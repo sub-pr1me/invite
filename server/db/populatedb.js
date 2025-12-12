@@ -5,7 +5,8 @@ import 'dotenv/config.js';
 const SQL = `
 CREATE TABLE IF NOT EXISTS venues (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  venue VARCHAR ( 255 )
+  venue VARCHAR ( 255 ),
+  pics TEXT[]
 );
 
 CREATE TABLE IF NOT EXISTS customers (
@@ -13,11 +14,11 @@ CREATE TABLE IF NOT EXISTS customers (
   customer VARCHAR ( 255 )
 );
 
-INSERT INTO venues (venue) 
+INSERT INTO venues (venue, pics) 
 VALUES
-  ('ALMAR Seafood Bar'),
-  ('Elia Backyard Restaurant'),
-  ('To Arxontikon');
+  ('ALMAR Seafood Bar', '{https://res.cloudinary.com/dn1vxf0hg/image/upload/v1765461914/almar_dgpueu.jpg}'),
+  ('Elia Backyard Restaurant', '{https://res.cloudinary.com/dn1vxf0hg/image/upload/v1765461914/elia_zhszb9.jpg}'),
+  ('To Arxontikon Taverna', '{https://res.cloudinary.com/dn1vxf0hg/image/upload/v1765461916/arxontikon_jgme5l.jpg}');
 `;
 
 async function main() {

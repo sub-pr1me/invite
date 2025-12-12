@@ -5,7 +5,8 @@ import indexPageRouter from "./routes/indexPageRouter.js";
 const app = express();
 app.use(express.urlencoded({ extended: true })); // encodes req.body into obj
 
-app.use(cors({origin: ["http://localhost:5173/"]}));
+const corsOptions = {origin: ["http://localhost:5173"]};
+app.use(cors(corsOptions));
 
 app.use('/', indexPageRouter);
 

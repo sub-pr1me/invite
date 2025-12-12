@@ -1,0 +1,26 @@
+.content {
+  height: 50vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+  padding-top: 5vh;
+}
+
+
+ul {
+  display: flex;
+  justify-content: space-evenly;
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+li {
+
+  width: 12vh;
+}
+
+img {
+  height: 10vh;
+  border-radius: 50%;
+}
