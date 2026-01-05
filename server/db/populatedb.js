@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS venues (
   venue VARCHAR ( 255 ) NOT NULL UNIQUE,
   email citext NOT NULL UNIQUE,
   password VARCHAR ( 255 ),
-  pics TEXT[]
+  pics TEXT[],
+  reftoken VARCHAR ( 255 )
 );
 
 CREATE TABLE IF NOT EXISTS customers (
@@ -18,7 +19,8 @@ CREATE TABLE IF NOT EXISTS customers (
   customer VARCHAR ( 255 ),
   email citext NOT NULL UNIQUE,
   password VARCHAR ( 255 ),
-  pics TEXT[]
+  pics TEXT[],
+  reftoken VARCHAR ( 255 )
 );
 
 INSERT INTO venues (venue, email, password, pics) 

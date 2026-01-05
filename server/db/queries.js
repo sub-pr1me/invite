@@ -31,6 +31,21 @@ export async function getUserData(email, acc_type) {
   return rows[0];
 };
 
+export async function addRefreshToken(acc_type, email, token) {
+  await pool.query(`UPDATE ${acc_type}s SET refToken = '${token}' WHERE email = '${email}'`);
+  return 'success';
+};
+
+export async function checkVenueToken(token) {
+  const { rows } = await pool.query(`SELECT * FROM venues WHERE reftoken LIKE '${token}'`);
+  return rows[0];
+};
+
+export async function checkCustomerToken(token) {
+  const { rows } = await pool.query(`SELECT * FROM customers WHERE reftoken LIKE '${token}'`);
+  return rows[0];
+};
+
 // export async function searchUsername(string) {
 //   const { rows } = await pool.query(`SELECT * FROM usernames WHERE username LIKE '%${string}%'`);
 //   return rows;

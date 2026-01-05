@@ -1,15 +1,10 @@
-import React from 'react'
 import styles from '../styles/Sign_In.module.css'
 import axios from 'axios'
 import { use } from 'react'
 
-const Sign_In = ({ messagePromise, userAction, userStatus, setUserStatus }) => {
+const Sign_In = ({ messagePromise, userAction, userStatus }) => {
 
-  if (userStatus === 'acc_created') {
-    const delay = use(messagePromise);
-    console.log(delay);
-    setUserStatus('logged_out');
-  }
+  if (userStatus === 'acc_created') use(messagePromise);
 
   async function LogIn(formData) {
     const email = formData.get('email');

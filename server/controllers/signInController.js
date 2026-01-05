@@ -1,5 +1,7 @@
 import bcrypt from "bcryptjs";
-import { checkVenuesForMatch, checkCustomersForMatch, getUserData} from "../db/queries.js"
+import { checkVenuesForMatch, checkCustomersForMatch, getUserData, addRefreshToken} from "../db/queries.js";
+import jwt from 'jsonwebtoken';
+import 'dotenv/config.js';
 
 export default async function SignInController(req, res) {
 
@@ -23,11 +25,25 @@ export default async function SignInController(req, res) {
   const dbData = await getUserData(email, acc_type);
   const match = await bcrypt.compare(req.body.password, dbData.password);
 
-  if (match && matchedVenues) {
-    res.json({'success' : `User ${dbData.venue} is logged in!`});    
-  } else if (match && matchedCustomers) {
-    res.json({'success' : `User ${dbData.customer} is logged in!`});
-  } else {
-    res.sendStatus(401);
-  };
+  if (match) {
+
+    // CREATE JWT
+    const accessToken = jwt.sign(
+      { 'email': email },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '30s' }
+    );
+    const refreshToken = jwt.sign(
+      { 'email': email },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    // SAVE JWT WITH USER
+    addRefreshToken(acc_type, email, refreshToken);
+
+    // SEND TOKEN TO USER
+    res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
+    res.json({ accessToken });
+  }
 };
