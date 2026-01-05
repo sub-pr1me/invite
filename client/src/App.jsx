@@ -12,7 +12,7 @@ function App() {
   return (
     <>
       <WelcomeScreen />
-      <Suspense fallback={<Loading />}>        
+      <Suspense fallback={<Loading message={'LOADING...'}/>}>        
         <Venues venuesPromise={venuesPromise}/>
       </Suspense>      
     </>

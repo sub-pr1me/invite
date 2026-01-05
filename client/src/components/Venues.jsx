@@ -3,14 +3,13 @@ import { use } from 'react';
 
 export default function Venues({ venuesPromise }) {
 
-  const venues = use(venuesPromise);
+  const venues = use(venuesPromise).filter((ven) => ven.pics);
 
-  const getRandomKey = () => {
-    return crypto.randomUUID();
-  }
+  const getRandomKey = () => crypto.randomUUID();
   
   return (
     <>
+    <h4>POPULAR VENUES:</h4>
     <div className={`${styles.content}`}>
       <ul>{venues.map((item) => (
         <div key={item.id}>

@@ -1,0 +1,39 @@
+.hidden {
+    display: none !important;
+}
+
+.acc_type {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 5vh;
+}
+
+.acc_type img {
+  filter: invert(80%);
+}
+
+.type_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3vh;
+  height: 12vh;
+  width: 12vh;
+  border-radius: 50%;
+  margin-bottom: 3vh;
+}
+
+h3 {
+  margin: 1vh 0px 0px 0px;
+}
+
+.type_container:hover {
+  padding: 3vh;
+  box-shadow: 0px 0px 10px 1px rgba(242, 202, 243, 0.596);
+}
+
+.selected {
+  filter: invert(50%) sepia(50%) saturate(900%) hue-rotate(303deg) brightness(123%) contrast(100%);
+}

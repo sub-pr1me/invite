@@ -1,9 +1,9 @@
 import React from 'react'
 import styles from '../styles/Loading.module.css'
 
-const Loading = () => {
+const Loading = ({ message }) => {
   return (
-    <div className={`${styles.content}`}>LOADING...</div>
+    <div className={`${styles.content}`}>{message}</div>
   )
 }
 

@@ -1,4 +1,26 @@
 .hidden {
-    display: none;
+    display: none !important;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+}
+
+form input {
+  width: 140%;
+  align-self: center;
+}
+
+.duplicate {
+  color: red;
+  height: 4vh;
+}

@@ -1,12 +1,12 @@
 import Router from "express";
 import listAllVenues from "../controllers/listAllVenues.js";
 
-const indexPage = Router();
+const ListVenuesRouter = Router();
 
-indexPage.get("/", (req, res) => {
+ListVenuesRouter.get("/", (req, res) => {
     listAllVenues(req, res).then((venues) => {
-        res.json({venues});
+        res.json(venues);
     });   
 });
 
-export default indexPage;
+export default ListVenuesRouter;

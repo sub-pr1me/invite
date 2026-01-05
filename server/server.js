@@ -1,14 +1,18 @@
 import express from "express";
 import cors from "cors";
-import indexPageRouter from "./routes/indexPageRouter.js";
+import ListVenuesRouter from "./routes/ListVenuesRouter.js";
+import CreateAccRouter from "./routes/CreateAccRouter.js";
+import SignInRouter from "./routes/SignInRouter.js"
 
 const app = express();
 app.use(express.urlencoded({ extended: true })); // encodes req.body into obj
 
-const corsOptions = {origin: ["http://localhost:5173"]};
+const corsOptions = {origin: ["http://localhost:5173"], credentials: true};
 app.use(cors(corsOptions));
 
-app.use('/', indexPageRouter);
+app.use('/', ListVenuesRouter);
+app.use('/create_account', CreateAccRouter);
+app.use('/sign_in', SignInRouter);
 
 const PORT = 3000;
 

@@ -1,4 +1,14 @@
 .hidden {
-    display: none;
+    display: none !important;
 }
 
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+}
+
+form input {
+  width: 140%;
+  align-self: center;
+}

@@ -24,3 +24,9 @@ img {
   height: 10vh;
   border-radius: 50%;
 }
+
+h4 {
+  justify-self: flex-end;
+  align-self: center;
+  margin: 0px;
+}
