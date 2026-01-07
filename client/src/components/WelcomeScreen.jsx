@@ -5,7 +5,8 @@ import { ShowMessageSeconds } from '../functions/ShowMessageSeconds'
 import AccTypeChoice from './AccTypeChoice'
 import CreateAccount from './CreateAccount'
 import Sign_In from './Sign_In'
-import Loading from './Loading';
+import Loading from './Loading'
+import Log_Out from './Log_Out'
 
 const WelcomeScreen = () => {
   const [userAction, setUserAction] = useState(null);
@@ -57,12 +58,18 @@ const WelcomeScreen = () => {
         <Sign_In
         messagePromise={messagePromise}
         userAction={userAction}
+        setUserAction={setUserAction}
         userStatus={userStatus}
         setUserStatus={setUserStatus}
         activeEmail={activeEmail}
         setActiveEmail={setActiveEmail}
         />
       </Suspense>
+      <Log_Out
+      userStatus={userStatus}
+      setUserStatus={setUserStatus}
+      setUserAction={setUserAction}
+      />
 
       <button className={`${!userAction ? styles.hidden : null}`}
           onClick={() => {

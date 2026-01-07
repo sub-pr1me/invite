@@ -46,6 +46,11 @@ export async function checkCustomerToken(token) {
   return rows[0];
 };
 
+export async function deleteRefreshToken(acc_type, email) {
+  await pool.query(`UPDATE ${acc_type}s SET refToken = '' WHERE email = '${email}'`);
+  return 'success';
+};
+
 // export async function searchUsername(string) {
 //   const { rows } = await pool.query(`SELECT * FROM usernames WHERE username LIKE '%${string}%'`);
 //   return rows;

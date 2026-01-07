@@ -4,6 +4,7 @@ import ListVenuesRouter from "./routes/ListVenuesRouter.js";
 import CreateAccRouter from "./routes/CreateAccRouter.js";
 import SignInRouter from "./routes/SignInRouter.js";
 import RefreshRouter from "./routes/RefreshRouter.js";
+import LogoutRouter from "./routes/LogoutRouter.js";
 import verifyJWT from "./middleware/verifyJWT.js";
 import cookieParser from 'cookie-parser';
 
@@ -19,6 +20,7 @@ app.use('/', ListVenuesRouter);
 app.use('/create_account', CreateAccRouter);
 app.use('/sign_in', SignInRouter);
 app.use('/refresh', RefreshRouter);
+app.use('/logout', LogoutRouter);
 
 app.use(verifyJWT);
 

@@ -2,7 +2,7 @@ import styles from '../styles/Sign_In.module.css'
 import axios from 'axios'
 import { use } from 'react'
 
-const Sign_In = ({ messagePromise, userAction, userStatus }) => {
+const Sign_In = ({ messagePromise, userAction, setUserAction, userStatus, setUserStatus }) => {
 
   if (userStatus === 'acc_created') use(messagePromise);
 
@@ -11,7 +11,7 @@ const Sign_In = ({ messagePromise, userAction, userStatus }) => {
     const password = formData.get('password');
 
     try {
-      const response = await axios.post("http://localhost:3000/sign_in",
+      await axios.post("http://localhost:3000/sign_in",
         {email: email, password: password},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -19,9 +19,9 @@ const Sign_In = ({ messagePromise, userAction, userStatus }) => {
         }
       );
 
-      console.log(response);
-      // const accessToken = response?.data?.accessToken;
-      // const roles = response?.data?.roles;
+      console.log('LOGGED IN');
+      setUserStatus('logged_in');
+      setUserAction('main_page');
 
     } catch (err) {
       if (!err?.response) {
@@ -33,7 +33,7 @@ const Sign_In = ({ messagePromise, userAction, userStatus }) => {
       } else {
         console.log('LOGIN FAILED');
       }
-    }    
+    }
   };
   
   return (
