@@ -1,19 +1,25 @@
 import './App.css';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { fetchVenues } from './functions/FetchVenues';
 import Loading from './components/Loading';
-import WelcomeScreen from './components/WelcomeScreen';
+import MainScreen from './components/MainScreen';
 import Venues from './components/Venues';
 
 function App() {
-
-  const venuesPromise = fetchVenues();
+    const [userStatus, setUserStatus] = useState('logged_out');
+    const venuesPromise = fetchVenues();
 
   return (
     <>
-      <WelcomeScreen />
-      <Suspense fallback={<Loading message={'LOADING...'}/>}>        
-        <Venues venuesPromise={venuesPromise}/>
+      <MainScreen 
+          userStatus={userStatus}
+          setUserStatus={setUserStatus}
+      />
+      <Suspense fallback={<Loading userStatus={userStatus} message={'LOADING...'}/>}>        
+        <Venues
+          venuesPromise={venuesPromise}
+          userStatus={userStatus}
+        />
       </Suspense>      
     </>
   )

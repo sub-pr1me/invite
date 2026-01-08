@@ -1,11 +1,23 @@
-.content {
+.hidden {
+    display: none !important;
+}
+
+.container {
   height: 50vh;
   width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  height: 100%;
+  width: 100%;
   justify-content: center;
   align-items: center;
   padding-top: 5vh;
 }
-
 
 ul {
   display: flex;

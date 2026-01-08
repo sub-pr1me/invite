@@ -1,7 +1,7 @@
 import styles from '../styles/Sign_In.module.css'
 import axios from 'axios'
 
-const Log_Out = ({ userStatus, setUserStatus, setUserAction }) => {
+const Log_Out = ({ setUserStatus, setUserAction }) => {
 
   async function SignOut() {
 
@@ -28,10 +28,10 @@ const Log_Out = ({ userStatus, setUserStatus, setUserAction }) => {
   };
   
   return (
-    <div className={`${userStatus !== 'logged_in' ? styles.hidden : null}
-                     ${styles.container}`}>
-        <button onClick={SignOut}>LOG OUT</button>
-    </div>
+    <button className={`${styles.container}`}
+            onClick={SignOut}>
+            LOG OUT
+    </button>
   )
 }
 

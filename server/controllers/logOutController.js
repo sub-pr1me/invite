@@ -25,10 +25,7 @@ export default async function handleLogOut(req, res) {
   const email = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET).email;
 
   const result = await deleteRefreshToken(acc_type, email);
-  console.log(result, '- TOKEN DELETED!');
 
   res.clearCookie('jwt', { httpOnly: true, maxAge: 24*60*60*1000 }); // secure: true - only serves on https
   res.sendStatus(204);
-
-  console.log(result, '- COOKIE DELETED!');
 };

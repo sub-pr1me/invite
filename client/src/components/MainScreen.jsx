@@ -1,22 +1,20 @@
-import React from 'react'
-import styles from '../styles/WelcomeScreen.module.css'
-import { useState, Suspense } from 'react'
+import styles from '../styles/MainScreen.module.css'
+import { Suspense, useState } from 'react'
 import { ShowMessageSeconds } from '../functions/ShowMessageSeconds'
 import AccTypeChoice from './AccTypeChoice'
 import CreateAccount from './CreateAccount'
 import Sign_In from './Sign_In'
 import Loading from './Loading'
-import Log_Out from './Log_Out'
+import Dashboard from './Dashboard'
 
-const WelcomeScreen = () => {
+const MainScreen = ({ userStatus, setUserStatus }) => {
   const [userAction, setUserAction] = useState(null);
-  const [userStatus, setUserStatus] = useState('logged_out');
   const [activeEmail, setActiveEmail] = useState(null);
   const [accType, setAccType] = useState('venue');
 
   const messagePromise = ShowMessageSeconds(3);
 
-  function handleClick(action) {    
+  function handleClick(action) {
 
     if (action === 'create_acc') {
       setUserAction('create_acc')
@@ -30,19 +28,16 @@ const WelcomeScreen = () => {
   return (
     <>
     <div className={`${styles.content}`}>
-
       <AccTypeChoice
         userAction={userAction}
         accType={accType}
         setAccType={setAccType}
       />
-
       <div className={`${styles.btns_div}
                  ${userAction ? styles.hidden : null}`}>
         <button onClick={() => handleClick('create_acc')}>Create Account</button>
         <button onClick={() => handleClick('sign_in')}>Log In</button>
       </div>
-
       <CreateAccount
         userAction={userAction}
         setUserAction={setUserAction}
@@ -52,36 +47,36 @@ const WelcomeScreen = () => {
         setActiveEmail={setActiveEmail}
         accType={accType}
         />
-
       <Suspense fallback={<Loading message={
-          userStatus === 'acc_created' ? 'Your account has been successfully created!' : 'LOADING...'}/>}>
+          userStatus === 'acc_created' ?
+          'Your account has been successfully created!' :
+          'LOADING...'}/>}>
         <Sign_In
         messagePromise={messagePromise}
         userAction={userAction}
         setUserAction={setUserAction}
         userStatus={userStatus}
         setUserStatus={setUserStatus}
-        activeEmail={activeEmail}
-        setActiveEmail={setActiveEmail}
         />
       </Suspense>
-      <Log_Out
+      <Dashboard
       userStatus={userStatus}
       setUserStatus={setUserStatus}
       setUserAction={setUserAction}
       />
-
-      <button className={`${!userAction ? styles.hidden : null}`}
+      <button className={`${!userAction ? styles.hidden : null}
+                          ${userStatus !=='logged_out' ? styles.hidden : null}`}
           onClick={() => {
             handleClick('back');
             setUserStatus('logged_out')
             setActiveEmail(null);
             setAccType('venue');
             setUserAction(null);
-          }}>Go Back</button>      
+          }}>Go Back
+      </button>      
     </div>
     </>    
   )
 }
 
-export default WelcomeScreen
+export default MainScreen
