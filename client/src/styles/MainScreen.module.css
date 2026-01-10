@@ -21,3 +21,8 @@
 .hidden {
     display: none;
 }
+
+.content.login {
+  height: 100vh;
+  padding: 0px;
+}

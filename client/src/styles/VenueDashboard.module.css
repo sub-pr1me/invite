@@ -1,0 +1,62 @@
+.hidden {
+    display: none !important;
+}
+
+* {
+  outline: greenyellow 1px solid;
+}
+
+.container,
+main,
+nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+}
+
+.container {
+  flex-direction: column;
+  height: 100vh;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  height: 10vh;
+  width: 100vw;
+}
+
+main {
+  height: 80vh;
+}
+
+nav {
+  height: 10vh;
+  justify-content: space-around;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  padding: 0px 4vw;
+  width: 80vw;
+  height: 100%;
+  gap: 1vw;
+}
+
+.profile_pic {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 7vw;
+  height: 7vw;
+  border-radius: 50%;
+}
+
+.logout {
+  display: flex;
+  justify-content: center;
+  width: 20vw;
+  height: 100%;
+}

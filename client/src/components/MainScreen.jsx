@@ -1,16 +1,17 @@
 import styles from '../styles/MainScreen.module.css'
-import { Suspense, useState } from 'react'
+import { Suspense, useState} from 'react'
 import { ShowMessageSeconds } from '../functions/ShowMessageSeconds'
 import AccTypeChoice from './AccTypeChoice'
 import CreateAccount from './CreateAccount'
 import Sign_In from './Sign_In'
 import Loading from './Loading'
-import Dashboard from './Dashboard'
+import VenueDashboard from './VenueDashboard'
 
 const MainScreen = ({ userStatus, setUserStatus }) => {
   const [userAction, setUserAction] = useState(null);
   const [activeEmail, setActiveEmail] = useState(null);
   const [accType, setAccType] = useState('venue');
+  const [token, setToken] = useState(null);
 
   const messagePromise = ShowMessageSeconds(3);
 
@@ -23,11 +24,11 @@ const MainScreen = ({ userStatus, setUserStatus }) => {
     } else {
       setUserAction(null)
     };
-  };
+  };  
 
   return (
     <>
-    <div className={`${styles.content}`}>
+    <div className={`${styles.content} ${userStatus === 'logged_in' ? styles.login : null}`}>
       <AccTypeChoice
         userAction={userAction}
         accType={accType}
@@ -52,17 +53,22 @@ const MainScreen = ({ userStatus, setUserStatus }) => {
           'Your account has been successfully created!' :
           'LOADING...'}/>}>
         <Sign_In
+        setToken={setToken}
         messagePromise={messagePromise}
         userAction={userAction}
         setUserAction={setUserAction}
         userStatus={userStatus}
         setUserStatus={setUserStatus}
+        setActiveEmail={setActiveEmail}
         />
       </Suspense>
-      <Dashboard
-      userStatus={userStatus}
-      setUserStatus={setUserStatus}
-      setUserAction={setUserAction}
+      <VenueDashboard
+        token={token}
+        accType={accType}
+        email={activeEmail}
+        userStatus={userStatus}
+        setUserStatus={setUserStatus}
+        setUserAction={setUserAction}
       />
       <button className={`${!userAction ? styles.hidden : null}
                           ${userStatus !=='logged_out' ? styles.hidden : null}`}

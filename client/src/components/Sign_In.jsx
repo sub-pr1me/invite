@@ -2,7 +2,8 @@ import styles from '../styles/Sign_In.module.css'
 import axios from 'axios'
 import { use } from 'react'
 
-const Sign_In = ({ messagePromise, userAction, setUserAction, userStatus, setUserStatus }) => {
+const Sign_In = ({ setToken, messagePromise, userAction, setUserAction,
+                   userStatus, setUserStatus, setActiveEmail }) => {
 
   if (userStatus === 'acc_created') use(messagePromise);
 
@@ -11,7 +12,7 @@ const Sign_In = ({ messagePromise, userAction, setUserAction, userStatus, setUse
     const password = formData.get('password');
 
     try {
-      await axios.post("http://localhost:3000/sign_in",
+      const response = await axios.post("http://localhost:3000/sign_in",
         {email: email, password: password},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -20,9 +21,10 @@ const Sign_In = ({ messagePromise, userAction, setUserAction, userStatus, setUse
       );
 
       console.log('LOGGED IN');
+      setToken(response.data.accessToken);
       setUserStatus('logged_in');
       setUserAction('main_page');
-
+      setActiveEmail(email);
     } catch (err) {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');
