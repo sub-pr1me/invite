@@ -1,30 +1,24 @@
 import styles from '../styles/Sign_In.module.css'
-import axios from 'axios'
 import { use } from 'react'
+import useAuth from '../hooks/useAuth'
+import UserSignIn from '../functions/UserSignIn'
 
-const Sign_In = ({ setToken, messagePromise, userAction, setUserAction,
-                   userStatus, setUserStatus, setActiveEmail }) => {
-
+const Sign_In = ({ messagePromise, userAction, setUserAction, userStatus, setUserStatus }) => {
+  
+  const { setAuth } = useAuth();
   if (userStatus === 'acc_created') use(messagePromise);
 
   async function LogIn(formData) {
     const email = formData.get('email');
     const password = formData.get('password');
-
-    try {
-      const response = await axios.post("http://localhost:3000/sign_in",
-        {email: email, password: password},
-        {
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-          withCredentials: true,
-        }
-      );
-
-      console.log('LOGGED IN');
-      setToken(response.data.accessToken);
+    try {      
+      const response = await UserSignIn(email, password);
+      const accessToken = response?.data?.accessToken;
+      setAuth({ email, token: accessToken });
       setUserStatus('logged_in');
       setUserAction('main_page');
-      setActiveEmail(email);
+      console.log('LOGGED IN');
+      
     } catch (err) {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');

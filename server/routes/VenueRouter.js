@@ -1,8 +1,8 @@
 import Router from "express";
 import VenueController from "../controllers/VenueController.js";
 
-const VenueInRouter = Router();
+const VenueRouter = Router();
 
-VenueInRouter.post("/", VenueController);
+VenueRouter.get("/", VenueController);
 
-export default VenueInRouter;
+export default VenueRouter;

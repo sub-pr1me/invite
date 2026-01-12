@@ -7,8 +7,6 @@ export default async function handleRefreshToken(req, res) {
   const cookies = req.cookies;
   if (!cookies?.jwt) return res.status(401);
 
-  console.log(cookies.jwt);
-  
   const refreshToken = cookies.jwt;
 
   const matchedVenue = await checkVenueToken(refreshToken);
@@ -29,6 +27,7 @@ export default async function handleRefreshToken(req, res) {
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: '30s' }
       );
+      console.log('NEW TOKEN - ', accessToken);
       res.json({ accessToken })
     }
   );  

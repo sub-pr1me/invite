@@ -1,12 +1,15 @@
 import styles from '../styles/Sign_In.module.css'
-import axios from 'axios'
+import axios from '../api/axios'
+import { useContext } from 'react'
+import AuthContext from '../context/AuthProvider'
 
 const Log_Out = ({ setUserStatus, setUserAction }) => {
+  const { setAuth } = useContext(AuthContext);
 
   async function SignOut() {
 
     try {
-      await axios.get("http://localhost:3000/logout",
+      await axios.get("/logout",
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true,
@@ -14,6 +17,7 @@ const Log_Out = ({ setUserStatus, setUserAction }) => {
       );
       console.log('LOGGED OUT');
       setUserAction(null);
+      setAuth({});
       setUserStatus('logged_out');
 
     } catch (err) {

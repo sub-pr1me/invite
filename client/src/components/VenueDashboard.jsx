@@ -1,11 +1,16 @@
 import styles from '../styles/VenueDashboard.module.css'
-import { GetUserData } from '../functions/GetUserData';
+import useAuth from '../hooks/useAuth'
+import { GetUserData } from '../functions/GetUserData'
 import Log_Out from './Log_Out'
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
-const VenueDashboard = ({ token, accType, email, userStatus, setUserStatus, setUserAction }) => {
+const VenueDashboard = ({ accType, userStatus, setUserStatus, setUserAction }) => {
+  
+  const { auth } = useAuth(); // Contains email + token
+  const axiosPrivate = useAxiosPrivate();
   
   if (userStatus !== 'logged_in' || accType !== 'venue') return null
-  console.log('TOKEN -', token);
+
   return (
     <>
     <div className={`${styles.container}
@@ -13,14 +18,14 @@ const VenueDashboard = ({ token, accType, email, userStatus, setUserStatus, setU
       <header>
         <div className={`${styles.user}`}>
           <div className={`${styles.profile_pic}`}>PIC</div>
-          <div className={`${styles.email}`}>{email}</div>
+          <div className={`${styles.email}`}>{auth.email}</div>
         </div>
         <div className={`${styles.logout}`}>
           <Log_Out setUserStatus={setUserStatus} setUserAction={setUserAction}
         /></div>          
       </header>
       <main>
-        <div>NO DATA YET</div>
+        <button onClick={() => GetUserData(axiosPrivate, auth.token, accType, userStatus, auth.email)}>GET DATA</button>
       </main>
       <nav>
         <div>HOME</div>

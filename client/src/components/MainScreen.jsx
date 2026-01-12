@@ -11,7 +11,6 @@ const MainScreen = ({ userStatus, setUserStatus }) => {
   const [userAction, setUserAction] = useState(null);
   const [activeEmail, setActiveEmail] = useState(null);
   const [accType, setAccType] = useState('venue');
-  const [token, setToken] = useState(null);
 
   const messagePromise = ShowMessageSeconds(3);
 
@@ -53,19 +52,15 @@ const MainScreen = ({ userStatus, setUserStatus }) => {
           'Your account has been successfully created!' :
           'LOADING...'}/>}>
         <Sign_In
-        setToken={setToken}
         messagePromise={messagePromise}
         userAction={userAction}
         setUserAction={setUserAction}
         userStatus={userStatus}
         setUserStatus={setUserStatus}
-        setActiveEmail={setActiveEmail}
         />
       </Suspense>
       <VenueDashboard
-        token={token}
         accType={accType}
-        email={activeEmail}
         userStatus={userStatus}
         setUserStatus={setUserStatus}
         setUserAction={setUserAction}

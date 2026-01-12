@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from '../styles/CreateAccount.module.css'
-import axios from 'axios'
+import axios from '../api/axios'
 
 const CreateAccount = ({ accType, userAction, setUserAction, userStatus,
                          setUserStatus, activeEmail, setActiveEmail }) => {
@@ -12,7 +12,7 @@ const CreateAccount = ({ accType, userAction, setUserAction, userStatus,
     const acc_type = formData.get('acc_type');
     setActiveEmail(email);
 
-    const response = await axios.post("http://localhost:3000/create_account",
+    const response = await axios.post("/create_account",
       {name: name, email: email, password: password, acc_type: acc_type},
       {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
     );

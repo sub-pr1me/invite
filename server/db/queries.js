@@ -51,9 +51,8 @@ export async function deleteRefreshToken(acc_type, email) {
   return 'success';
 };
 
-export async function getAllUserData(accType, email) {
-  const { rows } = await pool.query(`SELECT * FROM ${accType}s WHERE email LIKE '${email}'`);
-  console.log(rows[0]);
+export async function getVenueData(email) {
+  const { rows } = await pool.query(`SELECT * FROM venues WHERE email LIKE '${email}'`);
   return await rows[0];
 };
 

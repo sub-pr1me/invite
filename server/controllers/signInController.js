@@ -12,6 +12,7 @@ export default async function SignInController(req, res) {
   // Check Account Existence
 
   const email = req.body.email;
+  const accType = req.body.accType;
   const matchedVenues = await checkVenuesForMatch(email);
   const matchedCustomers = await checkCustomersForMatch(email);  
   if (!matchedVenues && !matchedCustomers) return res.sendStatus(401);// Unauthorized
@@ -39,7 +40,7 @@ export default async function SignInController(req, res) {
       { expiresIn: '1d' }
     );
 
-    // SAVE JWT WITH USER
+    // SAVE JWT WITH USER IN DB
     addRefreshToken(acc_type, email, refreshToken);
 
     // SEND TOKEN TO USER

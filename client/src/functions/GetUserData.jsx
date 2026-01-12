@@ -1,17 +1,17 @@
-import axios from 'axios';
 
-export async function GetUserData(accType, userStatus, email) {
+export async function GetUserData(axiosPrivate, token, accType, userStatus) {
 
   if (userStatus === 'logged_in' && accType === 'venue') {
-    console.log('START');
 
-    const response = await axios.get(`http://localhost:3000/${accType}`,
-      {email: email, accType: accType},
-      {withCredentials: true}
+    const response = await axiosPrivate.get(`/venue`,
+      {
+        withCredentials: true,
+        headers: { "authorization": "Bearer " + token }
+      }
     );
-
-    console.log('FINISH');
-
+    
+    console.log('RESPONSE - ', response.data);
+    
 
     return await response.data;
   }
