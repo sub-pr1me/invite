@@ -25,7 +25,7 @@ const VenueDashboard = ({ accType, userStatus, setUserStatus, setUserAction }) =
         /></div>          
       </header>
       <main>
-        <button onClick={() => GetUserData(axiosPrivate, auth.token, accType, userStatus, auth.email)}>GET DATA</button>
+        <button onClick={() => GetUserData(axiosPrivate, auth.token, accType, userStatus)}>GET DATA</button>
       </main>
       <nav>
         <div>HOME</div>

@@ -52,16 +52,6 @@ export async function deleteRefreshToken(acc_type, email) {
 };
 
 export async function getVenueData(email) {
-  const { rows } = await pool.query(`SELECT * FROM venues WHERE email LIKE '${email}'`);
+  const { rows } = await pool.query(`SELECT id, email, pics, venue FROM venues WHERE email LIKE '${email}'`);
   return await rows[0];
 };
-
-// export async function searchUsername(string) {
-//   const { rows } = await pool.query(`SELECT * FROM usernames WHERE username LIKE '%${string}%'`);
-//   return rows;
-// };
-
-// export async function deleteAllUsernames() {
-//   const { rows } = await pool.query("DELETE FROM usernames");
-//   return rows;
-// };
