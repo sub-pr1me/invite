@@ -3,9 +3,10 @@ import { use } from 'react'
 import useAuth from '../hooks/useAuth'
 import UserSignIn from '../functions/UserSignIn'
 
-const Sign_In = ({ messagePromise, userAction, setUserAction, userStatus, setUserStatus }) => {
+const Sign_In = ({ handleClick, messagePromise, userAction, setUserAction, 
+                   userStatus, setUserStatus, setActiveEmail, setAccType }) => {
   
-  const { setAuth } = useAuth();
+  const { setAuth, setVens } = useAuth();
   if (userStatus === 'acc_created') use(messagePromise);
 
   async function LogIn(formData) {
@@ -17,6 +18,7 @@ const Sign_In = ({ messagePromise, userAction, setUserAction, userStatus, setUse
       setAuth({ email, token: accessToken });
       setUserStatus('logged_in');
       setUserAction('main_page');
+      setVens('invisible');
       console.log('LOGGED IN');
       
     } catch (err) {
@@ -41,6 +43,16 @@ const Sign_In = ({ messagePromise, userAction, setUserAction, userStatus, setUse
         <input name='password' type="password" placeholder='Password'/>
         <button>Submit</button>
       </form>
+      <button className={`${!userAction ? styles.hidden : null}
+      ${userStatus === 'acc_created' || userStatus === 'logged_out' ? null : styles.hidden}`}
+          onClick={() => {
+            handleClick('back');
+            setUserStatus('logged_out')
+            setActiveEmail(null);
+            setAccType('venue');
+            setUserAction(null);
+          }}>Go Back
+      </button>
     </div>
   )
 }

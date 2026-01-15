@@ -7,6 +7,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 50%;
 }
 
 form {
@@ -23,4 +24,9 @@ form input {
 .duplicate {
   color: red;
   height: 4vh;
+}
+
+::placeholder {
+  color: rgb(233, 233, 233);
+  opacity: 1; /* Firefox */
 }

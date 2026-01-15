@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import AuthContext from '../context/AuthProvider'
 
 const Log_Out = ({ setUserStatus, setUserAction }) => {
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth, setVens } = useContext(AuthContext);
 
   async function SignOut() {
 
@@ -19,7 +19,7 @@ const Log_Out = ({ setUserStatus, setUserAction }) => {
       setUserAction(null);
       setAuth({});
       setUserStatus('logged_out');
-
+      setVens('invisible');
     } catch (err) {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');

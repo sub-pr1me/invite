@@ -1,17 +1,18 @@
 import styles from '../styles/Venues.module.css'
 import { use } from 'react'
+import useAuth from '../hooks/useAuth';
 
-export default function Venues({ userStatus, venuesPromise }) {
+export default function Venues() {
 
+  const { venuesPromise, vens } = useAuth();
   const fetched = use(venuesPromise);
-  const venues = fetched.filter((ven) => ven.pics);
-  
+  const venues = fetched.filter((ven) => ven.pics);  
   const getRandomKey = () => crypto.randomUUID();
-  
+
   return (
     <>
       <div className={`${styles.container}
-                       ${userStatus !== 'logged_out' ? styles.hidden : null}`}>
+      ${vens === 'visible' ? null : styles.hidden}`}>
         <h4>POPULAR VENUES:</h4>
         <div className={`${styles.content}`}>
           <ul>{venues.map((item) => (

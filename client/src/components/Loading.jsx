@@ -1,10 +1,12 @@
-import React from 'react'
 import styles from '../styles/Loading.module.css'
+import useAuth from '../hooks/useAuth'
 
-const Loading = ({ message, userStatus }) => {
+const Loading = ({ message }) => {
+  const { userStatus } = useAuth();
+
   return (
     <div className={`${styles.content}
-                     ${userStatus !=='logged_out' ? styles.hidden : null}`}>{message}</div>
+    ${userStatus === 'acc_created' || userStatus === 'logged_out' ? null : styles.hidden}`}>{message}</div>
   )
 }
 

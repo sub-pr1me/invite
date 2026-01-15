@@ -1,9 +1,8 @@
-import React from 'react'
 import styles from '../styles/CreateAccount.module.css'
 import axios from '../api/axios'
 
-const CreateAccount = ({ accType, userAction, setUserAction, userStatus,
-                         setUserStatus, activeEmail, setActiveEmail }) => {
+const CreateAccount = ({ accType, setAccType, userAction, setUserAction, userStatus,
+                         setUserStatus, activeEmail, setActiveEmail, handleClick }) => {
 
   async function AddNewAcc(formData) {
     const name = formData.get('name');
@@ -17,9 +16,8 @@ const CreateAccount = ({ accType, userAction, setUserAction, userStatus,
       {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
     );
 
-    console.log(response);
+    console.log(response.data);
     if (response.data === 'duplicate') {setUserStatus(response.data)};
-
     if (response.data === 'success') {
       setUserStatus('acc_created');
       setUserAction('sign_in');
@@ -38,7 +36,17 @@ const CreateAccount = ({ accType, userAction, setUserAction, userStatus,
             <input name='password' type="password" placeholder='Password'/>
             <input name='acc_type' type="text" value={accType} hidden readOnly/>
             <button>Submit</button>
-        </form>    
+        </form>
+        <button className={`${!userAction ? styles.hidden : null}
+        ${userStatus === 'acc_created' || userStatus === 'logged_out' ? null : styles.hidden}`}
+          onClick={() => {
+            handleClick('back');
+            setUserStatus('logged_out')
+            setActiveEmail(null);
+            setAccType('venue');
+            setUserAction(null);
+          }}>Go Back
+      </button>    
     </div>
   )
 }

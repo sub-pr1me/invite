@@ -5,14 +5,16 @@ import AccTypeChoice from './AccTypeChoice'
 import CreateAccount from './CreateAccount'
 import Sign_In from './Sign_In'
 import Loading from './Loading'
+import Venues from './Venues'
 import VenueDashboard from './VenueDashboard'
+import useAuth from '../hooks/useAuth'
 
-const MainScreen = ({ userStatus, setUserStatus }) => {
+const MainScreen = () => {
   const [userAction, setUserAction] = useState(null);
   const [activeEmail, setActiveEmail] = useState(null);
   const [accType, setAccType] = useState('venue');
-
   const messagePromise = ShowMessageSeconds(3);
+  const { userStatus, setUserStatus } = useAuth();
 
   function handleClick(action) {
 
@@ -23,7 +25,7 @@ const MainScreen = ({ userStatus, setUserStatus }) => {
     } else {
       setUserAction(null)
     };
-  };  
+  };
 
   return (
     <>
@@ -39,6 +41,7 @@ const MainScreen = ({ userStatus, setUserStatus }) => {
         <button onClick={() => handleClick('sign_in')}>Log In</button>
       </div>
       <CreateAccount
+        handleClick={handleClick}
         userAction={userAction}
         setUserAction={setUserAction}
         userStatus={userStatus}
@@ -46,17 +49,21 @@ const MainScreen = ({ userStatus, setUserStatus }) => {
         activeEmail={activeEmail}
         setActiveEmail={setActiveEmail}
         accType={accType}
+        setAccType={setAccType}
         />
       <Suspense fallback={<Loading message={
           userStatus === 'acc_created' ?
           'Your account has been successfully created!' :
           'LOADING...'}/>}>
         <Sign_In
-        messagePromise={messagePromise}
-        userAction={userAction}
-        setUserAction={setUserAction}
-        userStatus={userStatus}
-        setUserStatus={setUserStatus}
+          handleClick={handleClick}
+          messagePromise={messagePromise}
+          userAction={userAction}
+          setUserAction={setUserAction}
+          userStatus={userStatus}
+          setUserStatus={setUserStatus}
+          setActiveEmail={setActiveEmail}
+          setAccType={setAccType}
         />
       </Suspense>
       <VenueDashboard
@@ -65,17 +72,10 @@ const MainScreen = ({ userStatus, setUserStatus }) => {
         setUserStatus={setUserStatus}
         setUserAction={setUserAction}
       />
-      <button className={`${!userAction ? styles.hidden : null}
-                          ${userStatus !=='logged_out' ? styles.hidden : null}`}
-          onClick={() => {
-            handleClick('back');
-            setUserStatus('logged_out')
-            setActiveEmail(null);
-            setAccType('venue');
-            setUserAction(null);
-          }}>Go Back
-      </button>      
     </div>
+    <Suspense fallback={<Loading userStatus={userStatus} message={'LOADING...'}/>}>        
+      <Venues userStatus={userStatus}/>
+    </Suspense> 
     </>    
   )
 }
