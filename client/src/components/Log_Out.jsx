@@ -19,7 +19,7 @@ const Log_Out = ({ setUserStatus, setUserAction }) => {
       setUserAction(null);
       setAuth({});
       setUserStatus('logged_out');
-      setVens('invisible');
+      setVens('visible');
     } catch (err) {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');
