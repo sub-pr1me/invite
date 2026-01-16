@@ -4,14 +4,13 @@ import { fetchVenues } from '../functions/FetchVenues';
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState({});
+  const [auth, setAuth] = useState(null);
   const [userStatus, setUserStatus] = useState('logged_out');
-  const [vens, setVens] = useState('visible');
   const venuesPromise = fetchVenues();
 
   return (
-    <AuthContext.Provider value={{ auth, setAuth, userStatus, setUserStatus,
-    vens, setVens, venuesPromise }}>
+    <AuthContext.Provider value={{
+      auth, setAuth, userStatus, setUserStatus, venuesPromise }}>
       {children}
     </AuthContext.Provider>
   )

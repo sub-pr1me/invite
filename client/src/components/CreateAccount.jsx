@@ -23,7 +23,7 @@ const CreateAccount = ({ accType, setAccType, userAction, setUserAction, userSta
       setUserAction('sign_in');
     };
   };
-
+  
   return (
     <div className={`${userAction !== 'create_acc' ? styles.hidden : null}
                      ${styles.container}`}>
@@ -31,10 +31,10 @@ const CreateAccount = ({ accType, setAccType, userAction, setUserAction, userSta
           {`Address "${activeEmail}" is already taken!`}
         </div>
         <form action={AddNewAcc}>
-            <input name='name' type="text" placeholder={accType === 'venue' ? 'Venue Name' : 'Customer Name'}/>
-            <input name='email' type="email" placeholder='Email'/>
-            <input name='password' type="password" placeholder='Password'/>
-            <input name='acc_type' type="text" value={accType} hidden readOnly/>
+            <input required name='name' type="text" placeholder={accType === 'venue' ? 'Venue Name' : 'Customer Name'}/>
+            <input required name='email' type="email" placeholder='Email'/>
+            <input required name='password' type="password" placeholder='Password'/>
+            <input required name='acc_type' type="text" value={accType} hidden readOnly/>
             <button>Submit</button>
         </form>
         <button className={`${!userAction ? styles.hidden : null}

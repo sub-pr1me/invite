@@ -3,10 +3,10 @@ import { use } from 'react'
 import useAuth from '../hooks/useAuth'
 import UserSignIn from '../functions/UserSignIn'
 
-const Sign_In = ({ handleClick, messagePromise, userAction, setUserAction, 
-                   userStatus, setUserStatus, setActiveEmail, setAccType }) => {
+const Log_In = ({ handleClick, messagePromise, userAction, setUserAction, 
+                   userStatus, setUserStatus, setActiveEmail, accType, setAccType }) => {
   
-  const { setAuth, setVens } = useAuth();
+  const { auth, setAuth } = useAuth();
   if (userStatus === 'acc_created') use(messagePromise);
 
   async function LogIn(formData) {
@@ -15,10 +15,9 @@ const Sign_In = ({ handleClick, messagePromise, userAction, setUserAction,
     try {      
       const response = await UserSignIn(email, password);
       const accessToken = response?.data?.accessToken;
-      setAuth({ email, token: accessToken });
+      setAuth({ email, roles: [accType], token: accessToken });
       setUserStatus('logged_in');
       setUserAction('main_page');
-      setVens('invisible');
       console.log('LOGGED IN');
       
     } catch (err) {
@@ -39,8 +38,8 @@ const Sign_In = ({ handleClick, messagePromise, userAction, setUserAction,
                      ${styles.container}`}>
       <h2>Log In:</h2>
       <form action={LogIn}>
-        <input name='email' type="email" placeholder='Email'/>
-        <input name='password' type="password" placeholder='Password'/>
+        <input required name='email' type="email" placeholder='Email'/>
+        <input required name='password' type="password" placeholder='Password'/>
         <button>Submit</button>
       </form>
       <button className={`${!userAction ? styles.hidden : null}
@@ -57,4 +56,4 @@ const Sign_In = ({ handleClick, messagePromise, userAction, setUserAction,
   )
 }
 
-export default Sign_In
+export default Log_In

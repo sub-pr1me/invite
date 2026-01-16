@@ -4,7 +4,7 @@ import useAuth from '../hooks/useAuth';
 
 export default function Venues() {
 
-  const { venuesPromise, vens } = useAuth();
+  const { auth, venuesPromise } = useAuth();
   const fetched = use(venuesPromise);
   const venues = fetched.filter((ven) => ven.pics);  
   const getRandomKey = () => crypto.randomUUID();
@@ -12,7 +12,7 @@ export default function Venues() {
   return (
     <>
       <div className={`${styles.container}
-      ${vens === 'visible' ? null : styles.hidden}`}>
+      ${auth ? styles.hidden : null}`}>
         <h4>POPULAR VENUES:</h4>
         <div className={`${styles.content}`}>
           <ul>{venues.map((item) => (

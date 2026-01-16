@@ -28,7 +28,9 @@ header {
 }
 
 main {
+  flex-direction: column;
   height: 80vh;
+  gap: 1vh;
 }
 
 nav {

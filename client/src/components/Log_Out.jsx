@@ -1,10 +1,9 @@
 import styles from '../styles/Sign_In.module.css'
 import axios from '../api/axios'
-import { useContext } from 'react'
-import AuthContext from '../context/AuthProvider'
+import useAuth from '../hooks/useAuth'
 
 const Log_Out = ({ setUserStatus, setUserAction }) => {
-  const { setAuth, setVens } = useContext(AuthContext);
+  const { setAuth } = useAuth();
 
   async function SignOut() {
 
@@ -17,9 +16,8 @@ const Log_Out = ({ setUserStatus, setUserAction }) => {
       );
       console.log('LOGGED OUT');
       setUserAction(null);
-      setAuth({});
+      setAuth(null);
       setUserStatus('logged_out');
-      setVens('visible');
     } catch (err) {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');

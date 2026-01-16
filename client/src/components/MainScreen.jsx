@@ -3,10 +3,10 @@ import { Suspense, useState} from 'react'
 import { ShowMessageSeconds } from '../functions/ShowMessageSeconds'
 import AccTypeChoice from './AccTypeChoice'
 import CreateAccount from './CreateAccount'
-import Sign_In from './Sign_In'
+import Log_In from './Log_In'
 import Loading from './Loading'
 import Venues from './Venues'
-import VenueDashboard from './VenueDashboard'
+import Dashboard from './Dashboard'
 import useAuth from '../hooks/useAuth'
 
 const MainScreen = () => {
@@ -55,7 +55,7 @@ const MainScreen = () => {
           userStatus === 'acc_created' ?
           'Your account has been successfully created!' :
           'LOADING...'}/>}>
-        <Sign_In
+        <Log_In
           handleClick={handleClick}
           messagePromise={messagePromise}
           userAction={userAction}
@@ -63,10 +63,11 @@ const MainScreen = () => {
           userStatus={userStatus}
           setUserStatus={setUserStatus}
           setActiveEmail={setActiveEmail}
+          accType={accType}
           setAccType={setAccType}
         />
       </Suspense>
-      <VenueDashboard
+      <Dashboard
         accType={accType}
         userStatus={userStatus}
         setUserStatus={setUserStatus}

@@ -1,20 +1,20 @@
-import styles from '../styles/VenueDashboard.module.css'
+import styles from '../styles/Dashboard.module.css'
 import useAuth from '../hooks/useAuth'
 import { GetUserData } from '../functions/GetUserData'
 import Log_Out from './Log_Out'
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
-const VenueDashboard = ({ accType, userStatus, setUserStatus, setUserAction }) => {
+const Dashboard = ({ accType, userStatus, setUserStatus, setUserAction }) => {
   
-  const { auth } = useAuth(); // Contains email + token
+  const { auth } = useAuth(); // Contains email + role + token
   const axiosPrivate = useAxiosPrivate();
+  const getRandomKey = () => crypto.randomUUID();
   
-  if (userStatus !== 'logged_in' || accType !== 'venue') return null
+  if (!auth) return null;
 
   return (
     <>
-    <div className={`${styles.container}
-                     ${(userStatus !== 'logged_in' || accType !== 'venue') ? styles.hidden : null}`}>     
+    <div className={`${styles.container} ${!auth ? styles.hidden : null}`}>
       <header>
         <div className={`${styles.user}`}>
           <div className={`${styles.profile_pic}`}>PIC</div>
@@ -25,6 +25,7 @@ const VenueDashboard = ({ accType, userStatus, setUserStatus, setUserAction }) =
         /></div>          
       </header>
       <main>
+        <div>{auth.roles.map((role) => (<h3 key={getRandomKey()} >{role}</h3>))}</div>
         <button onClick={() => GetUserData(axiosPrivate, auth.token, accType, userStatus)}>GET DATA</button>
       </main>
       <nav>
@@ -37,4 +38,4 @@ const VenueDashboard = ({ accType, userStatus, setUserStatus, setUserAction }) =
   )
 }
 
-export default VenueDashboard
+export default Dashboard
