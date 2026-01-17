@@ -25,6 +25,12 @@ export default async function LogInController(req, res) {
   const dbData = await getUserData(email, accType);
   const match = await bcrypt.compare(req.body.password, dbData.password);
 
+  let username = null;
+  if (matchedVenues) {username = dbData.venue};
+  if (matchedCustomers) {username = dbData.customer};
+
+  const currentpage = 'home';
+
   if (match) {
 
     // CREATE JWT
@@ -44,6 +50,6 @@ export default async function LogInController(req, res) {
 
     // SEND TOKEN TO USER
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
-    res.json({ accessToken, accType });
+    res.json({ accessToken, accType, username, currentpage });
   }
 };

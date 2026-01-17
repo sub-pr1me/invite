@@ -16,7 +16,10 @@ const Log_In = ({ handleClick, messagePromise, userAction, setUserAction,
       const response = await UserLogIn(email, password);
       const accessToken = response?.data?.accessToken;
       const accType = response?.data?.accType;
-      setAuth({ email, roles: [accType], token: accessToken });
+      const name = response?.data?.username;
+      const currentpage = response?.data?.currentpage;
+
+      setAuth({ email, roles: [accType], name, token: accessToken, currentpage });
       setAccType(accType);
       setUserStatus('logged_in');
       setUserAction('main_page');
