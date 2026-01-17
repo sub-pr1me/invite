@@ -3,7 +3,7 @@ import { checkVenuesForMatch, checkCustomersForMatch, getUserData, addRefreshTok
 import jwt from 'jsonwebtoken';
 import 'dotenv/config.js';
 
-export default async function SignInController(req, res) {
+export default async function LogInController(req, res) {
 
   if (!req.body.email || !req.body.password) {
     return res.status(400).json({'message' : 'Username and password are required.'});
@@ -12,18 +12,17 @@ export default async function SignInController(req, res) {
   // Check Account Existence
 
   const email = req.body.email;
-  const accType = req.body.accType;
   const matchedVenues = await checkVenuesForMatch(email);
   const matchedCustomers = await checkCustomersForMatch(email);  
   if (!matchedVenues && !matchedCustomers) return res.sendStatus(401);// Unauthorized
 
   // Evaluate Password
 
-  let acc_type = null;
-  if (matchedVenues) {acc_type = 'venue'};
-  if (matchedCustomers) {acc_type = 'customer'};
+  let accType = null;
+  if (matchedVenues) {accType = 'venue'};
+  if (matchedCustomers) {accType = 'customer'};
   
-  const dbData = await getUserData(email, acc_type);
+  const dbData = await getUserData(email, accType);
   const match = await bcrypt.compare(req.body.password, dbData.password);
 
   if (match) {
@@ -41,10 +40,10 @@ export default async function SignInController(req, res) {
     );
 
     // SAVE JWT WITH USER IN DB
-    addRefreshToken(acc_type, email, refreshToken);
+    addRefreshToken(accType, email, refreshToken);
 
     // SEND TOKEN TO USER
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
-    res.json({ accessToken });
+    res.json({ accessToken, accType });
   }
 };

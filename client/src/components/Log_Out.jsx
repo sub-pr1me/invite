@@ -1,4 +1,4 @@
-import styles from '../styles/Sign_In.module.css'
+import styles from '../styles/Log_Out.module.css'
 import axios from '../api/axios'
 import useAuth from '../hooks/useAuth'
 
@@ -30,7 +30,7 @@ const Log_Out = ({ setUserStatus, setUserAction }) => {
   };
   
   return (
-    <button className={`${styles.container}`}
+    <button className={`${styles.logout_container}`}
             onClick={SignOut}>
             LOG OUT
     </button>

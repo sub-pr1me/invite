@@ -1,11 +1,11 @@
 import express from "express";
 import cors from "cors";
-import ListVenuesRouter from "./routes/ListVenuesRouter.js";
+import IndexPageRouter from "./routes/IndexPageRouter.js";
 import CreateAccRouter from "./routes/CreateAccRouter.js";
-import SignInRouter from "./routes/SignInRouter.js";
+import LogInRouter from "./routes/LogInRouter.js";
 import RefreshRouter from "./routes/RefreshRouter.js";
-import LogoutRouter from "./routes/LogoutRouter.js";
-import VenueRouter from "./routes/VenueRouter.js"
+import LogOutRouter from "./routes/LogOutRouter.js";
+import DashboardRouter from "./routes/DashboardRouter.js"
 import verifyJWT from "./middleware/verifyJWT.js";
 import cookieParser from 'cookie-parser';
 
@@ -17,15 +17,15 @@ app.use(cookieParser()); // middleware for cookies
 const corsOptions = {origin: ["http://localhost:5173"], credentials: true};
 app.use(cors(corsOptions));
 
-app.use('/', ListVenuesRouter);
+app.use('/', IndexPageRouter);
 app.use('/create_account', CreateAccRouter);
-app.use('/sign_in', SignInRouter);
+app.use('/login', LogInRouter);
 app.use('/refresh', RefreshRouter);
-app.use('/logout', LogoutRouter);
+app.use('/logout', LogOutRouter);
 
 app.use(verifyJWT);
 
-app.use('/venue', VenueRouter);
+app.use('/user', DashboardRouter);
 
 const PORT = 3000;
 

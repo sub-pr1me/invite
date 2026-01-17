@@ -11,6 +11,17 @@ export async function getAllVenueData() {
   return rows;
 };
 
+export async function getAllCustomerData() {
+  const { rows } = await pool.query("SELECT * FROM customers");
+  
+  for (let i=0; i<rows.length; i++) {
+    delete rows[i].email;
+    delete rows[i].password;
+  };
+  
+  return rows;
+};
+
 export async function checkVenuesForMatch(email) {
   const { rows } = await pool.query(`SELECT * FROM venues WHERE email LIKE '${email}'`);
   return rows[0];
@@ -51,7 +62,7 @@ export async function deleteRefreshToken(acc_type, email) {
   return 'success';
 };
 
-export async function getVenueData(email) {
-  const { rows } = await pool.query(`SELECT id, email, pics, venue FROM venues WHERE email LIKE '${email}'`);
+export async function getLoggedInUserData(email, acc_type) {
+  const { rows } = await pool.query(`SELECT id, email, pics, ${acc_type} FROM ${acc_type}s WHERE email LIKE '${email}'`);
   return await rows[0];
 };

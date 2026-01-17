@@ -1,5 +1,5 @@
 import Router from "express";
-import handleRefreshToken from "../controllers/refreshTokenController.js";
+import handleRefreshToken from "../controllers/RefreshTokenController.js";
 
 const RefreshRouter = Router();
 

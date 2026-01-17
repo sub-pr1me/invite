@@ -3,7 +3,7 @@ import { checkCustomersForMatch } from "../db/queries.js"
 import { createNewUser } from "../db/queries.js"
 import bcrypt from "bcryptjs";
 
-export default async function createAccController(req, res) {  
+export default async function CreateAccController(req, res) {  
  
   const email = req.body.email;
   const matchedVenues = await checkVenuesForMatch(email);

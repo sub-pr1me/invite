@@ -1,21 +1,23 @@
 import styles from '../styles/Sign_In.module.css'
 import { use } from 'react'
 import useAuth from '../hooks/useAuth'
-import UserSignIn from '../functions/UserSignIn'
+import UserLogIn from '../functions/UserLogIn'
 
 const Log_In = ({ handleClick, messagePromise, userAction, setUserAction, 
-                   userStatus, setUserStatus, setActiveEmail, accType, setAccType }) => {
+                  userStatus, setUserStatus, setActiveEmail, setAccType }) => {
   
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
   if (userStatus === 'acc_created') use(messagePromise);
 
   async function LogIn(formData) {
     const email = formData.get('email');
     const password = formData.get('password');
     try {      
-      const response = await UserSignIn(email, password);
+      const response = await UserLogIn(email, password);
       const accessToken = response?.data?.accessToken;
+      const accType = response?.data?.accType;
       setAuth({ email, roles: [accType], token: accessToken });
+      setAccType(accType);
       setUserStatus('logged_in');
       setUserAction('main_page');
       console.log('LOGGED IN');

@@ -21,8 +21,8 @@ const Dashboard = ({ accType, userStatus, setUserStatus, setUserAction }) => {
           <div className={`${styles.email}`}>{auth.email}</div>
         </div>
         <div className={`${styles.logout}`}>
-          <Log_Out setUserStatus={setUserStatus} setUserAction={setUserAction}
-        /></div>          
+          <Log_Out setUserStatus={setUserStatus} setUserAction={setUserAction} />
+        </div>          
       </header>
       <main>
         <div>{auth.roles.map((role) => (<h3 key={getRandomKey()} >{role}</h3>))}</div>

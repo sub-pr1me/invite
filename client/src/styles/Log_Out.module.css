@@ -2,6 +2,6 @@
     display: none !important;
 }
 
-* {
-  outline: greenyellow 1px solid;
+.logout_container {
+  display: flex;
 }
