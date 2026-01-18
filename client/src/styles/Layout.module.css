@@ -6,7 +6,7 @@
   outline: rgb(121, 165, 55) 1px solid;
 }
 
-.container {
+.dash_container {
   display: flex;
   flex-direction: column;
   height: 100%;

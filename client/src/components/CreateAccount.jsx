@@ -1,11 +1,12 @@
 import styles from '../styles/CreateAccount.module.css'
 import axios from '../api/axios'
 import useAuth from '../hooks/useAuth'
+import AccTypeChoice from './AccTypeChoice'
 
 const CreateAccount = ({ accType, setAccType, userAction, setUserAction, userStatus,
                          setUserStatus, activeEmail, setActiveEmail, handleClick }) => {
 
-    const { auth } = useAuth();
+  const { auth } = useAuth();
 
   async function AddNewAcc(formData) {
     const name = formData.get('name');
@@ -30,6 +31,11 @@ const CreateAccount = ({ accType, setAccType, userAction, setUserAction, userSta
   return (
     <div className={`${userAction !== 'create_acc' ? styles.hidden : null}
                      ${styles.container}`}>
+        <AccTypeChoice
+          userAction={userAction}
+          accType={accType}
+          setAccType={setAccType}
+        />
         <div className={`${styles.duplicate} ${userStatus !== 'duplicate' ? styles.hidden : null}`}>
           {`Address "${activeEmail}" is already taken!`}
         </div>

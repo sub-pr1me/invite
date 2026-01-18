@@ -1,0 +1,8 @@
+.hidden {
+    display: none !important;
+}
+
+.btns_div {
+  display: flex;
+  flex-direction: column;
+}

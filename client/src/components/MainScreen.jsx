@@ -1,7 +1,7 @@
 import styles from '../styles/MainScreen.module.css'
 import { Suspense, useState} from 'react'
 import { ShowMessageSeconds } from '../functions/ShowMessageSeconds'
-import AccTypeChoice from './AccTypeChoice'
+import Options from './Options'
 import CreateAccount from './CreateAccount'
 import Log_In from './Log_In'
 import Loading from './Loading'
@@ -29,17 +29,12 @@ const MainScreen = () => {
 
   return (
     <>
+    <title>Invite</title>
     <div className={`${styles.content} ${auth ? styles.hidden : null}`}>
-      <AccTypeChoice
-        userAction={userAction}
-        accType={accType}
-        setAccType={setAccType}
-      />
-      <div className={`${styles.btns_div}
-                 ${userAction ? styles.hidden : null}`}>
-        <button onClick={() => handleClick('create_acc')}>Create Account</button>
-        <button onClick={() => handleClick('sign_in')}>Log In</button>
-      </div>
+      <Options
+        auth={auth}
+        handleClick={handleClick}
+        userAction={userAction}/>
       <CreateAccount
         handleClick={handleClick}
         userAction={userAction}

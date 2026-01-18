@@ -1,6 +1,13 @@
-import styles from '../styles/Dashboard.module.css'
 import useAuth from '../hooks/useAuth'
-import Log_Out from './Log_Out'
+import RequireAuth from './RequireAuth'
+import { Routes, Route } from 'react-router-dom'
+import Layout from './Layout'
+import Home from './Home'
+import Clients from './Clients'
+import Profile from './Profile'
+import Auctions from './Auctions'
+import Stats from './Stats'
+import Missing from './Missing'
 
 const Dashboard = () => {
   
@@ -10,30 +17,20 @@ const Dashboard = () => {
 
   return (
     <>
-    <div className={`${styles.container} ${!auth ? styles.hidden : null}`}>
-      <header>
-        <div className={`${styles.user}`}>
-          <div className={`${styles.profile_pic}`}>PIC</div>
-          <div className={`${styles.userdata}`}>
-            <div className={`${styles.name}`}>{auth.name}</div>
-            <div className={`${styles.email}`}>{auth.email}</div>
-          </div>          
-        </div>
-        <div className={`${styles.logout}`}>
-          <Log_Out />
-        </div>          
-      </header>
-      <main>
-        <button onClick={()=> {console.log('AUTH - ', auth)}}>GET DATA</button>
-      </main>
-      <nav>
-        <div>HOME</div>
-        <div>CLIENTS</div>
-        <div>PROFILE</div>
-        <div>AUCTIONS</div>
-        <div>STATS</div>
-      </nav>
-    </div>
+    <Routes>
+      <Route path='/' element={<Layout />}>
+        <Route element={<RequireAuth />}>
+          <Route index element={<Home />} />
+          <Route path='/clients' element={<Clients />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/auctions' element={<Auctions />} />
+          <Route path='/stats' element={<Stats />} />
+        </Route>
+
+        <Route path='*' element={<Missing />} />
+
+      </Route>
+    </Routes>
     </>
   )
 }

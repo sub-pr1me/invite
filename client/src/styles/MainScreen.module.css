@@ -14,11 +14,6 @@
   align-self: center;
 }
 
-.btns_div {
-  display: flex;
-  flex-direction: column;
-}
-
 .hidden {
     display: none;
 }
