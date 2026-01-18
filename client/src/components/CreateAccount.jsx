@@ -1,8 +1,11 @@
 import styles from '../styles/CreateAccount.module.css'
 import axios from '../api/axios'
+import useAuth from '../hooks/useAuth'
 
 const CreateAccount = ({ accType, setAccType, userAction, setUserAction, userStatus,
                          setUserStatus, activeEmail, setActiveEmail, handleClick }) => {
+
+    const { auth } = useAuth();
 
   async function AddNewAcc(formData) {
     const name = formData.get('name');
@@ -38,7 +41,7 @@ const CreateAccount = ({ accType, setAccType, userAction, setUserAction, userSta
             <button>Submit</button>
         </form>
         <button className={`${!userAction ? styles.hidden : null}
-        ${userStatus === 'acc_created' || userStatus === 'logged_out' ? null : styles.hidden}`}
+        ${userStatus === 'acc_created' || !auth ? null : styles.hidden}`}
           onClick={() => {
             handleClick('back');
             setUserStatus('logged_out')

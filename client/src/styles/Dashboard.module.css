@@ -3,7 +3,7 @@
 }
 
 * {
-  outline: greenyellow 1px solid;
+  outline: rgb(121, 165, 55) 1px solid;
 }
 
 .container {
@@ -67,8 +67,8 @@ main {
   height: 80%;
 }
 
+h2,
 h3 {
-  height: 100%;
   padding: 0px;
   margin: 0px;
 }

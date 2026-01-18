@@ -2,7 +2,7 @@ import styles from '../styles/Log_Out.module.css'
 import axios from '../api/axios'
 import useAuth from '../hooks/useAuth'
 
-const Log_Out = ({ setUserStatus, setUserAction }) => {
+const Log_Out = () => {
   const { setAuth } = useAuth();
 
   async function SignOut() {
@@ -15,9 +15,7 @@ const Log_Out = ({ setUserStatus, setUserAction }) => {
         }
       );
       console.log('LOGGED OUT');
-      setUserAction(null);
       setAuth(null);
-      setUserStatus('logged_out');
     } catch (err) {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');

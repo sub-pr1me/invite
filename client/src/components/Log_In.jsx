@@ -6,7 +6,7 @@ import UserLogIn from '../functions/UserLogIn'
 const Log_In = ({ handleClick, messagePromise, userAction, setUserAction, 
                   userStatus, setUserStatus, setActiveEmail, setAccType }) => {
   
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
   if (userStatus === 'acc_created') use(messagePromise);
 
   async function LogIn(formData) {
@@ -22,7 +22,7 @@ const Log_In = ({ handleClick, messagePromise, userAction, setUserAction,
       setAuth({ email, roles: [accType], name, token: accessToken, currentpage });
       setAccType(accType);
       setUserStatus('logged_in');
-      setUserAction('main_page');
+      setUserAction(null);
       console.log('LOGGED IN');
       
     } catch (err) {
@@ -48,7 +48,7 @@ const Log_In = ({ handleClick, messagePromise, userAction, setUserAction,
         <button>Submit</button>
       </form>
       <button className={`${!userAction ? styles.hidden : null}
-      ${userStatus === 'acc_created' || userStatus === 'logged_out' ? null : styles.hidden}`}
+      ${userStatus === 'acc_created' || !auth ? null : styles.hidden}`}
           onClick={() => {
             handleClick('back');
             setUserStatus('logged_out')

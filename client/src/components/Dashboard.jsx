@@ -2,10 +2,9 @@ import styles from '../styles/Dashboard.module.css'
 import useAuth from '../hooks/useAuth'
 import Log_Out from './Log_Out'
 
-
-const Dashboard = ({ setUserStatus, setUserAction }) => {
+const Dashboard = () => {
   
-  const { auth } = useAuth(); // Contains email + role + token
+  const { auth } = useAuth();
   
   if (!auth) return null;
 
@@ -21,7 +20,7 @@ const Dashboard = ({ setUserStatus, setUserAction }) => {
           </div>          
         </div>
         <div className={`${styles.logout}`}>
-          <Log_Out setUserStatus={setUserStatus} setUserAction={setUserAction} />
+          <Log_Out />
         </div>          
       </header>
       <main>

@@ -6,15 +6,15 @@ import CreateAccount from './CreateAccount'
 import Log_In from './Log_In'
 import Loading from './Loading'
 import Venues from './Venues'
-import Dashboard from './Dashboard'
 import useAuth from '../hooks/useAuth'
 
 const MainScreen = () => {
+  const [userStatus, setUserStatus] = useState('logged_out');
   const [userAction, setUserAction] = useState(null);
   const [activeEmail, setActiveEmail] = useState(null);
   const [accType, setAccType] = useState('venue');
   const messagePromise = ShowMessageSeconds(3);
-  const { userStatus, setUserStatus } = useAuth();
+  const { auth } = useAuth();
 
   function handleClick(action) {
 
@@ -29,7 +29,7 @@ const MainScreen = () => {
 
   return (
     <>
-    <div className={`${styles.content} ${userStatus === 'logged_in' ? styles.login : null}`}>
+    <div className={`${styles.content} ${auth ? styles.hidden : null}`}>
       <AccTypeChoice
         userAction={userAction}
         accType={accType}
@@ -51,7 +51,7 @@ const MainScreen = () => {
         accType={accType}
         setAccType={setAccType}
         />
-      <Suspense fallback={<Loading message={
+      <Suspense fallback={<Loading userStatus={userStatus} message={
           userStatus === 'acc_created' ?
           'Your account has been successfully created!' :
           'LOADING...'}/>}>
@@ -67,12 +67,6 @@ const MainScreen = () => {
           setAccType={setAccType}
         />
       </Suspense>
-      <Dashboard
-        accType={accType}
-        userStatus={userStatus}
-        setUserStatus={setUserStatus}
-        setUserAction={setUserAction}
-      />
     </div>
     <Suspense fallback={<Loading userStatus={userStatus} message={'LOADING...'}/>}>        
       <Venues userStatus={userStatus}/>
