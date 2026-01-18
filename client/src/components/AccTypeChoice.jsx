@@ -1,8 +1,8 @@
 import styles from '../styles/AccTypeChoice.module.css'
 
-const AccTypeChoice = ({ userAction, accType, setAccType }) => {
+const AccTypeChoice = ({ accType, setAccType }) => {
   return (
-    <div className={`${userAction !== 'create_acc' ? styles.hidden : null}`}>
+    <div>
       <h2>Choose your account type:</h2>
       <div className={`${styles.acc_type}`}>
         <div onClick={() => {setAccType('customer')}}

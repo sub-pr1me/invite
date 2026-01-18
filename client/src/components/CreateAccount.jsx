@@ -1,12 +1,15 @@
 import styles from '../styles/CreateAccount.module.css'
+import { useState } from 'react'
 import axios from '../api/axios'
 import useAuth from '../hooks/useAuth'
 import AccTypeChoice from './AccTypeChoice'
+import { useNavigate } from 'react-router-dom'
 
-const CreateAccount = ({ accType, setAccType, userAction, setUserAction, userStatus,
-                         setUserStatus, activeEmail, setActiveEmail, handleClick }) => {
+const CreateAccount = () => {
 
-  const { auth } = useAuth();
+  const [accType, setAccType] = useState('venue');
+  const { auth, userStatus, setUserStatus, activeEmail, setActiveEmail } = useAuth();
+  const navigate = useNavigate();
 
   async function AddNewAcc(formData) {
     const name = formData.get('name');
@@ -24,15 +27,13 @@ const CreateAccount = ({ accType, setAccType, userAction, setUserAction, userSta
     if (response.data === 'duplicate') {setUserStatus(response.data)};
     if (response.data === 'success') {
       setUserStatus('acc_created');
-      setUserAction('sign_in');
+      navigate('/login')
     };
   };
   
   return (
-    <div className={`${userAction !== 'create_acc' ? styles.hidden : null}
-                     ${styles.container}`}>
+    <div className={`${styles.container}`}>
         <AccTypeChoice
-          userAction={userAction}
           accType={accType}
           setAccType={setAccType}
         />
@@ -46,16 +47,13 @@ const CreateAccount = ({ accType, setAccType, userAction, setUserAction, userSta
             <input required name='acc_type' type="text" value={accType} hidden readOnly/>
             <button>Submit</button>
         </form>
-        <button className={`${!userAction ? styles.hidden : null}
-        ${userStatus === 'acc_created' || !auth ? null : styles.hidden}`}
-          onClick={() => {
-            handleClick('back');
-            setUserStatus('logged_out')
-            setActiveEmail(null);
-            setAccType('venue');
-            setUserAction(null);
-          }}>Go Back
-      </button>    
+          <button className={`${!auth ? null : styles.hidden}`}
+              onClick={() => {
+                setUserStatus('logged_out')
+                setActiveEmail(null);
+                navigate('/');
+              }}>Go Back
+          </button>  
     </div>
   )
 }

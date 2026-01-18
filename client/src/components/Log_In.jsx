@@ -1,12 +1,13 @@
 import styles from '../styles/Log_In.module.css'
 import { use } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
 import UserLogIn from '../functions/UserLogIn'
 
-const Log_In = ({ handleClick, messagePromise, userAction, setUserAction, 
-                  userStatus, setUserStatus, setActiveEmail, setAccType }) => {
+const Log_In = ({ messagePromise, userStatus, setUserStatus, setActiveEmail }) => {
   
-  const { auth, setAuth } = useAuth();
+  const { auth, setAuth} = useAuth();
+  const navigate = useNavigate();
   if (userStatus === 'acc_created') use(messagePromise);
 
   async function LogIn(formData) {
@@ -17,13 +18,12 @@ const Log_In = ({ handleClick, messagePromise, userAction, setUserAction,
       const accessToken = response?.data?.accessToken;
       const accType = response?.data?.accType;
       const name = response?.data?.username;
-      const currentpage = response?.data?.currentpage;
+      const currentPage = response?.data?.currentPage;
 
-      setAuth({ email, roles: [accType], name, token: accessToken, currentpage });
-      setAccType(accType);
+      setAuth({ email, roles: [accType], name, token: accessToken, currentPage });
       setUserStatus('logged_in');
-      setUserAction(null);
       console.log('LOGGED IN');
+      navigate('/dashboard');
       
     } catch (err) {
       if (!err?.response) {
@@ -39,24 +39,20 @@ const Log_In = ({ handleClick, messagePromise, userAction, setUserAction,
   };
   
   return (
-    <div className={`${userAction !== 'sign_in' ? styles.hidden : null}
-                     ${styles.container}`}>
+    <div className={`${styles.container}`}>
       <h2>Log In:</h2>
       <form action={LogIn}>
         <input required name='email' type="email" placeholder='Email'/>
-        <input required name='password' type="password" placeholder='Password'/>
-        <button>Submit</button>
+        <input required name='password' type="password" placeholder='Password'/>        
+          <button>Submit</button>
       </form>
-      <button className={`${!userAction ? styles.hidden : null}
-      ${userStatus === 'acc_created' || !auth ? null : styles.hidden}`}
-          onClick={() => {
-            handleClick('back');
-            setUserStatus('logged_out')
-            setActiveEmail(null);
-            setAccType('venue');
-            setUserAction(null);
-          }}>Go Back
-      </button>
+        <button className={`${!auth ? null : styles.hidden}`}
+            onClick={() => {
+              setUserStatus('logged_out')
+              setActiveEmail(null);
+              navigate('/');
+            }}>Go Back
+        </button>   
     </div>
   )
 }

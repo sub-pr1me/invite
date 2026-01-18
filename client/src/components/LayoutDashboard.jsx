@@ -1,13 +1,13 @@
 import { Outlet, Link } from 'react-router-dom'
-import styles from '../styles/Layout.module.css'
+import styles from '../styles/LayoutDashboard.module.css'
 import useAuth from '../hooks/useAuth'
 import Log_Out from './Log_Out'
 
-const Layout = () => {
+const LayoutDashboard = () => {
   const { auth } = useAuth();
   return (
     <>
-    <div className={`${styles.dash_container} ${!auth ? styles.hidden : null}`}>
+    <div className={`${styles.dash_container}`}>
       <header>
         <div className={`${styles.user}`}>
           <div className={`${styles.profile_pic}`}>PIC</div>
@@ -24,15 +24,15 @@ const Layout = () => {
         <Outlet />
       </main>
       <nav>
-        <Link to='/'>HOME</Link>
-        <Link to='/clients'>CLIENTS</Link>
-        <Link to='/profile'>PROFILE</Link>
-        <Link to='/auctions'>AUCTIONS</Link>
-        <Link to='/stats'>STATS</Link>
+        <Link to='/dashboard/'>HOME</Link>
+        <Link to='/dashboard/clients'>CLIENTS</Link>
+        <Link to='/dashboard/profile'>PROFILE</Link>
+        <Link to='/dashboard/auctions'>AUCTIONS</Link>
+        <Link to='/dashboard/stats'>STATS</Link>
       </nav>
     </div>      
     </>
   )
 }
 
-export default Layout
+export default LayoutDashboard

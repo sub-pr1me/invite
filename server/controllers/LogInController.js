@@ -29,7 +29,7 @@ export default async function LogInController(req, res) {
   if (matchedVenues) {username = dbData.venue};
   if (matchedCustomers) {username = dbData.customer};
 
-  const currentpage = 'home';
+  const currentPage = 'home';
 
   if (match) {
 
@@ -50,6 +50,6 @@ export default async function LogInController(req, res) {
 
     // SEND TOKEN TO USER
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
-    res.json({ accessToken, accType, username, currentpage });
+    res.json({ accessToken, accType, username, currentPage });
   }
 };
