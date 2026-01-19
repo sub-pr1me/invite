@@ -1,14 +1,12 @@
 import styles from '../styles/Log_In.module.css'
-import { use } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
 import UserLogIn from '../functions/UserLogIn'
 
-const Log_In = ({ messagePromise, userStatus, setUserStatus, setActiveEmail }) => {
+const Log_In = () => {
   
-  const { auth, setAuth} = useAuth();
+  const { auth, setAuth, setActiveEmail } = useAuth();
   const navigate = useNavigate();
-  if (userStatus === 'acc_created') use(messagePromise);
 
   async function LogIn(formData) {
     const email = formData.get('email');
@@ -21,7 +19,6 @@ const Log_In = ({ messagePromise, userStatus, setUserStatus, setActiveEmail }) =
       const currentPage = response?.data?.currentPage;
 
       setAuth({ email, roles: [accType], name, token: accessToken, currentPage });
-      setUserStatus('logged_in');
       console.log('LOGGED IN');
       navigate('/dashboard');
       
@@ -48,7 +45,6 @@ const Log_In = ({ messagePromise, userStatus, setUserStatus, setActiveEmail }) =
       </form>
         <button className={`${!auth ? null : styles.hidden}`}
             onClick={() => {
-              setUserStatus('logged_out')
               setActiveEmail(null);
               navigate('/');
             }}>Go Back

@@ -1,4 +1,4 @@
-import RequireAuth from './RequireAuth'
+// import RequireAuth from './RequireAuth'
 import { Routes, Route } from 'react-router-dom'
 import LayoutDashboard from './LayoutDashboard'
 import Home from './Home'
