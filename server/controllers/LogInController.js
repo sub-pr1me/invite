@@ -29,8 +29,6 @@ export default async function LogInController(req, res) {
   if (matchedVenues) {username = dbData.venue};
   if (matchedCustomers) {username = dbData.customer};
 
-  const currentPage = 'home';
-
   if (match) {
 
     // CREATE JWT
@@ -50,6 +48,6 @@ export default async function LogInController(req, res) {
 
     // SEND TOKEN TO USER
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
-    res.json({ accessToken, accType, username, currentPage });
+    res.json({ accessToken, accType, username });
   }
 };

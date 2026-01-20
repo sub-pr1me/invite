@@ -13,6 +13,22 @@ export default async function handleRefreshToken(req, res) {
   const matchedCustomer = await checkCustomerToken(refreshToken);
   if (!matchedVenue && !matchedCustomer) return res.sendStatus(403);// Forbidden
 
+  let name = null;
+  let roles = null;
+  let email = null;
+
+  if (matchedVenue) {
+    roles = ['venue'];
+    name = matchedVenue.venue;
+    email = matchedVenue.email;
+  }
+
+  if (matchedCustomer) {
+    roles = ['customer'];
+    name = matchedCustomer.customer;
+    email = matchedCustomer.email;
+  }
+
   // Evaluate JWT
 
   jwt.verify(
@@ -28,7 +44,7 @@ export default async function handleRefreshToken(req, res) {
         { expiresIn: '30s' }
       );
       // console.log('NEW TOKEN - ', accessToken);
-      res.json({ accessToken })
+      res.json({ accessToken, roles, name, email})
     }
   );  
 };

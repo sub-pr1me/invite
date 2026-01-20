@@ -5,7 +5,7 @@ import useAuth from '../hooks/useAuth'
 
 const Log_In = () => {
   
-  const { auth, setAuth, setActiveEmail } = useAuth();
+  const { setAuth, setActiveEmail } = useAuth();
   const navigate = useNavigate();
 
   async function LogIn(formData) {
@@ -22,9 +22,8 @@ const Log_In = () => {
       const accessToken = response?.data?.accessToken;
       const accType = response?.data?.accType;
       const name = response?.data?.username;
-      const currentPage = response?.data?.currentPage;
 
-      setAuth({ email, roles: [accType], name, token: accessToken, currentPage });
+      setAuth({ email, roles: [accType], name, token: accessToken });
       console.log('LOGGED IN');
       navigate('/dashboard');
       
@@ -49,7 +48,7 @@ const Log_In = () => {
         <input required name='password' type="password" placeholder='Password'/>        
           <button>Submit</button>
       </form>
-        <button className={`${!auth ? null : styles.hidden}`}
+        <button
             onClick={() => {
               setActiveEmail(null);
               navigate('/');

@@ -13,7 +13,13 @@ const useRefreshToken = () => {
     setAuth(prev => {
       // console.log('OLD TOKEN - ', prev);
       // console.log('NEW TOKEN - ', response.data.accessToken);
-      return { ...prev, token: response.data.accessToken }
+      return {
+        ...prev,
+        token: response.data.accessToken,
+        name: response.data.name,
+        email: response.data.email,
+        roles: response.data.roles
+      }
     });
     return response.data.accessToken;
   } 
