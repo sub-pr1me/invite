@@ -9,8 +9,8 @@ const RequireAuth = () => {
   return (
     auth?.email
         ? <Outlet />
-        : <Navigate to='/' state={{ from: location}} replace />
-  )
+        : <Navigate to='/login' state={{ from: location}} replace />
+  );
 }
 
 export default RequireAuth

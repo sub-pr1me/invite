@@ -1,7 +1,7 @@
 import styles from '../styles/Log_In.module.css'
 import { useNavigate } from 'react-router-dom'
+import axios from "../api/axios";
 import useAuth from '../hooks/useAuth'
-import UserLogIn from '../functions/UserLogIn'
 
 const Log_In = () => {
   
@@ -12,7 +12,13 @@ const Log_In = () => {
     const email = formData.get('email');
     const password = formData.get('password');
     try {      
-      const response = await UserLogIn(email, password);
+      const response = await axios.post("/login",
+        {email: email, password: password},
+        {
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          withCredentials: true
+        }
+      );
       const accessToken = response?.data?.accessToken;
       const accType = response?.data?.accType;
       const name = response?.data?.username;
