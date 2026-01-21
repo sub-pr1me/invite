@@ -2,6 +2,13 @@
     display: none !important;
 }
 
-.logout_container {
+.logout_container, a {
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+a {
+  height: 100%;
+  width: 100%;
 }
