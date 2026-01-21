@@ -5,7 +5,6 @@ import CreateAccRouter from "./routes/CreateAccRouter.js";
 import LogInRouter from "./routes/LogInRouter.js";
 import RefreshRouter from "./routes/RefreshRouter.js";
 import LogOutRouter from "./routes/LogOutRouter.js";
-import DashboardRouter from "./routes/DashboardRouter.js"
 import verifyJWT from "./middleware/verifyJWT.js";
 import cookieParser from 'cookie-parser';
 
@@ -25,7 +24,10 @@ app.use('/logout', LogOutRouter);
 
 app.use(verifyJWT);
 
-app.use('/user', DashboardRouter);
+
+
+
+
 
 const PORT = 3000;
 

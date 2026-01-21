@@ -71,8 +71,3 @@ export async function deleteRefreshToken(acc_type, email) {
   await pool.query(`UPDATE ${acc_type}s SET refToken = '' WHERE email = '${email}'`);
   return 'success';
 };
-
-export async function getLoggedInUserData(email, acc_type) {
-  const { rows } = await pool.query(`SELECT id, email, pics, ${acc_type} FROM ${acc_type}s WHERE email LIKE '${email}'`);
-  return await rows[0];
-};
