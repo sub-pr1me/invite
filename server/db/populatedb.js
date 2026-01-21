@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS venues (
   venue VARCHAR ( 255 ) NOT NULL UNIQUE,
   email citext NOT NULL UNIQUE,
   password VARCHAR ( 255 ),
+  stage VARCHAR ( 255 ),
   pics TEXT[],
   reftoken VARCHAR ( 255 )
 );
@@ -19,15 +20,16 @@ CREATE TABLE IF NOT EXISTS customers (
   customer VARCHAR ( 255 ),
   email citext NOT NULL UNIQUE,
   password VARCHAR ( 255 ),
+  stage VARCHAR ( 255 ),
   pics TEXT[],
   reftoken VARCHAR ( 255 )
 );
 
-INSERT INTO venues (venue, email, password, pics) 
+INSERT INTO venues (venue, email, password, stage, pics) 
 VALUES
-  ('ALMAR Seafood Bar', 'almar@gmail.com', 'almar123', '{https://res.cloudinary.com/dn1vxf0hg/image/upload/v1765461914/almar_dgpueu.jpg}'),
-  ('Elia Backyard Restaurant', 'elia@gmail.com', 'elia123', '{https://res.cloudinary.com/dn1vxf0hg/image/upload/v1765461914/elia_zhszb9.jpg}'),
-  ('To Arxontikon Taverna', 'arxontikon@gmail.com', 'arxontikon123', '{https://res.cloudinary.com/dn1vxf0hg/image/upload/v1765461916/arxontikon_jgme5l.jpg}');
+  ('ALMAR Seafood Bar', 'almar@gmail.com', '$2b$10$kyqN3Zq1Pz8z8StirfeKG.3PZ0MXU79SjZq698XJYB269IpxFiSh2', '2', '{https://res.cloudinary.com/dn1vxf0hg/image/upload/v1765461914/almar_dgpueu.jpg}'),
+  ('Elia Backyard Restaurant', 'elia@gmail.com', '$2b$10$WcdIqHK1zph72gBvNMmoGOwm2Y.Ri4ODe3Hrxhy.PEaRu4eHeAgLi', '2', '{https://res.cloudinary.com/dn1vxf0hg/image/upload/v1765461914/elia_zhszb9.jpg}'),
+  ('To Arxontikon Taverna', 'arxontikon@gmail.com', '$2b$10$Z52bajBvHxVlQKarHIxaZ.EdREeXMZpoBes6nUXMchxHxSTGvUty6', '2', '{https://res.cloudinary.com/dn1vxf0hg/image/upload/v1765461916/arxontikon_jgme5l.jpg}');
 `;
 
 async function main() {

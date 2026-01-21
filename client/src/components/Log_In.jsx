@@ -22,8 +22,11 @@ const Log_In = () => {
       const accessToken = response?.data?.accessToken;
       const accType = response?.data?.accType;
       const name = response?.data?.username;
+      const album = response?.data?.pics;
+      const stage = response?.data?.stage;
+      const profilePic = album.shift();
 
-      setAuth({ email, roles: [accType], name, token: accessToken });
+      setAuth({ email, roles: [accType], name, profilePic, album, stage, token: accessToken });
       console.log('LOGGED IN');
       navigate('/dashboard');
       

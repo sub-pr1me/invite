@@ -10,7 +10,7 @@ const LayoutDashboard = () => {
     <div className={`${styles.dash_container}`}>
       <header>
         <div className={`${styles.user}`}>
-          <div className={`${styles.profile_pic}`}>PIC</div>
+          <div className={`${styles.profile_pic}`}><img src={auth.profilePic} alt="IMG" /></div>
           <div className={`${styles.userdata}`}>
             <div className={`${styles.name}`}>{auth.name}</div>
             <div className={`${styles.email}`}>{auth.email}</div>

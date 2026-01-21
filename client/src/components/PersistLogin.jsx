@@ -9,7 +9,7 @@ const PersistLogin = () => {
   const { auth } = useAuth();
   const verifyRefreshToken = async () => {
     try {
-      await refresh();      
+      await refresh();
     } catch (err) {
       console.error(err)
     } finally {

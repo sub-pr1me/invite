@@ -29,6 +29,14 @@ export default async function LogInController(req, res) {
   if (matchedVenues) {username = dbData.venue};
   if (matchedCustomers) {username = dbData.customer};
 
+  let pics = null;
+  if (matchedVenues) {pics = dbData.pics};
+  if (matchedCustomers) {pics = dbData.pics};
+
+  let stage = null;
+  if (matchedVenues) {stage = dbData.stage};
+  if (matchedCustomers) {stage = dbData.stage};
+
   if (match) {
 
     // CREATE JWT
@@ -48,6 +56,6 @@ export default async function LogInController(req, res) {
 
     // SEND TOKEN TO USER
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
-    res.json({ accessToken, accType, username });
+    res.json({ accessToken, accType, username, pics, stage });
   }
 };
