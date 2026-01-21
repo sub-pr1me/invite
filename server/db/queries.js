@@ -6,11 +6,6 @@ export async function getAllVenueData() {
   for (let i=0; i<rows.length; i++) {
     delete rows[i].email;
     delete rows[i].password;
-    const album = rows[i].pics;
-    const profilePic = album.shift();
-    rows[i].profilePic = profilePic;
-    rows[i].album = album;
-    delete rows[i].pics;
   };
   
   return rows;
@@ -22,11 +17,6 @@ export async function getAllCustomerData() {
   for (let i=0; i<rows.length; i++) {
     delete rows[i].email;
     delete rows[i].password;
-    const album = rows[i].pics;
-    const profilePic = album.shift();
-    rows[i].profilePic = profilePic;
-    rows[i].album = album;
-    delete rows[i].pics;
   };
   
   return rows;
@@ -42,13 +32,14 @@ export async function checkCustomersForMatch(email) {
   return rows[0];
 };
 
-export async function createNewUser(acc_type, name, email, password, stage) {
-  await pool.query(`INSERT INTO ${acc_type}s (${acc_type}, email, password, stage) VALUES ($1, $2, $3, $4)`, [name, email, password, stage]);
+export async function createNewUser(acc_type, name, email, password) {
+  await pool.query(
+    `INSERT INTO ${acc_type}s (${acc_type}, email, password) VALUES ($1, $2, $3)`, [name, email, password]);
   return 'success';
 };
 
 export async function getUserData(email, acc_type) {
-  const { rows } = await pool.query(`SELECT ${acc_type}, password, pics, stage FROM ${acc_type}s WHERE email LIKE '${email}'`);
+  const { rows } = await pool.query(`SELECT ${acc_type}, password, stage, avatar, album, rating FROM ${acc_type}s WHERE email LIKE '${email}'`);
   return rows[0];
 };
 

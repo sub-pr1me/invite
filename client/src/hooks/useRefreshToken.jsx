@@ -16,12 +16,13 @@ const useRefreshToken = () => {
       return {
         ...prev,
         token: response.data.accessToken,
-        name: response.data.name,
-        email: response.data.email,
         roles: response.data.roles,
+        email: response.data.email,
+        name: response.data.name,
+        avatar: response.data.avatar,
         album: response.data.album,
-        profilePic: response.data.profilePic,
-        stage: response.data.stage
+        stage: response.data.stage,
+        rating: response.data.rating
       }
     });
     return response.data.accessToken;

@@ -25,17 +25,25 @@ export default async function LogInController(req, res) {
   const dbData = await getUserData(email, accType);
   const match = await bcrypt.compare(req.body.password, dbData.password);
 
-  let username = null;
-  if (matchedVenues) {username = dbData.venue};
-  if (matchedCustomers) {username = dbData.customer};
-
-  let pics = null;
-  if (matchedVenues) {pics = dbData.pics};
-  if (matchedCustomers) {pics = dbData.pics};
+  let name = null;
+  if (matchedVenues) {name = dbData.venue};
+  if (matchedCustomers) {name = dbData.customer};
 
   let stage = null;
   if (matchedVenues) {stage = dbData.stage};
   if (matchedCustomers) {stage = dbData.stage};
+
+  let avatar = null;
+  if (matchedVenues) {avatar = dbData.avatar};
+  if (matchedCustomers) {avatar = dbData.avatar};
+
+  let album = null;
+  if (matchedVenues) {album = dbData.album};
+  if (matchedCustomers) {album = dbData.album};
+
+  let rating = null;
+  if (matchedVenues) {rating = dbData.rating};
+  if (matchedCustomers) {rating = dbData.rating};
 
   if (match) {
 
@@ -56,6 +64,6 @@ export default async function LogInController(req, res) {
 
     // SEND TOKEN TO USER
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
-    res.json({ accessToken, accType, username, pics, stage });
+    res.json({ accessToken, accType, name, stage, avatar, album, rating });
   }
 };

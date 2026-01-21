@@ -19,14 +19,16 @@ const Log_In = () => {
           withCredentials: true
         }
       );
+
       const accessToken = response?.data?.accessToken;
       const accType = response?.data?.accType;
-      const name = response?.data?.username;
-      const album = response?.data?.pics;
+      const name = response?.data?.name;
       const stage = response?.data?.stage;
-      const profilePic = album.shift();
+      const avatar = response?.data?.avatar;
+      const album = response?.data?.album;
+      const rating = response?.data?.rating;
 
-      setAuth({ email, roles: [accType], name, profilePic, album, stage, token: accessToken });
+      setAuth({ token: accessToken, roles: [accType], email, name, stage, avatar, album, rating });
       console.log('LOGGED IN');
       navigate('/dashboard');
       

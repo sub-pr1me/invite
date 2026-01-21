@@ -13,29 +13,32 @@ export default async function handleRefreshToken(req, res) {
   const matchedCustomer = await checkCustomerToken(refreshToken);
   if (!matchedVenue && !matchedCustomer) return res.sendStatus(403);// Forbidden
 
-  let name = null;
   let roles = null;
   let email = null;
+  let name = null;
+  let avatar = null;
   let album = null;
-  let profilePic = null;
   let stage = null;
+  let rating = null;
 
   if (matchedVenue) {
     roles = ['venue'];
-    name = matchedVenue.venue;
     email = matchedVenue.email;
-    album = matchedVenue.pics;
-    profilePic = album.shift();
+    name = matchedVenue.venue;
+    avatar = matchedVenue.avatar;
+    album = matchedVenue.album;
     stage = matchedVenue.stage;
+    rating = matchedVenue.rating;
   }
 
   if (matchedCustomer) {
     roles = ['customer'];
-    name = matchedCustomer.customer;
     email = matchedCustomer.email;
-    album = matchedCustomer.pics;
-    profilePic = album.shift();
-    stage = matchedCustomer.stage;    
+    name = matchedCustomer.customer;
+    avatar = matchedCustomer.avatar;
+    album = matchedCustomer.album;
+    stage = matchedCustomer.stage;
+    rating = matchedVenue.rating;
   }
 
   // Evaluate JWT
@@ -53,7 +56,7 @@ export default async function handleRefreshToken(req, res) {
         { expiresIn: '30s' }
       );
       // console.log('NEW TOKEN - ', accessToken);
-      res.json({ accessToken, roles, name, email, album, profilePic, stage})
+      res.json({ accessToken, roles, email, name, avatar, album, stage, rating})
     }
   );  
 };

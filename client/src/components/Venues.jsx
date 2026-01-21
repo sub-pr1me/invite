@@ -6,7 +6,7 @@ export default function Venues() {
 
   const { auth, venuesPromise } = useAuth();
   const fetched = use(venuesPromise);
-  const venues = fetched.filter((ven) => ven.album);  
+  const venues = fetched.filter((ven) => ven.avatar);  
   // const getRandomKey = () => crypto.randomUUID();
 
   return (
@@ -18,7 +18,7 @@ export default function Venues() {
           <ul>{venues.map((item) => (
             <div key={item.id}>
               <div className={`${styles.item}`}>
-                <img src={item.profilePic} alt="IMG" />
+                <img src={item.avatar} alt="IMG" />
                 {/* {item.pics.map((img) => (<img key={getRandomKey()} src={img} alt="IMAGE" />))} */}
               </div>
               <li>{item.venue}</li>
