@@ -1,7 +1,6 @@
 import styles from '../styles/CreateAccount.module.css'
 import { useState, useEffect } from 'react'
 import axios from '../api/axios'
-import useAuth from '../hooks/useAuth'
 import AccTypeChoice from './AccTypeChoice'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,7 +9,6 @@ const CreateAccount = () => {
   const [result, setResult] = useState(null);
 
   const [accType, setAccType] = useState('venue');
-  const { auth } = useAuth();
   const navigate = useNavigate();
 
   async function AddNewAcc(formData) {
@@ -56,7 +54,7 @@ const CreateAccount = () => {
             <input required name='acc_type' type="text" value={accType} hidden readOnly/>
             <button>Submit</button>
         </form>
-          <button className={`${!auth ? null : styles.hidden}`}
+          <button
               onClick={() => {
                 navigate('/');
               }}>Go Back

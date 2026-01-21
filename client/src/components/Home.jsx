@@ -1,9 +1,14 @@
 import useAuth from '../hooks/useAuth'
+import { useEffect, useEffectEvent } from 'react';
 
 const Home = () => {
 
   const { auth } = useAuth();
-  console.log(auth);
+  const onRefresh = useEffectEvent(()=>{console.log(auth)});
+  
+  useEffect(()=>{
+    onRefresh();
+  },[])
 
   return (
     <>
