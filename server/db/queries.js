@@ -6,6 +6,11 @@ export async function getAllVenueData() {
   for (let i=0; i<rows.length; i++) {
     delete rows[i].email;
     delete rows[i].password;
+    const album = rows[i].pics;
+    const profilePic = album.shift();
+    rows[i].profilePic = profilePic;
+    rows[i].album = album;
+    delete rows[i].pics;
   };
   
   return rows;
@@ -17,6 +22,11 @@ export async function getAllCustomerData() {
   for (let i=0; i<rows.length; i++) {
     delete rows[i].email;
     delete rows[i].password;
+    const album = rows[i].pics;
+    const profilePic = album.shift();
+    rows[i].profilePic = profilePic;
+    rows[i].album = album;
+    delete rows[i].pics;
   };
   
   return rows;
