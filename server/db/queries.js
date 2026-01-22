@@ -32,9 +32,9 @@ export async function checkCustomersForMatch(email) {
   return rows[0];
 };
 
-export async function createNewUser(acc_type, name, email, password) {
+export async function createNewUser(acc_type, name, email, password, stage) {
   await pool.query(
-    `INSERT INTO ${acc_type}s (${acc_type}, email, password) VALUES ($1, $2, $3)`, [name, email, password]);
+    `INSERT INTO ${acc_type}s (${acc_type}, email, password, stage) VALUES ($1, $2, $3, $4)`, [name, email, password, stage]);
   return 'success';
 };
 

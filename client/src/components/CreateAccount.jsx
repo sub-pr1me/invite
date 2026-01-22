@@ -20,7 +20,7 @@ const CreateAccount = () => {
     try {
 
     const response = await axios.post("/create_account",
-      { name: name, email: email, password: password, acc_type: acc_type },
+      { acc_type: acc_type, name: name, email: email, password: password },
       {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
     );
 

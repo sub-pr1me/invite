@@ -1,4 +1,5 @@
 import useAuth from '../hooks/useAuth'
+import styles from '../styles/Home.module.css'
 import { useEffect, useEffectEvent } from 'react';
 
 const Home = () => {
@@ -13,7 +14,20 @@ const Home = () => {
   return (
     <>
     <title>Home</title>
-    <div>Home</div>
+    <div className={`${auth.stage !== '0' ? styles.hidden : null}`}>
+      STAGE 0 - UPLOAD AVATAR
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    <div className={`${auth.stage !== '1' ? styles.hidden : null}`}>STAGE 1 - UPLOAD ALBUM</div>
+    <div className={`${auth.stage !== '2' ? styles.hidden : null}`}>STAGE 2 - FILL OUT INFO</div>
+    <div className={`${auth.stage !== '3' ? styles.hidden : null}`}>STAGE 3 - SET AUCTION</div>
+    <div className={`${auth.stage !== '4' ? styles.hidden : null}`}>STAGE 4 - VISIBLE</div>
     </>    
   )
 }
