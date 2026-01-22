@@ -2,9 +2,9 @@
     display: none !important;
 }
 
-* {
+/* * {
   outline: rgb(121, 165, 55) 1px solid;
-}
+} */
 
 .dash_container {
   display: flex;
@@ -18,7 +18,9 @@ main,
 nav,
 .user,
 .logout,
-.avatar {
+.avatar,
+.logo,
+.add {
   display: flex;
   align-items: center;
 }
@@ -40,13 +42,48 @@ nav,
   align-items: flex-start;
 }
 
-.avatar img {
-  width: 60px;
-  min-width: 60px;
+.avatar {
   max-width: 60px;
   height: 60px;
   border-radius: 50%;
   justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.border {
+  border: 2px solid rgb(211, 148, 226);
+}
+
+.border:hover {
+  background-color: rgb(54, 38, 70);
+}
+
+.add {
+  justify-content: center;
+  align-items: center;
+  max-width: 50%;
+  height: auto;
+  filter: invert(50%) sepia(50%) saturate(500%) hue-rotate(220deg) brightness(123%) contrast(100%);
+}
+
+header .arrow {
+  position: absolute;
+  width: 20vh;
+  height: auto;
+  top: 10vh;
+  left: clamp(1%, 3vw, 5%);
+  filter: invert(50%) sepia(50%) saturate(500%) hue-rotate(220deg) brightness(123%) contrast(100%);
+  animation: swing .7s ease-in-out infinite alternate both running;
+}
+
+@keyframes swing {
+    0% {
+        transform: rotate(245deg) translateX(-15%);
+    }
+    100% {
+        transform: rotate(245deg) translateX(0%);
+    }
 }
 
 .logout {
@@ -65,12 +102,6 @@ main {
   flex-direction: column;
   justify-content: center;
   height: 80%;
-}
-
-h2,
-h3 {
-  padding: 0px;
-  margin: 0px;
 }
 
 button {

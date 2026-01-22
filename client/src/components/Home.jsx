@@ -15,7 +15,11 @@ const Home = () => {
     <>
     <title>Home</title>
     <div className={`${auth.stage !== '0' ? styles.hidden : null}`}>
-      STAGE 0 - UPLOAD AVATAR
+      <div className={`${styles.welcome}`}>Welcome!<br/>{
+        auth.roles[0] === 'venue' ?
+        `Please start by uploading your venue's logo!` :
+        `Please start by uploading your profile photo!` 
+      }</div>
     </div>
     
     
