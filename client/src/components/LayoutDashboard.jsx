@@ -2,27 +2,20 @@ import { Outlet, Link } from 'react-router-dom'
 import styles from '../styles/LayoutDashboard.module.css'
 import useAuth from '../hooks/useAuth'
 import Log_Out from './Log_Out'
+import LogoUpload from './LogoUpload'
 
 const LayoutDashboard = () => {
   const { auth } = useAuth();
-
-  function addLogo() {
-    
-  };
 
   return (
     <>
     <div className={`${styles.dash_container}`}>
       <header>
-        <img src="../../img/arrow.png" alt="" className={`${auth.avatar ? styles.hidden : null} ${styles.arrow}`}/>
+        <img src='../../img/arrow.png' alt='' className={`${auth.avatar ? styles.hidden : null} ${styles.arrow}`}/>
         <div className={`${styles.user}`}>
           <div className={`${styles.avatar} ${auth.stage === '0' ? styles.border : null}`}>
-            <img src={auth.avatar} alt="LOGO" className={`${!auth.avatar ? styles.hidden : null} ${styles.logo}`}/>
-            <img src="../../img/add.png"
-                 alt="ADD"
-                 className={`${auth.avatar ? styles.hidden : null} ${styles.add}`}
-                 onClick={()=>{addLogo}}
-            />
+            <img src={auth.avatar} alt='LOGO' className={`${!auth.avatar ? styles.hidden : null} ${styles.logo}`}/>
+            <LogoUpload />
           </div>
           <div className={`${styles.userdata}`}>
             <div className={`${styles.name}`}>{auth.name}</div>

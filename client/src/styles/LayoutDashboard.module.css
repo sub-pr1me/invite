@@ -20,9 +20,21 @@ nav,
 .logout,
 .avatar,
 .logo,
-.add {
+.add,
+label {
   display: flex;
   align-items: center;
+}
+
+label {
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+}
+
+label:hover {
+  background-color: rgb(54, 38, 70);
 }
 
 .user {
@@ -53,18 +65,6 @@ nav,
 
 .border {
   border: 2px solid rgb(211, 148, 226);
-}
-
-.border:hover {
-  background-color: rgb(54, 38, 70);
-}
-
-.add {
-  justify-content: center;
-  align-items: center;
-  max-width: 50%;
-  height: auto;
-  filter: invert(50%) sepia(50%) saturate(500%) hue-rotate(220deg) brightness(123%) contrast(100%);
 }
 
 header .arrow {

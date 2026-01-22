@@ -1,0 +1,21 @@
+.hidden {
+    display: none !important;
+}
+
+.upload {
+  display: none;
+}
+
+.add {
+  justify-content: center;
+  align-items: center;
+  max-width: 50%;
+  height: auto;
+  filter: invert(50%) sepia(50%) saturate(500%) hue-rotate(220deg) brightness(123%) contrast(100%);
+}
+
+.send {
+  position: absolute;
+  top: 35%;
+  left: 40%;
+}
