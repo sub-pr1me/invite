@@ -7,7 +7,7 @@ const LogoUpload = () => {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState('idle');
   const axiosPrivate = useAxiosPrivate();
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
 
   function handleFileChange(e) {if (e.target.files) setFile(e.target.files[0])};
 
@@ -21,18 +21,27 @@ const LogoUpload = () => {
       await axiosPrivate.post('/logo_upload', formData,
         {
           headers: {'Content-Type': 'multipart/form-data'},
-          withCredentials: true
+          withCredentials: true,
         });
       setStatus('success');
-      console.log('success');
+      console.log('FILE UPLOADED');
     } catch(err) {
       setStatus('error');
       console.log(err);
     }
   });
+
+  const resetStatus = useEffectEvent((status)=>{
+    if(status === 'success') {
+      setFile(null);
+      setAuth({...auth, stage: '1'});
+      window.location.reload();
+    }    
+  });
   
   useEffect(()=>{    
     if (file && status === 'idle') handleFileUpload(file);
+    resetStatus(status);
   },[file, status]);
 
   return (

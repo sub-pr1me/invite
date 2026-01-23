@@ -62,3 +62,9 @@ export async function deleteRefreshToken(acc_type, email) {
   await pool.query(`UPDATE ${acc_type}s SET refToken = '' WHERE email = '${email}'`);
   return 'success';
 };
+
+export async function uploadNewAvatar(acc_type, email, link) {
+  await pool.query(`UPDATE ${acc_type}s SET avatar = '${link}' WHERE email = '${email}'`);
+  await pool.query(`UPDATE ${acc_type}s SET stage = '1' WHERE email = '${email}'`);
+  return 'AVATAR UPLOADED TO DB';
+};
