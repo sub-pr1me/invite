@@ -50,7 +50,9 @@ const LogoUpload = () => {
       <label htmlFor='file'>
         <img src='../../img/add.png'
            alt='ADD'
-           className={`${auth.avatar ? styles.hidden : null} ${styles.add}`}/>
+           className={`${auth.avatar ? styles.hidden : null} ${styles.add}`}
+        />
+        <img src={auth.avatar} alt='LOGO' className={`${!auth.avatar ? styles.hidden : null} ${styles.logo}`}/>
       </label>
     </>
   )

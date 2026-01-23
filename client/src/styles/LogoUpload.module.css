@@ -6,6 +6,18 @@
   display: none;
 }
 
+.avatar,
+.logo {
+  display: flex;
+  align-items: center;
+  max-width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
 .add {
   justify-content: center;
   align-items: center;
@@ -18,4 +30,9 @@
   position: absolute;
   top: 35%;
   left: 40%;
+}
+
+img {
+  object-fit: cover;
+  overflow-clip-margin: unset;
 }

@@ -14,7 +14,6 @@ const LayoutDashboard = () => {
         <img src='../../img/arrow.png' alt='' className={`${auth.avatar ? styles.hidden : null} ${styles.arrow}`}/>
         <div className={`${styles.user}`}>
           <div className={`${styles.avatar} ${auth.stage === '0' ? styles.border : null}`}>
-            <img src={auth.avatar} alt='LOGO' className={`${!auth.avatar ? styles.hidden : null} ${styles.logo}`}/>
             <LogoUpload />
           </div>
           <div className={`${styles.userdata}`}>
