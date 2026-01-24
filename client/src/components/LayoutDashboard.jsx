@@ -23,7 +23,7 @@ const LayoutDashboard = () => {
         </div>
         <div className={`${styles.logout}`}>
           <Link to='/'><Log_Out /></Link>          
-        </div>          
+        </div>
       </header>
       <main>
         <Outlet />

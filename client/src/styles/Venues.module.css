@@ -36,7 +36,10 @@ li {
 
 img {
   height: 10vh;
+  width: 10vh;
   border-radius: 50%;
+  object-fit: cover;
+  overflow-clip-margin: unset !important;
 }
 
 h4 {
