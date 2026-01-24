@@ -30,13 +30,13 @@ ul {
 }
 
 li {
-
   width: 12vh;
+  font-size: 14px;
 }
 
 img {
-  height: 10vh;
-  width: 10vh;
+  height: 8vh;
+  width: 8vh;
   border-radius: 50%;
   object-fit: cover;
   overflow-clip-margin: unset !important;

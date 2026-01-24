@@ -2,6 +2,10 @@
     display: none !important;
 }
 
+/* * {
+  outline: rgb(82, 109, 41) 1px solid;
+} */
+
 .container {
   display: flex;
   flex-direction: column;
@@ -14,11 +18,7 @@ form {
   display: flex;
   flex-direction: column;
   gap: 2vh;
-}
-
-form input {
-  width: 140%;
-  align-self: center;
+  width: 250px;
 }
 
 .duplicate {
@@ -29,4 +29,60 @@ form input {
 ::placeholder {
   color: rgb(233, 233, 233);
   opacity: 1; /* Firefox */
+}
+
+.field {
+  display: flex;
+  width: 100%;
+  margin-left: 5%;
+}
+
+input {
+  min-width: 85%;
+  max-width: 85%;
+  align-self: center;
+}
+
+input:focus {
+  outline: 2px rgb(190, 170, 174) solid;
+}
+
+label {
+  max-width: 15%;
+}
+
+span {
+  line-height: 1;
+}
+
+.check {
+  filter: invert(50%) sepia(50%) saturate(500%) hue-rotate(100deg) brightness(123%) contrast(100%);
+}
+
+.x {
+  filter: invert(50%) sepia(50%) saturate(1200%) hue-rotate(320deg) brightness(123%) contrast(100%);
+}
+
+.note {
+  font-size: 14px;
+  border-radius: 10px;
+  background-color: black;
+  padding: 10px;
+  position: absolute;
+  top: 33%;
+  left: auto;
+}
+
+.note_p {
+  font-size: 14px;
+  border-radius: 10px;
+  background-color: black;
+  padding: 10px;
+  position: absolute;
+  top: 40%;
+  left: auto;
+}
+
+.offscreen {
+  top: -500%
 }

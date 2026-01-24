@@ -22,13 +22,27 @@ const Home = () => {
       }</div>
     </div>
     
+    <div className={`${auth.stage !== '1' ? styles.hidden : null}`}>
+      <div className={`${styles.welcome}`}>{
+        auth.roles[0] === 'venue' ?
+        <div>
+          {`Now, upload some photos of your venue's interiors!`}<br /><br />
+          {`We also recommend you to add a few images`}<br />
+          {`of your fanciest dishes and cocktails.`}<br /><br />
+          <button>Upload</button>
+        </div> :
+        <div>
+          {`You can now upload more photos of yourself to your album!`}<br />
+          <button>Upload</button>
+          <button>Maybe Later</button>
+        </div> 
+      }</div>
+    </div>
     
     
     
     
     
-    
-    <div className={`${auth.stage !== '1' ? styles.hidden : null}`}>STAGE 1 - UPLOAD ALBUM</div>
     <div className={`${auth.stage !== '2' ? styles.hidden : null}`}>STAGE 2 - FILL OUT INFO</div>
     <div className={`${auth.stage !== '3' ? styles.hidden : null}`}>STAGE 3 - SET AUCTION</div>
     <div className={`${auth.stage !== '4' ? styles.hidden : null}`}>STAGE 4 - VISIBLE</div>
