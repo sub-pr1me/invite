@@ -64,7 +64,9 @@ export async function deleteRefreshToken(acc_type, email) {
 };
 
 export async function uploadNewAvatar(acc_type, email, link) {
+  const { rows } = await pool.query(`SELECT avatar FROM ${acc_type}s WHERE email LIKE '${email}'`);
   await pool.query(`UPDATE ${acc_type}s SET avatar = '${link}' WHERE email = '${email}'`);
   await pool.query(`UPDATE ${acc_type}s SET stage = '1' WHERE email = '${email}'`);
-  return 'AVATAR UPLOADED TO DB';
+  if (rows[0]) return rows[0].avatar;
+  return null;
 };
