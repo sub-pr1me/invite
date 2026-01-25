@@ -1,13 +1,14 @@
 import Router from "express";
 import CreateAccController from "../controllers/CreateAccController.js";
+import { body } from 'express-validator'
 
 const CreateAccRouter = Router();
 
-CreateAccRouter.post("/", (req, res) => {
-    CreateAccController(req, res).then((result) => {
-        console.log("ROUTER: ", result);
-        res.send(result);
-    });
-});
+CreateAccRouter.post(
+  "/",
+  body('name').notEmpty().isLength({ min: 6, max: 23 }),
+  body('email').notEmpty().isEmail(),
+  body('password').notEmpty().isLength({ min: 6 }),
+  CreateAccController);
 
 export default CreateAccRouter;

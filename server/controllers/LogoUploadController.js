@@ -3,6 +3,8 @@ import { checkVenuesForMatch, checkCustomersForMatch, uploadNewAvatar } from '..
 
 export default async function handleLogoUpload(req, res) {
 
+    if (req.errorMessage) return res.status(422);
+
     const email = req.email;
     const matchedVenues = await checkVenuesForMatch(email);
     const matchedCustomers = await checkCustomersForMatch(email);

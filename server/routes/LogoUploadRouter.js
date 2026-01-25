@@ -1,6 +1,7 @@
-import Router from "express";
-import handleLogoUpload from "../controllers/LogoUploadController.js";
-import upload from "../middleware/uploadSingleImage.js";
+import Router from "express"
+import handleLogoUpload from "../controllers/LogoUploadController.js"
+import upload from "../middleware/uploadSingleImage.js"
+
 
 const LogoUploadRouter = Router();
 

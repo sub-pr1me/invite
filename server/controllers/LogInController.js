@@ -2,13 +2,22 @@ import bcrypt from "bcryptjs";
 import { checkVenuesForMatch, checkCustomersForMatch, getUserData, addRefreshToken} from "../db/queries.js";
 import jwt from 'jsonwebtoken';
 import 'dotenv/config.js';
+import { validationResult } from 'express-validator'
 
 export default async function LogInController(req, res) {
 
-  if (!req.body.email || !req.body.password) {
-    return res.status(400).json({'message' : 'Username and password are required.'});
+  const validation = validationResult(req);
+
+  if (validation.errors[0] && validation.errors[0].path === 'email') {
+    return res.status(400).send('Invalid email address! Please try again.')
   }
-  
+
+  if (validation.errors[0] && validation.errors[0].path === 'password') {
+    return res
+      .status(400)
+      .send('Password must be longer than 6 characters!')
+  }
+
   // Check Account Existence
 
   const email = req.body.email;

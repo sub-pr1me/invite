@@ -9,11 +9,24 @@ const LogoUpload = () => {
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
 
-  function handleFileChange(e) {if (e.target.files) setFile(e.target.files[0])};
+  function handleFileChange(e) {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
 
   const handleFileUpload = useEffectEvent(async (file) => {
-    setStatus('uploading');
 
+    const valid = ['image/jpeg', 'image/png'];   
+
+    if (!valid.includes(file.type)) {
+      console.log('INVALID FILE EXTENSION');
+      setFile(null);
+      setStatus('idle');
+      return;
+    }
+    
+    setStatus('uploading');
     const formData = new FormData();
     formData.append('file', file);
 
@@ -26,8 +39,17 @@ const LogoUpload = () => {
       setStatus('success');
       console.log('FILE UPLOADED');
     } catch(err) {
-      setStatus('error');
-      console.log(err);
+      setFile(null);
+      setStatus('idle');
+      if (!err?.response) {
+        console.log('NO SERVER RESPONSE');
+      } else if (err.response?.status === 422) {
+        console.log('INVALID FILE EXTENSION');
+      } else if (err.response?.status === 401) {
+        console.log('UNAUTHORIZED');
+      } else {
+        console.log('SOMETHING WENT WRONG');
+      }
     }
   });
 

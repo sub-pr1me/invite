@@ -46,16 +46,19 @@ const Log_In = () => {
 
   async function LogIn(formData) {
 
+    setEmail(false);
+    setPwd(false);
+
+    const email = formData.get('email');
+    const password = formData.get('password');
+
     const v1 = PASSWORD_REGEX.test(pwd);
     const v2 = EMAIL_REGEX.test(email);
     if (!v1 || !v2) {
       console.log('Invalid Entry Attempt!');
       return;
     }
-
-    const email = formData.get('email');
-    const password = formData.get('password');
-
+    
     try {      
       const response = await axios.post("/login",
         {email: email, password: password},
@@ -81,7 +84,7 @@ const Log_In = () => {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');
       } else if (err.response?.status === 400) {
-        console.log('MISSING EMAIL OR PASSWORD');
+        console.log(err.response.data);
       } else if (err.response?.status === 401) {
         console.log('UNAUTHORIZED');
       } else {

@@ -71,6 +71,15 @@ const CreateAccount = () => {
 
   async function AddNewAcc(formData) {
 
+    setUsername(false);
+    setEmail(false);
+    setPwd(false);
+
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const password = formData.get('password');
+    const acc_type = formData.get('acc_type');
+    
     const v1 = NAME_REGEX.test(name);
     const v2 = PASSWORD_REGEX.test(pwd);
     const v3 = EMAIL_REGEX.test(email);
@@ -78,28 +87,26 @@ const CreateAccount = () => {
       console.log('Invalid Entry Attempt!');
       return;
     }
-    
-    const name = formData.get('name');
-    const email = formData.get('email');
-    const password = formData.get('password');
-    const acc_type = formData.get('acc_type');
 
     try {
+      const response = await axios.post('/create_account',
+        { acc_type: acc_type, name: name, email: email, password: password },
+        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
+      );
 
-    const response = await axios.post('/create_account',
-      { acc_type: acc_type, name: name, email: email, password: password },
-      {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
-    );
-
-    if (response.data === 'duplicate') setResult('duplicate');
-    if (response.data === 'success') setResult('success');
-
-    setUsername(false);
-    setEmail(false);
-    setPwd(false);
+      if (response.data === 'duplicate') setResult('duplicate');
+      if (response.data === 'success') setResult('success');
 
     } catch (err) {
-      console.log(err);
+      if (!err?.response) {
+        console.log('NO SERVER RESPONSE');
+      } else if (err.response?.status === 400) {
+        console.log(err.response.data);
+      } else if (err.response?.status === 401) {
+        console.log('UNAUTHORIZED');
+      } else {
+        console.log('SOMETHING WENT WRONG');
+      }
     }
   };
 

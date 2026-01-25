@@ -13,7 +13,15 @@ let storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fieldSize: 5 * 1024 * 1024 }
+  limits: { fieldSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg') {
+      cb(null, true);
+    } else {
+      req.errorMessage = 'Invalid file extension!'
+      cb(null, false);
+    }
+  }
 });
 
 export default upload
