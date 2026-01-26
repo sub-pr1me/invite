@@ -6,7 +6,13 @@
   display: none;
 }
 
-.add {
+label {
+  height: 100%;
+  min-width: 100%;
+  border-radius: 50%;
+}
+
+.add  {
   min-height: 50%;
   min-width: 50%;
   height: 50%;
@@ -16,8 +22,7 @@
   filter: invert(50%) sepia(50%) saturate(500%) hue-rotate(220deg) brightness(123%) contrast(100%);
 }
 
-.logo,
-.add {
+.logo {
   display: flex;
   align-items: center;
   max-width: 60px;
