@@ -38,7 +38,7 @@ export default async function handleRefreshToken(req, res) {
     avatar = matchedCustomer.avatar;
     album = matchedCustomer.album;
     stage = matchedCustomer.stage;
-    rating = matchedVenue.rating;
+    rating = matchedCustomer.rating;
   }
 
   // Evaluate JWT

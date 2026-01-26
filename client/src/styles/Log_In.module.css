@@ -2,6 +2,10 @@
     display: none !important;
 }
 
+/* * {
+  outline: greenyellow 1px solid;
+} */
+
 form {
   display: flex;
   flex-direction: column;

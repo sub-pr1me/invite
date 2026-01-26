@@ -69,7 +69,7 @@ const LogoUpload = () => {
   return (
     <>
       <input className={`${styles.upload}`} type='file' id='file' name='file' onChange={handleFileChange}/>
-      <label htmlFor='file'>
+      <label htmlFor='file' className={`${styles.label}`}>
         <img src='../../img/add.png'
            alt='ADD'
            className={`${auth.avatar ? styles.hidden : null} ${styles.add}`}

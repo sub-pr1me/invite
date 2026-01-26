@@ -35,14 +35,9 @@ const Home = () => {
           {`You can now upload more photos of yourself to your album!`}<br />
           <button>Upload</button>
           <button>Maybe Later</button>
-        </div> 
-      }</div>
+        </div>
+        }</div>
     </div>
-    
-    
-    
-    
-    
     <div className={`${auth.stage !== '2' ? styles.hidden : null}`}>STAGE 2 - FILL OUT INFO</div>
     <div className={`${auth.stage !== '3' ? styles.hidden : null}`}>STAGE 3 - SET AUCTION</div>
     <div className={`${auth.stage !== '4' ? styles.hidden : null}`}>STAGE 4 - VISIBLE</div>

@@ -12,7 +12,7 @@ export default async function handleLogoUpload(req, res) {
     if (matchedVenues) {accType = 'venue'};
     if (matchedCustomers) {accType = 'customer'};
 
-    // console.log(req.params);
+    console.log(req.params);
 
   cloudinary.uploader.upload(req.file.path, async (err, result) => {
     if (err) {

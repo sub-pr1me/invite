@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS venues (
   stage VARCHAR ( 255 ),
   avatar VARCHAR ( 255 ),
   album TEXT[],
-  rating VARCHAR ( 255 ),
+  rating NUMERIC (2,1),
   reftoken VARCHAR ( 255 )
 );
 
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS customers (
   stage VARCHAR ( 255 ),
   avatar VARCHAR ( 255 ),
   album TEXT[],
-  rating VARCHAR ( 255 ),
+  rating NUMERIC (2,1),
   reftoken VARCHAR ( 255 )
 );
 
