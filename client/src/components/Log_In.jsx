@@ -86,7 +86,7 @@ const Log_In = () => {
       } else if (err.response?.status === 400) {
         console.log(err.response.data);
       } else if (err.response?.status === 401) {
-        console.log('UNAUTHORIZED');
+        console.log('UNAUTHORIZED - ', err.response.data);
       } else {
         console.log('LOGIN FAILED');
       }

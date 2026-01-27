@@ -9,6 +9,7 @@
 .label {
   height: 100%;
   min-width: 100%;
+  border: 2px solid rgb(211, 148, 226);
 }
 
 .add  {

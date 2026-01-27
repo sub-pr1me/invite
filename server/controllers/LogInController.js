@@ -74,5 +74,7 @@ export default async function LogInController(req, res) {
     // SEND TOKEN TO USER
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
     res.json({ accessToken, accType, name, stage, avatar, album, rating });
+  } else {
+    res.status(401).send('WRONG PASSWORD');
   }
 };

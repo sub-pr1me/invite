@@ -31,9 +31,9 @@ CREATE TABLE IF NOT EXISTS customers (
 
 INSERT INTO venues (venue, email, password, stage, avatar)
 VALUES
-  ('ALMAR Seafood Bar', 'almar@gmail.com', '$2b$10$kyqN3Zq1Pz8z8StirfeKG.3PZ0MXU79SjZq698XJYB269IpxFiSh2', '1', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1765461914/almar_dgpueu.jpg'),
-  ('Elia Backyard Restaurant', 'elia@gmail.com', '$2b$10$WcdIqHK1zph72gBvNMmoGOwm2Y.Ri4ODe3Hrxhy.PEaRu4eHeAgLi', '1', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1765461914/elia_zhszb9.jpg'),
-  ('To Arxontikon Taverna', 'arxontikon@gmail.com', '$2b$10$Z52bajBvHxVlQKarHIxaZ.EdREeXMZpoBes6nUXMchxHxSTGvUty6', '1', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1765461916/arxontikon_jgme5l.jpg');
+  ('ALMAR Seafood Bar', 'almar@gmail.com', '$2b$10$kyqN3Zq1Pz8z8StirfeKG.3PZ0MXU79SjZq698XJYB269IpxFiSh2', '1', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1769500570/wumocsozmi7tpnm06flh.jpg'),
+  ('Elia Backyard Restaurant', 'elia@gmail.com', '$2b$10$WcdIqHK1zph72gBvNMmoGOwm2Y.Ri4ODe3Hrxhy.PEaRu4eHeAgLi', '1', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1769500654/ajbjnizwpbwq7jwrf65h.jpg'),
+  ('Savino Rock Bar', 'savino@gmail.com', '$2b$10$3Aoe/BBUED1vBwqOf0ZCOunqIctEh7AD3UFYoq4JhdUPS9INGUCYe', '1', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1769501496/i3lre8meevjwwxez3rsp.jpg');
 `;
 
 async function main() {
