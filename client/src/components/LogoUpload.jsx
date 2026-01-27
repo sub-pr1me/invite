@@ -12,6 +12,7 @@ const LogoUpload = () => {
   function handleFileChange(e) {
     if (e.target.files) {
       setFile(e.target.files[0]);
+      e.target.value = '';
     }
   };
 
@@ -31,13 +32,14 @@ const LogoUpload = () => {
     formData.append('file', file);
 
     try {
-      await axiosPrivate.post('/logo_upload', formData,
+      const response = await axiosPrivate.post('/logo_upload', formData,
         {
           headers: {'Content-Type': 'multipart/form-data'},
           withCredentials: true,
         });
       setStatus('success');
       console.log('FILE UPLOADED');
+      setAuth({...auth, stage: '1', avatar: response.data});
     } catch(err) {
       setFile(null);
       setStatus('idle');
@@ -56,8 +58,7 @@ const LogoUpload = () => {
   const resetStatus = useEffectEvent((status)=>{
     if(status === 'success') {
       setFile(null);
-      setAuth({...auth, stage: '1'});
-      window.location.reload();
+      setStatus('idle');
     }    
   });
   
@@ -65,7 +66,6 @@ const LogoUpload = () => {
     if (file && status === 'idle') handleFileUpload(file);
     resetStatus(status);
   },[file, status]);
-
   return (
     <>
       <input className={`${styles.upload}`} type='file' id='file' name='file' onChange={handleFileChange}/>

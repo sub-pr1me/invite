@@ -68,5 +68,5 @@ export async function uploadNewAvatar(acc_type, email, link) {
   await pool.query(`UPDATE ${acc_type}s SET avatar = '${link}' WHERE email = '${email}'`);
   await pool.query(`UPDATE ${acc_type}s SET stage = '1' WHERE email = '${email}'`);
   if (rows[0]) return rows[0].avatar;
-  return null;
+  return 'NO AVATAR';
 };

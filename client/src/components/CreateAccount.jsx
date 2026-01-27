@@ -157,7 +157,7 @@ const CreateAccount = () => {
               ${styles.note}`}>
                   <FontAwesomeIcon icon={faInfoCircle} />
                   4 to 23 characters. Must begin with a letter.<br />
-                  Letters, numbers, underscores, hyphens allowed.
+                  Letters, numbers, underscores, hyphens, spaces allowed.
               </p>              
             </div>
             <div className={styles.field}>

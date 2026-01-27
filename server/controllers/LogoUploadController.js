@@ -12,7 +12,7 @@ export default async function handleLogoUpload(req, res) {
     if (matchedVenues) {accType = 'venue'};
     if (matchedCustomers) {accType = 'customer'};
 
-    console.log(req.params);
+    // console.log(req.params);
 
   cloudinary.uploader.upload(req.file.path, async (err, result) => {
     if (err) {
@@ -22,12 +22,6 @@ export default async function handleLogoUpload(req, res) {
         message: 'UPLOAD ERROR'
       })
     }
-    // console.log(req.email);
-    res.status(200).json({
-        success: true,
-        message: 'FILE UPLOADED!',
-        data: result
-    })
     
     const renew = await uploadNewAvatar(accType, req.email, result.secure_url);
     if (renew) {
@@ -35,6 +29,8 @@ export default async function handleLogoUpload(req, res) {
     const arr2 = arr[arr.length - 1].split(".");
     const oldLogoID = arr2[arr2.length -2];
     cloudinary.uploader.destroy(oldLogoID).then(console.log('old logo deleted!'));
-    }    
-  })
+    }
+    const response = await result.secure_url;
+    res.status(200).send(response);
+  });
 };
