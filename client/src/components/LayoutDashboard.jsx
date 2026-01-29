@@ -18,11 +18,12 @@ const LayoutDashboard = () => {
           </div>
           <div className={`${styles.userdata}`}>
             <div className={`${styles.name}`}>{auth.name}</div>
+            <div className={`${styles.divider}`}></div>
             <div className={`${styles.email}`}>{auth.email}</div>
           </div>
         </div>
         <div className={`${styles.logout}`}>
-          <Link to='/'><Log_Out /></Link>          
+          <Link to='/'><Log_Out /></Link>
         </div>
       </header>
       <main>

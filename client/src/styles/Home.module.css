@@ -2,7 +2,34 @@
     display: none !important;
 }
 
+/* * {
+  outline: rgb(115, 161, 46) 1px solid;
+} */
+
+.container,
 .welcome {
-  color: rgb(243, 196, 255);
-  font-size: 20px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.welcome {
+  color: rgb(248, 172, 255);
+  font-size: 15px;
+  background: 
+    linear-gradient(
+      rgb(15, 0, 29),
+      rgb(59, 14, 77),
+      rgb(15, 0, 29)
+    );
+}
+
+.stage2_screen {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

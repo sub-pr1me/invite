@@ -1,10 +1,10 @@
 import Router from "express"
-import handleLogoUpload from "../controllers/LogoUploadController.js"
+import handleAlbumUpload from "../controllers/AlbumUploadController.js"
 import upload from "../middleware/uploadImage.js"
 
 
 const LogoUploadRouter = Router();
 
-LogoUploadRouter.post('/', upload.single('file'), handleLogoUpload);
+LogoUploadRouter.post('/', upload.array('album', 10), handleAlbumUpload);
 
 export default LogoUploadRouter;

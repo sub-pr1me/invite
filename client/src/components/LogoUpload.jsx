@@ -68,14 +68,16 @@ const LogoUpload = () => {
   },[file, status]);
   return (
     <>
+    <div className={`${styles.container}`}>
       <input className={`${styles.upload}`} type='file' id='file' name='file' onChange={handleFileChange}/>
       <label htmlFor='file' className={`${styles.label}`}>
-        <img src='../../img/add.png'
-           alt='ADD'
-           className={`${auth.avatar ? styles.hidden : null} ${styles.add}`}
-        />
-        <img src={auth.avatar} alt='LOGO' className={`${!auth.avatar ? styles.hidden : null} ${styles.logo}`}/>
+      <img src='../../img/add.png'
+         alt='ADD'
+         className={`${auth.avatar ? styles.hidden : null} ${styles.add}`}
+      />
+      <img src={auth.avatar} alt='LOGO' className={`${!auth.avatar ? styles.hidden : null} ${styles.logo}`}/>
       </label>
+    </div>      
     </>
   )
 }
