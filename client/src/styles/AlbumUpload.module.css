@@ -141,6 +141,7 @@
 
 .trash:hover {
   background-color: #142272;
+  box-shadow: 0 0 3pt 2pt rgb(178, 83, 255);
 }
 
 .previous,
@@ -192,6 +193,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 5px;
 }
 
 .item:hover{
@@ -204,6 +206,7 @@
   max-width: 100%;
   max-height: 100%;
   cursor: pointer;
+  border-radius: 5px;
 }
 
 .album button {
