@@ -9,7 +9,8 @@
 .stage2,
 .welcome,
 .venue,
-.customer {
+.customer,
+.btns {
   height: 100%;
   width: 100%;
   display: flex;
@@ -94,7 +95,7 @@
 }
 
 .preview_section {
-  height: 70%;
+  height: 60%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -131,7 +132,7 @@
   max-height: 40px;
   max-width: 40px;
   border: rgb(163, 22, 22) 2px solid;
-  bottom: -5%;
+  bottom: -10%;
 }
 
 .trash img {
@@ -178,33 +179,33 @@
 }
 
 .album ul {
-  height: 12%;
+  height: 23%;
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   gap: 2vw;
 }
 
 .item {
-  width: 70px;
-  height: 100% !important;
+  width: 17vw;
   height: fit-content;
+
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 5px;
 }
 
-.item:hover{
-  box-shadow: 0 0 3pt 2pt rgb(178, 83, 255);
+.focused {
+  box-shadow: 0 0 6pt 4pt rgb(178, 83, 255);
 }
 
 .item img {
   width: 100%;
   height: 100%;
   max-width: 100%;
-  max-height: 100%;
+  max-height: 15vh;
   cursor: pointer;
   border-radius: 5px;
 }
@@ -222,4 +223,8 @@
 .album button:focus,
 .album button:focus-visible {
   outline: 4px auto wh-webkit-focus-ring-color;
+}
+
+.btns {
+  height: 5%;
 }

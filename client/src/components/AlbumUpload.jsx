@@ -13,21 +13,54 @@ const AlbumUpload = () => {
   const [mainPreview, setMainPreview] = useState(null);
 
   async function handleFilesChange(e) {
-    const arr = Array.from(e.target.files);    
+    const arr = Array.from(e.target.files);
     while (arr.length > 5) arr.pop();
-    const cutArr = [];
+    const arrData = [];
     const valid = ['image/jpeg', 'image/png'];
     try {
       for (let i=0; i<arr.length; i++) {
-        if (valid.includes(arr[i].type)) cutArr.push(await fileToDataString(arr[i]));
+        if (valid.includes(arr[i].type)) arrData.push([arr[i], await fileToDataString(arr[i]), i]);
       }
-      setPreviewSrc(cutArr);
-      setMainPreview(cutArr[0])
+      setPreviewSrc(arrData);
+      setMainPreview(arrData[0])
       e.target.value = '';      
 
     } catch (err) {
       console.log('PREVIEW ERROR - ',err);
     }
+  };
+
+  function nextPic(item) {
+    if (item[2] === previewSrc.length - 1) {
+      setMainPreview(previewSrc[0]);
+      return
+    };
+    setMainPreview(previewSrc[item[2]+1]);
+  };
+
+  function prevPic(item) {
+    if (item[2] === 0) {
+      setMainPreview(previewSrc[previewSrc.length - 1]);
+      return
+    };
+    setMainPreview(previewSrc[item[2]-1]);
+  };
+
+  function removePic(item) {    
+    const arr = previewSrc;
+    if (arr.length === 1) {
+      setPreviewSrc(null);
+      setMainPreview(null);
+      return;
+    };
+    const index = previewSrc.indexOf(item);
+    arr.splice(index, 1);
+    const newArr = [];
+    for (let i=0; i<arr.length; i++) {
+      newArr.push([arr[i][0], arr[i][1], i])
+    };
+    setPreviewSrc(newArr);
+    setMainPreview(newArr[0]);
   };
 
   // const handleAlbumUpload = useEffectEvent(async (files) => {
@@ -129,29 +162,33 @@ const AlbumUpload = () => {
           <button>Maybe Later</button>
         </div>
       }</div>
-      <div className={`${styles.preview} ${previewSrc ? null : styles.hidden}`}>        
+      <div className={`${styles.preview} ${previewSrc ? null : styles.hidden}`}>
         <div className={`${styles.album}`}>          
           <div className={`${styles.preview_section}`}>
-            <div className={`${styles.previous}`}>
+            <div className={`${styles.previous}`} onClick={() => prevPic(mainPreview)}>
               <img src='../../img/right-arrow.png' alt='PREV' />
             </div>
             <div className={`${styles.preview_image}`}>
-              <img src={previewSrc ? mainPreview : '/'} alt='IMG'/>              
-              <div className={`${styles.trash}`}>
+              <img src={previewSrc && mainPreview[1]} alt='IMG'/>
+              <div className={`${styles.trash}`} onClick={() => removePic(mainPreview)}>
                 <img src='../../img/trash.png' alt='[X]'/>
               </div>
             </div>
-            <div className={`${styles.next}`}>
+            <div className={`${styles.next}`} onClick={() => nextPic(mainPreview)}>
               <img src='../../img/right-arrow.png' alt='NEXT' />
             </div>          
           </div>          
           <ul>{previewSrc?.map((item) => (
-            <div key={getRandomKey()} className={`${styles.item}`}>
-                <img src={item} alt='IMG' onClick={() => setMainPreview(item)}/>
+            <div key={getRandomKey()}
+                 className={`${styles.item} ${mainPreview === item ? styles.focused : null}`}>
+                <img src={item[1]} alt='IMG' onClick={() => setMainPreview(item)}/>
             </div>
             ))}
-          </ul>          
-          <button onClick={()=> {setPreviewSrc(null)}}>Cancel</button>       
+          </ul>
+          <div className={`${styles.btns}`}>
+            <button>Upload</button>
+            <button onClick={()=> {setPreviewSrc(null)}}>Cancel</button>
+          </div>          
         </div>
       </div>      
     </div>
