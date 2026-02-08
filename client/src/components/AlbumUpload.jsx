@@ -202,7 +202,11 @@ const AlbumUpload = () => {
         </div>      
       </div>
     :
-    <div>LOADING...</div>
+    <div className={`${styles.loading}`}>
+      <img src='../../public/img/loading.gif' alt='PLEASE WAIT' />
+      <br />
+      <div>UPLOADING...</div>
+    </div>
     }  
     </>
   )

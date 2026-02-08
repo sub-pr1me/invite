@@ -10,7 +10,8 @@
 .welcome,
 .venue,
 .customer,
-.btns {
+.btns,
+.loading {
   height: 100%;
   width: 100%;
   display: flex;
@@ -25,7 +26,8 @@
 }
 
 .venue,
-.customer {
+.customer,
+.loading {
   flex-direction: column;
   background: 
     linear-gradient(
@@ -227,4 +229,14 @@
 
 .btns {
   height: 5%;
+}
+
+.loading {
+  color: rgb(248, 172, 255);
+  font-size: 20px;
+}
+
+.loading img {
+  max-width: 50%;
+  max-height: 30vh;
 }

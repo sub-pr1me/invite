@@ -14,8 +14,9 @@ const handleAlbumUpload = asyncHandler(async (req, res)=> {
     const images = req.files;
     const imageURLs = [];
 
-    for (const image of images) {
-      const result = await cloudinary.uploader.upload(image.path, {
+    for (let i=0; i<images.length; i++) {
+      console.log('UPLOADING FILE -',images[i].filename);
+      const result = await cloudinary.uploader.upload(images[i].path, {
         resource_type: "image"
       });
       imageURLs.push(result.secure_url);
@@ -28,7 +29,7 @@ const handleAlbumUpload = asyncHandler(async (req, res)=> {
 
   } catch (err) {
     console.log(err);
-    res.status(500).send('ALBUM CONTROLLER ERROR')
+    res.status(500).send('ALBUM CONTROLLER ERROR');
   }
 });
 
