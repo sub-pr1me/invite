@@ -1,39 +1,35 @@
 import cloudinary from '../utils/cloudinary.js'
-import { checkVenuesForMatch, checkCustomersForMatch, uploadNewAvatar } from '../db/queries.js'
+import { checkVenuesForMatch, checkCustomersForMatch, uploadNewAlbum } from '../db/queries.js'
+import asyncHandler from "express-async-handler"
 
-export default async function handleAlbumUpload(req, res) {
+const handleAlbumUpload = asyncHandler(async (req, res)=> {
+  try {
+    const email = req.email;
+    const matchedVenues = await checkVenuesForMatch(email);
+    const matchedCustomers = await checkCustomersForMatch(email);
+    let accType = null;
+    if (matchedVenues) {accType = 'venue'};
+    if (matchedCustomers) {accType = 'customer'};
 
-  if (req.errorMessage) {
-    console.log('ALBUM ERROR - ', req.errorMessage);
-    return res.status(422);
+    const images = req.files;
+    const imageURLs = [];
+
+    for (const image of images) {
+      const result = await cloudinary.uploader.upload(image.path, {
+        resource_type: "image"
+      });
+      imageURLs.push(result.secure_url);
+    }
+
+    const psqlArr = '{' + imageURLs.toString() + '}';
+    const result = await uploadNewAlbum(accType, email, psqlArr);
+    console.log(result);
+    res.status(200).send(imageURLs);
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('ALBUM CONTROLLER ERROR')
   }
+});
 
-  console.log(req.files[0]);
-
-  const email = req.email;
-  const matchedVenues = await checkVenuesForMatch(email);
-  const matchedCustomers = await checkCustomersForMatch(email);
-  let accType = null;
-  if (matchedVenues) {accType = 'venue'};
-  if (matchedCustomers) {accType = 'customer'};
-
-  // cloudinary.uploader.upload(req.file.path, async (err, result) => {
-  //   if (err) {
-  //     console.log('CONTROLLER ERROR',err);
-  //     res.status(500).json({
-  //       success: false,
-  //       message: 'UPLOAD ERROR'
-  //     })
-  //   }
-    
-  //   const renew = await uploadNewAvatar(accType, req.email, result.secure_url);
-  //   if (renew) {
-  //   const arr = renew.split("/");
-  //   const arr2 = arr[arr.length - 1].split(".");
-  //   const oldLogoID = arr2[arr2.length -2];
-  //   cloudinary.uploader.destroy(oldLogoID).then(console.log('old logo deleted!'));
-  //   }
-  //   const response = await result.secure_url;
-  //   res.status(200).send(response);
-  // });
-};
+export default handleAlbumUpload

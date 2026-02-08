@@ -3,8 +3,8 @@ import handleAlbumUpload from "../controllers/AlbumUploadController.js"
 import upload from "../middleware/uploadImage.js"
 
 
-const LogoUploadRouter = Router();
+const AlbumUploadRouter = Router();
 
-LogoUploadRouter.post('/', upload.array('album', 10), handleAlbumUpload);
+AlbumUploadRouter.post('/', upload.array('album', 5), handleAlbumUpload);
 
-export default LogoUploadRouter;
+export default AlbumUploadRouter;

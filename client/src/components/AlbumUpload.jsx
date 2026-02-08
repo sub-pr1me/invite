@@ -63,135 +63,147 @@ const AlbumUpload = () => {
     setMainPreview(newArr[0]);
   };
 
-  // const handleAlbumUpload = useEffectEvent(async (files) => {
+  const extractFiles = () => {
+    let arr = [];
+    for (let i=0; i<previewSrc.length; i++) {
+      arr.push(previewSrc[i][0]);
+    };
+    setFiles(arr);
+    setPreviewSrc(null);
+  };
 
-  //   const valid = ['image/jpeg', 'image/png'];
+  const handleAlbumUpload = useEffectEvent(async (files) => {
 
-  //   for (let i=0; i<files.length; i++) {
-  //     if (!valid.includes(files[i].type)) {
-  //       console.log('INVALID FILE EXTENSION');
-  //       setFiles(null);
-  //       setStatus('idle');
-  //       return;
-  //     }
-  //   };
+    const valid = ['image/jpeg', 'image/png'];
+
+    for (let i=0; i<files.length; i++) {
+      if (!valid.includes(files[i].type)) {
+        console.log('INVALID FILE EXTENSION');
+        setFiles(null);
+        setStatus('idle');
+        return;
+      }
+    };
     
-  //   setStatus('uploading');
-  //   const formData = new FormData();
-  //   for (let i=0; i<files.length; i++) {
-  //     formData.append('album', files[i]);
-  //   };
+    setStatus('uploading');
+    const formData = new FormData();
+    for (let i=0; i<files.length; i++) {
+      formData.append('album', files[i]);
+    };
 
-  //   try {
-  //     const response = await axiosPrivate.post('/album_upload', formData,
-  //       {
-  //         headers: {'Content-Type': 'multipart/form-data'},
-  //         withCredentials: true,
-  //       });
-  //     setStatus('success');
-  //     console.log('FILE UPLOADED');
-  //     setAuth({...auth, album: response.data});
+    try {
+      await axiosPrivate.post('/album_upload', formData,
+        {
+          headers: {'Content-Type': 'multipart/form-data'},
+          withCredentials: true,
+        });
+      setStatus('success');
+      console.log('ALBUM UPLOADED');
+      if (auth.stage === '1') setAuth({...auth, stage: '2'});
 
-  //   } catch(err) {
-  //     setFiles(null);
-  //     setStatus('idle');
-  //     if (!err?.response) {
-  //       console.log('NO SERVER RESPONSE');
-  //     } else if (err.response?.status === 422) {
-  //       console.log('INVALID FILE EXTENSION');
-  //     } else if (err.response?.status === 401) {
-  //       console.log('UNAUTHORIZED');
-  //     } else {
-  //       console.log('SOMETHING WENT WRONG');
-  //     }
-  //   }
-  // });
+    } catch(err) {
+      setFiles(null);
+      setStatus('idle');
+      if (!err?.response) {
+        console.log('NO SERVER RESPONSE');
+      } else if (err.response?.status === 422) {
+        console.log('INVALID FILE EXTENSION');
+      } else if (err.response?.status === 401) {
+        console.log('UNAUTHORIZED');
+      } else {
+        console.log('SOMETHING WENT WRONG');
+      }
+    }
+  });
 
-  // const resetStatus = useEffectEvent((status)=>{
-  //   if(status === 'success') {
-  //     setFiles(null);
-  //     setStatus('idle');
-  //   }    
-  // });
+  const resetStatus = useEffectEvent((status)=>{
+    if(status === 'success') {
+      setFiles(null);
+      setStatus('idle');
+    }    
+  });
 
-  // useEffect(()=>{
-  //   if (files && status === 'idle') {
-  //     handleAlbumUpload(files);
-  //     resetStatus(status);
-  //     console.log('FILES - ', files);
-  //   }    
-  // },[files, status]);
+  useEffect(()=>{
+    if (files && status === 'idle') {
+      handleAlbumUpload(files);
+      resetStatus(status);
+    }    
+  },[files, status]);
 
-  // console.log('RENDER');
   const getRandomKey = () => crypto.randomUUID();
 
   return (
     <>
-    <div className={`${styles.stage2}`}>      
-      <div className={`${styles.welcome} ${previewSrc ? styles.hidden : null}`}>{
-        auth.roles[0] === 'venue'
-        ?
-        <div className={`${styles.venue}`}>
-             {`Now, upload some photos of your venue's interiors!`}<br /><br />
-             {`We also recommend you to add a few images`}<br />
-             {`of your fanciest dishes and cocktails.`}<br /><br />
-          <label htmlFor='album' className={`${styles.label} ${previewSrc ? styles.hidden : null}`}>
-            Upload
-            <input
-              className={`${styles.upload}`}
-              multiple
-              type='file'
-              id='album'
-              name='album'
-              onChange={handleFilesChange}/>
-          </label>
-        </div>
-        :
-        <div className={`${styles.customer}`}>
-          {`You can now upload more photos of yourself`} <br /> {`to your album!`}<br />
-          <label htmlFor='album' className={`${styles.label} ${previewSrc ? styles.hidden : null}`}>
-            Upload
-            <input
-              className={`${styles.upload}`}
-              multiple
-              type='file'
-              id='album'
-              name='album'
-              onChange={handleFilesChange}/>
-          </label>
-          <button>Maybe Later</button>
-        </div>
-      }</div>
-      <div className={`${styles.preview} ${previewSrc ? null : styles.hidden}`}>
-        <div className={`${styles.album}`}>          
-          <div className={`${styles.preview_section}`}>
-            <div className={`${styles.previous}`} onClick={() => prevPic(mainPreview)}>
-              <img src='../../img/right-arrow.png' alt='PREV' />
-            </div>
-            <div className={`${styles.preview_image}`}>
-              <img src={previewSrc && mainPreview[1]} alt='IMG'/>
-              <div className={`${styles.trash}`} onClick={() => removePic(mainPreview)}>
-                <img src='../../img/trash.png' alt='[X]'/>
+    {status === 'idle'
+    ?  
+      <div className={`${styles.stage2}`}>      
+        <div className={`${styles.welcome} ${previewSrc ? styles.hidden : null}`}>{
+          auth.roles[0] === 'venue'
+          ?
+          <div className={`${styles.venue}`}>
+               {`Now, upload some photos of your venue's interiors!`}<br /><br />
+               {`We also recommend you to add a few images`}<br />
+               {`of your fanciest dishes and cocktails.`}<br /><br />
+            <label htmlFor='album' className={`${styles.label} ${previewSrc ? styles.hidden : null}`}>
+              Upload
+              <input
+                className={`${styles.upload}`}
+                multiple
+                type='file'
+                id='album'
+                name='album'
+                onChange={handleFilesChange}/>
+            </label>
+          </div>
+          :
+          <div className={`${styles.customer}`}>
+            {`You can now upload more photos of yourself`} <br /> {`to your album!`}<br />
+            <label htmlFor='album' className={`${styles.label} ${previewSrc ? styles.hidden : null}`}>
+              Upload
+              <input
+                className={`${styles.upload}`}
+                multiple
+                type='file'
+                id='album'
+                name='album'
+                onChange={handleFilesChange}/>
+            </label>
+            <button>Maybe Later</button>
+          </div>
+        }</div>
+        <div className={`${styles.preview} ${previewSrc ? null : styles.hidden}`}>
+          <div className={`${styles.album}`}>          
+            <div className={`${styles.preview_section}`}>
+              <div className={`${styles.previous}`} onClick={() => prevPic(mainPreview)}>
+                <img src='../../img/right-arrow.png' alt='PREV' />
               </div>
-            </div>
-            <div className={`${styles.next}`} onClick={() => nextPic(mainPreview)}>
-              <img src='../../img/right-arrow.png' alt='NEXT' />
+              <div className={`${styles.preview_image}`}>
+                <img src={previewSrc && mainPreview[1]} alt='IMG'/>
+                <div className={`${styles.trash}`} onClick={() => removePic(mainPreview)}>
+                  <img src='../../img/trash.png' alt='[X]'/>
+                </div>
+              </div>
+              <div className={`${styles.next}`} onClick={() => nextPic(mainPreview)}>
+                <img src='../../img/right-arrow.png' alt='NEXT' />
+              </div>          
             </div>          
-          </div>          
-          <ul>{previewSrc?.map((item) => (
-            <div key={getRandomKey()}
-                 className={`${styles.item} ${mainPreview === item ? styles.focused : null}`}>
-                <img src={item[1]} alt='IMG' onClick={() => setMainPreview(item)}/>
-            </div>
-            ))}
-          </ul>
-          <div className={`${styles.btns}`}>
-            <button>Upload</button>
-            <button onClick={()=> {setPreviewSrc(null)}}>Cancel</button>
-          </div>          
-        </div>
-      </div>      
-    </div>
+            <ul>{previewSrc?.map((item) => (
+              <div key={getRandomKey()}
+                   className={`${styles.item} ${mainPreview === item ? styles.focused : null}`}>
+                  <img src={item[1]} alt='IMG' onClick={() => setMainPreview(item)}/>
+              </div>
+              ))}
+            </ul>
+            <div className={`${styles.btns}`}>
+              <button onClick={()=> {extractFiles()}}>Upload</button>
+              <button onClick={()=> {setPreviewSrc(null)}}>Cancel</button>
+            </div>          
+          </div>
+        </div>      
+      </div>
+    :
+    <div>LOADING...</div>
+    }  
     </>
   )
 }

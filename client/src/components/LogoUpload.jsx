@@ -38,8 +38,9 @@ const LogoUpload = () => {
           withCredentials: true,
         });
       setStatus('success');
-      console.log('FILE UPLOADED');
-      setAuth({...auth, stage: '1', avatar: response.data});
+      console.log('LOGO UPLOADED');      
+      setAuth({...auth, avatar: response.data});
+      
     } catch(err) {
       setFile(null);
       setStatus('idle');
@@ -57,6 +58,7 @@ const LogoUpload = () => {
 
   const resetStatus = useEffectEvent((status)=>{
     if(status === 'success') {
+      if (auth.stage === '0') setAuth({...auth, stage: '1'});
       setFile(null);
       setStatus('idle');
     }    

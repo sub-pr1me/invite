@@ -64,9 +64,15 @@ export async function deleteRefreshToken(acc_type, email) {
 };
 
 export async function uploadNewAvatar(acc_type, email, link) {
-  const { rows } = await pool.query(`SELECT avatar FROM ${acc_type}s WHERE email LIKE '${email}'`);
+  const { rows } = await pool.query(`SELECT * FROM ${acc_type}s WHERE email LIKE '${email}'`);
   await pool.query(`UPDATE ${acc_type}s SET avatar = '${link}' WHERE email = '${email}'`);
-  await pool.query(`UPDATE ${acc_type}s SET stage = '1' WHERE email = '${email}'`);
+  if (rows[0].stage === '0') await pool.query(`UPDATE ${acc_type}s SET stage = '1' WHERE email = '${email}'`);
   if (rows[0]) return rows[0].avatar;
-  return 'NO AVATAR';
+  return null;
+};
+
+export async function uploadNewAlbum(acc_type, email, links) {
+  await pool.query(`UPDATE ${acc_type}s SET album = '${links}' WHERE email = '${email}'`);
+  await pool.query(`UPDATE ${acc_type}s SET stage = '2' WHERE email = '${email}'`);
+  return 'ALBUM UPLOADED';
 };
