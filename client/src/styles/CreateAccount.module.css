@@ -9,9 +9,11 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  height: 50%;
+  height: 45%;
+  animation: appear 0.3s 0.1s both, opacity 0.2s 0.1s both;;
+  will-change: transform, opacity;
 }
 
 form {
@@ -56,33 +58,52 @@ span {
 }
 
 .check {
-  filter: invert(50%) sepia(50%) saturate(500%) hue-rotate(100deg) brightness(123%) contrast(100%);
+  filter: invert(50%) sepia(50%) saturate(600%) hue-rotate(250deg) brightness(15%) contrast(100%);;
 }
 
 .x {
-  filter: invert(50%) sepia(50%) saturate(1200%) hue-rotate(320deg) brightness(123%) contrast(100%);
+  filter: invert(50%) sepia(50%) saturate(600%) hue-rotate(250deg) brightness(15%) contrast(100%);;
 }
 
 .note {
   font-size: 14px;
   border-radius: 10px;
-  background-color: black;
+  background-color: rgb(58, 0, 63);
+  color: rgb(243, 203, 255);
   padding: 10px;
   position: absolute;
-  top: 33%;
+  top: 73%;
   left: auto;
 }
 
 .note_p {
   font-size: 14px;
   border-radius: 10px;
-  background-color: black;
+  background-color: rgb(58, 0, 63);
   padding: 10px;
   position: absolute;
-  top: 40%;
+  top: 100%;
   left: auto;
 }
 
 .offscreen {
   top: -500%
+}
+
+@keyframes appear {
+    0% {
+      transform: scale(1%);
+    }
+    100% {
+      transform: scale(100%);
+    }
+}
+
+@keyframes opacity {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }

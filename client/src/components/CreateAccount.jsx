@@ -12,7 +12,7 @@ const PASSWORD_REGEX = /^.{4,}$/;
 
 const CreateAccount = () => {
   const [result, setResult] = useState(null);
-  const [accType, setAccType] = useState('venue');
+  const [accType, setAccType] = useState('customer');
   const navigate = useNavigate();
 
   const usernameRef = useRef();

@@ -6,15 +6,25 @@
   outline: greenyellow 1px solid;
 } */
 
+.container {
+  animation: appear 0.3s 0.1s both, opacity 0.2s 0.1s both;;
+  will-change: transform, opacity;
+}
+
+.container h2 {
+  margin-bottom: 1vh;
+  color: rgb(68, 35, 75);
+}
+
 form {
   display: flex;
   flex-direction: column;
   gap: 2vh;
-  width: 250px;
+  width: 190px;
 }
 
 ::placeholder {
-  color: rgb(233, 233, 233);
+  color: rgb(107, 19, 148);
   opacity: 1; /* Firefox */
 }
 
@@ -25,13 +35,17 @@ form {
 }
 
 input {
-  min-width: 85%;
-  max-width: 85%;
+  min-width: 80%;
+  max-width: 80%;
   align-self: center;
+  background-color: rgba(255, 255, 255, 0.466);
+  border-color: rgba(255, 255, 255, 0);
+  caret-color: rgba(56, 0, 102, 0.459);
+  color: rgba(56, 0, 102, 0.459);
 }
 
 input:focus {
-  outline: 2px rgb(190, 170, 174) solid;
+  outline: 2px rgba(56, 0, 102, 0.459) solid;
 }
 
 label {
@@ -43,11 +57,11 @@ span {
 }
 
 .check {
-  filter: invert(50%) sepia(50%) saturate(500%) hue-rotate(100deg) brightness(123%) contrast(100%);
+  filter: invert(50%) sepia(50%) saturate(600%) hue-rotate(250deg) brightness(15%) contrast(100%);;
 }
 
 .x {
-  filter: invert(50%) sepia(50%) saturate(1200%) hue-rotate(320deg) brightness(123%) contrast(100%);
+  filter: invert(50%) sepia(50%) saturate(600%) hue-rotate(250deg) brightness(15%) contrast(100%);;
 }
 
 .note {
@@ -72,4 +86,22 @@ span {
 
 .offscreen {
   top: -500%
+}
+
+@keyframes appear {
+    0% {
+      transform: scale(1%);
+    }
+    100% {
+      transform: scale(100%);
+    }
+}
+
+@keyframes opacity {
+    0% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 1;
+    }
 }

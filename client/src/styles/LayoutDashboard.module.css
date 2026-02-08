@@ -31,10 +31,6 @@ label {
   border-radius: 50%;
 }
 
-label:hover {
-  background-color: rgb(54, 38, 70);
-}
-
 .user {
   height: 100%;
   width: 80vw;
