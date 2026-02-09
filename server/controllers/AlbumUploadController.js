@@ -21,7 +21,7 @@ const handleAlbumUpload = asyncHandler(async (req, res)=> {
       });
       imageURLs.push(result.secure_url);
     }
-
+    
     const psqlArr = '{' + imageURLs.toString() + '}';
     const result = await uploadNewAlbum(accType, email, psqlArr);
     console.log(result);
