@@ -11,24 +11,30 @@ export default async function CreateAccController(req, res) {
   if (validation.errors[0] && validation.errors[0].path === 'name') {
     return res
       .status(400)
-      .send('Name must be between 6 and 23 characters!')
+      .send('Name must be between 6 and 23 characters!');
   }
 
   if (validation.errors[0] && validation.errors[0].path === 'email') {
-    return res.status(400).send('Invalid email address! Please try again.')
+    return res
+    .status(400)
+    .send('Invalid email address! Please try again.');
   }
 
   if (validation.errors[0] && validation.errors[0].path === 'password') {
     return res
       .status(400)
-      .send('Password must be longer than 6 characters!')
+      .send('Password must be longer than 6 characters!');
   }
  
   const email = req.body.email;
   const matchedVenues = await checkVenuesForMatch(email);
   const matchedCustomers = await checkCustomersForMatch(email);  
   
-  if (matchedVenues || matchedCustomers) return 'duplicate'
+  if (matchedVenues || matchedCustomers) {
+    return res
+      .status(409)
+      .send('duplicate');
+  }
 
   const acc_type = req.body.acc_type;
   const name = req.body.name;

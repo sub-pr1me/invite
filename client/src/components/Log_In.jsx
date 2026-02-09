@@ -26,20 +26,18 @@ const Log_In = () => {
 
   const validateEmail = useEffectEvent((email)=>{
     const result = EMAIL_REGEX.test(email);
-    // console.log(result);
-    // console.log(email);
     setValidEmail(result);
-  })
+  });
+
   useEffect(()=>{
     validateEmail(email);
   },[email]);
 
   const validatePwd = useEffectEvent((pwd)=>{
     const result = PASSWORD_REGEX.test(pwd);
-    // console.log(result);
-    // console.log(pwd);
     setValidPwd(result);
-  })
+  });
+  
   useEffect(()=>{
     validatePwd(pwd);
   },[pwd]);
@@ -55,7 +53,7 @@ const Log_In = () => {
     const v1 = PASSWORD_REGEX.test(pwd);
     const v2 = EMAIL_REGEX.test(email);
     if (!v1 || !v2) {
-      console.log('Invalid Entry Attempt!');
+      console.log(`Your hacking skills are worse than my alcoholism.`);
       return;
     }
     

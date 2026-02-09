@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{3,23}$/;
+const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{4,23}$/;
 const EMAIL_REGEX = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 const PASSWORD_REGEX = /^.{4,}$/;
 
@@ -16,17 +16,15 @@ const CreateAccount = () => {
   const navigate = useNavigate();
 
   const usernameRef = useRef();
-  const errRef = useRef();
   
   const [username, setUsername] = useState(false);
   const [validUsername, setValidUsername] = useState(false);
   const [usernameFocus, setUsernameFocus] = useState(false);
   const [email, setEmail] = useState(false);
-  const [validEmail, setValidEmail] = useState(false);  
+  const [validEmail, setValidEmail] = useState(false);
   const [pwd, setPwd] = useState(false);
   const [validPwd, setValidPwd] = useState(false);
   const [pwdFocus, setPwdFocus] = useState(false);
-  const [errMsg, setErrMsg] = useState('');
 
   useEffect(()=>{
     usernameRef.current.focus();
@@ -34,40 +32,30 @@ const CreateAccount = () => {
 
   const validateName = useEffectEvent((username)=>{
     const result = NAME_REGEX.test(username);
-    // console.log(result);
-    // console.log(username);
     setValidUsername(result);
-  })
+  });
+  
   useEffect(()=>{
     validateName(username);
   },[username]);
 
   const validateEmail = useEffectEvent((email)=>{
     const result = EMAIL_REGEX.test(email);
-    // console.log(result);
-    // console.log(email);
     setValidEmail(result);
-  })
+  });
+
   useEffect(()=>{
     validateEmail(email);
   },[email]);
 
   const validatePwd = useEffectEvent((pwd)=>{
     const result = PASSWORD_REGEX.test(pwd);
-    // console.log(result);
-    // console.log(pwd);
     setValidPwd(result);
-  })
+  });
+
   useEffect(()=>{
     validatePwd(pwd);
   },[pwd]);
-
-  const errMSG = useEffectEvent(()=>{
-    setErrMsg('');
-  })
-  useEffect(()=>{
-    errMSG();
-  },[username, email, pwd]);
 
   async function AddNewAcc(formData) {
 
@@ -84,7 +72,7 @@ const CreateAccount = () => {
     const v2 = PASSWORD_REGEX.test(pwd);
     const v3 = EMAIL_REGEX.test(email);
     if (!v1 || !v2 || !v3) {
-      console.log('Invalid Entry Attempt!');
+      console.log(`Your hacking skills are worse than my alcoholism.`);
       return;
     }
 
@@ -103,7 +91,11 @@ const CreateAccount = () => {
       } else if (err.response?.status === 400) {
         console.log(err.response.data);
       } else if (err.response?.status === 401) {
-        console.log('UNAUTHORIZED');
+        console.log('Unauthorized access attempt!');
+      } else if (err.response?.status === 409) {
+        console.log('Account with this email already exists!');
+        setTimeout(() => { navigate('/message',{state:{msg:'dup'}})}, 0);
+        setTimeout(() => { navigate('/create_acc')}, 2000);
       } else {
         console.log('SOMETHING WENT WRONG');
       }
@@ -111,7 +103,7 @@ const CreateAccount = () => {
   };
 
   useEffect(()=> {
-    if (result === 'success') setTimeout(() => { navigate('/acc_created')}, 0);
+    if (result === 'success') setTimeout(() => { navigate('/message',{state:{msg:'ok'}})}, 0);
   });
 
   if (result === 'success') setTimeout(() => { navigate('/login')}, 2000);
@@ -122,11 +114,6 @@ const CreateAccount = () => {
           accType={accType}
           setAccType={setAccType}
         />
-        <div className={`${styles.duplicate} ${result !== 'duplicate' ? styles.hidden : null}`}>
-          {`This e-mail address is already taken!`}
-        </div>
-        <p ref={errRef} className={errMsg ? styles.errmsg :
-        styles.offscreen} aria-live='assertive'>{errMsg}</p>
         <form action={AddNewAcc}>
             <div className={styles.field}>
               <input 
@@ -218,11 +205,11 @@ const CreateAccount = () => {
             <button disabled={!validUsername || !validEmail || !validPwd ? true : false}
             >Submit</button>
         </form>
-          <button
-              onClick={() => {
-                navigate('/');
-              }}>Go Back
-          </button>
+        <button
+            onClick={() => {
+              navigate('/');
+            }}>Go Back
+        </button>
     </section>
   )
 }
