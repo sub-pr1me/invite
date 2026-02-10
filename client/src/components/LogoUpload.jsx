@@ -2,6 +2,7 @@ import { useState, useEffect, useEffectEvent } from 'react'
 import useAuth from '../hooks/useAuth'
 import styles from '../styles/LogoUpload.module.css'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import { Suspense } from 'react'
 
 const LogoUpload = () => {
   const [file, setFile] = useState(null);
@@ -77,7 +78,8 @@ const LogoUpload = () => {
          alt='ADD'
          className={`${auth.avatar ? styles.hidden : null} ${styles.add}`}
       />
-      <img src={auth.avatar} alt='LOGO' className={`${!auth.avatar ? styles.hidden : null} ${styles.logo}`}/>
+      <img src={auth.avatar && status !== 'uploading' ? auth.avatar : '../../img/load.gif'} alt='LOGO' className={`${!auth.avatar || status === 'uploading' ? styles.hidden : null} ${styles.logo}`}/>
+      <img src={'../../img/load.gif'} alt='...' className={`${status !== 'uploading' ? styles.hidden : null} ${styles.loadgif}`}/>
       </label>
     </div>      
     </>

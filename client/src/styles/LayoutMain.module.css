@@ -50,7 +50,7 @@
   padding-right: 1vw;
   top: 3%;
   font-size: 22vh;
-  animation: logo 0.3s both;
+  animation: logo 0.3s 0.1s both;
   will-change: transform;
 }
 
@@ -61,17 +61,17 @@
 }
 
 .table {
-  animation: table 0.5s 0.3s both ;
+  animation: table 0.5s 0.4s both ;
   will-change: transform;
 }
 
 .male {
-  animation: male 0.5s 0.6s both;
+  animation: male 0.5s 0.7s both;
   will-change: transform;
 }
 
 .female {
-  animation: female 0.5s 0.9s both;
+  animation: female 0.5s 1s both;
   will-change: transform;
 }
 

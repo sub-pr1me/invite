@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   margin-top: 5vh;
-  animation: appear 0.3s 0.1s both, opacity 0.2s 0.1s both;;
+  animation: appear 0.3s 0.2s both, opacity 0.2s 0.2s both;;
   will-change: transform, opacity;
 }
 
