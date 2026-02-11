@@ -2,6 +2,7 @@ import useAuth from '../hooks/useAuth'
 import styles from '../styles/Home.module.css'
 import { useEffect, useEffectEvent } from 'react'
 import AlbumUpload from './AlbumUpload'
+import InfoUpload from './InfoUpload'
 
 const Home = () => {
 
@@ -23,12 +24,12 @@ const Home = () => {
         `Please start by uploading your profile photo!` 
       }</div>
     </div>
-
     <div className={`${auth.stage !== '1' ? styles.hidden : null} ${styles.stage2_screen}`}>
       <AlbumUpload />      
     </div>
-
-    <div className={`${auth.stage !== '2' ? styles.hidden : null}`}>STAGE 2 - FILL OUT INFO</div>
+    <div className={`${auth.stage !== '2' ? styles.hidden : null} ${styles.stage3_screen}`}>
+      <InfoUpload />
+    </div>    
     <div className={`${auth.stage !== '3' ? styles.hidden : null}`}>STAGE 3 - SET AUCTION</div>
     <div className={`${auth.stage !== '4' ? styles.hidden : null}`}>STAGE 4 - VISIBLE</div>
     </>    

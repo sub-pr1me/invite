@@ -2,10 +2,15 @@
     display: none !important;
 }
 
-.logout_container, a {
+.logout_container, 
+.logout_container a {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
+}
+
+.logout_container {
+  padding: 8px;
 }
 
 a {

@@ -30,7 +30,7 @@ const Log_Out = () => {
   return (
     <button className={`${styles.logout_container}`}
             onClick={SignOut}>
-            LOG OUT
+            Log Out
     </button>
   )
 }
