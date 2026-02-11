@@ -73,12 +73,12 @@ header .arrow {
     }
 }
 
-.logout {
+.logout,
+.logout a {
   height: 100%;
   min-width: 82px;
-  max-width: 100px;
   width: 20vw;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 header,
