@@ -43,7 +43,7 @@ export async function createNewUser(acc_type, name, email, password, stage, rati
   };
   await pool.query(
     `INSERT INTO customers (
-    customer, email, password, stage, likes) 
+    customer, email, password, stage) 
     VALUES ($1, $2, $3, $4)`, 
     [name, email, password, stage]);
   return 'success';
