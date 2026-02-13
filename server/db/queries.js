@@ -32,15 +32,21 @@ export async function checkCustomersForMatch(email) {
   return rows[0];
 };
 
-export async function createNewUser(acc_type, name, email, password, stage, rating, likes) {
+export async function createNewUser(acc_type, name, email, password, stage, rating) {
   if (acc_type === 'venue') {
     await pool.query(
-      `INSERT INTO ${acc_type}s (${acc_type}, email, password, stage, rating) VALUES ($1, $2, $3, $4, $5)`, [name, email, password, stage, rating]);
+      `INSERT INTO venues (
+      venue, email, password, stage, rating) 
+      VALUES ($1, $2, $3, $4, $5)`, 
+      [name, email, password, stage, rating]);
     return 'success';
   };
   await pool.query(
-      `INSERT INTO ${acc_type}s (${acc_type}, email, password, stage, likes) VALUES ($1, $2, $3, $4, $5)`, [name, email, password, stage, likes]);
-    return 'success'; 
+    `INSERT INTO customers (
+    customer, email, password, stage, likes) 
+    VALUES ($1, $2, $3, $4)`, 
+    [name, email, password, stage]);
+  return 'success';
 };
 
 export async function getUserData(email, acc_type) {

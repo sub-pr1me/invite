@@ -55,7 +55,7 @@ const Log_In = () => {
     if (!v1 || !v2) {
       console.log(`Your hacking skills are worse than my alcoholism.`);
       return;
-    }
+    };
     
     try {
       const response = await axios.post("/login",
@@ -75,8 +75,14 @@ const Log_In = () => {
       const rating = response?.data?.rating;
       const likes = response?.data?.likes;
 
-      if (accType === 'venue') setAuth({ token: accessToken, roles: [accType], email, name, stage, avatar, album, rating });
-      if (accType === 'customer') setAuth({ token: accessToken, roles: [accType], email, name, stage, avatar, album, likes });
+      if (accType === 'venue') setAuth({ 
+        token: accessToken, roles: [accType], email, name, stage, avatar, album, rating 
+      });
+
+      if (accType === 'customer') setAuth({ 
+        token: accessToken, roles: [accType], email, name, stage, avatar, album, likes 
+      });
+
       console.log('LOGGED IN');
       navigate('/dashboard');
       
@@ -90,7 +96,7 @@ const Log_In = () => {
       } else {
         console.log('LOGIN FAILED');
       }
-    }
+    };
   };
   
   return (

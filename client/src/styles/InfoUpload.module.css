@@ -11,7 +11,8 @@
 .time,
 .open_time,
 .closed_time,
-.venue form {
+.venue form,
+.table {
   display: flex;
 }
 
@@ -66,3 +67,31 @@
   background-color: rgb(0, 0, 0);
 }
 
+.table {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+
+.table label {
+  text-wrap: nowrap;
+  border-radius: 0;
+  min-width: fit-content;
+}
+
+.table input {
+  max-width: 30px;
+  background-color: black;
+  border: none;
+  outline: rgb(150, 150, 150) 1px solid;
+}
+
+.table input::placeholder {
+  color: rgb(255, 255, 255);
+}
+
+.venue button {
+  margin: 0px ;
+  background-color: rgb(95, 41, 105);
+}

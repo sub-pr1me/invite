@@ -14,6 +14,10 @@ CREATE TABLE IF NOT EXISTS venues (
   avatar VARCHAR ( 255 ),
   album TEXT[],
   rating NUMERIC (2,1),
+  hours VARCHAR ( 255 ),
+  tables TEXT[],
+  auctions TEXT[],
+  credits NUMERIC (2,1),
   reftoken VARCHAR ( 255 )
 );
 
@@ -26,6 +30,8 @@ CREATE TABLE IF NOT EXISTS customers (
   avatar VARCHAR ( 255 ),
   album TEXT[],
   likes TEXT[],
+  dates TEXT[],
+  credits NUMERIC (2,1),
   reftoken VARCHAR ( 255 )
 );
 

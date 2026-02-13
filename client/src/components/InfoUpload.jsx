@@ -10,7 +10,9 @@ const InfoUpload = () => {
   async function Upload(formData) {
     const open = formData.get('open');
     const close = formData.get('closed');
-    console.log(open, '-', close);
+    const hours = open + '-' + close;
+    const tables = formData.get('tables');
+    console.log(hours, 'Tables -', tables);
   };
 
   return (
@@ -81,7 +83,19 @@ const InfoUpload = () => {
               </select>
             </div>
           </div>
-          <div>TABLES</div>
+          <div className={`${styles.table}`}>
+            <label htmlFor='closed'>Number of tables (1-20):</label>
+            <input
+              name='tables'
+              id='tables'
+              type="number"
+              min='1'
+              max='20'
+              placeholder='#'
+              required 
+            />
+          </div>
+          <button>Save</button>
         </form>
       </div>
       :

@@ -13,9 +13,7 @@ export default async function LogInController(req, res) {
   }
 
   if (validation.errors[0] && validation.errors[0].path === 'password') {
-    return res
-      .status(400)
-      .send('Password must be longer than 6 characters!')
+    return res.status(400).send('Password must be longer than 6 characters!')
   }
 
   // Check Account Existence
@@ -28,33 +26,28 @@ export default async function LogInController(req, res) {
   // Evaluate Password
 
   let accType = null;
-  if (matchedVenues) {accType = 'venue'};
-  if (matchedCustomers) {accType = 'customer'};
-  
+  if (matchedVenues) accType = 'venue';
+  if (matchedCustomers) accType = 'customer';
+
   const dbData = await getUserData(email, accType);
   const match = await bcrypt.compare(req.body.password, dbData.password);
 
   let name = null;
-  if (matchedVenues) {name = dbData.venue};
-  if (matchedCustomers) {name = dbData.customer};
-
-  let stage = null;
-  if (matchedVenues) {stage = dbData.stage};
-  if (matchedCustomers) {stage = dbData.stage};
-
-  let avatar = null;
-  if (matchedVenues) {avatar = dbData.avatar};
-  if (matchedCustomers) {avatar = dbData.avatar};
-
-  let album = null;
-  if (matchedVenues) {album = dbData.album};
-  if (matchedCustomers) {album = dbData.album};
-
   let rating = null;
-  if (matchedVenues) {rating = dbData.rating};
-
   let likes = null;
-  if (matchedCustomers) {likes = dbData.likes};
+  const stage = dbData.stage
+  const avatar = dbData.avatar
+  const album = dbData.album
+
+  if (matchedVenues) {
+    name = dbData.venue;
+    rating = dbData.rating;
+  };
+
+  if (matchedCustomers) {
+    name = dbData.customer;
+    likes = dbData.likes;
+  };
 
   if (match) {
 
@@ -75,8 +68,12 @@ export default async function LogInController(req, res) {
 
     // SEND TOKEN TO USER
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
-    if (accType === 'venue') res.json({ accessToken, accType, name, stage, avatar, album, rating });
-    if (accType === 'customer') res.json({ accessToken, accType, name, stage, avatar, album, likes });
+    if (accType === 'venue') res.json({ 
+      accessToken, accType, name, stage, avatar, album, rating 
+    });
+    if (accType === 'customer') res.json({ 
+      accessToken, accType, name, stage, avatar, album, likes 
+    });
   } else {
     res.status(401).send('WRONG PASSWORD');
   }
