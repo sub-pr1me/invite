@@ -76,7 +76,7 @@ const LogoUpload = () => {
       <label htmlFor='file' className={`${styles.label}`}>
       <img src='../../img/add.png'
          alt='ADD'
-         className={`${auth.avatar ? styles.hidden : null} ${styles.add}`}
+         className={`${auth.avatar || status === 'uploading' ? styles.hidden : null} ${styles.add}`}
       />
       <img src={auth.avatar && status !== 'uploading' ? auth.avatar : '../../img/load.gif'} alt='LOGO' className={`${!auth.avatar || status === 'uploading' ? styles.hidden : null} ${styles.logo}`}/>
       <img src={'../../img/load.gif'} alt='...' className={`${status !== 'uploading' ? styles.hidden : null} ${styles.loadgif}`}/>

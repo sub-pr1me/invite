@@ -32,15 +32,24 @@ export async function checkCustomersForMatch(email) {
   return rows[0];
 };
 
-export async function createNewUser(acc_type, name, email, password, stage, rating) {
+export async function createNewUser(acc_type, name, email, password, stage, rating, likes) {
+  if (acc_type === 'venue') {
+    await pool.query(
+      `INSERT INTO ${acc_type}s (${acc_type}, email, password, stage, rating) VALUES ($1, $2, $3, $4, $5)`, [name, email, password, stage, rating]);
+    return 'success';
+  };
   await pool.query(
-    `INSERT INTO ${acc_type}s (${acc_type}, email, password, stage, rating) VALUES ($1, $2, $3, $4, $5)`, [name, email, password, stage, rating]);
-  return 'success';
+      `INSERT INTO ${acc_type}s (${acc_type}, email, password, stage, likes) VALUES ($1, $2, $3, $4, $5)`, [name, email, password, stage, likes]);
+    return 'success'; 
 };
 
 export async function getUserData(email, acc_type) {
-  const { rows } = await pool.query(`SELECT ${acc_type}, password, stage, avatar, album, rating FROM ${acc_type}s WHERE email LIKE '${email}'`);
-  return rows[0];
+  if (acc_type === 'venue') {
+    const { rows } = await pool.query(`SELECT ${acc_type}, password, stage, avatar, album, rating FROM ${acc_type}s WHERE email LIKE '${email}'`);
+    return rows[0];
+  };
+  const { rows } = await pool.query(`SELECT ${acc_type}, password, stage, avatar, album, likes FROM ${acc_type}s WHERE email LIKE '${email}'`);
+    return rows[0];  
 };
 
 export async function addRefreshToken(acc_type, email, token) {

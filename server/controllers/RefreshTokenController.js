@@ -20,6 +20,7 @@ export default async function handleRefreshToken(req, res) {
   let album = null;
   let stage = null;
   let rating = null;
+  let likes = null;
 
   if (matchedVenue) {
     roles = ['venue'];
@@ -38,7 +39,7 @@ export default async function handleRefreshToken(req, res) {
     avatar = matchedCustomer.avatar;
     album = matchedCustomer.album;
     stage = matchedCustomer.stage;
-    rating = matchedCustomer.rating;
+    likes = matchedCustomer.likes;
   }
 
   // Evaluate JWT
@@ -56,7 +57,8 @@ export default async function handleRefreshToken(req, res) {
         { expiresIn: '30s' }
       );
       // console.log('NEW TOKEN - ', accessToken);
-      res.json({ accessToken, roles, email, name, avatar, album, stage, rating})
+      if (matchedVenue) res.json({ accessToken, roles, email, name, avatar, album, stage, rating});
+      if (matchedCustomer) res.json({ accessToken, roles, email, name, avatar, album, stage, likes});
     }
   );  
 };

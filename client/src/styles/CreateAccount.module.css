@@ -29,8 +29,8 @@ form {
   height: 4vh;
 }
 
-::placeholder {
-  color: rgb(233, 233, 233);
+.container input::placeholder {
+  color: rgb(107, 19, 148);
   opacity: 1; /* Firefox */
 }
 
@@ -40,10 +40,14 @@ form {
   margin-left: 5%;
 }
 
-input {
+.container input {
   min-width: 85%;
   max-width: 85%;
   align-self: center;
+  background-color: rgba(255, 255, 255, 0.466);
+  border-color: rgba(255, 255, 255, 0);
+  caret-color: rgba(56, 0, 102, 0.459);
+  color: rgb(107, 19, 148);
 }
 
 input:focus {

@@ -6,7 +6,7 @@ import useAuth from '../hooks/useAuth'
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-const Log_In = () => {
+const Log_In = () => {  
   
   const { setAuth, setActiveEmail } = useAuth();
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ const Log_In = () => {
       return;
     }
     
-    try {      
+    try {
       const response = await axios.post("/login",
         {email: email, password: password},
         {
@@ -73,8 +73,10 @@ const Log_In = () => {
       const avatar = response?.data?.avatar;
       const album = response?.data?.album;
       const rating = response?.data?.rating;
+      const likes = response?.data?.likes;
 
-      setAuth({ token: accessToken, roles: [accType], email, name, stage, avatar, album, rating });
+      if (accType === 'venue') setAuth({ token: accessToken, roles: [accType], email, name, stage, avatar, album, rating });
+      if (accType === 'customer') setAuth({ token: accessToken, roles: [accType], email, name, stage, avatar, album, likes });
       console.log('LOGGED IN');
       navigate('/dashboard');
       

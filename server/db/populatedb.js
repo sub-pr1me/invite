@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS customers (
   stage VARCHAR ( 255 ),
   avatar VARCHAR ( 255 ),
   album TEXT[],
-  rating NUMERIC (2,1),
+  likes TEXT[],
   reftoken VARCHAR ( 255 )
 );
 

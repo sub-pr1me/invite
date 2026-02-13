@@ -168,7 +168,7 @@ const AlbumUpload = () => {
                 name='album'
                 onChange={handleFilesChange}/>
             </label>
-            <button>Maybe Later</button>
+            <button onClick={()=> {setAuth({...auth, stage: '2'})}}>Maybe Later</button>
           </div>
         }</div>
         <div className={`${styles.preview} ${previewSrc ? null : styles.hidden}`}>

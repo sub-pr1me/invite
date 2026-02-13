@@ -10,9 +10,7 @@ const useRefreshToken = () => {
       withCredentials: true
     });
 
-    setAuth(prev => {
-      // console.log('OLD TOKEN - ', prev);
-      // console.log('NEW TOKEN - ', response.data.accessToken);
+    if (response.data.roles[0] === 'venue') setAuth(prev => {
       return {
         ...prev,
         token: response.data.accessToken,
@@ -23,6 +21,19 @@ const useRefreshToken = () => {
         album: response.data.album,
         stage: response.data.stage,
         rating: response.data.rating
+      }
+    });
+    if (response.data.roles[0] === 'customer') setAuth(prev => {
+      return {
+        ...prev,
+        token: response.data.accessToken,
+        roles: response.data.roles,
+        email: response.data.email,
+        name: response.data.name,
+        avatar: response.data.avatar,
+        album: response.data.album,
+        stage: response.data.stage,
+        likes: response.data.likes
       }
     });
     return response.data.accessToken;
