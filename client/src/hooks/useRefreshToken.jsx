@@ -10,6 +10,7 @@ const useRefreshToken = () => {
     try {
       const response = await axios.get(`/refresh`, {withCredentials: true});
     if (response.data.roles[0] === 'venue') setAuth(prev => {
+     
       return {
         ...prev,
         token: response?.data?.accessToken,
@@ -19,7 +20,9 @@ const useRefreshToken = () => {
         avatar: response?.data?.avatar,
         album: response?.data?.album,
         stage: response?.data?.stage,
-        rating: response?.data?.rating
+        rating: response?.data?.rating,
+        hours: response?.data?.hours,
+        tables: response?.data?.tables[0]
       }
     });
     if (response.data.roles[0] === 'customer') setAuth(prev => {

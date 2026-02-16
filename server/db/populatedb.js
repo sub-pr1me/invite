@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS venues (
   album TEXT[],
   rating NUMERIC (2,1),
   hours VARCHAR ( 255 ),
-  tables TEXT[],
-  auctions TEXT[],
+  tables JSONB,
+  auctions JSONB,
   credits NUMERIC (2,1),
   reftoken VARCHAR ( 255 )
 );
@@ -30,16 +30,16 @@ CREATE TABLE IF NOT EXISTS customers (
   avatar VARCHAR ( 255 ),
   album TEXT[],
   likes TEXT[],
-  dates TEXT[],
+  dates JSONB,
   credits NUMERIC (2,1),
   reftoken VARCHAR ( 255 )
 );
 
-INSERT INTO venues (venue, email, password, stage, avatar)
+INSERT INTO venues (venue, email, password, stage, avatar, tables)
 VALUES
-  ('ALMAR Seafood Bar', 'almar@gmail.com', '$2b$10$kyqN3Zq1Pz8z8StirfeKG.3PZ0MXU79SjZq698XJYB269IpxFiSh2', '1', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1769500570/wumocsozmi7tpnm06flh.jpg'),
-  ('Elia Backyard Restaurant', 'elia@gmail.com', '$2b$10$WcdIqHK1zph72gBvNMmoGOwm2Y.Ri4ODe3Hrxhy.PEaRu4eHeAgLi', '1', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1769500654/ajbjnizwpbwq7jwrf65h.jpg'),
-  ('Savino Rock Bar', 'savino@gmail.com', '$2b$10$3Aoe/BBUED1vBwqOf0ZCOunqIctEh7AD3UFYoq4JhdUPS9INGUCYe', '1', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1769501496/i3lre8meevjwwxez3rsp.jpg');
+  ('ALMAR Seafood Bar', 'almar@gmail.com', '$2b$10$kyqN3Zq1Pz8z8StirfeKG.3PZ0MXU79SjZq698XJYB269IpxFiSh2', '1', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1769500570/wumocsozmi7tpnm06flh.jpg','{}'),
+  ('Elia Backyard Restaurant', 'elia@gmail.com', '$2b$10$WcdIqHK1zph72gBvNMmoGOwm2Y.Ri4ODe3Hrxhy.PEaRu4eHeAgLi', '1', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1769500654/ajbjnizwpbwq7jwrf65h.jpg','{}'),
+  ('Savino Rock Bar', 'savino@gmail.com', '$2b$10$3Aoe/BBUED1vBwqOf0ZCOunqIctEh7AD3UFYoq4JhdUPS9INGUCYe', '1', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1769501496/i3lre8meevjwwxez3rsp.jpg','{}');
 `;
 
 async function main() {

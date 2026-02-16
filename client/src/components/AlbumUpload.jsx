@@ -92,13 +92,13 @@ const AlbumUpload = () => {
     };
 
     try {
-      await axiosPrivate.post('/album_upload', formData,
+      const response = await axiosPrivate.post('/album_upload', formData,
         {
           headers: {'Content-Type': 'multipart/form-data'},
           withCredentials: true,
         });
       setStatus('success');
-      console.log('ALBUM UPLOADED');
+      console.log('ALBUM UPLOADED -', response.data);
       if (auth.stage === '1') setAuth({...auth, stage: '2'});
 
     } catch(err) {

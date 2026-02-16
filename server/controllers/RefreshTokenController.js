@@ -21,6 +21,8 @@ export default async function handleRefreshToken(req, res) {
   let stage = null;
   let rating = null;
   let likes = null;
+  let hours = null;
+  let tables = null;
 
   if (matchedVenue) {
     roles = ['venue'];
@@ -30,6 +32,8 @@ export default async function handleRefreshToken(req, res) {
     album = matchedVenue.album;
     stage = matchedVenue.stage;
     rating = matchedVenue.rating;
+    hours = matchedVenue.hours;
+    tables = matchedVenue.tables;
   }
 
   if (matchedCustomer) {
@@ -57,7 +61,7 @@ export default async function handleRefreshToken(req, res) {
         { expiresIn: '30s' }
       );
       // console.log('NEW TOKEN - ', accessToken);
-      if (matchedVenue) res.json({ accessToken, roles, email, name, avatar, album, stage, rating});
+      if (matchedVenue) res.json({ accessToken, roles, email, name, avatar, album, stage, rating, hours, tables});
       if (matchedCustomer) res.json({ accessToken, roles, email, name, avatar, album, stage, likes});
     }
   );  

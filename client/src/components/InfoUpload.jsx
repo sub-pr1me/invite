@@ -1,5 +1,4 @@
 import styles from '../styles/InfoUpload.module.css'
-import { } from 'react'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
@@ -8,11 +7,30 @@ const InfoUpload = () => {
   const { auth, setAuth } = useAuth();
 
   async function Upload(formData) {
+    
     const open = formData.get('open');
     const close = formData.get('closed');
     const hours = open + '-' + close;
     const tables = formData.get('tables');
-    console.log(hours, 'Tables -', tables);
+
+    try {
+      await axiosPrivate.post("/info_upload",
+        {hours: hours, tables: tables},
+        {
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          withCredentials: true
+        }
+      );
+
+      if (auth.stage === '2') setAuth({...auth, stage: '3'});
+
+    } catch (err) {
+      if (!err?.response) {
+        console.log('NO SERVER RESPONSE');
+      } else {
+        console.log('SOMETHING WENT WRONG');
+      }
+    }
   };
 
   return (

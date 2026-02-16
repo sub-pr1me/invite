@@ -91,3 +91,15 @@ export async function uploadNewAlbum(acc_type, email, links) {
   await pool.query(`UPDATE ${acc_type}s SET stage = '2' WHERE email = '${email}'`);
   return 'ALBUM UPLOADED';
 };
+
+export async function infoUpload(acc_type, email, hours, tables) {  
+  if (acc_type === 'venue') {
+    await pool.query(
+      `UPDATE venues SET hours = '${hours}',
+      tables = jsonb_set(tables, '{0}', '${tables}') WHERE email = '${email}'`);
+    await pool.query(`UPDATE venues SET stage = '3' WHERE email = '${email}'`);
+    return 'INFO UPLOADED';
+  }
+  await pool.query(`UPDATE customers SET stage = '3' WHERE email = '${email}'`);
+  return 'INFO UPLOADED';
+};

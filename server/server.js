@@ -5,7 +5,8 @@ import CreateAccRouter from './routes/CreateAccRouter.js';
 import LogInRouter from './routes/LogInRouter.js';
 import RefreshRouter from './routes/RefreshRouter.js';
 import LogoUploadRouter from './routes/LogoUploadRouter.js';
-import AlbumUploadRouter from './routes/AlbumUploadRouter.js'
+import AlbumUploadRouter from './routes/AlbumUploadRouter.js';
+import InfoUploadRouter from './routes/InfoUploadRouter.js';
 import LogOutRouter from './routes/LogOutRouter.js';
 import verifyJWT from './middleware/verifyJWT.js';
 import cookieParser from 'cookie-parser';
@@ -28,7 +29,7 @@ app.use(verifyJWT);
 
 app.use('/logo_upload', LogoUploadRouter);
 app.use('/album_upload', AlbumUploadRouter);
-
+app.use('/info_upload', InfoUploadRouter);
 
 const PORT = 3000;
 

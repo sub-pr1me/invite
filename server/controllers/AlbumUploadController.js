@@ -23,6 +23,7 @@ const handleAlbumUpload = asyncHandler(async (req, res)=> {
     }
     
     const psqlArr = '{' + imageURLs.toString() + '}';
+
     const result = await uploadNewAlbum(accType, email, psqlArr);
     console.log(result);
     res.status(200).send(imageURLs);
