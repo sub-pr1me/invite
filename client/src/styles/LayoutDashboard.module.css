@@ -56,10 +56,10 @@ label {
 
 header .arrow {
   position: absolute;
-  width: 20vh;
+  width: 10vh;
   height: auto;
   top: 10vh;
-  left: clamp(0.5%, 1vw, 1%);
+  left: 27px;
   filter: invert(50%) sepia(50%) saturate(500%) hue-rotate(220deg) brightness(123%) contrast(100%);
   animation: swing .7s ease-in-out infinite alternate both running;
 }

@@ -27,6 +27,10 @@
   border-radius: 50%;
 }
 
+.label:hover {
+  background-color: rgba(237, 164, 255, 0.26);
+}
+
 .add {
   height: 50%;
   filter: invert(50%) sepia(50%) saturate(500%) hue-rotate(220deg) brightness(123%) contrast(100%);
