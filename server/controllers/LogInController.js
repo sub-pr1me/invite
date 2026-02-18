@@ -35,6 +35,9 @@ export default async function LogInController(req, res) {
   let name = null;
   let rating = null;
   let likes = null;
+  let age = null;
+  let gender = null;
+  let interest = null;
   const stage = dbData.stage
   const avatar = dbData.avatar
   const album = dbData.album
@@ -47,6 +50,9 @@ export default async function LogInController(req, res) {
   if (matchedCustomers) {
     name = dbData.customer;
     likes = dbData.likes;
+    age = dbData.age;
+    gender = dbData.gender;
+    interest = dbData.interest;
   };
 
   if (match) {
@@ -72,9 +78,9 @@ export default async function LogInController(req, res) {
       accessToken, accType, name, stage, avatar, album, rating 
     });
     if (accType === 'customer') res.json({ 
-      accessToken, accType, name, stage, avatar, album, likes 
+      accessToken, accType, name, stage, avatar, album, likes, age, gender, interest 
     });
   } else {
     res.status(401).send('WRONG PASSWORD');
-  }
+  };
 };

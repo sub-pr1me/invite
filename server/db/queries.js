@@ -51,10 +51,16 @@ export async function createNewUser(acc_type, name, email, password, stage, rati
 
 export async function getUserData(email, acc_type) {
   if (acc_type === 'venue') {
-    const { rows } = await pool.query(`SELECT ${acc_type}, password, stage, avatar, album, rating FROM ${acc_type}s WHERE email LIKE '${email}'`);
+    const { rows } = await pool.query(`
+      SELECT ${acc_type}, password, stage, avatar, album, rating 
+      FROM ${acc_type}s 
+      WHERE email LIKE '${email}'`);
     return rows[0];
   };
-  const { rows } = await pool.query(`SELECT ${acc_type}, password, stage, avatar, album, likes FROM ${acc_type}s WHERE email LIKE '${email}'`);
+  const { rows } = await pool.query(`
+    SELECT ${acc_type}, password, stage, avatar, album, age, gender, interest, likes 
+    FROM ${acc_type}s 
+    WHERE email LIKE '${email}'`);
     return rows[0];  
 };
 
@@ -92,14 +98,24 @@ export async function uploadNewAlbum(acc_type, email, links) {
   return 'ALBUM UPLOADED';
 };
 
-export async function infoUpload(acc_type, email, hours, tables) {  
+export async function infoUpload(acc_type, email, hours, tables, dob, gender, interest) {  
   if (acc_type === 'venue') {
     await pool.query(
-      `UPDATE venues SET hours = '${hours}',
-      tables = jsonb_set(tables, '{0}', '${tables}') WHERE email = '${email}'`);
-    await pool.query(`UPDATE venues SET stage = '3' WHERE email = '${email}'`);
-    return 'INFO UPLOADED';
+      `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}'),
+       stage = '3' WHERE email = '${email}'`);
+    return 'VENUE INFO UPLOADED';
   }
-  await pool.query(`UPDATE customers SET stage = '3' WHERE email = '${email}'`);
-  return 'INFO UPLOADED';
+
+  const date = new Date(dob);
+  const currentDate = new Date();
+  let age = currentDate.getFullYear() - date.getFullYear();
+  const monthDifference = currentDate.getMonth() - date.getMonth();
+  // Adjust age if the birthday hasn't occurred yet this year
+  if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < date.getDate())) {
+      age--;
+  };
+  await pool.query(
+      `UPDATE customers SET dob = '${dob}', age = '${age}', gender = '${gender}',
+       interest = '${interest}', stage = '4' WHERE email = '${email}'`);
+  return 'CUSTOMER INFO UPLOADED';
 };

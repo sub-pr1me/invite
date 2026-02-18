@@ -10,6 +10,9 @@
 .customer,
 .time,
 .open_time,
+.birthday,
+.gender,
+.interest,
 .closed_time,
 .venue form,
 .table {
@@ -94,4 +97,34 @@
 .venue button {
   margin: 0px ;
   background-color: rgb(95, 41, 105);
+}
+
+.birthday,
+.gender,
+.interest {
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  height: 100%;
+  gap: 10px;
+}
+
+.birthday label,
+.gender label,
+.interest label {
+  border-radius: 0%;
+  min-width: 100px;
+  align-self: flex-end;
+}
+
+.birthday input,
+.gender select,
+.interest select {
+  border-radius: 0%;
+  background-color: rgb(0, 0, 0);
+}
+
+.birthday input {
+  border: none;
+  outline: rgb(150, 150, 150) 1px solid;
 }

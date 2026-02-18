@@ -35,7 +35,10 @@ const useRefreshToken = () => {
         avatar: response?.data?.avatar,
         album: response?.data?.album,
         stage: response?.data?.stage,
-        likes: response?.data?.likes
+        likes: response?.data?.likes,
+        age: response?.data?.age,
+        gender: response?.data?.gender,
+        interest: response?.data?.interest
       }
     });
     return response.data.accessToken;

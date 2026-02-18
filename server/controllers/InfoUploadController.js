@@ -12,6 +12,9 @@ const handleInfoUpload = async (req, res)=> {
     let hours = null;
     let tables_number = null;
     let tables_arr = [];
+    let dob = null;
+    let gender = null;
+    let interest = null;
     
     if (accType === 'venue') {
       hours = req.body.hours;
@@ -20,10 +23,15 @@ const handleInfoUpload = async (req, res)=> {
         tables_arr.push({'id': `${i}`, 'pic': null, 'active': false, 'auction': false});
       }
     };
-
     const tables = JSON.stringify(tables_arr);
 
-    const result = await infoUpload(accType, email, hours, tables);
+    if (accType === 'customer') {
+      dob = req.body.dob;
+      gender = req.body.gender;
+      interest = req.body.interest;
+    };
+
+    const result = await infoUpload(accType, email, hours, tables, dob, gender, interest);
     console.log(result);
     res.status(200).send(result);
 

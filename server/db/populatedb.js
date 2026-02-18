@@ -29,7 +29,11 @@ CREATE TABLE IF NOT EXISTS customers (
   stage VARCHAR ( 255 ),
   avatar VARCHAR ( 255 ),
   album TEXT[],
-  likes TEXT[],
+  likes TEXT[],  
+  dob VARCHAR ( 255 ),
+  age VARCHAR ( 255 ),
+  gender VARCHAR ( 255 ),
+  interest VARCHAR ( 255 ),
   dates JSONB,
   credits NUMERIC (2,1),
   reftoken VARCHAR ( 255 )

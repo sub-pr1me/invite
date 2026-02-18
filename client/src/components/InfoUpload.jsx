@@ -12,17 +12,21 @@ const InfoUpload = () => {
     const close = formData.get('closed');
     const hours = open + '-' + close;
     const tables = formData.get('tables');
+    const dob = formData.get('dob');
+    const gender = formData.get('gender');
+    const interest = formData.get('interest');
 
     try {
       await axiosPrivate.post("/info_upload",
-        {hours: hours, tables: tables},
+        {hours: hours, tables: tables, dob: dob, gender: gender, interest: interest},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
         }
       );
 
-      if (auth.stage === '2') setAuth({...auth, stage: '3'});
+      if (auth.stage === '2' && auth.roles[0] === 'venue') setAuth({...auth, stage: '3'});
+      if (auth.stage === '2' && auth.roles[0] === 'customer') setAuth({...auth, stage: '4'});
 
     } catch (err) {
       if (!err?.response) {
@@ -117,7 +121,33 @@ const InfoUpload = () => {
         </form>
       </div>
       :
-      <div className={`${styles.customer}`}>CUSTOMER INFO UPLOAD</div>
+      <div className={`${styles.customer}`}>
+        <div>Now, please specify a few details about yourself.</div>
+        <form action={Upload}>
+            <div className={`${styles.birthday}`}>
+              <label htmlFor='dob'>Date of birth:</label>
+              <input
+                type='date' 
+                name='dob' 
+                id='dob'/>
+            </div>
+            <div className={`${styles.gender}`}>
+              <label htmlFor='gender'>Gender:</label>
+              <select name='gender' id='gender'>
+                <option value='Male'>Male</option>
+                <option value='Female'>Female</option>
+              </select>
+            </div>
+            <div className={`${styles.interest}`}>
+              <label htmlFor='interest'>Looking for:</label>
+              <select name='interest' id='interest'>
+                <option value='Female'>Female</option>
+                <option value='Male'>Male</option>                
+              </select>
+            </div>
+          <button>Save</button>
+        </form>
+      </div>
     }
     </>
   )
