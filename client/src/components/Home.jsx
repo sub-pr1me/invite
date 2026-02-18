@@ -24,10 +24,10 @@ const Home = () => {
         `Please start by uploading your profile photo!` 
       }</div>
     </div>
-    <div className={`${auth.stage !== '1' ? styles.hidden : null} ${styles.stage2_screen}`}>
+    <div className={`${auth.stage !== '1' ? styles.hidden : null} ${styles.stage1_screen}`}>
       <AlbumUpload />      
     </div>
-    <div className={`${auth.stage !== '2' ? styles.hidden : null} ${styles.stage3_screen}`}>
+    <div className={`${auth.stage !== '2' ? styles.hidden : null} ${styles.stage2_screen}`}>
       <InfoUpload />
     </div>    
     <div className={`${auth.stage !== '3' ? styles.hidden : null}`}>STAGE 3 - SET AUCTION</div>
