@@ -22,14 +22,16 @@ return (
       <div className={`${styles.instructions}`}>
         You have {active} active {`table${active > 1 ? 's' : ''}`}. <br />
         {`${active > 1 ? 'These tables are' : 'This table is'}`} NOT visible for customers by default. <br /><br />
-        In order to make a table visible for customers, <br />
-        you should set up an auction for it. <br /><br />
 
-        Do it by clicking on your table of choice <br />
+        In order to make a table visible for customers, you should <br />
+        set up an auction for it. Do it by clicking on your table of choice <br />
         and going to the "Auction" section. <br /><br />
 
         You can also change the name of each table <br />
-        and upload it's photo in the "Customize" section.
+        and upload it's photo in the "Customize" section. <br /><br />
+
+        Finally, if you want to add more tables to your venue, <br />
+        you can do it by clicking on any empty slot.
       </div>
     </div>
     <div className={`${styles.tables}`}>
