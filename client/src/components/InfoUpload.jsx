@@ -106,7 +106,7 @@ const InfoUpload = () => {
             </div>
           </div>
           <div className={`${styles.table}`}>
-            <label htmlFor='closed'>Number of tables (1-20):</label>
+            <label htmlFor='tables'>Number of tables (1-20):</label>
             <input
               name='tables'
               id='tables'

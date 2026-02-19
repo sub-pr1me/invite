@@ -3,6 +3,7 @@ import styles from '../styles/Home.module.css'
 import { useEffect, useEffectEvent } from 'react'
 import AlbumUpload from './AlbumUpload'
 import InfoUpload from './InfoUpload'
+import SetAuctions from './SetAuctions'
 
 const Home = () => {
 
@@ -30,7 +31,9 @@ const Home = () => {
     <div className={`${auth.stage !== '2' ? styles.hidden : null} ${styles.stage2_screen}`}>
       <InfoUpload />
     </div>    
-    <div className={`${auth.stage !== '3' ? styles.hidden : null}`}>STAGE 3 - SET AUCTION</div>
+    <div className={`${auth.stage !== '3' ? styles.hidden : null} ${styles.stage3_screen}`}>
+      <SetAuctions />
+    </div>
     <div className={`${auth.stage !== '4' ? styles.hidden : null}`}>STAGE 4 - VISIBLE</div>
     </>    
   )

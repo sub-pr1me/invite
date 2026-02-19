@@ -1,0 +1,35 @@
+.hidden {
+    display: none !important;
+}
+
+ /* * {
+  outline: rgb(109, 155, 40) 1px solid;
+} */
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 65px;
+  min-width: 65px;
+  width: 9vh;
+  height: 9vh;
+  max-width: 120px;
+  max-height: 120px;
+  box-sizing: border-box;
+  border-radius: 50%;
+}
+
+.active {
+  border: 5px solid rgba(255, 245, 112, 0.425);
+  cursor: pointer;
+  font-size: clamp(13px, 2vw, 14px);
+}
+
+.active:hover {
+  background-color:  rgba(255, 255, 255, 0.089);
+}
+
+.inactive {
+  border: 3px solid rgba(255, 255, 255, 0.082);
+}

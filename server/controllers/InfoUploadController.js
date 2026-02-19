@@ -15,13 +15,21 @@ const handleInfoUpload = async (req, res)=> {
     let dob = null;
     let gender = null;
     let interest = null;
+    const maxTables = 20;
     
     if (accType === 'venue') {
+
       hours = req.body.hours;
       tables_number = req.body.tables;
-      for (let i=1; i<=tables_number; i++) {
-        tables_arr.push({'id': `${i}`, 'pic': null, 'active': false, 'auction': false});
-      }
+
+      for (let i = 1; i <= tables_number; i++) { // add active tables
+        tables_arr.push({'id': i, 'pic': null, 'active': true, 'auction': false});
+      };
+
+      for (let i = parseInt(tables_number)+1; i <= maxTables; i++) { // add inactive tables
+        tables_arr.push({'id': i, 'pic': null, 'active': false, 'auction': false});
+      };
+
     };
     const tables = JSON.stringify(tables_arr);
 

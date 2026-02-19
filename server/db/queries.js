@@ -52,7 +52,7 @@ export async function createNewUser(acc_type, name, email, password, stage, rati
 export async function getUserData(email, acc_type) {
   if (acc_type === 'venue') {
     const { rows } = await pool.query(`
-      SELECT ${acc_type}, password, stage, avatar, album, rating 
+      SELECT ${acc_type}, password, stage, avatar, album, rating, hours, tables
       FROM ${acc_type}s 
       WHERE email LIKE '${email}'`);
     return rows[0];

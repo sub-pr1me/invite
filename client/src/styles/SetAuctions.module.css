@@ -1,0 +1,64 @@
+.hidden {
+    display: none !important;
+}
+
+ /* * {
+  outline: rgb(109, 155, 40) 1px solid;
+} */
+
+.container,
+.info,
+.instructions,
+.table_count,
+.tables {
+  display: flex;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: 
+    linear-gradient(
+      rgb(15, 0, 29),
+      rgb(59, 14, 77),
+      rgb(15, 0, 29)
+    );
+  color: rgb(248, 172, 255);
+}
+
+.info {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background-color: rgba(255, 166, 0, 0.226); */
+  min-height: 48px;
+  height: 40%;
+  width: 100%;
+}
+
+.instructions {
+  width: 100%;
+  height: 90%;
+  justify-content: center;
+  align-items: center;
+  font-size: clamp(12px, 3vw, 14px);
+  overflow: wrap;
+  box-sizing: border-box;
+  padding: 20px 10px;
+}
+
+.tables {
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  /* background-color: rgba(0, 255, 255, 0.082); */
+  min-width: 350px;
+  max-width: 620px;
+  max-height: fit-content;
+  gap: 5px 5px;
+  padding: 1vh 0px;
+  margin-top: 2vh;
+}

@@ -38,6 +38,8 @@ export default async function LogInController(req, res) {
   let age = null;
   let gender = null;
   let interest = null;
+  let hours = null;
+  let tables = null;
   const stage = dbData.stage
   const avatar = dbData.avatar
   const album = dbData.album
@@ -45,6 +47,8 @@ export default async function LogInController(req, res) {
   if (matchedVenues) {
     name = dbData.venue;
     rating = dbData.rating;
+    hours = dbData.hours;
+    tables = dbData.tables[0];
   };
 
   if (matchedCustomers) {
@@ -75,7 +79,7 @@ export default async function LogInController(req, res) {
     // SEND TOKEN TO USER
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
     if (accType === 'venue') res.json({ 
-      accessToken, accType, name, stage, avatar, album, rating 
+      accessToken, accType, name, stage, avatar, album, rating, hours, tables
     });
     if (accType === 'customer') res.json({ 
       accessToken, accType, name, stage, avatar, album, likes, age, gender, interest 

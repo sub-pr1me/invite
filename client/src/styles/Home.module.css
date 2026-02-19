@@ -27,7 +27,8 @@
 }
 
 .stage1_screen,
-.stage2_screen {
+.stage2_screen,
+.stage3_screen {
   height: 100%;
   width: 100%;
   display: flex;

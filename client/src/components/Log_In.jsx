@@ -73,13 +73,15 @@ const Log_In = () => {
       const avatar = response?.data?.avatar;
       const album = response?.data?.album;
       const rating = response?.data?.rating;
+      const hours = response?.data?.hours;
+      const tables = response?.data?.tables;
       const likes = response?.data?.likes;
       const age = response?.data?.age;
       const gender = response?.data?.gender;
       const interest = response?.data?.interest;
 
       if (accType === 'venue') setAuth({ 
-        token: accessToken, roles: [accType], email, name, stage, avatar, album, rating 
+        token: accessToken, roles: [accType], email, name, stage, avatar, album, rating, hours, tables
       });
 
       if (accType === 'customer') setAuth({ 
