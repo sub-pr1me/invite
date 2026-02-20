@@ -15,17 +15,31 @@ const InfoUpload = () => {
     const dob = formData.get('dob');
     const gender = formData.get('gender');
     const interest = formData.get('interest');
+    const tables_arr = [];
+    const maxTables = 20;
+
+    if (auth.roles[0] === 'venue') {
+      for (let i = 1; i <= tables; i++) { // add active tables
+        tables_arr.push({'id': i, 'pic': '', 'active': true, 'modal': false, 'auction': false});
+      };
+
+      for (let i = parseInt(tables)+1; i <= maxTables; i++) { // add inactive tables
+        tables_arr.push({'id': i, 'pic': '', 'active': false, 'modal': false, 'auction': false});
+      };
+    }
 
     try {
       await axiosPrivate.post("/info_upload",
-        {hours: hours, tables: tables, dob: dob, gender: gender, interest: interest},
+        {hours: hours, tables: tables_arr, dob: dob, gender: gender, interest: interest},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
         }
       );
 
-      if (auth.stage === '2' && auth.roles[0] === 'venue') setAuth({...auth, stage: '3'});
+      if (auth.stage === '2' && auth.roles[0] === 'venue') setAuth({...auth, stage: '3', tables: tables_arr});
+
+
       if (auth.stage === '2' && auth.roles[0] === 'customer') setAuth({...auth, stage: '4'});
 
     } catch (err) {

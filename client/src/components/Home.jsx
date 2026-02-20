@@ -32,7 +32,7 @@ const Home = () => {
       <InfoUpload />
     </div>    
     <div className={`${auth.stage !== '3' ? styles.hidden : null} ${styles.stage3_screen}`}>
-      <SetAuctions />
+      {auth.tables && <SetAuctions />}
     </div>
     <div className={`${auth.stage !== '4' ? styles.hidden : null}`}>STAGE 4 - VISIBLE</div>
     </>    

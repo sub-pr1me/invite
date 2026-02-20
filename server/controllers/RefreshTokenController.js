@@ -29,7 +29,7 @@ export default async function handleRefreshToken(req, res) {
   let gender = null;
   let interest = null;
 
-  if (matchedVenue) {
+  if (matchedVenue) {    
     roles = ['venue'];
     email = matchedVenue.email;
     name = matchedVenue.venue;
@@ -38,7 +38,22 @@ export default async function handleRefreshToken(req, res) {
     stage = matchedVenue.stage;
     rating = matchedVenue.rating;
     hours = matchedVenue.hours;
-    tables = matchedVenue.tables;
+    if (matchedVenue.tables[0]) { // deserialize data
+      const arr = matchedVenue.tables[0];
+      const deserialized = [];
+      for (let i=0; i<arr.length; i++) {
+        deserialized.push(
+          {
+            id: parseInt(arr[i].id),
+            pic: `${arr[i].pic}`,
+            active: JSON.parse(arr[i].active),
+            modal: JSON.parse(arr[i].modal),
+            auction: JSON.parse(arr[i].auction)
+          }
+        );
+      };
+      tables = deserialized;
+    };    
   }
 
   if (matchedCustomer) {

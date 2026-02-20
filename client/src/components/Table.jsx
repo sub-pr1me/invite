@@ -1,5 +1,5 @@
 import styles from '../styles/Table.module.css'
-const Table = ({ id, pic, active, auction }) => {
+const Table = ({ id, active }) => {
   return (
     <>
       <div className={`${styles.container} ${active ? styles.active : styles.inactive}`}>
