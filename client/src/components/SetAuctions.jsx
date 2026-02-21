@@ -1,24 +1,47 @@
 import styles from '../styles/SetAuctions.module.css'
 import useAuth from '../hooks/useAuth'
 import Table from '../components/Table'
-import { useState, useEffect, useEffectEvent } from 'react';
+import TableModal from '../components/TableModal'
+import { useState } from 'react';
 // import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 const SetAuctions = () => {
   // const axiosPrivate = useAxiosPrivate();
-  const { auth } = useAuth();
-  const [active, setActive] = useState(0);
+  const { auth, setAuth } = useAuth();
+  // eslint-disable-next-line no-unused-vars
+  const [active, setActive] = useState(auth.tables.filter((item) => item.active === true).length);
 
-  const CountActive = useEffectEvent(async()=>{
-    setActive(auth.tables.filter((item) => item.active === true).length);
-  });
-
-  useEffect(()=> {
-    // console.log('TABLES - ', auth.tables);
-    // console.log('LENGTH - ', auth.tables.filter((item) => item.active));
-    if(active === 0) CountActive();
-  },[active, auth.tables])
-
+  const ShowModal = async (id) => {
+    const updated = [];
+    for (let i=0; i<auth.tables.length; i++) {
+      if (auth.tables[i].id !== id) {
+        if (auth.tables[i].modal) {
+          updated.push(
+          {
+            id: auth.tables[i].id,
+            pic: auth.tables[i].pic,
+            modal: !auth.tables[i].modal,
+            active: auth.tables[i].active,
+            auction: auth.tables[i].auction
+          }
+        )
+        } else {
+          updated.push(auth.tables[i]);
+        };        
+      } else {
+        updated.push(
+          {
+            id: auth.tables[i].id,
+            pic: auth.tables[i].pic,
+            modal: !auth.tables[i].modal,
+            active: auth.tables[i].active,
+            auction: auth.tables[i].auction
+          }
+        )
+      }
+    }
+    setAuth(prev => {return {...prev, tables: updated}});
+  };
 
   return (
     <>
@@ -40,19 +63,22 @@ const SetAuctions = () => {
         </div>
       </div>
       <div className={`${styles.tables}`}>
-        { auth.tables.filter((item) => item.active === true).length
-          ?
+        { 
           auth.tables.map((item) =>(
-              <Table
-                key={item.id}
-                id={item.id}
-                pic={item.pic}
-                active={item.active}
-                auction={item.auction}
-              />     
+            <div key={item.id} className={`${styles.item}`} onClick={()=>{if (item.active) ShowModal(item.id)}}>
+              <TableModal
+                  id={item.id}
+                  modal={item.modal}
+                />
+              <Table                
+                  id={item.id}
+                  pic={item.pic}
+                  active={item.active}
+                  modal={item.modal}
+                  auction={item.auction}
+                />
+            </div>              
           ))
-          :
-          ''
         }
       </div>
       <button>Save</button>

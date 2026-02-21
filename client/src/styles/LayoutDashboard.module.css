@@ -118,7 +118,7 @@ button {
 
 .name {
   color: rgb(255, 255, 255);
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .divider {
@@ -136,5 +136,5 @@ button {
 
 .email {
   color: rgb(178, 137, 194);
-  font-size: 15px;
+  font-size: 14px;
 }

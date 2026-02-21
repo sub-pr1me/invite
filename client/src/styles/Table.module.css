@@ -18,18 +18,106 @@
   max-height: 120px;
   box-sizing: border-box;
   border-radius: 50%;
+  position: absolute;
 }
 
 .active {
-  border: 5px solid rgba(255, 245, 112, 0.425);
+  border: 5px solid rgba(255, 229, 112, 0.479);
   cursor: pointer;
   font-size: clamp(13px, 2vw, 14px);
+  background: 
+    radial-gradient(
+      rgb(25, 0, 50),
+      rgb(40, 0, 80),
+      rgb(80, 0, 160)
+    );
 }
 
-.active:hover {
-  background-color:  rgba(255, 255, 255, 0.089);
+.active:hover,
+.selected {
+  border-color: rgb(119, 107, 228);
 }
 
 .inactive {
   border: 3px solid rgba(255, 255, 255, 0.082);
+}
+
+.t1 {
+  z-index: 2;
+}
+
+.t2 {
+  z-index: 4;
+}
+
+.t3 {
+  z-index: 6;
+}
+
+.t4 {
+  z-index: 8;
+}
+
+.t5 {
+  z-index: 10;
+}
+
+.t6 {
+  z-index: 12;
+}
+
+.t7 {
+  z-index: 14;
+}
+
+.t8 {
+  z-index: 16;
+}
+
+.t9 {
+  z-index: 18;
+}
+
+.t10 {
+  z-index: 20;
+}
+
+.t11 {
+  z-index: 22;
+}
+
+.t12 {
+  z-index: 24;
+}
+
+.t13 {
+  z-index: 26;
+}
+
+.t14 {
+  z-index: 28;
+}
+
+.t15 {
+  z-index: 30;
+}
+
+.t16 {
+  z-index: 32;
+}
+
+.t17 {
+  z-index: 34;
+}
+
+.t18 {
+  z-index: 36;
+}
+
+.t19 {
+  z-index: 38;
+}
+
+.t20 {
+  z-index: 40;
 }
