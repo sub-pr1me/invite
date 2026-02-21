@@ -12,12 +12,12 @@
   justify-content: flex-start;
   align-items: center;
   background-color: rgb(30, 0, 65);
-  width: 100%;
+  width: 99%;
   height: 155%;
   bottom: 50%;
   border-radius: 10px;
   box-sizing: border-box;
-  border: 3px rgba(255, 255, 255, 0.507) solid;
+  border: 3px rgb(119, 107, 228) solid;
   gap: 10px;
   padding-top: 10px;
   animation: appear 0.3s forwards;

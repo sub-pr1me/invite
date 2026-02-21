@@ -62,14 +62,14 @@ const SetAuctions = () => {
       <div className={`${styles.info}`}>
         <div className={`${styles.instructions}`}>
           You have {active} active {`table${active > 1 || active < 1? 's' : ''}`}. <br />
-          {`${active > 1 || active < 1 ? 'These tables are' : 'This table is'}`} NOT visible for customers by default. <br /><br />
+          {`${active > 1 || active < 1 ? 'These tables are' : 'This table is'}`} NOT visible to customers by default. <br /><br />
 
-          In order to make a table visible for customers, you should <br />
+          In order to make a table visible to customers, you should <br />
           set up an auction for it. Do it by clicking on your table of choice <br />
           and going to the "Auction" section. <br /><br />
 
-          You can also change the name of each table <br />
-          and upload it's photo in the "Customize" section. <br /><br />
+          You can also change each table's name <br />
+          and upload its photo in the "Customize" section. <br /><br />
 
           Finally, if you want to add more tables to your venue, <br />
           you can do it by clicking on any empty slot.
@@ -99,7 +99,7 @@ const SetAuctions = () => {
           ${styles.note}
           ${fadeNote ? styles.fadeNote : null}
           ${noteHidden ? styles.hidden : null}`}>
-            You should set at least one auction to continue!
+            You must set at least one auction to continue!
         </div>
         <button
         disabled={!auctions}
