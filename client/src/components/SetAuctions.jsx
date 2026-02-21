@@ -2,7 +2,7 @@ import styles from '../styles/SetAuctions.module.css'
 import useAuth from '../hooks/useAuth'
 import Table from '../components/Table'
 import TableModal from '../components/TableModal'
-import { useState } from 'react';
+import { useState, useEffect, useEffectEvent } from 'react';
 // import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 const SetAuctions = () => {
@@ -10,6 +10,15 @@ const SetAuctions = () => {
   const { auth, setAuth } = useAuth();
   // eslint-disable-next-line no-unused-vars
   const [active, setActive] = useState(auth.tables.filter((item) => item.active === true).length);
+  const [auctions, SetAuctions] = useState(false);
+  const [noteHidden, setNoteHidden] = useState(true);
+  const [fadeNote, setFadeNote] = useState(true);
+
+  const auctionsCount = useEffectEvent((auth)=>{
+    const count = auth.tables.filter((item) => item.auctions);
+    if (count.length) SetAuctions(true);
+    if (!count.length) SetAuctions(false);
+  });
 
   const ShowModal = async (id) => {
     const updated = [];
@@ -42,6 +51,10 @@ const SetAuctions = () => {
     }
     setAuth(prev => {return {...prev, tables: updated}});
   };
+
+  useEffect(()=>{
+    auctionsCount(auth);
+  },[auth]);
 
   return (
     <>
@@ -81,7 +94,26 @@ const SetAuctions = () => {
           ))
         }
       </div>
-      <button>Save</button>
+      <div className={`${styles.btn_container}`}>
+        <div className={`
+          ${styles.note}
+          ${fadeNote ? styles.fadeNote : null}
+          ${noteHidden ? styles.hidden : null}`}>
+            You should set at least one auction to continue!
+        </div>
+        <button
+        disabled={!auctions}
+        onMouseOver={()=>{
+          setFadeNote(false);
+          if (!auth.tables.filter((item) => item.auction).length) setNoteHidden(false);          
+        }}
+        onMouseOut={()=>{
+          setFadeNote(true);
+          if (!noteHidden) setTimeout(() => { setNoteHidden(true) }, 420);          
+          }}>
+          Save
+      </button>
+      </div>      
     </div>
     </>
   )

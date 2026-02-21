@@ -10,7 +10,9 @@
 .info,
 .instructions,
 .item,
-.tables {
+.tables,
+.btn_container,
+.note {
   display: flex;
 }
 
@@ -81,4 +83,54 @@
 
 .container button {
   background-color: rgb(54, 45, 136);
+}
+
+.btn_container {
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 100px;
+  width: 300px;
+}
+
+.note {
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  padding: 20px 10px;
+  height: 80px;
+  width: 200px;
+  border-radius: 10px;
+  color: rgb(255, 151, 151);
+  background-color: rgb(20, 0, 36);
+  box-sizing: border-box;
+  border: 3px solid rgb(185, 77, 77);
+  position: absolute;
+  z-index: 100;
+  top: -80%;
+  animation: appear 0.4s forwards;
+  will-change: opacity;
+}
+
+.fadeNote {
+  animation: disappear 0.4s forwards;
+  will-change: opacity;
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes disappear {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
