@@ -48,7 +48,22 @@ export default async function LogInController(req, res) {
     name = dbData.venue;
     rating = dbData.rating;
     hours = dbData.hours;
-    tables = dbData.tables[0];
+    if (dbData.tables[0]) { // deserialize data
+      const arr = dbData.tables[0];
+      const deserialized = [];
+      for (let i=0; i<arr.length; i++) {
+        deserialized.push(
+          {
+            id: parseInt(arr[i].id),
+            pic: `${arr[i].pic}`,
+            active: JSON.parse(arr[i].active),
+            modal: JSON.parse(arr[i].modal),
+            auction: JSON.parse(arr[i].auction)
+          }
+        );
+      };
+      tables = deserialized;
+    };
   };
 
   if (matchedCustomers) {
