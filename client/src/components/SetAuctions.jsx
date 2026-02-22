@@ -66,10 +66,10 @@ const SetAuctions = () => {
 
           In order to make a table visible to customers, you should <br />
           set up an auction for it. Do it by clicking on your table of choice <br />
-          and going to the "Auction" section. <br /><br />
+          and choosing the "Auction" option. <br /><br />
 
-          You can also change each table's name <br />
-          and upload its photo in the "Customize" section. <br /><br />
+          You can also customize or remove each table <br />
+          by choosing a corresponding option in the same menu. <br /><br />
 
           Finally, if you want to add more tables to your venue, <br />
           you can do it by clicking on any empty slot.

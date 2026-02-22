@@ -13,7 +13,7 @@
   align-items: center;
   background-color: rgb(30, 0, 65);
   width: 99%;
-  height: 155%;
+  height: 200%;
   bottom: 50%;
   border-radius: 10px;
   box-sizing: border-box;
@@ -36,6 +36,10 @@
   margin: 4px;
   padding: 2px 4px;
   background-color: rgb(78, 65, 199);
+}
+
+.container .red {
+  background-color: rgb(158, 54, 54);
 }
 
 @keyframes appear {

@@ -94,8 +94,8 @@ const CreateAccount = () => {
         console.log('Unauthorized access attempt!');
       } else if (err.response?.status === 409) {
         console.log('Account with this email already exists!');
-        setTimeout(() => { navigate('/message',{state:{msg:'dup'}})}, 0);
-        setTimeout(() => { navigate('/create_acc')}, 2000);
+        setTimeout(() => {navigate('/message',{state:{msg:'dup'}})}, 0);
+        setTimeout(() => {navigate('/create_acc')}, 2000);
       } else {
         console.log('SOMETHING WENT WRONG');
       }
