@@ -80,7 +80,7 @@ export default async function LogInController(req, res) {
     const accessToken = jwt.sign(
       { 'email': email },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '30s' }
+      { expiresIn: '8s' }
     );
     const refreshToken = jwt.sign(
       { 'email': email },

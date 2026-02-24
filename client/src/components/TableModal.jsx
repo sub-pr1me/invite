@@ -3,7 +3,7 @@ import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useState, useEffect, useEffectEvent } from 'react'
 
-const TableModal = ({ id, modal }) => {
+const TableModal = ({ id, modal, setStatus }) => {
   const [hidden, setHidden] = useState(true);
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
@@ -18,19 +18,35 @@ const TableModal = ({ id, modal }) => {
 
   const removeTable = async () => {
     if (auth.tables.filter((item) => item.active === true).length > 1) {
+      setStatus(`pending${id}`);
       setHidden(true);
       const update = auth.tables;
-      update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': false});
+      update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': false});      
       try {
-        await axiosPrivate.post("/info_upload",
+        const response = await axiosPrivate.post("/info_upload",
           {hours: auth.hours, tables: update},
           {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             withCredentials: true
           }
         );
-        setAuth({...auth, tables: update});
-      
+        if (response.data.tables[0]) { // deserialize data
+          const arr = response.data.tables[0];
+          const deserialized = [];
+          for (let i=0; i<arr.length; i++) {
+            deserialized.push(
+              {
+                id: parseInt(arr[i].id),
+                pic: `${arr[i].pic}`,
+                active: JSON.parse(arr[i].active),
+                modal: JSON.parse(arr[i].modal),
+                auction: JSON.parse(arr[i].auction)
+              }
+            );
+          };
+          setAuth({...auth, tables: deserialized});
+          setTimeout(() => {setStatus('success');}, 500);
+        };
       } catch (err) {
         if (!err?.response) {
           console.log('NO SERVER RESPONSE');
@@ -38,15 +54,12 @@ const TableModal = ({ id, modal }) => {
           console.log('SOMETHING WENT WRONG');
         }
       }
-    }
-    
+    }    
   };
-
   useEffect(()=>{    
     showModal(modal);
     hideModal(modal);
   },[modal]);
-
   return (
     <>
       <div className={`
@@ -62,7 +75,7 @@ const TableModal = ({ id, modal }) => {
           >Remove</button>
       </div>
     </>    
-  )
+  );
 }
 
 export default TableModal

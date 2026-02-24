@@ -2,17 +2,18 @@ import styles from '../styles/SetAuctions.module.css'
 import useAuth from '../hooks/useAuth'
 import Table from '../components/Table'
 import TableModal from '../components/TableModal'
+import TableLoading from '../components/TableLoading'
 import { useState, useEffect, useEffectEvent } from 'react';
 // import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 const SetAuctions = () => {
   // const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
-  // eslint-disable-next-line no-unused-vars
   const [active, setActive] = useState(auth.tables.filter((item) => item.active === true).length);
   const [auctions, SetAuctions] = useState(false);
   const [noteHidden, setNoteHidden] = useState(true);
   const [fadeNote, setFadeNote] = useState(true);
+  const [status, setStatus] = useState('idle');
 
   const auctionsCount = useEffectEvent((auth)=>{
     const count = auth.tables.filter((item) => item.auctions);
@@ -20,41 +21,20 @@ const SetAuctions = () => {
     if (!count.length) SetAuctions(false);
   });
 
-  const ShowModal = async (id) => {
-    const updated = [];
-    for (let i=0; i<auth.tables.length; i++) {
-      if (auth.tables[i].id !== id) {
-        if (auth.tables[i].modal) {
-          updated.push(
-          {
-            id: auth.tables[i].id,
-            pic: auth.tables[i].pic,
-            modal: !auth.tables[i].modal,
-            active: auth.tables[i].active,
-            auction: auth.tables[i].auction
-          }
-        )
-        } else {
-          updated.push(auth.tables[i]);
-        };        
-      } else {
-        updated.push(
-          {
-            id: auth.tables[i].id,
-            pic: auth.tables[i].pic,
-            modal: !auth.tables[i].modal,
-            active: auth.tables[i].active,
-            auction: auth.tables[i].auction
-          }
-        )
-      }
-    }
-    setAuth(prev => {return {...prev, tables: updated}});
-  };
+  const activeCount = useEffectEvent((auth)=>{
+    const count = auth.tables.filter((item) => item.active).length;
+    setActive(count);
+  });
+
+  const resetStatus = useEffectEvent((status)=>{
+    if (status === 'success') setStatus('idle');
+  });
 
   useEffect(()=>{
     auctionsCount(auth);
-  },[auth]);
+    if (status === 'success') activeCount(auth);
+    resetStatus(status);    
+  },[auth,status]);
 
   return (
     <>
@@ -78,18 +58,40 @@ const SetAuctions = () => {
       <div className={`${styles.tables}`}>
         { 
           auth.tables.map((item) =>(
-            <div key={item.id} className={`${styles.item}`} onClick={()=>{if (item.active) ShowModal(item.id)}}>
-              <TableModal
-                  id={item.id}
-                  modal={item.modal}
-                />
-              <Table                
-                  id={item.id}
-                  pic={item.pic}
-                  active={item.active}
-                  modal={item.modal}
-                  auction={item.auction}
-                />
+            <div 
+              key={item.id}
+              className={`${styles.item}`}
+              onClick={()=>{
+                if (item.active) {
+                  setAuth({...auth,
+                    tables: auth.tables.map(table => {
+                      if (table.id === item.id) {
+                        return { ...table, modal: !item.modal };
+                      } else {
+                        return table;
+                      }
+                    })
+                  });
+                }
+              }}>
+                { status !== `pending${item.id}` &&
+                  <TableModal
+                    id={item.id}
+                    modal={item.modal}
+                    setStatus={setStatus}
+                  />
+                }
+                { status !== `pending${item.id}` &&
+                  <Table                
+                    id={item.id}
+                    active={item.active}
+                    modal={item.modal}
+                    setStatus={setStatus}
+                  />
+                }
+                { status === `pending${item.id}` &&
+                  <TableLoading/>
+                }
             </div>              
           ))
         }
@@ -116,7 +118,7 @@ const SetAuctions = () => {
       </div>      
     </div>
     </>
-  )
+  );
 }
 
 export default SetAuctions

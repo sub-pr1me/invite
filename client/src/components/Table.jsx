@@ -2,12 +2,13 @@ import styles from '../styles/Table.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
-const Table = ({ id, active, modal }) => {
+const Table = ({ id, active, modal, setStatus }) => {
 
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
 
   const addTable = async () => {
+    setStatus(`pending${id}`);
     const update = auth.tables;
     update.splice(id-1, 1, {'id': id, 'pic': '', 'active': true, 'modal': false, 'auction': false});
     try {
@@ -18,9 +19,8 @@ const Table = ({ id, active, modal }) => {
           withCredentials: true
         }
       );
-
       setAuth({...auth, tables: update});
-
+      setTimeout(() => {setStatus('success');}, 500);
     } catch (err) {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');
@@ -29,7 +29,6 @@ const Table = ({ id, active, modal }) => {
       }
     }
   };
-
   return (
     <>
       <div className={`

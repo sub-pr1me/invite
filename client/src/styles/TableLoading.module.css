@@ -1,0 +1,14 @@
+.container {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.082);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container img {
+  height: 90%;
+  filter: invert(50%) sepia(50%) saturate(500%) hue-rotate(220deg) brightness(123%) contrast(100%);
+}

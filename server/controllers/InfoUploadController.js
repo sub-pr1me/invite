@@ -28,7 +28,7 @@ const handleInfoUpload = async (req, res)=> {
     };
 
     const result = await infoUpload(accType, email, hours, tables, dob, gender, interest);
-    console.log(result);
+    // console.log('INFO UPLOAD CONTROLLER - OK');
     res.status(200).send(result);
 
   } catch (err) {

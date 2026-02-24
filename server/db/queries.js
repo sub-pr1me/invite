@@ -103,7 +103,11 @@ export async function infoUpload(acc_type, email, hours, tables, dob, gender, in
     await pool.query(
       `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}'),
        stage = '3' WHERE email = '${email}'`);
-    return 'VENUE INFO UPLOADED';
+    const { rows } = await pool.query(`
+      SELECT tables
+      FROM venues 
+      WHERE email LIKE '${email}'`);
+    return rows[0];
   }
 
   const date = new Date(dob);
