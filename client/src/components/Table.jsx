@@ -9,7 +9,7 @@ const Table = ({ id, active, modal, setStatus }) => {
 
   const addTable = async () => {
     setStatus(`pending${id}`);
-    const update = auth.tables;
+    const update = auth.tables.map(item => {return {...item, modal: false}});
     update.splice(id-1, 1, {'id': id, 'pic': '', 'active': true, 'modal': false, 'auction': false});
     try {
       await axiosPrivate.post("/info_upload",

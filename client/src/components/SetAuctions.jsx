@@ -66,9 +66,9 @@ const SetAuctions = () => {
                   setAuth({...auth,
                     tables: auth.tables.map(table => {
                       if (table.id === item.id) {
-                        return { ...table, modal: !item.modal };
+                        return {...table, modal: !item.modal};
                       } else {
-                        return table;
+                        return {...table, modal: false};
                       }
                     })
                   });
@@ -86,6 +86,7 @@ const SetAuctions = () => {
                     id={item.id}
                     active={item.active}
                     modal={item.modal}
+                    status={status}
                     setStatus={setStatus}
                   />
                 }
