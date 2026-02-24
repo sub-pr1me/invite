@@ -3,6 +3,7 @@ import useAuth from '../hooks/useAuth'
 import Table from '../components/Table'
 import TableModal from '../components/TableModal'
 import TableLoading from '../components/TableLoading'
+import TablePic from '../components/TablePic'
 import { useState, useEffect, useEffectEvent } from 'react';
 // import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
@@ -14,6 +15,16 @@ const SetAuctions = () => {
   const [noteHidden, setNoteHidden] = useState(true);
   const [fadeNote, setFadeNote] = useState(true);
   const [status, setStatus] = useState('idle');
+  const [customize, setCostumize] = useState(null);
+
+
+  const CustomizeTable = (id) => {
+    setCostumize(id);
+  }
+
+  const TablePicUpload = async () => {
+
+  };
 
   const auctionsCount = useEffectEvent((auth)=>{
     const count = auth.tables.filter((item) => item.auctions);
@@ -40,7 +51,7 @@ const SetAuctions = () => {
     <>
     <div className={`${styles.container}`}>
       <div className={`${styles.info}`}>
-        <div className={`${styles.instructions}`}>
+        <div className={`${styles.instructions} ${customize ? styles.hidden : null}`}>
           You have {active} active {`table${active > 1 || active < 1? 's' : ''}`}. <br />
           {`${active > 1 || active < 1 ? 'These tables are' : 'This table is'}`} NOT visible to customers by default. <br /><br />
 
@@ -53,14 +64,20 @@ const SetAuctions = () => {
 
           Finally, if you want to add more tables to your venue, <br />
           you can do it by clicking on any empty slot.
-        </div>
+        </div>   
+        { customize &&
+          <TablePic
+            setCostumize={setCostumize}
+            customize={customize}
+          />
+        }
       </div>
       <div className={`${styles.tables}`}>
-        { 
+        {
           auth.tables.map((item) =>(
             <div 
               key={item.id}
-              className={`${styles.item}`}
+              className={`${styles.item} ${customize ? styles.unclickable : null}`}
               onClick={()=>{
                 if (item.active) {
                   setAuth({...auth,
@@ -79,6 +96,7 @@ const SetAuctions = () => {
                     id={item.id}
                     modal={item.modal}
                     setStatus={setStatus}
+                    CustomizeTable={CustomizeTable}
                   />
                 }
                 { status !== `pending${item.id}` &&
@@ -88,6 +106,7 @@ const SetAuctions = () => {
                     modal={item.modal}
                     status={status}
                     setStatus={setStatus}
+                    customize={customize}
                   />
                 }
                 { status === `pending${item.id}` &&

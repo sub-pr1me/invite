@@ -2,7 +2,7 @@ import styles from '../styles/Table.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
-const Table = ({ id, active, modal, setStatus }) => {
+const Table = ({ id, active, modal, setStatus, customize }) => {
 
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
@@ -35,7 +35,7 @@ const Table = ({ id, active, modal, setStatus }) => {
         ${styles.container} 
         ${styles[`t${id}`]} 
         ${active ? styles.active : styles.inactive}
-        ${modal ? styles.selected : null}`}
+        ${modal || customize === id ? styles.selected : null}`}
         onClick={()=>{!active ? addTable() : null}}>
         {
           active
