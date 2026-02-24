@@ -1,11 +1,12 @@
 .container {
   height: 100%;
   width: 100%;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.082);
+  border-radius: 50%;  
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 3px solid rgba(255, 255, 255, 0.082);
+  box-sizing: border-box;
 }
 
 .container img {
