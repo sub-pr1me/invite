@@ -1,15 +1,16 @@
-import express from 'express';
-import cors from 'cors';
-import IndexPageRouter from './routes/IndexPageRouter.js';
-import CreateAccRouter from './routes/CreateAccRouter.js';
-import LogInRouter from './routes/LogInRouter.js';
-import RefreshRouter from './routes/RefreshRouter.js';
-import LogoUploadRouter from './routes/LogoUploadRouter.js';
-import AlbumUploadRouter from './routes/AlbumUploadRouter.js';
-import InfoUploadRouter from './routes/InfoUploadRouter.js';
-import LogOutRouter from './routes/LogOutRouter.js';
-import verifyJWT from './middleware/verifyJWT.js';
-import cookieParser from 'cookie-parser';
+import express from 'express'
+import cors from 'cors'
+import IndexPageRouter from './routes/IndexPageRouter.js'
+import CreateAccRouter from './routes/CreateAccRouter.js'
+import LogInRouter from './routes/LogInRouter.js'
+import RefreshRouter from './routes/RefreshRouter.js'
+import LogoUploadRouter from './routes/LogoUploadRouter.js'
+import AlbumUploadRouter from './routes/AlbumUploadRouter.js'
+import InfoUploadRouter from './routes/InfoUploadRouter.js'
+import TableUploadRouter from './routes/TableUploadRouter.js'
+import LogOutRouter from './routes/LogOutRouter.js'
+import verifyJWT from './middleware/verifyJWT.js'
+import cookieParser from 'cookie-parser'
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(verifyJWT);
 app.use('/logo_upload', LogoUploadRouter);
 app.use('/album_upload', AlbumUploadRouter);
 app.use('/info_upload', InfoUploadRouter);
+app.use('/table_upload', TableUploadRouter);
 
 const PORT = 3000;
 

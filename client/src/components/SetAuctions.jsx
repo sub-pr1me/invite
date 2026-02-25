@@ -15,11 +15,11 @@ const SetAuctions = () => {
   const [noteHidden, setNoteHidden] = useState(true);
   const [fadeNote, setFadeNote] = useState(true);
   const [status, setStatus] = useState('idle');
-  const [customize, setCostumize] = useState(null);
+  const [customize, setCustomize] = useState(null);
 
 
   const CustomizeTable = (id) => {
-    setCostumize(id);
+    setCustomize(id);
   }
 
   const TablePicUpload = async () => {
@@ -67,7 +67,7 @@ const SetAuctions = () => {
         </div>   
         { customize &&
           <TablePic
-            setCostumize={setCostumize}
+            setCustomize={setCustomize}
             customize={customize}
           />
         }

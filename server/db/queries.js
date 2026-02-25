@@ -98,7 +98,7 @@ export async function uploadNewAlbum(acc_type, email, links) {
   return 'ALBUM UPLOADED';
 };
 
-export async function infoUpload(acc_type, email, hours, tables, dob, gender, interest) {  
+export async function infoUpload(acc_type, email, hours, tables, dob, gender, interest) {
   if (acc_type === 'venue') {
     await pool.query(
       `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}'),
@@ -122,4 +122,18 @@ export async function infoUpload(acc_type, email, hours, tables, dob, gender, in
       `UPDATE customers SET dob = '${dob}', age = '${age}', gender = '${gender}',
        interest = '${interest}', stage = '4' WHERE email = '${email}'`);
   return 'CUSTOMER INFO UPLOADED';
+};
+
+export async function tableInfoUpdate(email, id, link) {
+  const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${email}'`);
+  const tables = rows[0].tables[0];
+  const pic = tables.filter(item => item.id === id)[0].pic;
+  const updated = tables.map(item => {if (item.id === id) {return {...item, pic: link}} else {return item}});
+  const stringified = JSON.stringify(updated);
+  await pool.query(`
+    UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
+    WHERE email 
+    LIKE '${email}'`);
+  if (pic) return pic;
+  return null;
 };

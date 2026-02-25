@@ -2,62 +2,57 @@ import styles from '../styles/TablePic.module.css'
 import { useState, useEffect, useEffectEvent } from 'react'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import fileToDataString from '../utils/fileToDataString'
+import Loading from './Loading'
 
-const TablePic = ({ setCostumize, customize }) => {
+const TablePic = ({ setCustomize, customize }) => {
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
-  const [files, setFiles] = useState(null);
+  const [file, setFile] = useState(null);
   const [status, setStatus] = useState('idle');
-  const [previewSrc, setPreviewSrc] = useState(null);
 
-  async function handleFilesChange(e) {
-    const arr = Array.from(e.target.files);
-    while (arr.length > 5) arr.pop();
-    const arrData = [];
-    const valid = ['image/jpeg', 'image/png'];
-    try {
-      for (let i=0; i<arr.length; i++) {
-        if (valid.includes(arr[i].type)) arrData.push([arr[i], await fileToDataString(arr[i]), i]);
-      }
-      setPreviewSrc(arrData);
+  function handleFileChange(e) {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
       e.target.value = '';
-    } catch (err) {
-      console.log('PREVIEW ERROR - ',err);
     }
   };
 
-  const handleAlbumUpload = useEffectEvent(async (files) => {
+  const handleFileUpload = useEffectEvent(async (file) => {
 
-    const valid = ['image/jpeg', 'image/png'];
+    const valid = ['image/jpeg', 'image/png'];   
 
-    for (let i=0; i<files.length; i++) {
-      if (!valid.includes(files[i].type)) {
-        console.log('INVALID FILE EXTENSION');
-        setFiles(null);
-        setStatus('idle');
-        return;
-      }
-    };
+    if (!valid.includes(file.type)) {
+      console.log('INVALID FILE EXTENSION');
+      setFile(null);
+      setStatus('idle');
+      return;
+    }
     
     setStatus('uploading');
     const formData = new FormData();
-    for (let i=0; i<files.length; i++) {
-      formData.append('album', files[i]);
-    };
+    formData.append('tablepic', file);    
 
     try {
-      const response = await axiosPrivate.post('/album_upload', formData,
+      const response = await axiosPrivate.post('/table_upload', formData,
         {
           headers: {'Content-Type': 'multipart/form-data'},
           withCredentials: true,
+          params: {id: customize}
         });
       setStatus('success');
-      console.log('ALBUM UPLOADED -', response.data);
-      if (auth.stage === '1') setAuth({...auth, stage: '2'});
+      console.log(`TABLE-${customize} PHOTO UPLOADED`);
+      setAuth({...auth,
+        tables: auth.tables.map(table => {
+          if (table.id === customize) {
+            return {...table, pic: response.data};
+          } else {
+            return table;
+          };
+        })
+      });
 
     } catch(err) {
-      setFiles(null);
+      setFile(null);
       setStatus('idle');
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');
@@ -73,41 +68,61 @@ const TablePic = ({ setCostumize, customize }) => {
 
   const resetStatus = useEffectEvent((status)=>{
     if(status === 'success') {
-      setFiles(null);
-      setStatus('idle');
+      setFile(null);
     }    
   });
-
+  
   useEffect(()=>{
-    if (files && status === 'idle') {
-      handleAlbumUpload(files);
-      resetStatus(status);
-    }    
-  },[files, status]);
+    if (file && status === 'idle') handleFileUpload(file);
+    resetStatus(status);
+  },[file, status]);
 
   return (
     <>
-      <div className={`${styles.upload_container}`}>
+      {status === 'uploading'
+      &&
+      <div className={`${styles.loading}`}>
+        <img src='../../img/loading.gif' alt='PLEASE WAIT' />
+        <br />
+        <div>UPLOADING...</div>
+      </div>
+      }
+      {status === 'success' && auth.tables[customize-1].pic
+      &&
+      <div className={`${styles.uploaded_image}`}>
+        <img src={auth.tables[customize-1].pic} alt='' />
+        <div>
+          Image uploaded!
+        </div>
+          <button onClick={()=>{
+            setStatus('idle');
+            setFile(null);
+            setCustomize(null);            
+            }}>
+            OK
+          </button>
+      </div>
+      }
+      <div className={`${styles.upload_container} ${status !== 'idle' ? styles.hidden : null}`}>
         <div className={`${styles.cust_name}`}><strong>Table {`${customize}`}</strong></div>
         <div className={`${styles.message}`}>
           Upload a photo of this table <br /> 
           to make it more appealing for customers!
         </div>
         <div className={`${styles.btns}`}>
-          <button onClick={()=> {setCostumize(null)}}>Cancel</button>
-          <label htmlFor='album' className={`${styles.label} ${previewSrc ? styles.hidden : null}`}>
+          <button onClick={()=> {setCustomize(null)}}>Cancel</button>
+          <label htmlFor='tablepic' className={`${styles.label}`}>
             Upload
             <input
               className={`${styles.upload}`}
               multiple
               type='file'
-              id='album'
-              name='album'
-              onChange={handleFilesChange}/>
+              id='tablepic'
+              name='tablepic'
+              onChange={handleFileChange}/>
           </label>          
         </div>
-      </div>
-      
+      </div>      
     </>
   );
 };
