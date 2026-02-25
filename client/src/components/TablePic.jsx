@@ -2,7 +2,6 @@ import styles from '../styles/TablePic.module.css'
 import { useState, useEffect, useEffectEvent } from 'react'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import Loading from './Loading'
 
 const TablePic = ({ setCustomize, customize }) => {
   const axiosPrivate = useAxiosPrivate();
@@ -79,18 +78,18 @@ const TablePic = ({ setCustomize, customize }) => {
 
   return (
     <>
-      {status === 'uploading'
+      {file
       &&
       <div className={`${styles.loading}`}>
-        <img src='../../img/loading.gif' alt='PLEASE WAIT' />
+        <img src='../../img/load.gif' alt='' />
         <br />
         <div>UPLOADING...</div>
       </div>
       }
       {status === 'success' && auth.tables[customize-1].pic
       &&
-      <div className={`${styles.uploaded_image}`}>
-        <img src={auth.tables[customize-1].pic} alt='' />
+      <div className={`${styles.uploaded_image} ${file || !auth.tables[customize-1].pic ? styles.hidden : null}`}>
+        <img src={auth.tables[customize-1].pic && !file ? auth.tables[customize-1].pic : null} alt='' />
         <div>
           Image uploaded!
         </div>

@@ -2,7 +2,7 @@ import styles from '../styles/Table.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
-const Table = ({ id, active, modal, setStatus, customize }) => {
+const Table = ({ id, active, modal, setStatus, customize, pic }) => {
 
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
@@ -39,14 +39,18 @@ const Table = ({ id, active, modal, setStatus, customize }) => {
         onClick={()=>{!active ? addTable() : null}}>
         {
           active
-          ? <div>{`Table ${id}`}</div>
+          ? <div className={`${styles.table_image}`}>
+              <div className={`${styles.bottom}`}>Table {id}</div>
+              <img src={pic ? pic : null} alt='' className={`${!pic ? styles.hidden : null}`}/>
+            </div>
+
           : <div className={`${styles.empty}`}>
             <img src='../../img/add.png' alt='' />
           </div>
         }
       </div>
     </>
-  )
-}
+  );
+};
 
 export default Table

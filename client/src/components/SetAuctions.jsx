@@ -22,10 +22,6 @@ const SetAuctions = () => {
     setCustomize(id);
   }
 
-  const TablePicUpload = async () => {
-
-  };
-
   const auctionsCount = useEffectEvent((auth)=>{
     const count = auth.tables.filter((item) => item.auctions);
     if (count.length) SetAuctions(true);
@@ -60,7 +56,7 @@ const SetAuctions = () => {
           and choosing the "Auction" option. <br /><br />
 
           You can also customize or remove each table <br />
-          by choosing a corresponding option in the same menu. <br /><br />
+          by choosing corresponding options in the same menu. <br /><br />
 
           Finally, if you want to add more tables to your venue, <br />
           you can do it by clicking on any empty slot.
@@ -107,6 +103,7 @@ const SetAuctions = () => {
                     status={status}
                     setStatus={setStatus}
                     customize={customize}
+                    pic={item.pic}
                   />
                 }
                 { status === `pending${item.id}` &&

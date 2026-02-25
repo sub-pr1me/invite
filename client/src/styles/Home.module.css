@@ -6,6 +6,10 @@
   outline: rgb(115, 161, 46) 1px solid;
 } */
 
+* {
+  box-sizing: border-box;
+}
+
 .container,
 .welcome {
   height: 100%;
