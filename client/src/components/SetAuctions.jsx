@@ -4,6 +4,7 @@ import Table from '../components/Table'
 import TableModal from '../components/TableModal'
 import TableLoading from '../components/TableLoading'
 import TablePic from '../components/TablePic'
+import AuctionSetup from '../components/AuctionSetup'
 import { useState, useEffect, useEffectEvent } from 'react';
 // import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
@@ -61,10 +62,16 @@ const SetAuctions = () => {
           Finally, if you want to add more tables to your venue, <br />
           you can do it by clicking on any empty slot.
         </div>   
-        { customize &&
+        { customize && status !== 'auction' &&
           <TablePic
+            customize={customize}  
+            setCustomize={setCustomize}            
+          />
+        }
+        { customize && status === 'auction' &&
+          <AuctionSetup
+            setStatus={setStatus}  
             setCustomize={setCustomize}
-            customize={customize}
           />
         }
       </div>
