@@ -59,6 +59,7 @@
   overflow: wrap;
   box-sizing: border-box;
   line-height: 1.3;
+  color: rgba(248, 195, 255, 0.884);
 }
 
 .customize {

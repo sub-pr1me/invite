@@ -17,7 +17,7 @@
   bottom: 50%;
   border-radius: 10px;
   box-sizing: border-box;
-  border: 3px rgb(119, 107, 228) solid;
+  border: 3px solid rgba(252, 164, 255, 0.85);
   gap: 10px;
   padding-top: 10px;
   animation: appear 0.3s forwards;
@@ -39,7 +39,7 @@
 }
 
 .container .red {
-  background-color: rgb(158, 54, 54);
+  background-color: rgb(185, 52, 52);
 }
 
 @keyframes appear {
