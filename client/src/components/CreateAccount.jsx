@@ -202,14 +202,17 @@ const CreateAccount = () => {
               name='acc_type' 
               type='text' 
               value={accType} hidden readOnly/>
-            <button disabled={!validUsername || !validEmail || !validPwd ? true : false}
-            >Submit</button>
+            <button disabled={!validUsername || !validEmail || !validPwd ? true : false}>
+              Submit
+            </button>
+            <button
+              type='button'
+              className={`${styles.goback}`}
+              onClick={() => {
+                navigate('/');
+              }}>Go Back
+            </button>
         </form>
-        <button
-            onClick={() => {
-              navigate('/');
-            }}>Go Back
-        </button>
     </section>
   )
 }

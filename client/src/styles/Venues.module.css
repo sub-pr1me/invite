@@ -48,7 +48,7 @@ li {
   overflow-clip-margin: unset !important;
 }
 
-h4 {
+.container h4 {
   justify-self: flex-end;
   align-self: center;
   margin: 0px;

@@ -9,18 +9,21 @@
 .container {
   animation: appear 0.3s 0.1s both, opacity 0.2s 0.1s both;;
   will-change: transform, opacity;
+  position: absolute;
+  top: 33%;
 }
 
 .container h2 {
   margin-bottom: 1vh;
   color: rgb(68, 35, 75);
+  font-size: clamp(14px, 3vh, 22px);
 }
 
-form {
+.container form {
   display: flex;
   flex-direction: column;
   gap: 2vh;
-  width: 190px;
+  width: clamp(130px, 25vh, 200px);
 }
 
 .container input::placeholder {
@@ -31,7 +34,7 @@ form {
 .field {
   display: flex;
   width: 100%;
-  margin-left: 5%;
+  margin-left: 10%;
 }
 
 .container input {
@@ -48,11 +51,11 @@ input:focus {
   outline: 2px rgba(56, 0, 102, 0.459) solid;
 }
 
-label {
+.container label {
   max-width: 15%;
 }
 
-span {
+.container span {
   line-height: 1;
 }
 

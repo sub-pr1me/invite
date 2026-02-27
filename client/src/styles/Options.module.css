@@ -8,6 +8,8 @@
   margin-top: 5vh;
   animation: appear 0.3s 0.2s both, opacity 0.2s 0.2s both;;
   will-change: transform, opacity;
+  position: absolute;
+  top: 40%;
 }
 
 @keyframes appear {

@@ -1,3 +1,8 @@
+
+.hidden {
+  display: none !important;
+}
+
 /* * {
   outline: 1px greenyellow solid;
 }  */
@@ -14,13 +19,10 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   align-self: center;
-}
-
-.hidden {
-    display: none !important;
+  position: relative;
 }
 
 .bg_container {
@@ -52,6 +54,7 @@
   font-size: 22vh;
   animation: logo 0.3s 0.1s both;
   will-change: transform;
+  margin-left: -5px;
 }
 
 .male,

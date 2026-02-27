@@ -11,22 +11,18 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: 45%;
+  height: 70%;
   animation: appear 0.3s 0.1s both, opacity 0.2s 0.1s both;;
   will-change: transform, opacity;
 }
 
-form {
+.container form {
   display: flex;
   flex-direction: column;
   gap: 2vh;
-  width: 250px;
-  margin-top: 4vh;
-}
-
-.duplicate {
-  color: red;
-  height: 4vh;
+  width: clamp(130px, 25vh, 220px);
+  height: 35%;
+  margin-top: 10px;
 }
 
 .container input::placeholder {
@@ -54,11 +50,15 @@ input:focus {
   outline: 2px rgb(190, 170, 174) solid;
 }
 
-label {
+.goback {
+  margin-top: -8%;
+}
+
+.container label {
   max-width: 15%;
 }
 
-span {
+.container span {
   line-height: 1;
 }
 
@@ -75,9 +75,10 @@ span {
   border-radius: 10px;
   background-color: rgb(58, 0, 63);
   color: rgb(243, 203, 255);
+  font-weight: 500;
   padding: 10px;
   position: absolute;
-  top: 73%;
+  top: 35%;
   left: auto;
 }
 
@@ -87,8 +88,11 @@ span {
   background-color: rgb(58, 0, 63);
   padding: 10px;
   position: absolute;
-  top: 100%;
+  top: 52%;
   left: auto;
+  color: rgb(243, 203, 255);
+  font-weight: 500;
+
 }
 
 .offscreen {
