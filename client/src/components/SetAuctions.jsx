@@ -18,7 +18,6 @@ const SetAuctions = () => {
   const [status, setStatus] = useState('idle');
   const [customize, setCustomize] = useState(null);
 
-
   const CustomizeTable = (id) => {
     setCustomize(id);
   }
@@ -70,6 +69,7 @@ const SetAuctions = () => {
         }
         { customize && status === 'auction' &&
           <AuctionSetup
+            customize={customize}
             setStatus={setStatus}  
             setCustomize={setCustomize}
           />
@@ -120,29 +120,29 @@ const SetAuctions = () => {
           ))
         }
       </div>
-      <div className={`${styles.btn_container}`}>
+      <div
+        className={`${styles.btn_container}`}        
+        onMouseEnter={()=>{
+            setFadeNote(false);
+            if (!auth.tables.filter((item) => item.auction).length) setNoteHidden(false);          
+          }}
+          onMouseLeave={()=>{
+            setFadeNote(true);
+            if (!noteHidden) setTimeout(() => { setNoteHidden(true) }, 420);          
+          }}>
         <div className={`
           ${styles.note}
           ${fadeNote ? styles.fadeNote : null}
           ${noteHidden ? styles.hidden : null}`}>
             You must set at least one auction to continue!
         </div>
-        <button
-        disabled={!auctions}
-        onMouseOver={()=>{
-          setFadeNote(false);
-          if (!auth.tables.filter((item) => item.auction).length) setNoteHidden(false);          
-        }}
-        onMouseOut={()=>{
-          setFadeNote(true);
-          if (!noteHidden) setTimeout(() => { setNoteHidden(true) }, 420);          
-          }}>
+        <button disabled={!auctions}>
           Save
       </button>
       </div>      
     </div>
     </>
   );
-}
+};
 
 export default SetAuctions

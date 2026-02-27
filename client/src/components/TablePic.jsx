@@ -103,7 +103,7 @@ const TablePic = ({ setCustomize, customize }) => {
       </div>
       }
       <div className={`${styles.upload_container} ${status !== 'idle' ? styles.hidden : null}`}>
-        <div className={`${styles.cust_name}`}><strong>Table {`${customize}`}</strong></div>
+        <div className={`${styles.cust_name}`}><strong>Table {`${customize}`}<br />Customization</strong></div>
         <div className={`${styles.message}`}>
           Upload a photo of this table <br /> 
           to make it more appealing for customers!
