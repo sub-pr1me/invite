@@ -137,3 +137,16 @@ export async function tableInfoUpdate(email, id, link) {
   if (pic) return pic;
   return null;
 };
+
+export async function auctionUpload(email, id, deposit, step) {
+  const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${email}'`);
+  const tables = rows[0].tables[0];
+  const updated = tables.map(item => {if (item.id === id)
+    {return {...item, auction: {deposit: deposit, step: step}}} else {return item}});
+  const stringified = JSON.stringify(updated);
+  await pool.query(`
+    UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
+    WHERE email 
+    LIKE '${email}'`);
+  return 'AUCTION SET';
+};

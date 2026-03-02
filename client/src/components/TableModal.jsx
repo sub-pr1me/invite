@@ -3,7 +3,7 @@ import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useState, useEffect, useEffectEvent } from 'react'
 
-const TableModal = ({ id, modal, setStatus, CustomizeTable, SetAuctions }) => {
+const TableModal = ({ id, modal, setStatus, CustomizeTable }) => {
   const [hidden, setHidden] = useState(true);
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
@@ -68,7 +68,7 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, SetAuctions }) => {
         ${!modal ? styles.fade : null}
         ${hidden ? styles.hidden : null}`}>
         <button onClick={()=>{CustomizeTable(id)}}>
-          Customize
+          Photo
           </button>
         <button onClick={()=>{
           setStatus('auction');

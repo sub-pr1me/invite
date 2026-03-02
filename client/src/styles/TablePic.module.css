@@ -37,6 +37,10 @@
 }
 
 .message {
+  width: 90%;
+  padding: 5px 0px;
+  border-radius: 10px;
+  background-color: rgba(248, 172, 255, 0.13);
   max-height: 50%;
   font-size: clamp(13px, 3.3vw, 16px);
   font-weight: 400;
@@ -71,7 +75,7 @@
   font-size: 13px;
   font-weight: 500;
   font-family: inherit;
-  background-color: rgb(77, 66, 177);
+  background-color: rgb(89, 74, 223);
   cursor: pointer;
   transition: border-color 0.25s;
   color: white;

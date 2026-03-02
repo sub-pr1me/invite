@@ -26,10 +26,10 @@ const LayoutDashboard = () => {
           <Link to='/'><Log_Out /></Link>
         </div>
       </header>
-      <main>
+      <main className={`${auth.stage !== '4' ? styles.fullscreen : null}`}>
         <Outlet />
       </main>
-      <nav>
+      <nav className={`${auth.stage !== '4' ? styles.hidden : null}`}>
         <Link to='/dashboard/'>HOME</Link>
         <Link to='/dashboard/clients'>CLIENTS</Link>
         <Link to='/dashboard/profile'>PROFILE</Link>

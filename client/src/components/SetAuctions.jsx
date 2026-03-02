@@ -23,7 +23,7 @@ const SetAuctions = () => {
   }
 
   const auctionsCount = useEffectEvent((auth)=>{
-    const count = auth.tables.filter((item) => item.auctions);
+    const count = auth.tables.filter((item) => item.auction.deposit);
     if (count.length) SetAuctions(true);
     if (!count.length) SetAuctions(false);
   });
@@ -51,11 +51,11 @@ const SetAuctions = () => {
           You have {active} active {`table${active > 1 || active < 1? 's' : ''}`}. <br />
           {`${active > 1 || active < 1 ? 'These tables are' : 'This table is'}`} NOT visible to customers by default. <br /><br />
 
-          In order to make a table visible to customers, you should <br />
-          set up an auction for it. Do it by clicking on your table of choice <br />
+          In order to make a table visible, you should set up<br />
+          an auction for it. Do it by clicking on your table of choice <br />
           and choosing the "Auction" option. <br /><br />
 
-          You can also customize or remove each table <br />
+          You can also remove tables or upload their photos <br />
           by choosing corresponding options in the same menu. <br /><br />
 
           Finally, if you want to add more tables to your venue, <br />
@@ -92,7 +92,7 @@ const SetAuctions = () => {
                       }
                     })
                   });
-                }
+                };
               }}>
                 { status !== `pending${item.id}` &&
                   <TableModal
@@ -121,10 +121,10 @@ const SetAuctions = () => {
         }
       </div>
       <div
-        className={`${styles.btn_container}`}        
+        className={`${styles.btn_container}`}
         onMouseEnter={()=>{
             setFadeNote(false);
-            if (!auth.tables.filter((item) => item.auction).length) setNoteHidden(false);          
+            if (!auth.tables.filter((item) => item.auction.deposit).length) setNoteHidden(false);          
           }}
           onMouseLeave={()=>{
             setFadeNote(true);

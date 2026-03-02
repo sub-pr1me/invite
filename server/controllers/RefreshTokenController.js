@@ -48,13 +48,13 @@ export default async function handleRefreshToken(req, res) {
             pic: `${arr[i].pic}`,
             active: JSON.parse(arr[i].active),
             modal: JSON.parse(arr[i].modal),
-            auction: JSON.parse(arr[i].auction)
+            auction: {deposit: parseInt(arr[i].auction.deposit), step: parseInt(arr[i].auction.step)}
           }
         );
       };
       tables = deserialized;
     };    
-  }
+  };
 
   if (matchedCustomer) {
     roles = ['customer'];

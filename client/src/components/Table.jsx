@@ -6,6 +6,7 @@ const Table = ({ id, active, modal, setStatus, customize, pic }) => {
 
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
+  const index = id-1;
 
   const addTable = async () => {
     setStatus(`pending${id}`);
@@ -35,15 +36,18 @@ const Table = ({ id, active, modal, setStatus, customize, pic }) => {
         ${styles.container} 
         ${styles[`t${id}`]} 
         ${active ? styles.active : styles.inactive}
-        ${modal || customize === id ? styles.selected : null}`}
+        ${modal || customize === id ? styles.selected : null}
+        ${auth.tables[index].auction.deposit ? styles.auction_running : null}`}
         onClick={()=>{!active ? addTable() : null}}>
         {
           active
           ? <div className={`${styles.table_image}`}>
+              <div className={`${styles.auction_icon} ${!auth.tables[index].auction.deposit ? styles.hidden : null}`}>
+                <img src='../../public/img/auctions.png' alt='' />
+              </div>
               <div className={`${styles.bottom}`}>Table {id}</div>
               <img src={pic ? pic : null} alt='' className={`${!pic ? styles.hidden : null}`}/>
             </div>
-
           : <div className={`${styles.empty}`}>
             <img src='../../img/add.png' alt='' />
           </div>

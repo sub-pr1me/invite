@@ -50,11 +50,14 @@
 }
 
 .label {
-  height: 20px;
-  width: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 36px;
+  width: 70px;
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 15px 40px;
+  box-sizing: border-box;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
