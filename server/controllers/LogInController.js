@@ -52,15 +52,37 @@ export default async function LogInController(req, res) {
       const arr = dbData.tables[0];
       const deserialized = [];
       for (let i=0; i<arr.length; i++) {
-        deserialized.push(
-          {
-            id: parseInt(arr[i].id),
-            pic: `${arr[i].pic}`,
-            active: JSON.parse(arr[i].active),
-            modal: JSON.parse(arr[i].modal),
-            auction: {deposit: parseInt(arr[i].auction.deposit), step: parseInt(arr[i].auction.step)}
-          }
-        );
+        if (arr[i].auction && arr[i].auction.deposit) {
+          deserialized.push(
+            {
+              id: parseInt(arr[i].id),
+              pic: `${arr[i].pic}`,
+              active: JSON.parse(arr[i].active),
+              modal: JSON.parse(arr[i].modal),
+              auction: {deposit: parseInt(arr[i].auction.deposit), step: parseInt(arr[i].auction.step)}
+            }
+          );
+        } else if (arr[i].auction && !arr[i].auction.deposit) {
+          deserialized.push(
+            {
+              id: parseInt(arr[i].id),
+              pic: `${arr[i].pic}`,
+              active: JSON.parse(arr[i].active),
+              modal: JSON.parse(arr[i].modal),
+              auction: {deposit: null, step: null}
+            }
+          );
+        } else {
+          deserialized.push(
+            {
+              id: parseInt(arr[i].id),
+              pic: `${arr[i].pic}`,
+              active: JSON.parse(arr[i].active),
+              modal: JSON.parse(arr[i].modal),
+              auction: {deposit: null, step: null}
+            }
+          );
+        }
       };
       tables = deserialized;
     };

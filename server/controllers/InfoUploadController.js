@@ -19,6 +19,7 @@ const handleInfoUpload = async (req, res)=> {
       hours = req.body.hours;
       tables_arr = req.body.tables;
     };
+    
     const tables = JSON.stringify(tables_arr);
 
     if (accType === 'customer') {
@@ -28,9 +29,7 @@ const handleInfoUpload = async (req, res)=> {
     };
 
     const result = await infoUpload(accType, email, hours, tables, dob, gender, interest);
-    // console.log('INFO UPLOAD CONTROLLER - OK');
     res.status(200).send(result);
-
   } catch (err) {
     console.log(err);
     res.status(500).send('INFO CONTROLLER ERROR');

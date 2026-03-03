@@ -21,7 +21,7 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable }) => {
       setStatus(`pending${id}`);
       setHidden(true);
       const update = auth.tables;
-      update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': false});      
+      update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': false});
       try {
         const response = await axiosPrivate.post("/info_upload",
           {hours: auth.hours, tables: update},
@@ -34,16 +34,39 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable }) => {
           const arr = response.data.tables[0];
           const deserialized = [];
           for (let i=0; i<arr.length; i++) {
-            deserialized.push(
-              {
-                id: parseInt(arr[i].id),
-                pic: `${arr[i].pic}`,
-                active: JSON.parse(arr[i].active),
-                modal: JSON.parse(arr[i].modal),
-                auction: JSON.parse(arr[i].auction)
-              }
-            );
+            if (arr[i].auction && arr[i].auction.deposit) {
+              deserialized.push(
+                {
+                  id: parseInt(arr[i].id),
+                  pic: `${arr[i].pic}`,
+                  active: JSON.parse(arr[i].active),
+                  modal: JSON.parse(arr[i].modal),
+                  auction: {deposit: parseInt(arr[i].auction.deposit), step: parseInt(arr[i].auction.step)}
+                }
+              );
+            } else if (arr[i].auction && !arr[i].auction.deposit) {
+              deserialized.push(
+                {
+                  id: parseInt(arr[i].id),
+                  pic: `${arr[i].pic}`,
+                  active: JSON.parse(arr[i].active),
+                  modal: JSON.parse(arr[i].modal),
+                  auction: {deposit: null, step: null}
+                }
+              );
+            } else {
+              deserialized.push(
+                {
+                  id: parseInt(arr[i].id),
+                  pic: `${arr[i].pic}`,
+                  active: JSON.parse(arr[i].active),
+                  modal: JSON.parse(arr[i].modal),
+                  auction: {deposit: null, step: null}
+                }
+              );
+            }
           };
+          console.log('RESULT - ', deserialized);
           setAuth({...auth, tables: deserialized});
           setTimeout(() => {setStatus('success');}, 500);
         };
