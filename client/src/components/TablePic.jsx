@@ -105,13 +105,21 @@ const TablePic = ({ setCustomize, customize }) => {
       <div className={`${styles.upload_container} ${status !== 'idle' ? styles.hidden : null}`}>
         <div className={`${styles.cust_name}`}><strong>Table {`${customize}`}</strong></div>
         <div className={`${styles.message}`}>
-          Upload a photo of this table <br /> 
-          to make it more appealing for customers!
+          {
+            auth.tables[customize-1].pic
+            ?
+            <img src={auth.tables[customize-1].pic} alt='' />
+            :
+            <div>
+              Upload a photo of this table <br /> 
+              to make it more appealing for customers!
+          </div>
+          }
         </div>
         <div className={`${styles.btns}`}>
           <button onClick={()=> {setCustomize(null)}}>Cancel</button>
           <label htmlFor='tablepic' className={`${styles.label}`}>
-            Upload
+            {auth.tables[customize-1].pic ? 'Change' : 'Upload'}
             <input
               className={`${styles.upload}`}
               multiple
