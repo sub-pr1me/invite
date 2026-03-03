@@ -1,11 +1,13 @@
 import styles from '../styles/AuctionSetup.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import { useRef, useEffect } from 'react';
 
 const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
   
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
+  const depositRef = useRef();
   
   async function Upload(formData) {
 
@@ -40,6 +42,10 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
     }
   };
 
+  useEffect(()=>{
+    depositRef.current.focus();
+  },[]);
+
   return (
     <>
       <div className={styles.auction_container}>
@@ -59,6 +65,7 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
                 type='number' 
                 name='deposit'
                 id='deposit'
+                ref={depositRef}
                 min={50}
                 max={1000}/>
           </div>

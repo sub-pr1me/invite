@@ -98,8 +98,12 @@ export async function uploadNewAlbum(acc_type, email, links) {
   return 'ALBUM UPLOADED';
 };
 
-export async function infoUpload(acc_type, email, hours, tables, dob, gender, interest) {
+export async function infoUpload(acc_type, email, hours, tables, stage, dob, gender, interest) {
   if (acc_type === 'venue') {
+    if (stage) {
+      await pool.query(`UPDATE venues SET stage = '4' WHERE email = '${email}'`);
+      return 'VENUE REGISTRATION COMPLETE';
+    };
     await pool.query(
       `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}'),
        stage = '3' WHERE email = '${email}'`);
@@ -121,7 +125,7 @@ export async function infoUpload(acc_type, email, hours, tables, dob, gender, in
   await pool.query(
       `UPDATE customers SET dob = '${dob}', age = '${age}', gender = '${gender}',
        interest = '${interest}', stage = '4' WHERE email = '${email}'`);
-  return 'CUSTOMER INFO UPLOADED';
+  return 'CUSTOMER REGISTRATION COMPLETE';
 };
 
 export async function tableInfoUpdate(email, id, link) {

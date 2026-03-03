@@ -6,10 +6,10 @@ import TableLoading from '../components/TableLoading'
 import TablePic from '../components/TablePic'
 import AuctionSetup from '../components/AuctionSetup'
 import { useState, useEffect, useEffectEvent } from 'react';
-// import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 const SetAuctions = () => {
-  // const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
   const [active, setActive] = useState(auth.tables.filter((item) => item.active === true).length);
   const [auctions, SetAuctions] = useState(false);
@@ -37,10 +37,30 @@ const SetAuctions = () => {
     if (status === 'success') setStatus('idle');
   });
 
+  const EndVenueRegistration = async () => {
+    try {
+      await axiosPrivate.post("/info_upload",
+        {hours: auth.hours, tables: auth.tables, stage: 4},
+        {
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          withCredentials: true
+        }
+      );
+      setAuth({...auth, stage: '4'});
+
+    } catch (err) {
+      if (!err?.response) {
+        console.log('NO SERVER RESPONSE');
+      } else {
+        console.log('SOMETHING WENT WRONG');
+      }
+    }
+  };
+
   useEffect(()=>{
     auctionsCount(auth);
     if (status === 'success') activeCount(auth);
-    resetStatus(status);    
+    resetStatus(status);
   },[auth,status]);
 
   return (
@@ -136,9 +156,11 @@ const SetAuctions = () => {
           ${noteHidden ? styles.hidden : null}`}>
             You must set at least one auction to continue!
         </div>
-        <button disabled={!auctions}>
+        <button
+          disabled={!auctions}
+          onClick={()=>{EndVenueRegistration()}}>
           Save
-      </button>
+        </button>
       </div>      
     </div>
     </>
