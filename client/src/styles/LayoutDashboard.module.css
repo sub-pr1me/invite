@@ -74,17 +74,24 @@ header .arrow {
   justify-content: flex-end;
 }
 
-header,
-nav {
+.dash_container header,
+.dash_container nav {
   height: 10%;
   width: 100%;
-  justify-content: space-around;
+  justify-content: center;
   background-color: rgb(15, 0, 29);
+  position: relative;
 }
 
-nav a {
+.dash_container nav a {
   font-size: 13px;
   justify-content: center;
+  max-width: 180px;
+}
+
+.dash_container nav img {
+  filter: invert(50%) sepia(50%) saturate(500%) hue-rotate(220deg) brightness(100%) contrast(100%);
+  height: clamp(30px, 8vw, 40px);
 }
 
 .dash_container main {
@@ -134,4 +141,21 @@ button {
 .email {
   color: rgb(178, 137, 194);
   font-size: 14px;
+}
+
+.pointer {
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  outline: 2px solid rgb(205, 154, 253);
+  z-index: 1;
+}
+
+.home {
+  left: 2.8vw;
+}
+
+.selected {
+  filter: invert(50%) sepia(50%) saturate(800%) hue-rotate(240deg) brightness(180%) contrast(100%) !important;
 }

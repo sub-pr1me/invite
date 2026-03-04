@@ -43,7 +43,7 @@ const Table = ({ id, active, modal, setStatus, customize, pic }) => {
           active
           ? <div className={`${styles.table_image}`}>
               <div className={`${styles.auction_icon} ${!auth.tables[index].auction.deposit ? styles.hidden : null}`}>
-                <img src='../../public/img/auctions.png' alt='' />
+                <img src='../../img/auctions.png' alt='' />
               </div>
               <div className={`${styles.bottom}`}>Table {id}</div>
               <img src={pic ? pic : null} alt='' className={`${!pic ? styles.hidden : null}`}/>

@@ -2,9 +2,11 @@ const Clients = () => {
   return (
     <>
     <title>Clients</title>
-    <div>Clients</div>
+    <div>Hosts</div>
+    <div>Guests</div>
+    <div>Explore</div>
     </>   
-  )
-}
+  );
+};
 
 export default Clients

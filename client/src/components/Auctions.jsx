@@ -2,7 +2,8 @@ const Auctions = () => {
   return (
     <>
     <title>Auctions</title>
-    <div>Auctions</div>
+    <div>Active auctions</div>
+    <div>Past auctions</div>
     </>
   )
 }

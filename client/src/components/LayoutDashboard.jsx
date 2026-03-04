@@ -3,9 +3,11 @@ import styles from '../styles/LayoutDashboard.module.css'
 import useAuth from '../hooks/useAuth'
 import Log_Out from './Log_Out'
 import LogoUpload from './LogoUpload'
+import { useState } from 'react'
 
 const LayoutDashboard = () => {
   const { auth } = useAuth();
+  const [active, setActive] = useState('home');
 
   return (
     <>
@@ -30,15 +32,35 @@ const LayoutDashboard = () => {
         <Outlet />
       </main>
       <nav className={`${auth.stage !== '4' ? styles.hidden : null}`}>
-        <Link to='/dashboard/'>HOME</Link>
-        <Link to='/dashboard/clients'>CLIENTS</Link>
-        <Link to='/dashboard/profile'>PROFILE</Link>
-        <Link to='/dashboard/auctions'>AUCTIONS</Link>
-        <Link to='/dashboard/stats'>STATS</Link>
+        <Link to='/dashboard/' onClick={()=>{setActive('home')}} >
+          <img            
+            className={`${active === 'home' ? styles.selected : null}`} 
+            src='../../img/home.png' alt='' />
+        </Link>
+        <Link to='/dashboard/clients' onClick={()=>{setActive('clients')}}>
+          <img
+            className={`${active === 'clients' ? styles.selected : null}`} 
+            src='../../img/clients.png' alt='' />
+        </Link>
+        <Link to='/dashboard/profile' onClick={()=>{setActive('profile')}}>
+          <img
+            className={`${active === 'profile' ? styles.selected : null}`} 
+            src='../../img/profile.png' alt='' />
+        </Link>
+        <Link to='/dashboard/auctions' onClick={()=>{setActive('auctions')}}>
+          <img
+            className={`${active === 'auctions' ? styles.selected : null}`} 
+            src='../../img/auctions.png' alt='' />
+        </Link>
+        <Link to='/dashboard/cashier' onClick={()=>{setActive('cashier')}}>
+          <img
+            className={`${active === 'cashier' ? styles.selected : null}`} 
+            src='../../img/dollar.png' alt='' />
+        </Link>
       </nav>
-    </div>      
+    </div>
     </>
-  )
-}
+  );
+};
 
 export default LayoutDashboard

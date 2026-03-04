@@ -4,7 +4,7 @@ import Home from './Home'
 import Clients from './Clients'
 import Profile from './Profile'
 import Auctions from './Auctions'
-import Stats from './Stats'
+import Cashier from './Cashier'
 
 const Dashboard = () => {
   return (
@@ -15,7 +15,7 @@ const Dashboard = () => {
           <Route path='/clients' element={<Clients />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/auctions' element={<Auctions />} />
-          <Route path='/stats' element={<Stats />} />
+          <Route path='/cashier' element={<Cashier />} />
       </Route>
     </Routes>
     </>

@@ -1,6 +1,6 @@
 import useAuth from '../hooks/useAuth'
 import styles from '../styles/Home.module.css'
-import { useEffect, useEffectEvent } from 'react'
+// import { useEffect, useEffectEvent } from 'react'
 import AlbumUpload from './AlbumUpload'
 import InfoUpload from './InfoUpload'
 import SetAuctions from './SetAuctions'
@@ -8,11 +8,11 @@ import SetAuctions from './SetAuctions'
 const Home = () => {
 
   const { auth } = useAuth();
-  const onRefresh = useEffectEvent(()=>{console.log(auth)});
+  // const onRefresh = useEffectEvent(()=>{console.log(auth)});
   
-  useEffect(()=>{
-    onRefresh();
-  },[])
+  // useEffect(()=>{
+  //   onRefresh();
+  // },[])
 
   return (
     <>
@@ -34,9 +34,17 @@ const Home = () => {
     <div className={`${auth.stage !== '3' ? styles.hidden : null} ${styles.stage3_screen}`}>
       {auth.tables && <SetAuctions />}
     </div>
-    <div className={`${auth.stage !== '4' ? styles.hidden : null}`}>STAGE 4 - VISIBLE</div>
+    <div className={`${auth.stage !== '4' ? styles.hidden : null} ${styles.home_screen}`}>
+      <div>Logo / Avatar</div>
+      <div>Name</div>
+      <div>Photos</div>
+      <div>Likes</div>
+      <div>Compliments</div>
+      <div>Dates</div>
+      <div>Popular Venues</div>
+    </div>
     </>    
-  )
-}
+  );
+};
 
 export default Home
