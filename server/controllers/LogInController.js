@@ -43,6 +43,7 @@ export default async function LogInController(req, res) {
   const stage = dbData.stage
   const avatar = dbData.avatar
   const album = dbData.album
+  const credits = dbData.credits
 
   if (matchedVenues) {
     name = dbData.venue;
@@ -116,10 +117,10 @@ export default async function LogInController(req, res) {
     // SEND TOKEN TO USER
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
     if (accType === 'venue') res.json({ 
-      accessToken, accType, name, stage, avatar, album, rating, hours, tables
+      accessToken, accType, name, stage, avatar, album, rating, hours, tables, credits
     });
     if (accType === 'customer') res.json({ 
-      accessToken, accType, name, stage, avatar, album, likes, age, gender, interest 
+      accessToken, accType, name, stage, avatar, album, likes, age, gender, interest, credits
     });
   } else {
     res.status(401).send('WRONG PASSWORD');

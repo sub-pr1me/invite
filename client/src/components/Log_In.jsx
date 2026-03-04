@@ -79,13 +79,14 @@ const Log_In = () => {
       const age = response?.data?.age;
       const gender = response?.data?.gender;
       const interest = response?.data?.interest;
+      const credits = parseInt(response?.data?.credits);
 
       if (accType === 'venue') setAuth({ 
-        token: accessToken, roles: [accType], email, name, stage, avatar, album, rating, hours, tables
+        token: accessToken, roles: [accType], email, name, stage, avatar, album, rating, hours, tables, credits
       });
 
       if (accType === 'customer') setAuth({ 
-        token: accessToken, roles: [accType], email, name, stage, avatar, album, likes, age, gender, interest 
+        token: accessToken, roles: [accType], email, name, stage, avatar, album, likes, age, gender, interest, credits
       });
 
       console.log('LOGGED IN');

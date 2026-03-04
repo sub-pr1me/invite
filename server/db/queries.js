@@ -52,16 +52,16 @@ export async function createNewUser(acc_type, name, email, password, stage, rati
 export async function getUserData(email, acc_type) {
   if (acc_type === 'venue') {
     const { rows } = await pool.query(`
-      SELECT ${acc_type}, password, stage, avatar, album, rating, hours, tables
+      SELECT ${acc_type}, password, stage, avatar, album, rating, hours, tables, credits
       FROM ${acc_type}s 
       WHERE email LIKE '${email}'`);
     return rows[0];
   };
   const { rows } = await pool.query(`
-    SELECT ${acc_type}, password, stage, avatar, album, age, gender, interest, likes 
+    SELECT ${acc_type}, password, stage, avatar, album, age, gender, interest, likes, credits 
     FROM ${acc_type}s 
     WHERE email LIKE '${email}'`);
-    return rows[0];  
+    return rows[0];
 };
 
 export async function addRefreshToken(acc_type, email, token) {

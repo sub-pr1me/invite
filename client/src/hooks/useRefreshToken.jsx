@@ -21,7 +21,8 @@ const useRefreshToken = () => {
             stage: response?.data?.stage,
             rating: response?.data?.rating,
             hours: response?.data?.hours,
-            tables: response?.data?.tables
+            tables: response?.data?.tables,
+            credits: parseInt(response?.data?.credits)
           }
         });
         if (response.data.roles[0] === 'customer') setAuth(prev => {
@@ -37,7 +38,8 @@ const useRefreshToken = () => {
             likes: response?.data?.likes,
             age: response?.data?.age,
             gender: response?.data?.gender,
-            interest: response?.data?.interest
+            interest: response?.data?.interest,
+            credits: parseInt(response?.data?.credits)
           }
         });
 

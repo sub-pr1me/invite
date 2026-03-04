@@ -1,0 +1,16 @@
+.hidden {
+    display: none !important;
+}
+
+/* .preview * {
+  outline: rgb(135, 197, 43) 1px solid;
+} */
+
+.homescreen_container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}

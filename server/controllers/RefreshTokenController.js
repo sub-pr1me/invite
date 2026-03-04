@@ -19,6 +19,7 @@ export default async function handleRefreshToken(req, res) {
   let avatar = null;
   let album = null;
   let stage = null;
+  let credits = null;
 
   let rating = null;
   let hours = null;
@@ -38,6 +39,7 @@ export default async function handleRefreshToken(req, res) {
     stage = matchedVenue.stage;
     rating = matchedVenue.rating;
     hours = matchedVenue.hours;
+    credits = matchedVenue.credits;
     
     if (matchedVenue.tables[0]) { // deserialize data
       const arr = matchedVenue.tables[0];
@@ -90,6 +92,7 @@ export default async function handleRefreshToken(req, res) {
     age = matchedCustomer.age;
     gender = matchedCustomer.gender;
     interest = matchedCustomer.interest;
+    credits = matchedCustomer.credits;
   }
 
   // Evaluate JWT
@@ -108,10 +111,10 @@ export default async function handleRefreshToken(req, res) {
       );
       // console.log('NEW TOKEN - ', accessToken);
       if (matchedVenue) res.json({ 
-        accessToken, roles, email, name, avatar, album, stage, rating, hours, tables
+        accessToken, roles, email, name, avatar, album, stage, rating, hours, tables, credits
       });
       if (matchedCustomer) res.json({ 
-        accessToken, roles, email, name, avatar, album, stage, likes, age, gender, interest
+        accessToken, roles, email, name, avatar, album, stage, likes, age, gender, interest, credits
       });
     }
   );  
