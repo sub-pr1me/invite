@@ -2,7 +2,7 @@
   display: none !important;
 }
 
-/* .venue * {
+ /* * {
   outline: rgb(135, 197, 43) 1px solid;
 } */
 
@@ -15,6 +15,7 @@
 .interest,
 .closed_time,
 .venue form,
+.customer form,
 .table {
   display: flex;
 }
@@ -35,7 +36,8 @@
     );
 }
 
-.venue form {
+.venue form,
+.customer form {
   width: 100%;
   flex-direction: column;
   justify-content: center;
@@ -45,7 +47,9 @@
 }
 
 .venue form select,
-.venue form input {
+.venue form input,
+.customer form select,
+.customer form input {
   border: none;
   outline: 1px solid rgba(248, 172, 255, 0.63);
 }
@@ -102,9 +106,10 @@
   color: rgb(255, 255, 255);
 }
 
-.venue button {
+.venue button,
+.customer button {
   margin: 0px ;
-  background-color: rgb(95, 41, 105);
+  background-color: rgb(89, 74, 223);
 }
 
 .birthday,
@@ -122,7 +127,9 @@
 .interest label {
   border-radius: 0%;
   min-width: 100px;
-  align-self: flex-end;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center; 
 }
 
 .birthday input,
@@ -130,6 +137,7 @@
 .interest select {
   border-radius: 0%;
   background-color: rgb(0, 0, 0);
+  min-width: 120px;
 }
 
 .birthday input {

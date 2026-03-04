@@ -17,7 +17,7 @@ const MainScreen = () => {
       </Route>
     </Routes>
     </>    
-  )
-}
+  );
+};
 
 export default MainScreen

@@ -1,5 +1,7 @@
 .container {
   color: rgb(68, 35, 75);
+  position: absolute;
+  top: 40%;
 }
 
 .container h3,

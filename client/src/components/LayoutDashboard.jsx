@@ -34,14 +34,27 @@ const LayoutDashboard = () => {
       <nav className={`${auth.stage !== '4' ? styles.hidden : null}`}>
         <Link to='/dashboard/' onClick={()=>{setActive('home')}} >
           <img            
-            className={`${active === 'home' ? styles.selected : null}`} 
+            className={`${active === 'home' ? styles.selected : null}`}
             src='../../img/home.png' alt='' />
         </Link>
+        {
+        auth.roles[0] === 'venue'
+        &&
         <Link to='/dashboard/clients' onClick={()=>{setActive('clients')}}>
           <img
             className={`${active === 'clients' ? styles.selected : null}`} 
             src='../../img/clients.png' alt='' />
         </Link>
+        }
+        {
+        auth.roles[0] === 'customer'
+        &&
+        <Link to='/dashboard/explore' onClick={()=>{setActive('explore')}}>
+          <img
+            className={`${active === 'explore' ? styles.selected : null}`} 
+            src='../../img/explore.png' alt='' />
+        </Link>
+        }
         <Link to='/dashboard/profile' onClick={()=>{setActive('profile')}}>
           <img
             className={`${active === 'profile' ? styles.selected : null}`} 

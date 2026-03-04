@@ -12,7 +12,7 @@ const ActionMessage = () => {
         <h3>Account with this email <br /> already exists!</h3> 
       }
     </div>
-  )
+  );
 };
 
 export default ActionMessage

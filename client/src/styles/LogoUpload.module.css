@@ -21,11 +21,13 @@
 }
 
 .label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
   min-width: 50px;
   min-height: 50px;
   border-radius: 50%;
-  justify-content: center;
   height: 100%;
   width: 100%;
 }
