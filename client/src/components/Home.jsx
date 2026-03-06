@@ -18,24 +18,20 @@ const Home = () => {
   return (
     <>
     <title>Home</title>
-
-    <div className={`${auth.stage !== '0' ? styles.hidden : null} ${styles.container}`}>
-      <div className={`${styles.welcome}`}>Welcome!<br/>{
-        auth.roles[0] === 'venue' ?
-        `Please start by uploading your venue's logo!` :
-        `Please start by uploading your profile photo!` 
-      }</div>
+    <div  className={`${styles.container}`}>
+      {
+        auth.stage === '0' && 
+        <div className={`${styles.welcome}`}>Welcome!<br/>{
+          auth.roles[0] === 'venue' ?
+          `Please start by uploading your venue's logo!` :
+          `Please start by uploading your profile photo!`}
+        </div>
+      }
+      {auth.stage === '1' && <AlbumUpload />}
+      {auth.stage === '2' && <InfoUpload />}
+      {auth.stage === '3' && auth.tables && <SetAuctions />}
+      {auth.stage === '4' && <HomeScreen />}
     </div>
-    <div className={`${auth.stage !== '1' ? styles.hidden : null} ${styles.stage1_screen}`}>
-      <AlbumUpload />      
-    </div>
-    <div className={`${auth.stage !== '2' ? styles.hidden : null} ${styles.stage2_screen}`}>
-      <InfoUpload />
-    </div>    
-    <div className={`${auth.stage !== '3' ? styles.hidden : null} ${styles.stage3_screen}`}>
-      {auth.tables && <SetAuctions />}
-    </div>
-    {auth.stage === '4' && <HomeScreen />}
     </>    
   );
 };
