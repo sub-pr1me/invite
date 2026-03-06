@@ -29,8 +29,9 @@ export default async function CreateAccController(req, res) {
   const password = await bcrypt.hash(req.body.password, 10);
   const stage = '0';
   const rating = 0;
+  const tables = [];
   const credits = 0;
 
-  const result = await createNewUser(acc_type, name, email, password, stage, rating, credits);
+  const result = await createNewUser(acc_type, name, email, password, stage, rating, tables, credits);
   res.send(result);
 };

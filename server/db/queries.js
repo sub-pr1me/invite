@@ -32,13 +32,13 @@ export async function checkCustomersForMatch(email) {
   return rows[0];
 };
 
-export async function createNewUser(acc_type, name, email, password, stage, rating, credits) {
+export async function createNewUser(acc_type, name, email, password, stage, rating, tables, credits) {
   if (acc_type === 'venue') {
     await pool.query(
       `INSERT INTO venues (
-      venue, email, password, stage, rating, credits) 
-      VALUES ($1, $2, $3, $4, $5, $6)`, 
-      [name, email, password, stage, rating, credits]);
+      venue, email, password, stage, rating, tables, credits) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7)`, 
+      [name, email, password, stage, rating, tables, credits]);
     return 'success';
   };
   await pool.query(
