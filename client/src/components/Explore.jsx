@@ -1,6 +1,16 @@
 import styles from '../styles/Explore.module.css'
+import useAuth from '../hooks/useAuth'
+import { useEffect, useEffectEvent } from 'react'
 
-const Explore = () => {
+const Explore = ({ setActive }) => {
+
+  const { auth } = useAuth();
+  const onRefresh = useEffectEvent(()=>{setActive('explore')});
+
+  useEffect(()=>{
+    onRefresh();
+  },[]);
+
   return (
     <>
     <title>Explore</title>

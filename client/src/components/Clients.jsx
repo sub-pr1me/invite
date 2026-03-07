@@ -1,6 +1,16 @@
 import styles from '../styles/Clients.module.css'
+import useAuth from '../hooks/useAuth'
+import { useEffect, useEffectEvent } from 'react'
 
-const Clients = () => {
+const Clients = ({ setActive }) => {
+
+  const { auth } = useAuth();
+  const onRefresh = useEffectEvent(()=>{setActive('clients')});
+
+  useEffect(()=>{
+    onRefresh();
+  },[]);
+
   return (
     <>
     <title>Clients</title>
