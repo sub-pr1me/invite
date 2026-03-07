@@ -71,6 +71,7 @@ const CreateAccount = () => {
     const v1 = NAME_REGEX.test(name);
     const v2 = PASSWORD_REGEX.test(pwd);
     const v3 = EMAIL_REGEX.test(email);
+    
     if (!v1 || !v2 || !v3) {
       console.log(`Your hacking skills are worse than my alcoholism.`);
       return;

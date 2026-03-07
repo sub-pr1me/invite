@@ -3,11 +3,9 @@ import styles from '../styles/LayoutDashboard.module.css'
 import useAuth from '../hooks/useAuth'
 import Log_Out from './Log_Out'
 import LogoUpload from './LogoUpload'
-import { useState } from 'react'
 
 const LayoutDashboard = () => {
-  const { auth } = useAuth();
-  const [active, setActive] = useState('home');
+  const { auth, active, setActive } = useAuth();
 
   return (
     <>

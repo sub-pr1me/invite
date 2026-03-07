@@ -6,11 +6,12 @@ const AuthContext = createContext({});
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(null);
   const [activeEmail, setActiveEmail] = useState(null);
+  const [active, setActive] = useState('home');
   const venuesPromise = fetchVenues();
 
   return (
     <AuthContext.Provider value={{
-      auth, setAuth, venuesPromise, activeEmail, setActiveEmail }}>
+      auth, setAuth, venuesPromise, activeEmail, setActiveEmail, active, setActive }}>
       {children}
     </AuthContext.Provider>
   )

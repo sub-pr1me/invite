@@ -9,6 +9,7 @@ import AlbumUploadRouter from './routes/AlbumUploadRouter.js'
 import InfoUploadRouter from './routes/InfoUploadRouter.js'
 import TableUploadRouter from './routes/TableUploadRouter.js'
 import AuctionUploadRouter from './routes/AuctionUploadRouter.js'
+import BalanceUpdateRouter from './routes/BalanceUpdateRouter.js'
 import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
 import cookieParser from 'cookie-parser'
@@ -34,6 +35,7 @@ app.use('/album_upload', AlbumUploadRouter);
 app.use('/info_upload', InfoUploadRouter);
 app.use('/table_upload', TableUploadRouter);
 app.use('/auction_upload', AuctionUploadRouter);
+app.use('/balance_update', BalanceUpdateRouter);
 
 const PORT = 3000;
 

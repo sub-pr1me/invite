@@ -154,3 +154,26 @@ export async function auctionUpload(email, id, deposit, step) {
     LIKE '${email}'`);
   return 'AUCTION SET';
 };
+
+export async function BalanceUpdate(email, amount, acc_type) {
+  if (acc_type === 'customer') {
+    const { rows } = await pool.query(`SELECT credits FROM venues WHERE email LIKE '${email}'`);
+    const balance = rows[0].credits;
+    const updatedBalance = parseInt(balance) + parseInt(amount);
+    await pool.query(`
+      UPDATE venues SET credits = '${updatedBalance}' 
+      WHERE email 
+      LIKE '${email}'`);
+    return updatedBalance;
+  };
+  if (acc_type === 'venue') {
+    const { rows } = await pool.query(`SELECT credits FROM venues WHERE email LIKE '${email}'`);
+    const balance = rows[0].credits;
+    const updatedBalance = parseInt(balance) - parseInt(amount);
+    await pool.query(`
+      UPDATE venues SET credits = '${updatedBalance}' 
+      WHERE email 
+      LIKE '${email}'`);
+    return updatedBalance;
+  };
+};
