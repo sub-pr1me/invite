@@ -100,19 +100,35 @@ export async function uploadNewAlbum(acc_type, email, links) {
 
 export async function infoUpload(acc_type, email, hours, tables, stage, dob, gender, interest) {
   if (acc_type === 'venue') {
-    if (stage) {
+    if (stage === '2') {
+      await pool.query(
+        `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}'),
+         stage = '3' WHERE email = '${email}'`);
+        const { rows } = await pool.query(`
+          SELECT tables
+          FROM venues 
+          WHERE email LIKE '${email}'`
+        );
+        return rows[0];
+    };
+
+    if (stage === '3') {
       await pool.query(`UPDATE venues SET stage = '4' WHERE email = '${email}'`);
       return 'VENUE REGISTRATION COMPLETE';
     };
-    await pool.query(
-      `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}'),
-       stage = '3' WHERE email = '${email}'`);
-    const { rows } = await pool.query(`
-      SELECT tables
-      FROM venues 
-      WHERE email LIKE '${email}'`);
-    return rows[0];
-  }
+
+    if (stage === '4') {
+      await pool.query(
+        `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}')
+        WHERE email = '${email}'`);
+        const { rows } = await pool.query(`
+          SELECT tables
+          FROM venues 
+          WHERE email LIKE '${email}'`
+      );
+      return rows[0];
+    };    
+  };
 
   const date = new Date(dob);
   const currentDate = new Date();

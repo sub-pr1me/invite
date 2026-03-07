@@ -24,7 +24,7 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable }) => {
       update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': false});
       try {
         const response = await axiosPrivate.post("/info_upload",
-          {hours: auth.hours, tables: update},
+          {hours: auth.hours, tables: update, stage: auth.stage},
           {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             withCredentials: true
@@ -66,7 +66,7 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable }) => {
               );
             }
           };
-          console.log('RESULT - ', deserialized);
+          // console.log('RESULT - ', deserialized);
           setAuth({...auth, tables: deserialized});
           setTimeout(() => {setStatus('success');}, 500);
         };

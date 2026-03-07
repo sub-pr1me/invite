@@ -40,7 +40,7 @@ const SetAuctions = () => {
   const EndVenueRegistration = async () => {
     try {
       await axiosPrivate.post("/info_upload",
-        {hours: auth.hours, tables: auth.tables, stage: 4},
+        {hours: auth.hours, tables: auth.tables, stage: '4'},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
@@ -65,8 +65,9 @@ const SetAuctions = () => {
 
   return (
     <>
-    <div className={`${styles.container}`}>
-      <div className={`${styles.info}`}>
+    <div className={`${styles.container} ${auth.stage === '4' ? styles.post_registration : null}`}>
+      <div className={`${styles.info} ${auth.stage === '4' ? styles.hidden : null}`}>
+        {auth.stage !== '4' &&
         <div className={`${styles.instructions} ${customize ? styles.hidden : null}`}>
           You have {active} active {`table${active > 1 || active < 1? 's' : ''}`}. <br />
           {`${active > 1 || active < 1 ? 'These tables are' : 'This table is'}`} NOT visible to customers by default. <br /><br />
@@ -80,21 +81,22 @@ const SetAuctions = () => {
 
           Finally, if you want to add more tables to your venue, <br />
           you can do it by clicking on any empty slot.
-        </div>   
-        { customize && status !== 'auction' &&
-          <TablePic
-            customize={customize}  
-            setCustomize={setCustomize}            
-          />
-        }
-        { customize && status === 'auction' &&
-          <AuctionSetup
-            customize={customize}
-            setStatus={setStatus}  
-            setCustomize={setCustomize}
-          />
+        </div>
         }
       </div>
+      { customize && status !== 'auction' &&
+        <TablePic
+          customize={customize}
+          setCustomize={setCustomize}            
+        />
+      }
+      { customize && status === 'auction' &&
+        <AuctionSetup
+          customize={customize}
+          setStatus={setStatus}  
+          setCustomize={setCustomize}
+        />
+      }
       <div className={`${styles.tables}`}>
         {
           auth.tables.map((item) =>(
@@ -140,28 +142,31 @@ const SetAuctions = () => {
           ))
         }
       </div>
-      <div
-        className={`${styles.btn_container}`}
-        onMouseEnter={()=>{
-            setFadeNote(false);
-            if (!auth.tables.filter((item) => item.auction.deposit).length) setNoteHidden(false);          
-          }}
-          onMouseLeave={()=>{
-            setFadeNote(true);
-            if (!noteHidden) setTimeout(() => { setNoteHidden(true) }, 420);          
-          }}>
-        <div className={`
-          ${styles.note}
-          ${fadeNote ? styles.fadeNote : null}
-          ${noteHidden ? styles.hidden : null}`}>
-            You must set at least one auction to continue!
+      {
+        auth.stage !== '4' &&
+        <div
+          className={`${styles.btn_container}`}
+          onMouseEnter={()=>{
+              setFadeNote(false);
+              if (!auth.tables.filter((item) => item.auction.deposit).length) setNoteHidden(false);          
+            }}
+            onMouseLeave={()=>{
+              setFadeNote(true);
+              if (!noteHidden) setTimeout(() => { setNoteHidden(true) }, 420);          
+            }}>
+          <div className={`
+            ${styles.note}
+            ${fadeNote ? styles.fadeNote : null}
+            ${noteHidden ? styles.hidden : null}`}>
+              You must set at least one auction to continue!
+          </div>          
+          <button
+            disabled={!auctions}
+            onClick={()=>{EndVenueRegistration()}}>
+            Save
+          </button>          
         </div>
-        <button
-          disabled={!auctions}
-          onClick={()=>{EndVenueRegistration()}}>
-          Save
-        </button>
-      </div>      
+      }
     </div>
     </>
   );
