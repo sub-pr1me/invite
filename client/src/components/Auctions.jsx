@@ -1,6 +1,7 @@
 import styles from '../styles/Auctions.module.css'
 import useAuth from '../hooks/useAuth'
 import { useEffect, useEffectEvent } from 'react'
+import SetAuctions from './SetAuctions'
 
 const Auctions = ({ setActive }) => {
   
@@ -15,8 +16,7 @@ const Auctions = ({ setActive }) => {
     <>
     <title>Auctions</title>
     <div className={`${styles.auctions_container}`}>
-      <div>Active auctions</div>
-      <div>Past auctions</div>
+      {auth.roles[0] === 'venue' && <SetAuctions />}
     </div>
     </>
   );

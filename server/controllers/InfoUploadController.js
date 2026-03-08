@@ -15,11 +15,13 @@ const handleInfoUpload = async (req, res)=> {
     let gender = null;
     let interest = null;
     let stage = null;
+    let endreg = null;
     
     if (accType === 'venue') {
       hours = req.body.hours;
       tables_arr = req.body.tables;
       stage = req.body.stage;
+      endreg = req.body.endreg;
     };
     
     const tables = JSON.stringify(tables_arr);
@@ -30,7 +32,7 @@ const handleInfoUpload = async (req, res)=> {
       interest = req.body.interest;
     };
 
-    const result = await infoUpload(accType, email, hours, tables, stage, dob, gender, interest);
+    const result = await infoUpload(accType, email, hours, tables, stage, dob, gender, interest, endreg);
     res.status(200).send(result);
   } catch (err) {
     console.log(err);

@@ -40,7 +40,7 @@ const SetAuctions = () => {
   const EndVenueRegistration = async () => {
     try {
       await axiosPrivate.post("/info_upload",
-        {hours: auth.hours, tables: auth.tables, stage: '4'},
+        {hours: auth.hours, tables: auth.tables, stage: auth.stage, endreg: true},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
@@ -66,7 +66,7 @@ const SetAuctions = () => {
   return (
     <>
     <div className={`${styles.container} ${auth.stage === '4' ? styles.post_registration : null}`}>
-      <div className={`${styles.info} ${auth.stage === '4' ? styles.hidden : null}`}>
+      <div className={`${styles.info} ${auth.stage === '4' || customize ? styles.hidden : null}`}>
         {auth.stage !== '4' &&
         <div className={`${styles.instructions} ${customize ? styles.hidden : null}`}>
           You have {active} active {`table${active > 1 || active < 1? 's' : ''}`}. <br />

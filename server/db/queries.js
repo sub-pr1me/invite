@@ -98,9 +98,10 @@ export async function uploadNewAlbum(acc_type, email, links) {
   return 'ALBUM UPLOADED';
 };
 
-export async function infoUpload(acc_type, email, hours, tables, stage, dob, gender, interest) {
+export async function infoUpload(acc_type, email, hours, tables, stage, dob, gender, interest, endreg) {
+  console.log('stage - ', stage);
   if (acc_type === 'venue') {
-    if (stage === '2') {
+    if (stage === '2') {  // pre-registration basic info
       await pool.query(
         `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}'),
          stage = '3' WHERE email = '${email}'`);
@@ -112,12 +113,24 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
         return rows[0];
     };
 
-    if (stage === '3') {
+    if (stage === '3') { // pre-registration table editing
+      await pool.query(
+        `UPDATE venues SET tables = jsonb_set(tables, '{0}', '${tables}')
+         WHERE email = '${email}'`);
+        const { rows } = await pool.query(`
+          SELECT tables
+          FROM venues 
+          WHERE email LIKE '${email}'`
+        );
+      return rows[0];
+    };
+
+    if (stage === '3' && endreg) { // end venue registration
       await pool.query(`UPDATE venues SET stage = '4' WHERE email = '${email}'`);
       return 'VENUE REGISTRATION COMPLETE';
     };
 
-    if (stage === '4') {
+    if (stage === '4') { // post-registration table editing
       await pool.query(
         `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}')
         WHERE email = '${email}'`);
@@ -127,7 +140,7 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
           WHERE email LIKE '${email}'`
       );
       return rows[0];
-    };    
+    };
   };
 
   const date = new Date(dob);

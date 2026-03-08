@@ -1,7 +1,6 @@
 import styles from '../styles/Profile.module.css'
 import useAuth from '../hooks/useAuth'
 import { useEffect, useEffectEvent } from 'react'
-import SetAuctions from './SetAuctions'
 
 const Profile = ({ setActive }) => {
     
@@ -16,7 +15,7 @@ const Profile = ({ setActive }) => {
     <>
     <title>Profile</title>
     <div className={`${styles.profile_container}`}>
-      {auth.roles[0] === 'venue' && <SetAuctions />}
+      PROFLIE SETTINGS
     </div>
     </>
   );

@@ -102,7 +102,8 @@ const TablePic = ({ setCustomize, customize }) => {
           </button>
       </div>
       }
-      <div className={`${styles.upload_container} ${status !== 'idle' ? styles.hidden : null}`}>
+      {status === 'idle' &&
+      <div className={`${styles.upload_container} ${auth.stage === '4' ? styles.post_registration : null}`}>
         <div className={`${styles.cust_name}`}><strong>Table {`${customize}`}</strong></div>
         <div className={`${styles.message}`}>
           {
@@ -129,7 +130,8 @@ const TablePic = ({ setCustomize, customize }) => {
               onChange={handleFileChange}/>
           </label>          
         </div>
-      </div>      
+      </div>
+      }
     </>
   );
 };

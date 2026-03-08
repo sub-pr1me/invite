@@ -30,7 +30,7 @@ const InfoUpload = () => {
 
     try {
       await axiosPrivate.post("/info_upload",
-        {hours: hours, tables: tables_arr, dob: dob, gender: gender, interest: interest},
+        {hours: hours, tables: tables_arr, stage: auth.stage, dob: dob, gender: gender, interest: interest},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
@@ -164,7 +164,7 @@ const InfoUpload = () => {
       </div>
     }
     </>
-  )
-}
+  );
+};
 
 export default InfoUpload
