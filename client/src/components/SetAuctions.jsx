@@ -144,8 +144,7 @@ const SetAuctions = () => {
       </div>
       {
         auth.stage !== '4' &&
-        <div
-          className={`${styles.btn_container}`}
+        <div className={`${styles.btn_container}`}
           onMouseEnter={()=>{
               setFadeNote(false);
               if (!auth.tables.filter((item) => item.auction.deposit).length) setNoteHidden(false);          

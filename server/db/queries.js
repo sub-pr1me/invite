@@ -99,7 +99,6 @@ export async function uploadNewAlbum(acc_type, email, links) {
 };
 
 export async function infoUpload(acc_type, email, hours, tables, stage, dob, gender, interest, endreg) {
-  console.log('stage - ', stage);
   if (acc_type === 'venue') {
     if (stage === '2') {  // pre-registration basic info
       await pool.query(
