@@ -1,0 +1,80 @@
+.monitor {
+  width: clamp(350px, 90%, 620px);
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.navigate {
+  display: flex;
+  height: 15%;
+  width: 100%;
+}
+
+.line {
+  height: 1%;
+  width: 25%;
+  background-color: rgb(248, 172, 255);
+  margin-top: -5px;
+}
+
+.current,
+.history {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.current_section,
+.history_section {
+  display: flex;
+  justify-content: center;
+}
+
+.current_section {
+  background-color: rgba(255, 166, 0, 0.116);
+  align-items: center;
+}
+
+.history_section {
+  background-color: rgba(0, 225, 255, 0.116);
+  align-items: center;
+}
+
+.sections {
+  display: flex;
+  width: 200%;
+  height: 84%;
+  position: absolute;
+}
+
+.sections div {
+  width: 100%;
+}
+
+.left {
+  transform: translateX(50%);
+  transition: all 0.2s ease-in;
+}
+
+.right {
+  transform: translateX(250%);
+  transition: all 0.2s ease-in;
+}
+
+.curr {
+  transform: translateX(0%);
+  transition: all 0.2s ease-in;
+}
+
+.hist {
+  transform: translateX(-50%);
+  transition: all 0.2s ease-in;
+}
