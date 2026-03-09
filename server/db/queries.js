@@ -112,7 +112,7 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
         return rows[0];
     };
 
-    if (stage === '3') { // pre-registration table editing
+    if (stage === '3' && !endreg) { // pre-registration table editing
       await pool.query(
         `UPDATE venues SET tables = jsonb_set(tables, '{0}', '${tables}')
          WHERE email = '${email}'`);

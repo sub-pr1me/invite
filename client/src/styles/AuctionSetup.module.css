@@ -12,7 +12,7 @@
   justify-content: space-evenly;
   align-items: center;
   width: 90%;
-  height: 90%;
+  height: fit-content;
   min-width: 320px;
   max-width: 365px;
   font-size: clamp(11px, 3vw, 16px);
@@ -21,6 +21,8 @@
   border: 2px solid rgba(246, 179, 255, 0.884);
   border-radius: 15px;
   font-size: 14px;
+  gap: 10px;
+  margin-bottom: 5vh;
 }
 
 .header{
@@ -50,7 +52,7 @@
   border-radius: 10px;
   font-size: clamp(12px, 3vw, 14px);
   line-height: 1.2;
-  background-color: rgba(248, 172, 255, 0.13)
+  background-color: rgba(248, 172, 255, 0.13);
 }
 
 .fields {
@@ -91,6 +93,7 @@
 
 .btns {
   width: 100%;
+  margin-top: 10px;
 }
 
 .btns button {
