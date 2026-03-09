@@ -3,10 +3,9 @@ import axios from '../api/axios'
 import useAuth from '../hooks/useAuth'
 
 const Log_Out = () => {
-  const { setAuth } = useAuth();
+  const { setAuth, setActive } = useAuth();
 
-  async function SignOut() {
-
+  async function SignOut() {    
     try {
       await axios.get("/logout",
         {
@@ -14,8 +13,9 @@ const Log_Out = () => {
           withCredentials: true,
         }
       );
+      await setActive('home');
+      await setAuth(null);
       console.log('LOGGED OUT');
-      setAuth(null);
     } catch (err) {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');
@@ -29,10 +29,10 @@ const Log_Out = () => {
   
   return (
     <button className={`${styles.logout_container}`}
-            onClick={SignOut}>
+            onClick={()=>{SignOut()}}>
             Log Out
     </button>
-  )
-}
+  );
+};
 
 export default Log_Out

@@ -1,4 +1,5 @@
 import styles from '../styles/AuctionsMonitor.module.css'
+import AuctionActive from './AuctionActive'
 
 const AuctionsMonitor = ({ section, setSection }) => {
   return (
@@ -11,7 +12,10 @@ const AuctionsMonitor = ({ section, setSection }) => {
         <div className={`${styles.line} ${section === 'current' ? styles.left : styles.right}`}></div>
         <div className={`${styles.sections} ${section !== 'current' ? styles.curr : styles.hist}`}>
           <div className={`${styles.history_section}`}>History</div>
-          <div className={`${styles.current_section}`}>Current</div>
+          
+          <div className={`${styles.current_section}`}>
+            <AuctionActive />
+          </div>
         </div>
       </div>
     </>

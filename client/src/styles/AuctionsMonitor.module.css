@@ -1,5 +1,13 @@
+.hidden {
+    display: none !important;
+}
+
+/* * {
+  outline: rgb(63, 145, 212) 1px solid;
+} */
+
 .monitor {
-  width: clamp(350px, 90%, 620px);
+  width: clamp(350px, 100%, 620px);
   height: 100%;
   position: relative;
   z-index: 1;
@@ -16,19 +24,18 @@
   height: 1%;
   width: 25%;
   background-color: rgb(248, 172, 255);
-  margin-top: -5px;
 }
 
 .current,
 .history {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   height: 100%;
   width: 100%;
   cursor: pointer;
-  font-size: 18px;
+  font-size: clamp(18px, 4vw, 22px);
   font-weight: 500;
 }
 
@@ -36,11 +43,12 @@
 .history_section {
   display: flex;
   justify-content: center;
+  width: 50%;
+  height: 100%;;
 }
 
 .current_section {
-  background-color: rgba(255, 166, 0, 0.116);
-  align-items: center;
+  align-items: center;  
 }
 
 .history_section {
@@ -53,10 +61,6 @@
   width: 200%;
   height: 84%;
   position: absolute;
-}
-
-.sections div {
-  width: 100%;
 }
 
 .left {

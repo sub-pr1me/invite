@@ -5,6 +5,7 @@ import Log_Out from './Log_Out'
 import LogoUpload from './LogoUpload'
 
 const LayoutDashboard = () => {
+  
   const { auth, active, setActive } = useAuth();
 
   return (
@@ -23,7 +24,7 @@ const LayoutDashboard = () => {
           </div>
         </div>
         <div className={`${styles.logout}`}>
-          <Link to='/'><Log_Out /></Link>
+          <Log_Out />
         </div>
       </header>
       <main className={`${auth.stage !== '4' ? styles.fullscreen : null}`}>
