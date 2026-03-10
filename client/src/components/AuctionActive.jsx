@@ -16,7 +16,7 @@ const AuctionActive = () => {
             <Customer />
           </div>
           <div className={`${styles.new_bid}`}>
-            +BID
+            +Bid
           </div>
       </div>
     </>

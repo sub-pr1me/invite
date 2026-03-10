@@ -15,6 +15,7 @@ const AuctionsMonitor = ({ section, setSection }) => {
           
           <div className={`${styles.current_section}`}>
             <AuctionActive />
+            <AuctionActive />
           </div>
         </div>
       </div>

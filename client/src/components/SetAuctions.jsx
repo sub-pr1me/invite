@@ -10,13 +10,12 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 const SetAuctions = () => {
   const axiosPrivate = useAxiosPrivate();
-  const { auth, setAuth } = useAuth();
+  const { auth, setAuth, customize, setCustomize } = useAuth();
   const [active, setActive] = useState(auth.tables.filter((item) => item.active === true).length);
   const [auctions, SetAuctions] = useState(false);
   const [noteHidden, setNoteHidden] = useState(true);
   const [fadeNote, setFadeNote] = useState(true);
   const [status, setStatus] = useState('idle');
-  const [customize, setCustomize] = useState(null);
 
   const CustomizeTable = (id) => {
     setCustomize(id);

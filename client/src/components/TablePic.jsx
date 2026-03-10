@@ -103,7 +103,7 @@ const TablePic = ({ setCustomize, customize }) => {
       </div>
       }
       {status === 'idle' &&
-      <div className={`${styles.upload_container} ${auth.stage === '4' ? styles.post_registration : null}`}>
+      <div className={`${styles.upload_container}`}>
         <div className={`${styles.cust_name}`}><strong>Table {`${customize}`}</strong></div>
         <div className={`${styles.message}`}>
           {
