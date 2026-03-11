@@ -1,7 +1,11 @@
 import styles from '../styles/AuctionActive.module.css'
 import Customer from './Customer'
+import useAuth from '../hooks/useAuth'
 
 const AuctionActive = () => {
+
+  const { auth } = useAuth();
+
   return (
     <>
       <div className={`${styles.auction}`}>
@@ -15,9 +19,12 @@ const AuctionActive = () => {
             <Customer />
             <Customer />
           </div>
-          <div className={`${styles.new_bid}`}>
-            +Bid
-          </div>
+          { 
+            auth.roles[0] === 'customer' &&
+            <div className={`${styles.new_bid}`}>
+              +Bid
+            </div>
+          }          
       </div>
     </>
   );

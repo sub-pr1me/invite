@@ -6,13 +6,20 @@ const AuctionsMonitor = ({ section, setSection }) => {
     <>
     <div className={`${styles.monitor}`}>
         <div className={`${styles.navigate}`}>
-          <div className={`${styles.current}`} onClick={()=>{setSection('current')}}>Current</div>
-          <div className={`${styles.history}`} onClick={()=>{setSection('history')}}>History</div>
+          <div 
+            className={`${styles.current} ${section !== 'current' ? styles.non_highlighted : null}`} 
+            onClick={()=>{setSection('current')}}
+            >Current
+          </div>
+          <div 
+            className={`${styles.history} ${section !== 'history' ? styles.non_highlighted : null}`} 
+            onClick={()=>{setSection('history')}}
+            >History
+          </div>
         </div>
         <div className={`${styles.line} ${section === 'current' ? styles.left : styles.right}`}></div>
         <div className={`${styles.sections} ${section !== 'current' ? styles.curr : styles.hist}`}>
-          <div className={`${styles.history_section}`}>History</div>
-          
+          <div className={`${styles.history_section}`}>History</div>          
           <div className={`${styles.current_section}`}>
             <AuctionActive />
             <AuctionActive />

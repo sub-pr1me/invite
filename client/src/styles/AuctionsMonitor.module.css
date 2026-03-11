@@ -24,6 +24,7 @@
   height: 1%;
   width: 25%;
   background-color: rgb(248, 172, 255);
+  border-radius: 1000px;
 }
 
 .current,
@@ -44,6 +45,7 @@
   display: flex;
   width: 50%;
   height: 100%;
+  border-radius: 30px;
 }
 
 .current_section {
@@ -54,7 +56,6 @@
   overflow-x: hidden;
   scrollbar-width: thin;
   background-color: rgba(248, 172, 255, 0.096);
-  border-radius: 30px;
   box-sizing: border-box;
 }
 
@@ -89,4 +90,8 @@
 .hist {
   transform: translateX(-50%);
   transition: all 0.2s ease-in;
+}
+
+.non_highlighted {
+  color: rgb(140, 92, 145);
 }
