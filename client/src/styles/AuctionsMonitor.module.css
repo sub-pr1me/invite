@@ -57,6 +57,7 @@
   scrollbar-width: thin;
   background-color: rgba(248, 172, 255, 0.096);
   box-sizing: border-box;
+  gap: 3%;
 }
 
 .history_section {
