@@ -31,9 +31,10 @@
   position: absolute;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
+  padding-top: 2px !important;
   height: 22px;
-  width: 40%;
+  width: 35%;
   max-height: fit-content;
   border-radius: 50px 50px 50px 50px;
   bottom: -10px;

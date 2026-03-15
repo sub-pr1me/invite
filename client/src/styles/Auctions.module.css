@@ -22,3 +22,7 @@
   color: rgb(248, 172, 255);
   overflow: hidden;
 }
+
+.flex_start {
+  justify-content: flex-start;
+}

@@ -1,5 +1,6 @@
 import styles from '../styles/AuctionsMonitor.module.css'
 import AuctionActive from './AuctionActive'
+import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useState, useEffect, useEffectEvent } from "react"
 
@@ -7,7 +8,7 @@ const AuctionsMonitor = ({section, setSection}) => {
 
   const axiosPrivate = useAxiosPrivate();
   const [auctions, setAuctions] = useState(null);
-  
+  const { auth } = useAuth();
 
   const AuctionsUpdate = useEffectEvent(async () => {
     if (!auctions) {
@@ -57,7 +58,9 @@ const AuctionsMonitor = ({section, setSection}) => {
   return (
     <>
     <div className={`${styles.monitor}`}>
-        <div className={`${styles.navigate}`}>
+        <div className={`
+          ${styles.navigate}
+          ${auth.roles[0] === 'customer' ? styles.navigate2 : null}`}>
           <div 
             className={`${styles.current} ${section !== 'current' ? styles.non_highlighted : null}`} 
             onClick={()=>{setSection('current')}}
@@ -70,7 +73,10 @@ const AuctionsMonitor = ({section, setSection}) => {
           </div>
         </div>
         <div className={`${styles.line} ${section === 'current' ? styles.left : styles.right}`}></div>
-        <div className={`${styles.sections} ${section !== 'current' ? styles.curr : styles.hist}`}>
+        <div className={`
+          ${styles.sections} 
+          ${section !== 'current' ? styles.curr : styles.hist}
+          ${auth.roles[0] === 'customer' ? styles.sections2 : null}`}>
           <div className={`${styles.history_section}`}>History</div>          
           <div className={`${styles.current_section}`}>
             { auctions &&

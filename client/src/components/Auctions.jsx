@@ -17,7 +17,9 @@ const Auctions = ({ setActive }) => {
   return (
     <>
     <title>Auctions</title>
-    <div className={`${styles.auctions_container}`}>
+    <div className={`
+      ${styles.auctions_container}
+      ${auth.roles[0] === 'customer' ? styles.flex_start : null}`}>
       { 
         !customize && 
         <AuctionsMonitor
