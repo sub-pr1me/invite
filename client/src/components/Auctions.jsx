@@ -7,6 +7,7 @@ import AuctionsMonitor from './AuctionsMonitor'
 const Auctions = ({ setActive }) => {
   
   const [section, setSection] = useState('current');
+  const [auctions, setAuctions] = useState(null);
   const { auth, customize } = useAuth();
   const onRefresh = useEffectEvent(()=>{setActive('auctions')});
   
@@ -25,10 +26,15 @@ const Auctions = ({ setActive }) => {
         <AuctionsMonitor
           section={section}
           setSection={setSection}
+          auctions={auctions}
+          setAuctions={setAuctions}
         />
       }
       <div className={`${styles.tables}`}>
-        {auth.roles[0] === 'venue' && <SetAuctions />}
+        {auth.roles[0] === 'venue' && 
+        <SetAuctions 
+          setAuctions={setAuctions}
+        />}
       </div>
     </div>
     </>

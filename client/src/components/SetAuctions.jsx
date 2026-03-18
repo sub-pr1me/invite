@@ -8,7 +8,7 @@ import AuctionSetup from '../components/AuctionSetup'
 import { useState, useEffect, useEffectEvent } from 'react';
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
-const SetAuctions = () => {
+const SetAuctions = ({ setAuctions }) => {
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth, customize, setCustomize } = useAuth();
   const [active, setActive] = useState(auth.tables.filter((item) => item.active === true).length);
@@ -121,6 +121,7 @@ const SetAuctions = () => {
                     modal={item.modal}
                     setStatus={setStatus}
                     CustomizeTable={CustomizeTable}
+                    setAuctions={setAuctions}
                   />
                 }
                 { status !== `pending${item.id}` &&

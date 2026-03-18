@@ -3,7 +3,7 @@ import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useRef, useEffect } from 'react';
 
-const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
+const AuctionSetup = ({ customize, setStatus, setCustomize, setAuctions }) => {
   
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();

@@ -3,7 +3,7 @@ import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useState, useEffect, useEffectEvent } from 'react'
 
-const TableModal = ({ id, modal, setStatus, CustomizeTable }) => {
+const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
   const [hidden, setHidden] = useState(true);
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
@@ -66,7 +66,13 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable }) => {
               );
             }
           };
-          // console.log('RESULT - ', deserialized);
+          const auctions = await axiosPrivate.post("/auctions_update",
+              {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                withCredentials: true
+              }
+          );
+          setAuctions(auctions.data);
           setAuth({...auth, tables: deserialized});
           setTimeout(() => {setStatus('success');}, 500);
         };

@@ -2,19 +2,17 @@ import styles from '../styles/AuctionsMonitor.module.css'
 import AuctionActive from './AuctionActive'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import { useState, useEffect, useEffectEvent } from "react"
+import { useEffect, useEffectEvent } from "react"
 
-const AuctionsMonitor = ({section, setSection}) => {
+const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
 
   const axiosPrivate = useAxiosPrivate();
-  const [auctions, setAuctions] = useState(null);
   const { auth } = useAuth();
 
   const AuctionsUpdate = useEffectEvent(async () => {
-    if (!auctions) {
+
       try {
         const response = await axiosPrivate.post("/auctions_update",
-          {auctions: auctions},
           {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             withCredentials: true
@@ -29,30 +27,11 @@ const AuctionsMonitor = ({section, setSection}) => {
         } else {
           console.log('SOMETHING WENT WRONG');
         }
-      }
-    }
+      };
   });
 
   useEffect(() => {
     AuctionsUpdate();
-        
-    // const eventSource = new EventSource(`http://localhost:3000/auctions?token=${auth.token}`);
-
-    // eventSource.onmessage = (event) => {
-    //   setAuctions(event.data);
-    //   console.log('EVENT DATA -', event.data);
-    // };
-
-    // eventSource.onerror = (error) => {
-    //   console.error("EventSource failed:", error);
-    //   eventSource.close();
-    // };
-
-    // console.log('AUCTIONS -', auctions);
-
-    // return () => {
-    //   eventSource.close();
-    // };
   },[]);
 
   return (

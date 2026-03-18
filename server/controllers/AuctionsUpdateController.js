@@ -3,12 +3,8 @@ import { FetchAuctions } from '../db/queries.js'
 const handleAuctionsUpdate = async (req, res) => {
   try {
     const email = req.email;
-    const auctions = req.body.auctions;
-
-    if (!auctions) {
-      const result = await FetchAuctions(email, auctions);
-      res.status(200).send(result);
-    }    
+    const result = await FetchAuctions(email);
+    res.status(200).send(result);
     
   } catch (err) {
     console.log(err);
