@@ -3,7 +3,7 @@ import 'dotenv/config.js';
 
 const verifyJWT = (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  console.log('HEADER - ', authHeader);
+  // console.log('HEADER - ', authHeader);
   if (!authHeader) return res.sendStatus(401);
   const token = authHeader.split(' ')[1];
   jwt.verify(
