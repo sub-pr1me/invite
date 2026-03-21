@@ -221,8 +221,7 @@ export async function FetchAuctions() {
         item.deposit = parseInt(item.auction.deposit); 
         delete item.modal;
         delete item.active;
-        delete item.auction.deposit;
-        delete item.auction.step;
+        delete item.auction;
         auctions.push(item);
       });
     };

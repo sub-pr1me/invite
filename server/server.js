@@ -11,6 +11,7 @@ import TableUploadRouter from './routes/TableUploadRouter.js'
 import AuctionUploadRouter from './routes/AuctionUploadRouter.js'
 import BalanceUpdateRouter from './routes/BalanceUpdateRouter.js'
 import AuctionsUpdateRouter from './routes/AuctionsUpdateRouter.js'
+import AuctionsSSERouter from './routes/AuctionsSSERouter.js'
 import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
 import cookieParser from 'cookie-parser'
@@ -38,6 +39,7 @@ app.use('/table_upload', TableUploadRouter);
 app.use('/auction_upload', AuctionUploadRouter);
 app.use('/balance_update', BalanceUpdateRouter);
 app.use('/auctions_update', AuctionsUpdateRouter);
+app.use('/auctions_sse', AuctionsSSERouter);
 
 const PORT = 3000;
 

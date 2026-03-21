@@ -2,7 +2,8 @@ import styles from '../styles/AuctionsMonitor.module.css'
 import AuctionActive from './AuctionActive'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import { useEffect, useEffectEvent } from "react"
+import useFetchSSE from '../hooks/useFetchSSE'
+import { useEffect, useEffectEvent } from 'react'
 
 const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
 
@@ -10,29 +11,84 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
   const { auth } = useAuth();
 
   const AuctionsUpdate = useEffectEvent(async () => {
+    try {
+      const response = await axiosPrivate.post('/auctions_update',
+        {
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          withCredentials: true
+        }
+      );
+      if (auctions !== response.data) setAuctions(response.data);
+    } catch (err) {
+      if (!err?.response) {
+        console.log('NO SERVER RESPONSE');
+      } else {
+        console.log('SOMETHING WENT WRONG');
+      }
+    };
+  });
 
-      try {
-        const response = await axiosPrivate.post("/auctions_update",
-          {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            withCredentials: true
-          }
-        );
+  const GetStream = useEffectEvent(async () => {
+    
+    try {
+      const eventSource = new EventSource('http://localhost:3000/auctions_sse');
 
-        if (auctions !== response.data) setAuctions(response.data);
+      eventSource.onopen = () => {
+        console.log('SSE connection opened');
+      };
 
-      } catch (err) {
-        if (!err?.response) {
-          console.log('NO SERVER RESPONSE');
-        } else {
-          console.log('SOMETHING WENT WRONG');
+      eventSource.onmessage = (event) => {
+        try {
+          const parsedData = JSON.parse(event.data);
+          console.log(parsedData)
+        } catch (parseError) {
+          console.error('Error parsing SSE data:', parseError);
         }
       };
-  });
+
+    } catch(err) {
+
+      if (!err?.response) {
+        console.log('NO SERVER RESPONSE');
+      } else {
+        console.log('SOMETHING WENT WRONG');
+      }
+    }
+});
+
+  const url = 'http://localhost:3000/auctions_sse'; 
+  const headers = {'Authorization': `Bearer ${auth.token}`};
+
+  const { data, isConnected } = useFetchSSE(url, headers);
 
   useEffect(() => {
     AuctionsUpdate();
   },[]);
+
+  // useEffect(() => {
+  //   const eventSource = new EventSource('http://localhost:3000/auctions_sse', {
+  //     withCredentials: true, // Send cookies with the request
+  //   });
+
+  //   eventSource.onmessage = (event) => {
+  //     try {
+  //       const parsedData = JSON.parse(event.data);
+  //       console.log(parsedData)
+  //     } catch (parseError) {
+  //       console.error('Error parsing SSE data:', parseError);
+  //     }
+  //   }
+
+  //   return () => {
+  //     eventSource.close();
+  //   };
+
+  // },[]);
+
+  useEffect(()=> {
+    // console.log('CONNECTED - ', isConnected);
+    // console.log(JSON.stringify(data));
+  });
 
   return (
     <>
