@@ -11,13 +11,13 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
 
   const AuctionsUpdate = useEffectEvent(async () => {
     try {
-      const response = await axiosPrivate.post('/auctions_update',
+      await axiosPrivate.post('/auctions_update',
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
         }
       );
-      if (auctions !== response.data) setAuctions(response.data);
+
     } catch (err) {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');
@@ -27,62 +27,38 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
     };
   });
 
-  const GetStream = useEffectEvent(async () => {
-    
+  const BroadcastAuctions = useEffectEvent(() => {
     try {
-      const eventSource = new EventSource('http://localhost:3000/auctions_sse');
+      const websocket = new WebSocket('ws://localhost:3000/ws');
 
-      eventSource.onopen = () => {
-        console.log('SSE connection opened');
-      };
-
-      eventSource.onmessage = (event) => {
-        try {
-          const parsedData = JSON.parse(event.data);
-          console.log(parsedData)
-        } catch (parseError) {
-          console.error('Error parsing SSE data:', parseError);
+      websocket.onopen = () => console.log('Connected to WebSocket server');
+      websocket.onmessage = (event) => {
+        const parsed = JSON.parse(event.data);
+        if (parsed.type === 'auctions_updated') {
+          const string = event.data;
+          const auctionsData = JSON.parse(string);
+          console.log(auctionsData.data);
+          setAuctions(auctionsData.data);
         }
       };
+      websocket.onclose = () => console.log('Disconnected from WebSocket server');
 
-    } catch(err) {
+      // Cleanup on unmount
+      return () => websocket.close();
 
+    } catch (err) {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');
       } else {
         console.log('SOMETHING WENT WRONG');
       }
-    }
-});
+    };
+  });
 
   useEffect(() => {
     AuctionsUpdate();
+    BroadcastAuctions();    
   },[]);
-
-  // useEffect(() => {
-  //   const eventSource = new EventSource('http://localhost:3000/auctions_sse', {
-  //     withCredentials: true, // Send cookies with the request
-  //   });
-
-  //   eventSource.onmessage = (event) => {
-  //     try {
-  //       const parsedData = JSON.parse(event.data);
-  //       console.log(parsedData)
-  //     } catch (parseError) {
-  //       console.error('Error parsing SSE data:', parseError);
-  //     }
-  //   }
-
-  //   return () => {
-  //     eventSource.close();
-  //   };
-
-  // },[]);
-
-  useEffect(()=> {
-    // console.log('CONNECTED - ', isConnected);
-    // console.log(JSON.stringify(data));
-  });
 
   return (
     <>

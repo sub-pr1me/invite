@@ -44,6 +44,14 @@ app.use('/login', LogInRouter);
 app.use('/refresh', RefreshRouter);
 app.use('/logout', LogOutRouter);
 
+app.use(verifyJWT);
+
+app.use('/logo_upload', LogoUploadRouter);
+app.use('/album_upload', AlbumUploadRouter);
+app.use('/info_upload', InfoUploadRouter);
+app.use('/table_upload', TableUploadRouter);
+app.use('/auction_upload', AuctionUploadRouter);
+app.use('/balance_update', BalanceUpdateRouter);
 app.post('/auctions_update', async (req, res) => {
   try {
     const email = req.email;
@@ -53,22 +61,13 @@ app.post('/auctions_update', async (req, res) => {
       req.app.locals.broadcastAuctionsUpdated(result);
     }
 
-    res.status(201).send(result);    
+    res.status(200).send(result);
     
   } catch (err) {
     console.log(err);
     res.status(500).send('AUCTIONS UPDATE CONTROLLER ERROR');
   }
 });
-
-app.use(verifyJWT);
-
-app.use('/logo_upload', LogoUploadRouter);
-app.use('/album_upload', AlbumUploadRouter);
-app.use('/info_upload', InfoUploadRouter);
-app.use('/table_upload', TableUploadRouter);
-app.use('/auction_upload', AuctionUploadRouter);
-app.use('/balance_update', BalanceUpdateRouter);
 
 server.listen(PORT, HOST, (error) => {  
   if (error) {console.error(error)}
