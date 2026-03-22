@@ -1,5 +1,7 @@
 import express from 'express'
 import cors from 'cors'
+import http from 'http'
+import { attachWebSocketServer } from './ws/wsServer.js'
 import IndexPageRouter from './routes/IndexPageRouter.js'
 import CreateAccRouter from './routes/CreateAccRouter.js'
 import LogInRouter from './routes/LogInRouter.js'
@@ -10,14 +12,26 @@ import InfoUploadRouter from './routes/InfoUploadRouter.js'
 import TableUploadRouter from './routes/TableUploadRouter.js'
 import AuctionUploadRouter from './routes/AuctionUploadRouter.js'
 import BalanceUpdateRouter from './routes/BalanceUpdateRouter.js'
-import AuctionsUpdateRouter from './routes/AuctionsUpdateRouter.js'
-import AuctionsSSERouter from './routes/AuctionsSSERouter.js'
+import { FetchAuctions } from './db/queries.js'
 import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
 import cookieParser from 'cookie-parser'
 
 const app = express();
 
+app.locals.test='TEST';
+
+const PORT = 3000;
+const HOST = '0.0.0.0'
+
+const server = http.createServer(app);
+
+
+
+const { broadcastAuctionsUpdated } = attachWebSocketServer(server);
+app.locals.broadcastAuctionsUpdated = broadcastAuctionsUpdated;
+
+app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // encodes req.body into obj
 app.use(cookieParser()); // middleware for cookies
 
@@ -30,6 +44,23 @@ app.use('/login', LogInRouter);
 app.use('/refresh', RefreshRouter);
 app.use('/logout', LogOutRouter);
 
+app.post('/auctions_update', async (req, res) => {
+  try {
+    const email = req.email;
+    const result = await FetchAuctions(email);
+
+    if (req.app.locals.broadcastAuctionsUpdated) {
+      req.app.locals.broadcastAuctionsUpdated(result);
+    }
+
+    res.status(201).send(result);    
+    
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('AUCTIONS UPDATE CONTROLLER ERROR');
+  }
+});
+
 app.use(verifyJWT);
 
 app.use('/logo_upload', LogoUploadRouter);
@@ -38,14 +69,10 @@ app.use('/info_upload', InfoUploadRouter);
 app.use('/table_upload', TableUploadRouter);
 app.use('/auction_upload', AuctionUploadRouter);
 app.use('/balance_update', BalanceUpdateRouter);
-app.use('/auctions_update', AuctionsUpdateRouter);
-app.use('/auctions_sse', AuctionsSSERouter);
 
-const PORT = 3000;
-
-app.listen(PORT, (error) => {
-  if (error) {
-    console.error(error);
-  }
-  console.log(`Listening on port ${PORT}!`);
+server.listen(PORT, HOST, (error) => {  
+  if (error) {console.error(error)}
+  const baseUrl = HOST === '0.0.0.0' ? `http://localhost:${PORT}` : `http://${HOST}:${PORT}`;  
+  console.log(`Server is running on ${baseUrl}`);
+  console.log(`WebSocket Server is running on ${baseUrl.replace('http', 'ws')}/ws`);
 });

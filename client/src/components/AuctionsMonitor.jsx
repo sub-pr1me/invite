@@ -2,7 +2,6 @@ import styles from '../styles/AuctionsMonitor.module.css'
 import AuctionActive from './AuctionActive'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import useFetchSSE from '../hooks/useFetchSSE'
 import { useEffect, useEffectEvent } from 'react'
 
 const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
@@ -55,11 +54,6 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
       }
     }
 });
-
-  const url = 'http://localhost:3000/auctions_sse'; 
-  const headers = {'Authorization': `Bearer ${auth.token}`};
-
-  const { data, isConnected } = useFetchSSE(url, headers);
 
   useEffect(() => {
     AuctionsUpdate();
