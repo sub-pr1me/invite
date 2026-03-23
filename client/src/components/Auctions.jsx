@@ -30,7 +30,7 @@ const Auctions = ({ setActive }) => {
           setAuctions={setAuctions}
         />
       }
-      <div className={`${styles.tables}`}>
+      <div className={`${styles.bottom}`}>
         {auth.roles[0] === 'venue' && 
         <SetAuctions 
           setAuctions={setAuctions}

@@ -37,7 +37,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
         if (parsed.type === 'auctions_updated') {
           const string = event.data;
           const auctionsData = JSON.parse(string);
-          console.log(auctionsData.data);
+          // console.log(auctionsData.data);
           setAuctions(auctionsData.data);
         }
       };

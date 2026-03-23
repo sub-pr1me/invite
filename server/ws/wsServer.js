@@ -1,9 +1,5 @@
 import { WebSocket, WebSocketServer } from "ws"
 
-// const auctionsSubscribers = new Map();
-
-
-
 function sendJson(socket, payload) {
   if(socket.readyState !== WebSocket.OPEN) return;
 

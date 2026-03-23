@@ -119,10 +119,9 @@
 }
 
 .uploaded_image {
+  width: 100vw;;
   max-width: 90%;
-  height: 100%;
   display: flex;
-  background-color: aqua;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
@@ -130,7 +129,8 @@
   position: relative;
   animation: appear 0.5s 0.5s both, opacity 0.5s 0.6s both;
   will-change: transform, opacity;
-  margin-top: 20px
+  margin-top: 20px;
+  flex: 1;
 }
 
 .uploaded_image img {
