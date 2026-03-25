@@ -52,26 +52,26 @@ VALUES
      https://res.cloudinary.com/dn1vxf0hg/image/upload/v1772073580/gpya3q9tieuoh6we4ien.png,
      https://res.cloudinary.com/dn1vxf0hg/image/upload/v1772073581/ekw2tiofukalgtxbmhqm.png}', 
    '10:00-22:00',
-   '{"0": [{"id": "1", "pic": "https://res.cloudinary.com/dn1vxf0hg/image/upload/v1772076148/pnfngy9zvshvqeoq0ccd.jpg", "modal": "false", "active": "true", "auction": "{deposit: null, step: null}"}, 
-    {"id": "2", "pic": "https://res.cloudinary.com/dn1vxf0hg/image/upload/v1772076156/rnxwcjwz6qzbedpeoxej.jpg", "modal": "false", "active": "true", "auction": "{deposit: null, step: null}"}, 
-    {"id": "3", "pic": "https://res.cloudinary.com/dn1vxf0hg/image/upload/v1772076167/ljkjpc2k6r57nxhvozg9.jpg", "modal": "false", "active": "true", "auction": "{deposit: null, step: null}"}, 
-    {"id": "4", "pic": "", "modal": "false", "active": "true", "auction": "{deposit: null, step: null}"}, 
-    {"id": "5", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "6", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "7", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "8", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "9", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "10", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "11", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "12", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "13", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "14", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "15", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "16", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "17", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "18", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "19", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}, 
-    {"id": "20", "pic": "", "modal": "false", "active": "false", "auction": "{deposit: null, step: null}"}]}',
+   '{"0": [{"id": 1, "pic": "https://res.cloudinary.com/dn1vxf0hg/image/upload/v1772076148/pnfngy9zvshvqeoq0ccd.jpg", "modal": false, "active": true, "auction": {"deposit": null, "step": null}}, 
+    {"id": 2, "pic": "https://res.cloudinary.com/dn1vxf0hg/image/upload/v1772076156/rnxwcjwz6qzbedpeoxej.jpg", "modal": false, "active": true, "auction": {"deposit": null, "step": null}}, 
+    {"id": 3, "pic": "https://res.cloudinary.com/dn1vxf0hg/image/upload/v1772076167/ljkjpc2k6r57nxhvozg9.jpg", "modal": false, "active": true, "auction": {"deposit": null, "step": null}}, 
+    {"id": 4, "pic": "", "modal": false, "active": true, "auction": {"deposit": null, "step": null}}, 
+    {"id": 5, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 6, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 7, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 8, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 9, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 10, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 11, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 12, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 13, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 14, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 15, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 16, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 17, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 18, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 19, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}, 
+    {"id": 20, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null}}]}',
    '0'),
 
   ('Elia Backyard Restaurant', 
@@ -92,7 +92,19 @@ VALUES
    '', 
    '{}', 
    '0');
+
+   INSERT INTO customers (customer, email, password, stage, avatar, dob, gender, interest)
+VALUES
+  ('Stan Marsh', 
+   'stan@gmail.com', 
+   '$2b$10$9fMzJPTDDSDAm71uSbew3u0gUyNcQ.DXW/8NoNvZ4OdjJcXZOMVW.', 
+   '4', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1774449173/jpzdy6bnnimvlhfcuvpq.jpg', 
+   '2026-03-03', 
+   'Male', 
+   'Female');
 `;
+
+
 
 async function main() {
   console.log("seeding...");

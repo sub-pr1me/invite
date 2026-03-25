@@ -213,13 +213,12 @@ export async function FetchAuctions() {
 
     for (let i=0; i<rows.length; i++) {
     if (rows[i].tables[0]) {
-      const filter1 = rows[i].tables[0].filter(item => item.auction);
-      const filter2 = filter1.filter(item => item.auction !== 'false');
-      filter2.map(item => {
+      const filtered = rows[i].tables[0].filter(item => item.auction.deposit);
+      filtered.map(item => {
         item.name = rows[i].venue;
-        item.id = parseInt(item.id);
-        item.step = parseInt(item.auction.step);
-        item.deposit = parseInt(item.auction.deposit); 
+        item.id = item.id;
+        item.step = item.auction.step;
+        item.deposit = item.auction.deposit; 
         delete item.modal;
         delete item.active;
         delete item.auction;

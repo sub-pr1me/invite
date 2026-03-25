@@ -17,7 +17,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
           withCredentials: true
         }
       );
-
+      
     } catch (err) {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');
