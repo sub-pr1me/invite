@@ -11,10 +11,10 @@ const Table = ({ id, active, modal, setStatus, customize, pic }) => {
   const addTable = async () => {
     setStatus(`pending${id}`);
     const update = auth.tables.map(item => {return {...item, modal: false}});
-    update.splice(index, 1, {'id': id, 'pic': '', 'active': true, 'modal': false, 'auction': false});
+    update.splice(index, 1, {'id': id, 'pic': '', 'active': true, 'modal': false, 'auction': {deposit: null, step: null}});
     try {
       await axiosPrivate.post("/info_upload",
-        {hours: auth.hours, tables: update, stage: auth.stage},
+        {hours: auth.hours, tables: JSON.stringify(update), stage: auth.stage},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true

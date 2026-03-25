@@ -99,10 +99,11 @@ export async function uploadNewAlbum(acc_type, email, links) {
 };
 
 export async function infoUpload(acc_type, email, hours, tables, stage, dob, gender, interest, endreg) {
+  const deserialized = JSON.parse(tables);
   if (acc_type === 'venue') {
     if (stage === '2') {  // pre-registration basic info
       await pool.query(
-        `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}'),
+        `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${deserialized}'),
          stage = '3' WHERE email = '${email}'`);
         const { rows } = await pool.query(`
           SELECT tables
@@ -114,7 +115,7 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
 
     if (stage === '3' && !endreg) { // pre-registration table editing
       await pool.query(
-        `UPDATE venues SET tables = jsonb_set(tables, '{0}', '${tables}')
+        `UPDATE venues SET tables = jsonb_set(tables, '{0}', '${deserialized}')
          WHERE email = '${email}'`);
         const { rows } = await pool.query(`
           SELECT tables
@@ -131,7 +132,7 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
 
     if (stage === '4') { // post-registration table editing
       await pool.query(
-        `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}')
+        `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${deserialized}')
         WHERE email = '${email}'`);
         const { rows } = await pool.query(`
           SELECT tables

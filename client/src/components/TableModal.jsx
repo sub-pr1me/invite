@@ -21,10 +21,10 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
       setStatus(`pending${id}`);
       setHidden(true);
       const update = auth.tables;
-      update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': false});
+      update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': {deposit: null, step: null}});
       try {
         const response = await axiosPrivate.post("/info_upload",
-          {hours: auth.hours, tables: update, stage: auth.stage},
+          {hours: auth.hours, tables: JSON.stringify(update), stage: auth.stage},
           {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             withCredentials: true
@@ -77,6 +77,7 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
           setTimeout(() => {setStatus('success');}, 500);
         };
       } catch (err) {
+        console.error(err)
         if (!err?.response) {
           console.log('NO SERVER RESPONSE');
         } else {

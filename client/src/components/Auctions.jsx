@@ -1,13 +1,12 @@
 import styles from '../styles/Auctions.module.css'
 import useAuth from '../hooks/useAuth'
 import { useState, useEffect, useEffectEvent } from 'react'
-import SetAuctions from './SetAuctions'
+import SetAucs from './SetAucs'
 import AuctionsMonitor from './AuctionsMonitor'
 
-const Auctions = ({ setActive }) => {
+const Auctions = ({ setActive, auctions, setAuctions }) => {
   
   const [section, setSection] = useState('current');
-  const [auctions, setAuctions] = useState(null);
   const { auth, customize } = useAuth();
   const onRefresh = useEffectEvent(()=>{setActive('auctions')});
   
@@ -32,7 +31,7 @@ const Auctions = ({ setActive }) => {
       }
       <div className={`${styles.bottom}`}>
         {auth.roles[0] === 'venue' && 
-        <SetAuctions 
+        <SetAucs 
           setAuctions={setAuctions}
         />}
       </div>

@@ -3,10 +3,10 @@ import styles from '../styles/Home.module.css'
 import { useEffect, useEffectEvent } from 'react'
 import AlbumUpload from './AlbumUpload'
 import InfoUpload from './InfoUpload'
-import SetAuctions from './SetAuctions'
+import SetAucs from './SetAucs'
 import HomeScreen from './HomeScreen'
 
-const Home = () => {
+const Home = ({ setAuctions }) => {
 
   const { auth } = useAuth();
   const onRefresh = useEffectEvent(()=>{console.log(auth)});
@@ -29,7 +29,7 @@ const Home = () => {
       }
       {auth.stage === '1' && <AlbumUpload />}
       {auth.stage === '2' && <InfoUpload />}
-      {auth.stage === '3' && auth.tables && <SetAuctions />}
+      {auth.stage === '3' && auth.tables && <SetAucs setAuctions={setAuctions}/>}
       {auth.stage === '4' && <HomeScreen />}
     </div>
     </>    

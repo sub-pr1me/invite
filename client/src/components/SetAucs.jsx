@@ -1,14 +1,14 @@
-import styles from '../styles/SetAuctions.module.css'
+import styles from '../styles/SetAucs.module.css'
 import useAuth from '../hooks/useAuth'
-import Table from '../components/Table'
-import TableModal from '../components/TableModal'
-import TableLoading from '../components/TableLoading'
-import TablePic from '../components/TablePic'
-import AuctionSetup from '../components/AuctionSetup'
+import Table from './Table'
+import TableModal from './TableModal'
+import TableLoading from './TableLoading'
+import TablePic from './TablePic'
+import AuctionSetup from './AuctionSetup'
 import { useState, useEffect, useEffectEvent } from 'react';
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
-const SetAuctions = ({ setAuctions }) => {
+const SetAucs = ({ setAuctions }) => {
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth, customize, setCustomize } = useAuth();
   const [active, setActive] = useState(auth.tables.filter((item) => item.active === true).length);
@@ -171,4 +171,4 @@ const SetAuctions = ({ setAuctions }) => {
   );
 };
 
-export default SetAuctions
+export default SetAucs
