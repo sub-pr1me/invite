@@ -1,3 +1,4 @@
+import { type } from 'os';
 import { checkVenuesForMatch, checkCustomersForMatch, infoUpload } from '../db/queries.js'
 
 const handleInfoUpload = async (req, res)=> {
@@ -18,9 +19,15 @@ const handleInfoUpload = async (req, res)=> {
     let endreg = null;
     
     if (accType === 'venue') {
+      if (typeof req.body.tables === 'string') {
+        tables_arr = JSON.parse(req.body.tables);
+      } else {
+        tables_arr = req.body.tables;
+      };
+      tables_arr.map(item => {
+        if (typeof item.auction === 'string') item.auction = JSON.parse(item.auction);
+      });
       hours = req.body.hours;
-      tables_arr = req.body.tables;
-      tables_arr.map(item => {item.auction = JSON.parse(item.auction)});
       stage = req.body.stage;
       endreg = req.body.endreg;
     };

@@ -175,7 +175,7 @@ export async function tableInfoUpdate(email, id, link) {
 export async function auctionUpload(email, id, deposit, step) {
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${email}'`);
   const tables = rows[0].tables[0];
-  const updated = tables.map(item => {if (item.id === id.toString())
+  const updated = tables.map(item => {if (item.id === id.toString() || item.id === id)
     {return {...item, auction: {deposit: deposit, step: step}}} else {return item}});
   const stringified = JSON.stringify(updated);
   await pool.query(`
