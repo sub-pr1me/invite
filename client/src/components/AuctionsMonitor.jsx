@@ -28,7 +28,11 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
   });
 
   const BroadcastAuctions = useEffectEvent(() => {
-    try {
+
+    let attempt = 0;
+    let maxAttempts = 5;
+    
+    const connect = () => {
       const websocket = new WebSocket('ws://localhost:3000/ws');
 
       websocket.onopen = () => console.log('Connected to WebSocket server');
@@ -41,10 +45,28 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
           setAuctions(auctionsData.data);
         }
       };
-      websocket.onclose = () => console.log('Disconnected from WebSocket server');
+      websocket.onclose = () => {
+        console.log('Disconnected from WebSocket server');
+        reconnect();
+      }
 
       // Cleanup on unmount
       return () => websocket.close();
+    };
+
+    const reconnect = () => {
+      if (attempt >= maxAttempts) {
+        console.error('Max reconnection attempts reached.');
+        return;
+      }
+      setTimeout(() => {
+        attempt++;
+        connect();
+      }, 1000 * attempt);
+    };
+    
+    try {
+      connect();
 
     } catch (err) {
       if (!err?.response) {

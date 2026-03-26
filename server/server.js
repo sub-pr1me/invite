@@ -26,8 +26,6 @@ const HOST = '0.0.0.0'
 
 const server = http.createServer(app);
 
-
-
 const { broadcastAuctionsUpdated } = attachWebSocketServer(server);
 app.locals.broadcastAuctionsUpdated = broadcastAuctionsUpdated;
 
