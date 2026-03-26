@@ -102,8 +102,9 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
   const deserialized = JSON.parse(tables);
   if (acc_type === 'venue') {
     if (stage === '2') {  // pre-registration basic info
+      // console.log('INFO UPLOADDDDDDDDDDD',tables);
       await pool.query(
-        `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${deserialized}'),
+        `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}'),
          stage = '3' WHERE email = '${email}'`);
         const { rows } = await pool.query(`
           SELECT tables
@@ -115,7 +116,7 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
 
     if (stage === '3' && !endreg) { // pre-registration table editing
       await pool.query(
-        `UPDATE venues SET tables = jsonb_set(tables, '{0}', '${deserialized}')
+        `UPDATE venues SET tables = jsonb_set(tables, '{0}', '${tables}')
          WHERE email = '${email}'`);
         const { rows } = await pool.query(`
           SELECT tables
@@ -132,7 +133,7 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
 
     if (stage === '4') { // post-registration table editing
       await pool.query(
-        `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${deserialized}')
+        `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}')
         WHERE email = '${email}'`);
         const { rows } = await pool.query(`
           SELECT tables
@@ -174,7 +175,7 @@ export async function tableInfoUpdate(email, id, link) {
 export async function auctionUpload(email, id, deposit, step) {
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${email}'`);
   const tables = rows[0].tables[0];
-  const updated = tables.map(item => {if (item.id === id)
+  const updated = tables.map(item => {if (item.id === id.toString())
     {return {...item, auction: {deposit: deposit, step: step}}} else {return item}});
   const stringified = JSON.stringify(updated);
   await pool.query(`

@@ -20,11 +20,13 @@ const handleInfoUpload = async (req, res)=> {
     if (accType === 'venue') {
       hours = req.body.hours;
       tables_arr = req.body.tables;
+      tables_arr.map(item => {item.auction = JSON.parse(item.auction)});
       stage = req.body.stage;
       endreg = req.body.endreg;
     };
     
     const tables = JSON.stringify(tables_arr);
+    // console.log('INFO UPLOADDDDDDDDDDD',tables);
 
     if (accType === 'customer') {
       dob = req.body.dob;

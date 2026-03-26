@@ -42,6 +42,7 @@ export default async function handleRefreshToken(req, res) {
     credits = matchedVenue.credits;
     
     if (matchedVenue.tables[0]) { // deserialize data
+      // console.log('REFRESH MATCHEDDDDDDDDDDDDDDD',matchedVenue.tables[0]);
       const arr = matchedVenue.tables[0];
       const deserialized = [];
       for (let i=0; i<arr.length; i++) {
@@ -52,7 +53,7 @@ export default async function handleRefreshToken(req, res) {
               pic: `${arr[i].pic}`,
               active: JSON.parse(arr[i].active),
               modal: JSON.parse(arr[i].modal),
-              auction: {deposit: parseInt(arr[i].auction.deposit), step: parseInt(arr[i].auction.step)}
+              auction: {deposit: arr[i].auction.deposit, step: arr[i].auction.step}
             }
           );
         } else if (arr[i].auction && !arr[i].auction.deposit) {
@@ -78,6 +79,7 @@ export default async function handleRefreshToken(req, res) {
         }
       };
       tables = deserialized;
+      // console.log('REFRESH',tables);
     };    
   };
 
