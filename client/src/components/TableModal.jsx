@@ -21,7 +21,7 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
       setStatus(`pending${id}`);
       setHidden(true);
       const update = auth.tables;
-      update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': {deposit: null, step: null}});
+      update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': {deposit: null, step: null, reg: auth.stage !== '4' ? false : true}});
       try {
         const response = await axiosPrivate.post("/info_upload",
           {hours: auth.hours, tables: JSON.stringify(update), stage: auth.stage},
@@ -41,7 +41,10 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
                   pic: `${arr[i].pic}`,
                   active: JSON.parse(arr[i].active),
                   modal: JSON.parse(arr[i].modal),
-                  auction: {deposit: parseInt(arr[i].auction.deposit), step: parseInt(arr[i].auction.step)}
+                  auction: {
+                    deposit: parseInt(arr[i].auction.deposit), 
+                    step: parseInt(arr[i].auction.step), 
+                    reg: auth.stage !== '4' ? false : true}
                 }
               );
             } else if (arr[i].auction && !arr[i].auction.deposit) {
@@ -51,7 +54,10 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
                   pic: `${arr[i].pic}`,
                   active: JSON.parse(arr[i].active),
                   modal: JSON.parse(arr[i].modal),
-                  auction: {deposit: null, step: null}
+                  auction: {
+                    deposit: null, 
+                    step: null, 
+                    reg: auth.stage !== '4' ? false : true}
                 }
               );
             } else {
@@ -61,7 +67,10 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
                   pic: `${arr[i].pic}`,
                   active: JSON.parse(arr[i].active),
                   modal: JSON.parse(arr[i].modal),
-                  auction: {deposit: null, step: null}
+                  auction: {
+                    deposit: null, 
+                    step: null, 
+                    reg: auth.stage !== '4' ? false : true}
                 }
               );
             }

@@ -33,7 +33,6 @@ const handleInfoUpload = async (req, res)=> {
     };
     
     const tables = JSON.stringify(tables_arr);
-    // console.log('INFO UPLOADDDDDDDDDDD',tables);
 
     if (accType === 'customer') {
       dob = req.body.dob;

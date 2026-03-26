@@ -53,7 +53,11 @@ export default async function handleRefreshToken(req, res) {
               pic: `${arr[i].pic}`,
               active: JSON.parse(arr[i].active),
               modal: JSON.parse(arr[i].modal),
-              auction: {deposit: arr[i].auction.deposit, step: arr[i].auction.step}
+              auction: {
+                deposit: arr[i].auction.deposit, 
+                step: arr[i].auction.step,
+                reg: arr[i].auction.reg
+              }
             }
           );
         } else if (arr[i].auction && !arr[i].auction.deposit) {
@@ -63,7 +67,11 @@ export default async function handleRefreshToken(req, res) {
               pic: `${arr[i].pic}`,
               active: JSON.parse(arr[i].active),
               modal: JSON.parse(arr[i].modal),
-              auction: {deposit: null, step: null}
+              auction: {
+                deposit: null, 
+                step: null,
+                reg: JSON.parse(arr[i].auction.reg)
+              }
             }
           );
         } else {
@@ -73,7 +81,11 @@ export default async function handleRefreshToken(req, res) {
               pic: `${arr[i].pic}`,
               active: JSON.parse(arr[i].active),
               modal: JSON.parse(arr[i].modal),
-              auction: {deposit: null, step: null}
+              auction: {
+                deposit: null, 
+                step: null,
+                reg: JSON.parse(arr[i].auction.reg)
+              }
             }
           );
         }

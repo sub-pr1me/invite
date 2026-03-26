@@ -20,11 +20,22 @@ const InfoUpload = () => {
 
     if (auth.roles[0] === 'venue') {
       for (let i = 1; i <= tables; i++) { // add active tables
-        tables_arr.push({'id': i, 'pic': '', 'active': true, 'modal': false, 'auction': JSON.stringify({deposit: null, step: null})});
+        tables_arr.push({
+          'id': i, 
+          'pic': '', 
+          'active': true, 
+          'modal': false, 
+          'auction': JSON.stringify({deposit: null, step: null, reg: auth.stage !== '4' ? false : true})
+        });
       };
 
       for (let i = parseInt(tables)+1; i <= maxTables; i++) { // add inactive tables
-        tables_arr.push({'id': i, 'pic': '', 'active': false, 'modal': false, 'auction': JSON.stringify({deposit: null, step: null})});
+        tables_arr.push({
+          'id': i, 
+          'pic': '', 
+          'active': false, 
+          'modal': false, 
+          'auction': JSON.stringify({deposit: null, step: null, reg: auth.stage !== '4' ? false : true})});
       };
     };
 

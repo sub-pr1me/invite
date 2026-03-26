@@ -107,8 +107,8 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
           <div className={`${styles.history_section}`}>History</div>          
           <div className={`${styles.current_section}`}>
             { auctions &&
-              auctions.map((item) => {
-                return (
+              auctions.map((item) => {       
+                if (item.reg !== 'false' && item.reg !== false) return (
                   <AuctionActive
                     key={item.name+item.id}
                     id={item.id}

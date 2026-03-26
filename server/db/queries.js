@@ -127,6 +127,9 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
     };
 
     if (stage === '3' && endreg) { // end venue registration
+      await pool.query(
+        `UPDATE venues SET tables = jsonb_set(tables, '{0}', '${tables}')
+         WHERE email = '${email}'`);
       await pool.query(`UPDATE venues SET stage = '4' WHERE email = '${email}'`);
       return 'VENUE REGISTRATION COMPLETE';
     };
@@ -135,11 +138,6 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
       await pool.query(
         `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}')
         WHERE email = '${email}'`);
-        const { rows } = await pool.query(`
-          SELECT tables
-          FROM venues 
-          WHERE email LIKE '${email}'`
-      );
       return rows[0];
     };
   };
@@ -172,11 +170,11 @@ export async function tableInfoUpdate(email, id, link) {
   return null;
 };
 
-export async function auctionUpload(email, id, deposit, step) {
+export async function auctionUpload(email, id, deposit, step, reg) {
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${email}'`);
   const tables = rows[0].tables[0];
   const updated = tables.map(item => {if (item.id === id.toString() || item.id === id)
-    {return {...item, auction: {deposit: deposit, step: step}}} else {return item}});
+    {return {...item, auction: {deposit: deposit, step: step, reg: reg}}} else {return item}});
   const stringified = JSON.stringify(updated);
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
@@ -209,6 +207,7 @@ export async function BalanceUpdate(email, amount, acc_type) {
 };
 
 export async function FetchAuctions() {
+  // console.log('FETCHED');
   let auctions = [];
   const { rows } = await pool.query('SELECT venue, tables FROM venues');
 
@@ -219,7 +218,8 @@ export async function FetchAuctions() {
         item.name = rows[i].venue;
         item.id = item.id;
         item.step = item.auction.step;
-        item.deposit = item.auction.deposit; 
+        item.deposit = item.auction.deposit;
+        item.reg = item.auction.reg;
         delete item.modal;
         delete item.active;
         delete item.auction;

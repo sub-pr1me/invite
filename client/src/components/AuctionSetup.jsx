@@ -13,7 +13,7 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
 
     try {
       await axiosPrivate.post("/auction_upload",
-        {id: customize, deposit: formData.get('deposit'), step: formData.get('step')},
+        {id: customize, deposit: formData.get('deposit'), step: formData.get('step'), reg: auth.stage !== '4' ? false : true},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
@@ -23,7 +23,13 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
         ...auth, tables: auth.tables.map(
           table => {
             if (table.id === customize) {
-              return {...table, auction: {deposit: formData.get('deposit'), step: formData.get('step')}};
+              return {...table, 
+                auction: {
+                  deposit: formData.get('deposit'),
+                  step: formData.get('step'),
+                  reg: auth.stage !== '4' ? false : true
+                }
+              };
             } else {
               return table;
             }
