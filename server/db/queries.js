@@ -138,6 +138,11 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
       await pool.query(
         `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}')
         WHERE email = '${email}'`);
+      const { rows } = await pool.query(`
+        SELECT tables
+        FROM venues 
+        WHERE email LIKE '${email}'`
+      );
       return rows[0];
     };
   };

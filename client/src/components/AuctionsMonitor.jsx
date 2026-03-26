@@ -108,7 +108,9 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
           <div className={`${styles.current_section}`}>
             { auctions &&
               auctions.map((item) => {       
-                if (item.reg !== 'false' && item.reg !== false) return (
+                if (item.reg !== 'false' && item.reg !== false) {
+                  if (auth.roles[0] === 'venue' && item.name === auth.name
+                      || auth.roles[0] === 'customer') return (
                   <AuctionActive
                     key={item.name+item.id}
                     id={item.id}
@@ -120,6 +122,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
                     setAuctions={setAuctions}
                   />
                 )
+                }
               })
             }
           </div>
