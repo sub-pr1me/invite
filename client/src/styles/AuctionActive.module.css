@@ -26,6 +26,8 @@
 
 .auction2 {
   min-height: 55px;
+  height: 15vw;
+  max-height: 110px;
 }
 
 .auction:hover {

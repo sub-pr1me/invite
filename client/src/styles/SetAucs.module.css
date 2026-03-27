@@ -25,7 +25,7 @@
 }
 
 .container {
-  height: fit-content;
+  height: 100%;
   width: 100%;
   flex-direction: column;
   justify-content: flex-end;
@@ -158,6 +158,7 @@
 }
 
 .post_registration {
+  height: fit-content;
   min-height: 0px;
   background: none;
   justify-content: flex-end;
