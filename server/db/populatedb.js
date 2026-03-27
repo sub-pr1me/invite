@@ -93,15 +93,16 @@ VALUES
    '{}', 
    '0');
 
-   INSERT INTO customers (customer, email, password, stage, avatar, dob, gender, interest)
-VALUES
+  INSERT INTO customers (customer, email, password, stage, avatar, dob, gender, interest, credits)
+  VALUES
   ('Stan Marsh', 
    'stan@gmail.com', 
    '$2b$10$9fMzJPTDDSDAm71uSbew3u0gUyNcQ.DXW/8NoNvZ4OdjJcXZOMVW.', 
    '4', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1774449173/jpzdy6bnnimvlhfcuvpq.jpg', 
    '2026-03-03', 
    'Male', 
-   'Female');
+   'Female',
+   '0');
 `;
 
 
