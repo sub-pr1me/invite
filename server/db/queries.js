@@ -175,11 +175,11 @@ export async function tableInfoUpdate(email, id, link) {
   return null;
 };
 
-export async function auctionUpload(email, id, deposit, step, reg) {
+export async function auctionUpload(email, id, deposit, step, bidders, reg) {
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${email}'`);
   const tables = rows[0].tables[0];
   const updated = tables.map(item => {if (item.id === id.toString() || item.id === id)
-    {return {...item, auction: {deposit: deposit, step: step, reg: reg}}} else {return item}});
+    {return {...item, auction: {deposit: deposit, step: step, bidders: bidders, reg: reg}}} else {return item}});
   const stringified = JSON.stringify(updated);
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
@@ -189,26 +189,16 @@ export async function auctionUpload(email, id, deposit, step, reg) {
 };
 
 export async function BalanceUpdate(email, amount, acc_type) {
-  if (acc_type === 'customer') {
-    const { rows } = await pool.query(`SELECT credits FROM venues WHERE email LIKE '${email}'`);
-    const balance = rows[0].credits;
-    const updatedBalance = parseInt(balance) + parseInt(amount);
-    await pool.query(`
-      UPDATE venues SET credits = '${updatedBalance}' 
-      WHERE email 
-      LIKE '${email}'`);
-    return updatedBalance;
-  };
-  if (acc_type === 'venue') {
-    const { rows } = await pool.query(`SELECT credits FROM venues WHERE email LIKE '${email}'`);
-    const balance = rows[0].credits;
-    const updatedBalance = parseInt(balance) - parseInt(amount);
-    await pool.query(`
-      UPDATE venues SET credits = '${updatedBalance}' 
-      WHERE email 
-      LIKE '${email}'`);
-    return updatedBalance;
-  };
+  const { rows } = await pool.query(`SELECT credits FROM ${acc_type}s WHERE email LIKE '${email}'`);
+  const balance = rows[0].credits;
+  const cashout = parseInt(balance) - parseInt(amount);
+  const deposit = parseInt(balance) + parseInt(amount);
+  await pool.query(`
+    UPDATE ${acc_type}s SET credits = '${acc_type === 'venue' ? cashout : deposit}' 
+    WHERE email 
+    LIKE '${email}'`);
+  if (acc_type === 'venue') return cashout;
+  return deposit;
 };
 
 export async function FetchAuctions() {
@@ -224,6 +214,7 @@ export async function FetchAuctions() {
         item.id = item.id;
         item.step = item.auction.step;
         item.deposit = item.auction.deposit;
+        item.bidders = item.auction.bidders;
         item.reg = item.auction.reg;
         delete item.modal;
         delete item.active;
