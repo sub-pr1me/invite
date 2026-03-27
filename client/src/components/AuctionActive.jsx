@@ -8,18 +8,18 @@ const AuctionActive = ({ id, venue, deposit, step, pic }) => {
 
   return (
     <>
-      <div className={`${styles.auction}`}>
+      <div className={`${styles.auction} ${auth.roles[0] === 'customer' ? styles.auction2 : null}`}>
         {
           auth.roles[0] === 'customer' &&
           <div className={`${styles.venue_name}`}>{venue}</div>
         }
         <div className={`${styles.table}`}>
-          <div>Table {id}</div>
+          <div className={`${styles.table_text}`}>Table {id}</div>
           {pic && <img src={pic} alt=''/>}
         </div>
         <div className={`${styles.details} ${auth.roles[0] === 'customer' ? styles.short : null}`}>          
-          <div className={`${styles.dep}`}>Dep: {deposit}</div>
-          <div className={`${styles.step}`}>Step: {step}</div>
+      <div className={`${styles.dep}`}>Dep: <div>{deposit}</div></div>
+          <div className={`${styles.step}`}>Step: <div>{step}</div></div>
         </div>
         <div className={`${styles.bidders}`}>
           <Customer />

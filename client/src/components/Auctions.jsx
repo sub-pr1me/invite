@@ -34,6 +34,7 @@ const Auctions = ({ setActive, auctions, setAuctions }) => {
         <SetAucs 
           setAuctions={setAuctions}
         />}
+        {/* { MAPPED CUSTOMER'S AUCTIONS} */}
       </div>
     </div>
     </>
