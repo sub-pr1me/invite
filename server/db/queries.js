@@ -178,7 +178,8 @@ export async function auctionUpload(email, id, deposit, step, bidders, reg) {
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${email}'`);
   const tables = rows[0].tables[0];
   const updated = tables.map(item => {if (item.id === id.toString() || item.id === id)
-    {return {...item, auction: {deposit: deposit, step: step, bidders: bidders, reg: reg}}} else {return item}});
+    {return {...item, auction: {deposit: deposit, step: step, bidders: bidders, reg: reg}}} else {return item}}
+  );
   const stringified = JSON.stringify(updated);
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
@@ -201,20 +202,29 @@ export async function BalanceUpdate(email, amount, acc_type) {
 };
 
 export async function FetchAuctions() {
-  // console.log('FETCHED');
   let auctions = [];
-  const { rows } = await pool.query('SELECT venue, tables FROM venues');
+  const { rows } = await pool.query('SELECT venue, email, tables FROM venues');
 
     for (let i=0; i<rows.length; i++) {
     if (rows[i].tables[0]) {
       const filtered = rows[i].tables[0].filter(item => item.auction.deposit);
+
       filtered.map(item => {
+        const arr = [];
+        for (let i=0; i<3; i++) {
+          if (typeof item.auction.bidders[i] === 'string') {
+            arr.push(JSON.parse(item.auction.bidders[i]));
+          } else {
+            arr.push(item.auction.bidders[i]);
+          }          
+        };
+        item.venue_email = rows[i].email;
         item.name = rows[i].venue;
-        item.id = item.id;
-        item.step = item.auction.step;
-        item.deposit = item.auction.deposit;
-        item.bidders = item.auction.bidders;
-        item.reg = item.auction.reg;
+        item.id = parseInt(item.id);
+        item.step = parseInt(item.auction.step);
+        item.deposit = parseInt(item.auction.deposit);
+        item.bidders = arr;
+        item.reg = JSON.parse(item.auction.reg);
         delete item.modal;
         delete item.active;
         delete item.auction;
@@ -223,4 +233,23 @@ export async function FetchAuctions() {
     };
   };
   return auctions;
+};
+
+export async function BiddersUpdate(bidders, venue_email, table) {
+  const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${venue_email}'`);
+  const tables = rows[0].tables[0];
+  const updated = tables.map(item => {if (item.id === table.toString() || item.id === table)
+    {return {...item, auction: {...item.auction, bidders: JSON.parse(bidders)}}} else {return item}}
+  );
+
+  const stringified = JSON.stringify(updated);
+
+  await pool.query(`
+    UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
+    WHERE email 
+    LIKE '${venue_email}'`
+  );
+
+  return 'BIDDERS UPDATED?'
+
 };

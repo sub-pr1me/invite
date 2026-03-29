@@ -12,6 +12,7 @@ import InfoUploadRouter from './routes/InfoUploadRouter.js'
 import TableUploadRouter from './routes/TableUploadRouter.js'
 import AuctionUploadRouter from './routes/AuctionUploadRouter.js'
 import BalanceUpdateRouter from './routes/BalanceUpdateRouter.js'
+import BiddersUpdateRouter from './routes/BiddersUpdateRouter.js'
 import { FetchAuctions } from './db/queries.js'
 import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
@@ -65,6 +66,7 @@ app.post('/auctions_update', async (req, res) => {
     res.status(500).send('AUCTIONS UPDATE CONTROLLER ERROR');
   }
 });
+app.use('/bidders_update', BiddersUpdateRouter);
 
 server.listen(PORT, HOST, (error) => {  
   if (error) {console.error(error)}

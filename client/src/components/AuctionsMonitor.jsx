@@ -117,6 +117,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
                     deposit={item.deposit}
                     step={item.step}
                     bidders={item.bidders}
+                    venue_email={item.venue_email}
                     venue={item.name}
                     pic={item.pic}
                     auctions={auctions}

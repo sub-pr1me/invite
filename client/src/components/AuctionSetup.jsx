@@ -79,7 +79,8 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
                 id='deposit'
                 ref={depositRef}
                 min={50}
-                max={1000}/>
+                max={1000}
+                required/>
           </div>
           <div className={`${styles.step}`}>
             <label htmlFor='step'>Bid step:</label>
@@ -88,7 +89,8 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
                 name='step' 
                 id='step'
                 min={10}
-                max={200}/>
+                max={200}
+                required/>
           </div>
           </div>
           <div className={styles.btns}>
