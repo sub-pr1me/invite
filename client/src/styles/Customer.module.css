@@ -7,13 +7,29 @@
 } */
 
 .customer {
-  background-color: rgb(35, 4, 51);
+  background-color: rgb(29, 0, 44);
+  min-height: 50px;
   height: 100%;
   aspect-ratio: 1/1;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  cursor: pointer;
-  font-size: clamp(10px, 3.5vw, 17px);
+  cursor: default;
+  font-size: clamp(11px, 2.5vw, 15px);
+  background: 
+    radial-gradient(
+      rgb(36, 0, 56),
+      rgba(33, 0, 53, 0.199),
+      rgb(167, 111, 199)
+    );
+  font-weight: 600;
+}
+
+.customer > div {
+  min-height: 50px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

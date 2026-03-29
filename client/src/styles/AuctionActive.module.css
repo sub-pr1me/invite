@@ -3,14 +3,10 @@
 }
 
 /* * {
-  outline: rgb(50, 162, 190) 1px solid;
+  outline: rgba(50, 162, 190, 0.527) 1px solid;
 } */
 
 .auction {
-  min-width: fit-content;
-  max-width: 90%;
-  min-height: 60px;
-  height: 25%;
   border-radius: 1000px 1000px 1000px 1000px;
   display: flex;
   justify-content: flex-start;
@@ -30,38 +26,116 @@
   max-height: 110px;
 }
 
+.auction > div {
+  min-height: 55px;
+  height: 15vw;
+  max-height: 110px;
+}
+
 .auction:hover {
   outline: 2px solid rgb(246, 179, 255);
 }
 
-.venue_name {  
+.modal {
+  position: absolute;
+  z-index: 0;
+  left: -4px;
+  height: 100%;
+  width: calc(99% + 10px);
+  background-color: rgb(35, 4, 51);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  animation: appear 0.3s forwards;
+  will-change: transform;
+  transform-origin: right;
+}
+
+.fade {
+  animation: disappear 0.3s forwards;
+  will-change: transform;
+  transform-origin: right;
+}
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(5px, 1.5vw, 10px);
+}
+
+.modal input {
+  width: 33%;
+  height: clamp(15px, 5vw, 30px);
+  background-color: black;
+  border: none;
+  outline: 1px solid rgba(253, 192, 255, 0.596);
+  font-size: clamp(11px, 2.7vw, 16px);
+  cursor: pointer;
+}
+
+.modal input::placeholder {
+  color: rgb(195, 164, 209);
+  opacity: 1; /* Firefox */
+}
+
+.modal label {
+  font-size: clamp(11px, 2.7vw, 16px);
+  line-height: 1;
+  margin-right: 3%;
+}
+
+.modal div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(5px, 2vw, 15px);
+}
+
+.btns button{
+  background-color: rgb(80, 70, 172);
+  margin: 0px;
+  padding: clamp(5px, 1.5vw, 10px);
+}
+
+.venue_name {
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 4px !important;
   padding-top: 2px !important;
-  height: 22px;
-  width: 35%;
-  max-height: fit-content;
+  height: 4vw !important;
+  width: 35% !important;
+  max-width: 170px !important;
+  max-height: fit-content !important;
   border-radius: 50px 50px 50px 50px;
   bottom: -10px;
   left: 0;
   background-color: rgb(13, 3, 70);
-  color: rgb(93, 255, 214);
+  color: rgb(139, 255, 226);
   border: 2px solid rgba(246, 179, 255, 0.555);
   padding: 0px 2vw;
-  font-size: clamp(8px, 60%, 12px) !important;
+  font-size: clamp(9px, 2vw, 12px) !important;
   font-weight: 900;
-  line-height: 1;
+  line-height: 1.5;
   white-space: nowrap;
   cursor: pointer;
   overflow: hidden;
   z-index: 2;
 }
 
-.venue_name:hover {
+.highlight {
   color: rgb(255, 227, 104);
-} 
+}
 
 .table {
   display: flex;
@@ -69,11 +143,11 @@
   align-items: center;
   background-color: rgb(35, 4, 51);
   aspect-ratio: 1/1;
+  min-height: 55px;
   height: 100%;
   border-radius: 50%;
   box-sizing: border-box;
   border: 2px solid rgba(246, 179, 255, 0.555);
-  font-size: clamp(10px, 3.5vw, 17px);
   cursor: pointer;
   position: relative;
 }
@@ -111,10 +185,17 @@
 }
 
 .table_text {
-    font-size: clamp(10px, 90%, 13px) !important;
+    font-size: clamp(11px, 2.3vw, 13px) !important;
+    padding: 0px 10%;
+}
+
+.table_text:hover {
+  background-color: rgba(236, 94, 255, 0.548);
+  color: white
 }
 
 .details {
+  min-height: 55px;
   height: 100%;
   min-width: 50px;
   width: 50px;
@@ -128,18 +209,22 @@
   color: rgb(247, 186, 255);
 }
 
-.short {
-  height: 90%;
-}
-
 .details div {
+  padding-left: 1px;
   width: 100%;
-  height: 50%;
+  min-height: 27.5px;
+  height: 7.5vw;  
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: clamp(10px, 3vw, 11px);
-  background-color: rgb(35, 4, 51);
+  background-color: rgb(25, 1, 36);
+}
+
+.short {
+  min-height: 55px;
+  height: 13.5vw !important;
+  max-height: 97px !important;
 }
 
 .details div:nth-child(1) {
@@ -147,14 +232,17 @@
 }
 
 .bidders {
+  min-height: 55px !important;
   height: 100%;
   width: fit-content;
-  max-width: 100%;
+  max-width: 345px !important;
+  gap: 4px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   border-radius: 0px 1000px 1000px 0px;
-  gap: 4px;
+  position: relative;
+  gap: 6px;
 }
 
 .new_bid {
@@ -169,7 +257,7 @@
   color: rgb(114, 226, 157);
   font-weight: 900;
   cursor: pointer;
-  font-size: clamp(11px, 3vw, 15px);
+  font-size: clamp(13px, 2.5vw, 20px);
   line-height: 0;
   padding-right: 4px;
 }
@@ -182,6 +270,26 @@
 .dep div,
 .step div {
   color: rgb(105, 255, 155);
-  height: 100%;
+  min-height: 10px;
+  height: 50%;
   border-bottom: none !important;
+  font-weight: 600;
+}
+
+@keyframes appear {
+    0% {
+      transform: scaleX(0%);
+    }
+    100% {
+      transform: scaleX(100%);
+    }
+}
+
+@keyframes disappear {
+    0% {
+      transform: scaleX(100%);
+    }
+    100% {
+      transform: scaleX(0%);
+    }
 }

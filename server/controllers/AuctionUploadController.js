@@ -9,6 +9,7 @@ export default async function handleAuctionUpload(req, res) {
     parseInt(req.body.id), 
     parseInt(req.body.deposit), 
     parseInt(req.body.step),
+    JSON.parse(req.body.bidders),
     JSON.parse(req.body.reg)
   );
   res.status(200).send(response);

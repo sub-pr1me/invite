@@ -1,10 +1,10 @@
 import styles from '../styles/Customer.module.css'
 
-const Customer = () => {
+const Customer = ({ content }) => {
   return (
     <>
     <div className={`${styles.customer}`}>
-      HOST
+      {!content ? <div>Empty<br />Seat</div> : 'HOST'}
     </div>
     </>
   );

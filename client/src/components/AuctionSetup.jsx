@@ -13,7 +13,12 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
 
     try {
       await axiosPrivate.post("/auction_upload",
-        {id: customize, deposit: formData.get('deposit'), step: formData.get('step'), reg: auth.stage !== '4' ? false : true},
+        {
+          id: customize,
+          deposit: formData.get('deposit'),
+          step: formData.get('step'),
+          bidders: JSON.stringify([0,0,0]),
+          reg: auth.stage !== '4' ? false : true},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
@@ -27,6 +32,7 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
                 auction: {
                   deposit: formData.get('deposit'),
                   step: formData.get('step'),
+                  bidders: [0,0,0],
                   reg: auth.stage !== '4' ? false : true
                 }
               };

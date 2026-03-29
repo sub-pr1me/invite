@@ -63,6 +63,7 @@ export default async function LogInController(req, res) {
               auction: {
                 deposit: parseInt(arr[i].auction.deposit), 
                 step: parseInt(arr[i].auction.step),
+                bidders: arr[i].auction.bidders,
                 reg: JSON.parse(arr[i].auction.reg)
               }
             }
@@ -77,6 +78,7 @@ export default async function LogInController(req, res) {
               auction: {
                 deposit: null, 
                 step: null,
+                bidders: [0,0,0],
                 reg: JSON.parse(arr[i].auction.reg)
               }
             }
@@ -91,6 +93,7 @@ export default async function LogInController(req, res) {
               auction: {
                 deposit: null, 
                 step: null,
+                bidders: [0,0,0],
                 reg: JSON.parse(arr[i].auction.reg)
               }
             }

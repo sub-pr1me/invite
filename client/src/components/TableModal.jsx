@@ -21,7 +21,8 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
       setStatus(`pending${id}`);
       setHidden(true);
       const update = auth.tables;
-      update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': {deposit: null, step: null, reg: auth.stage !== '4' ? false : true}});
+      update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': {
+        deposit: null, step: null, bidders: [0,0,0], reg: auth.stage !== '4' ? false : true}});
       try {
         const response = await axiosPrivate.post("/info_upload",
           {hours: auth.hours, tables: JSON.stringify(update), stage: auth.stage},
@@ -42,8 +43,9 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
                   active: JSON.parse(arr[i].active),
                   modal: JSON.parse(arr[i].modal),
                   auction: {
-                    deposit: parseInt(arr[i].auction.deposit), 
-                    step: parseInt(arr[i].auction.step), 
+                    deposit: parseInt(arr[i].auction.deposit),
+                    step: parseInt(arr[i].auction.step),
+                    bidders: arr[i].auction.bidders,
                     reg: auth.stage !== '4' ? false : true}
                 }
               );
@@ -56,7 +58,8 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
                   modal: JSON.parse(arr[i].modal),
                   auction: {
                     deposit: null, 
-                    step: null, 
+                    step: null,
+                    bidders: [0,0,0],
                     reg: auth.stage !== '4' ? false : true}
                 }
               );
@@ -69,7 +72,8 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
                   modal: JSON.parse(arr[i].modal),
                   auction: {
                     deposit: null, 
-                    step: null, 
+                    step: null,
+                    bidders: [0,0,0], 
                     reg: auth.stage !== '4' ? false : true}
                 }
               );

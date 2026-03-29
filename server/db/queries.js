@@ -102,7 +102,6 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
   const deserialized = JSON.parse(tables);
   if (acc_type === 'venue') {
     if (stage === '2') {  // pre-registration basic info
-      // console.log('INFO UPLOADDDDDDDDDDD',tables);
       await pool.query(
         `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}'),
          stage = '3' WHERE email = '${email}'`);
