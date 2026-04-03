@@ -80,6 +80,7 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
                 ref={depositRef}
                 min={50}
                 max={1000}
+                placeholder='50-1000'
                 required/>
           </div>
           <div className={`${styles.step}`}>
@@ -90,6 +91,7 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
                 id='step'
                 min={10}
                 max={200}
+                placeholder='10-100'
                 required/>
           </div>
           </div>

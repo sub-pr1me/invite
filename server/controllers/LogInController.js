@@ -49,59 +49,60 @@ export default async function LogInController(req, res) {
     name = dbData.venue;
     rating = dbData.rating;
     hours = dbData.hours;
-    if (dbData.tables[0]) { // deserialize data
-      const arr = dbData.tables[0];
-      const deserialized = [];
-      for (let i=0; i<arr.length; i++) {
-        if (arr[i].auction && arr[i].auction.deposit) {
-          deserialized.push(
-            {
-              id: parseInt(arr[i].id),
-              pic: `${arr[i].pic}`,
-              active: JSON.parse(arr[i].active),
-              modal: JSON.parse(arr[i].modal),
-              auction: {
-                deposit: parseInt(arr[i].auction.deposit), 
-                step: parseInt(arr[i].auction.step),
-                bidders: arr[i].auction.bidders,
-                reg: JSON.parse(arr[i].auction.reg)
-              }
-            }
-          );
-        } else if (arr[i].auction && !arr[i].auction.deposit) {
-          deserialized.push(
-            {
-              id: parseInt(arr[i].id),
-              pic: `${arr[i].pic}`,
-              active: JSON.parse(arr[i].active),
-              modal: JSON.parse(arr[i].modal),
-              auction: {
-                deposit: null, 
-                step: null,
-                bidders: [0,0,0],
-                reg: JSON.parse(arr[i].auction.reg)
-              }
-            }
-          );
-        } else {
-          deserialized.push(
-            {
-              id: parseInt(arr[i].id),
-              pic: `${arr[i].pic}`,
-              active: JSON.parse(arr[i].active),
-              modal: JSON.parse(arr[i].modal),
-              auction: {
-                deposit: null, 
-                step: null,
-                bidders: [0,0,0],
-                reg: JSON.parse(arr[i].auction.reg)
-              }
-            }
-          );
-        }
-      };
-      tables = deserialized;
-    };
+    tables = dbData.tables[0];
+    // if (dbData.tables[0]) { // deserialize data
+    //   const arr = dbData.tables[0];
+    //   const deserialized = [];
+    //   for (let i=0; i<arr.length; i++) {
+    //     if (arr[i].auction && arr[i].auction.deposit) {
+    //       deserialized.push(
+    //         {
+    //           id: parseInt(arr[i].id),
+    //           pic: `${arr[i].pic}`,
+    //           active: JSON.parse(arr[i].active),
+    //           modal: JSON.parse(arr[i].modal),
+    //           auction: {
+    //             deposit: parseInt(arr[i].auction.deposit), 
+    //             step: parseInt(arr[i].auction.step),
+    //             bidders: arr[i].auction.bidders,
+    //             reg: JSON.parse(arr[i].auction.reg)
+    //           }
+    //         }
+    //       );
+    //     } else if (arr[i].auction && !arr[i].auction.deposit) {
+    //       deserialized.push(
+    //         {
+    //           id: parseInt(arr[i].id),
+    //           pic: `${arr[i].pic}`,
+    //           active: JSON.parse(arr[i].active),
+    //           modal: JSON.parse(arr[i].modal),
+    //           auction: {
+    //             deposit: null, 
+    //             step: null,
+    //             bidders: [0,0,0],
+    //             reg: JSON.parse(arr[i].auction.reg)
+    //           }
+    //         }
+    //       );
+    //     } else {
+    //       deserialized.push(
+    //         {
+    //           id: parseInt(arr[i].id),
+    //           pic: `${arr[i].pic}`,
+    //           active: JSON.parse(arr[i].active),
+    //           modal: JSON.parse(arr[i].modal),
+    //           auction: {
+    //             deposit: null, 
+    //             step: null,
+    //             bidders: [0,0,0],
+    //             reg: JSON.parse(arr[i].auction.reg)
+    //           }
+    //         }
+    //       );
+    //     }
+    //   };
+    //   tables = deserialized;
+    // };
   };
 
   if (matchedCustomers) {

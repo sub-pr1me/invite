@@ -10,18 +10,33 @@ const Table = ({ id, active, modal, setStatus, customize, pic }) => {
 
   const addTable = async () => {
     setStatus(`pending${id}`);
-    const update = auth.tables.map(item => {return {...item, modal: false}});
-    update.splice(index, 1, {'id': id, 'pic': '', 'active': true, 'modal': false, 'auction': {
-      deposit: null, step: null, bidders: [0,0,0], reg: auth.stage !== '4' ? false : true}});
+    let update;
     try {
-      await axiosPrivate.post("/info_upload",
-        {hours: auth.hours, tables: JSON.stringify(update), stage: auth.stage},
-        {
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-          withCredentials: true
-        }
-      );
-      setAuth({...auth, tables: update});
+      if (auth.stage !== '4') {
+
+        update = auth.tables.map(item => {return {...item, modal: false}});
+        update.splice(index, 1, {'id': id, 'pic': '', 'active': true, 'modal': false, 'auction': {
+          deposit: null, step: null, bidders: [0,0,0], reg: auth.stage !== '4' ? false : true
+        }});
+
+        await axiosPrivate.post('/info_upload',
+          {hours: auth.hours, tables: JSON.stringify(update), stage: auth.stage},
+          {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            withCredentials: true
+          }
+        );
+        setAuth({...auth, tables: update});
+      } else {
+        update = await axiosPrivate.post('/transform_table',
+          {id: id, active: true},
+          {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            withCredentials: true
+          }
+        );
+        setAuth({...auth, tables: update.data});        
+      };
       setTimeout(() => {setStatus('success');}, 500);
     } catch (err) {
       if (!err?.response) {

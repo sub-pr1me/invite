@@ -2,11 +2,11 @@
   
   export async function fetchVenues() {
 
-    const accType = "venue";
+    // const accType = "venue";
     
-    const delay = new Promise((resolve) => setTimeout(resolve, 500));
-    await delay; // half second delay simulation
+    // const delay = new Promise((resolve) => setTimeout(resolve, 500));
+    // await delay; // half second delay simulation
 
-    const response = await axios.get('', { params: {accType} });
-    return await response.data.venues;
+    // const response = await axios.get('', { params: {accType} });
+    // return await response.data.venues;
   };

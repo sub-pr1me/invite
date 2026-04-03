@@ -7,17 +7,37 @@ import { useEffect, useEffectEvent } from 'react'
 const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
 
   const axiosPrivate = useAxiosPrivate();
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
 
   const AuctionsUpdate = useEffectEvent(async () => {
     try {
-      await axiosPrivate.post('/auctions_update',
+      const response = await axiosPrivate.post('/auctions_update',
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
         }
       );
+      const arr = response.data.filter(item => item.venue_email === auth.email);
+
+      // console.log(arr[0].bidders);
+      // console.log(arr[1].bidders);
+      // console.log(arr[2].bidders);
       
+      if (auth.roles[0] === 'venue') for (let i=0; i<arr.length; i++) {
+        for (const table of auth.tables) {
+          if (arr[i].id === table.id && arr[i].bidders[0].toString() !== table.auction.bidders[0].toString()) {
+            console.log(`UPDATING TABLE ${table.id}`);
+            setAuth({...auth, tables: auth.tables.map(table => {
+              if (table.id) {
+                return {...table, auction: {...table.auction, bidders: arr[i].bidders}};
+              } else {return table}
+            })});
+          };
+        }
+      };
+      // console.log('Auth', auth.tables[0].auction.bidders);
+      // console.log('Auth', auth.tables[1].auction.bidders);
+      // console.log('Auth', auth.tables[2].auction.bidders);
     } catch (err) {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');
@@ -35,7 +55,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
     const connect = () => {
       const websocket = new WebSocket('ws://localhost:3000/ws');
 
-      websocket.onopen = () => console.log('Connected to WebSocket server');
+      websocket.onopen = () => console.log('Connected');
       websocket.onmessage = (event) => {
         const parsed = JSON.parse(event.data);
         if (parsed.type === 'auctions_updated') {
@@ -46,7 +66,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
         }
       };
       websocket.onclose = () => {
-        console.log('Disconnected from WebSocket server');
+        console.log('Disconnected');
         reconnect();
       }
 
@@ -79,7 +99,12 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions}) => {
 
   useEffect(() => {
     AuctionsUpdate();
-    BroadcastAuctions();    
+    BroadcastAuctions();
+    // if (auth.roles[0] === 'venue') {
+    //   console.log('Auth', auth.tables[0].auction.bidders);
+    //   console.log('Auth', auth.tables[1].auction.bidders);
+    //   console.log('Auth', auth.tables[2].auction.bidders);
+    // }
   },[]);
 
   return (

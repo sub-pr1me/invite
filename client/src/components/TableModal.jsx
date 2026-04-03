@@ -20,75 +20,52 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
     if (auth.tables.filter((item) => item.active === true).length > 1) {
       setStatus(`pending${id}`);
       setHidden(true);
-      const update = auth.tables;
-      update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': {
-        deposit: null, step: null, bidders: [0,0,0], reg: auth.stage !== '4' ? false : true}});
+      let update;
       try {
-        const response = await axiosPrivate.post("/info_upload",
-          {hours: auth.hours, tables: JSON.stringify(update), stage: auth.stage},
-          {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            withCredentials: true
-          }
-        );
-        if (response.data.tables[0]) { // deserialize data
-          const arr = response.data.tables[0];
-          const deserialized = [];
-          for (let i=0; i<arr.length; i++) {
-            if (arr[i].auction && arr[i].auction.deposit) {
-              deserialized.push(
-                {
-                  id: parseInt(arr[i].id),
-                  pic: `${arr[i].pic}`,
-                  active: JSON.parse(arr[i].active),
-                  modal: JSON.parse(arr[i].modal),
-                  auction: {
-                    deposit: parseInt(arr[i].auction.deposit),
-                    step: parseInt(arr[i].auction.step),
-                    bidders: arr[i].auction.bidders,
-                    reg: auth.stage !== '4' ? false : true}
-                }
-              );
-            } else if (arr[i].auction && !arr[i].auction.deposit) {
-              deserialized.push(
-                {
-                  id: parseInt(arr[i].id),
-                  pic: `${arr[i].pic}`,
-                  active: JSON.parse(arr[i].active),
-                  modal: JSON.parse(arr[i].modal),
-                  auction: {
-                    deposit: null, 
-                    step: null,
-                    bidders: [0,0,0],
-                    reg: auth.stage !== '4' ? false : true}
-                }
-              );
-            } else {
-              deserialized.push(
-                {
-                  id: parseInt(arr[i].id),
-                  pic: `${arr[i].pic}`,
-                  active: JSON.parse(arr[i].active),
-                  modal: JSON.parse(arr[i].modal),
-                  auction: {
-                    deposit: null, 
-                    step: null,
-                    bidders: [0,0,0], 
-                    reg: auth.stage !== '4' ? false : true}
-                }
-              );
+        if (auth.stage !== '4') {
+          update = auth.tables;
+          update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': {
+            deposit: null, step: null, bidders: [0,0,0], reg: auth.stage !== '4' ? false : true
+          }});
+
+          await axiosPrivate.post('/info_upload',
+            {hours: auth.hours, tables: JSON.stringify(update), stage: auth.stage},
+            {
+              headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+              withCredentials: true
             }
-          };
-          const auctions = await axiosPrivate.post("/auctions_update",
-              {
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                withCredentials: true
-              }
+          );
+
+          const auctions = await axiosPrivate.post('/auctions_update',
+            {
+              headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+              withCredentials: true
+            }
           );
           setAuctions(auctions.data);
-          setAuth({...auth, tables: deserialized});
-          setTimeout(() => {setStatus('success');}, 500);
+          setAuth({...auth, tables: update});
+
+        } else {
+          update = await axiosPrivate.post('/transform_table',
+            {id: id, active: false},
+            {
+              headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+              withCredentials: true
+            }
+          );
+          
+          const auctions = await axiosPrivate.post('/auctions_update',
+            {
+              headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+              withCredentials: true
+            }
+          );
+          
+          setAuctions(auctions.data);
+          setAuth({...auth, tables: update.data});
         };
+        setTimeout(() => {setStatus('success');}, 500);
+
       } catch (err) {
         console.error(err)
         if (!err?.response) {

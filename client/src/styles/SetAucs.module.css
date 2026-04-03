@@ -158,7 +158,6 @@
 }
 
 .post_registration {
-  height: fit-content;
   min-height: 0px;
   background: none;
   justify-content: flex-end;

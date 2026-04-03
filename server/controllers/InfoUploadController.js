@@ -11,28 +11,55 @@ const handleInfoUpload = async (req, res)=> {
     if (matchedCustomers) {accType = 'customer'};
 
     let hours = null;
-    let tables_arr= null;
     let dob = null;
     let gender = null;
     let interest = null;
     let stage = null;
     let endreg = null;
+    const parsed = [];
     
     if (accType === 'venue') {
-      if (typeof req.body.tables === 'string') {
-        tables_arr = JSON.parse(req.body.tables);
-      } else {
-        tables_arr = req.body.tables;
+
+      const tables = JSON.parse(req.body.tables);
+      // console.log('INFO UPLOAD CONTROLLER (24) UNPARSED',tables[0]);
+
+      for (let i=0; i<tables.length; i++) {
+        if (typeof tables[i].auction.deposit === 'string') {
+          parsed.push(
+            { 
+              id: tables[i].id,
+              pic: tables[i].pic,
+              modal: tables[i].modal,
+              active: tables[i].active,
+              auction: {
+                deposit: parseInt(tables[i].auction.deposit),
+                step: parseInt(tables[i].auction.step),
+                bidders: tables[i].auction.bidders
+              }
+            }
+          )
+        } else {
+          parsed.push(tables[i]);
+        }
       };
-      tables_arr.map(item => {
-        if (typeof item.auction === 'string') item.auction = JSON.parse(item.auction);
-      });
+
+      // if (typeof req.body.tables === 'string') {
+      //   tables_arr = JSON.parse(req.body.tables);
+      // } else {
+      //   tables_arr = req.body.tables;
+      // };
+      // tables_arr.map(item => {
+      //   if (typeof item.auction === 'string') item.auction = JSON.parse(item.auction);
+      // });
       hours = req.body.hours;
       stage = req.body.stage;
       endreg = req.body.endreg;
     };
     
-    const tables = JSON.stringify(tables_arr);
+    
+    console.log('INFO UPLOAD CONTROLLER',parsed[0].auction);
+    console.log('INFO UPLOAD CONTROLLER',parsed[1].auction);
+    console.log('INFO UPLOAD CONTROLLER',parsed[2].auction);
 
     if (accType === 'customer') {
       dob = req.body.dob;
@@ -40,7 +67,7 @@ const handleInfoUpload = async (req, res)=> {
       interest = req.body.interest;
     };
 
-    const result = await infoUpload(accType, email, hours, tables, stage, dob, gender, interest, endreg);
+    const result = await infoUpload(accType, email, hours, parsed, stage, dob, gender, interest, endreg);
     res.status(200).send(result);
   } catch (err) {
     console.log(err);

@@ -40,8 +40,9 @@ const SetAucs = ({ setAuctions }) => {
     const tables = auth.tables;
     tables.map((item) => item.auction.reg = true);
     try {
+      console.log(tables);
       await axiosPrivate.post("/info_upload",
-        {hours: auth.hours, tables: tables, stage: auth.stage, endreg: true},
+        {hours: auth.hours, tables: JSON.stringify(tables), stage: auth.stage, endreg: true},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true

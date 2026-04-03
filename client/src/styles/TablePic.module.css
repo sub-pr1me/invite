@@ -119,7 +119,8 @@
 }
 
 .uploaded_image {
-  width: 100vw;;
+  width: 100vw;
+  height: 260px;
   max-width: 90%;
   display: flex;
   flex-direction: column;
@@ -130,7 +131,7 @@
   animation: appear 0.5s 0.5s both, opacity 0.5s 0.6s both;
   will-change: transform, opacity;
   margin-top: 20px;
-  flex: 1;
+  margin-bottom: clamp(0px, 3vw, 160px);
 }
 
 .uploaded_image img {

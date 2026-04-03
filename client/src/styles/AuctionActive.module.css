@@ -23,13 +23,13 @@
 .auction2 {
   min-height: 55px;
   height: 15vw;
-  max-height: 110px;
+  max-height: 100px;
 }
 
 .auction > div {
   min-height: 55px;
   height: 15vw;
-  max-height: 110px;
+  max-height: 100px;
 }
 
 .auction:hover {
@@ -38,7 +38,7 @@
 
 .modal {
   position: absolute;
-  z-index: 0;
+  z-index: 1;
   left: -4px;
   height: 100%;
   width: calc(99% + 10px);

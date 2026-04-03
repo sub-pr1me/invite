@@ -40,61 +40,66 @@ export default async function handleRefreshToken(req, res) {
     rating = matchedVenue.rating;
     hours = matchedVenue.hours;
     credits = matchedVenue.credits;
-    
-    if (matchedVenue.tables[0]) { // deserialize data
-      const arr = matchedVenue.tables[0];
-      const deserialized = [];
-      for (let i=0; i<arr.length; i++) {
-        if (arr[i].auction && arr[i].auction.deposit) {
-          deserialized.push(
-            {
-              id: parseInt(arr[i].id),
-              pic: `${arr[i].pic}`,
-              active: JSON.parse(arr[i].active),
-              modal: JSON.parse(arr[i].modal),
-              auction: {
-                deposit: arr[i].auction.deposit, 
-                step: arr[i].auction.step,
-                bidders: arr[i].auction.bidders,
-                reg: arr[i].auction.reg
-              }
-            }
-          );
-        } else if (arr[i].auction && !arr[i].auction.deposit) {
-          deserialized.push(
-            {
-              id: parseInt(arr[i].id),
-              pic: `${arr[i].pic}`,
-              active: JSON.parse(arr[i].active),
-              modal: JSON.parse(arr[i].modal),
-              auction: {
-                deposit: null, 
-                step: null,
-                bidders: [0,0,0],
-                reg: JSON.parse(arr[i].auction.reg)
-              }
-            }
-          );
-        } else {
-          deserialized.push(
-            {
-              id: parseInt(arr[i].id),
-              pic: `${arr[i].pic}`,
-              active: JSON.parse(arr[i].active),
-              modal: JSON.parse(arr[i].modal),
-              auction: {
-                deposit: null, 
-                step: null,
-                bidders: [0,0,0],
-                reg: JSON.parse(arr[i].auction.reg)
-              }
-            }
-          );
-        }
-      };
-      tables = deserialized;
-      // console.log('REFRESH',tables);
-    };    
+
+
+    console.log('REFRESH ARR');
+
+    tables = matchedVenue.tables[0];
+
+    // if (matchedVenue.tables[0]) { // deserialize data
+    //   const arr = matchedVenue.tables[0];
+    //   const deserialized = [];
+    //   for (let i=0; i<arr.length; i++) {
+    //     if (arr[i].auction && arr[i].auction.deposit) {
+    //       deserialized.push(
+    //         {
+    //           id: parseInt(arr[i].id),
+    //           pic: `${arr[i].pic}`,
+    //           active: JSON.parse(arr[i].active),
+    //           modal: JSON.parse(arr[i].modal),
+    //           auction: {
+    //             deposit: arr[i].auction.deposit, 
+    //             step: arr[i].auction.step,
+    //             bidders: arr[i].auction.bidders,
+    //             reg: arr[i].auction.reg
+    //           }
+    //         }
+    //       );
+    //     } else if (arr[i].auction && !arr[i].auction.deposit) {
+    //       deserialized.push(
+    //         {
+    //           id: parseInt(arr[i].id),
+    //           pic: `${arr[i].pic}`,
+    //           active: JSON.parse(arr[i].active),
+    //           modal: JSON.parse(arr[i].modal),
+    //           auction: {
+    //             deposit: null, 
+    //             step: null,
+    //             bidders: [0,0,0],
+    //             reg: JSON.parse(arr[i].auction.reg)
+    //           }
+    //         }
+    //       );
+    //     } else {
+    //       deserialized.push(
+    //         {
+    //           id: parseInt(arr[i].id),
+    //           pic: `${arr[i].pic}`,
+    //           active: JSON.parse(arr[i].active),
+    //           modal: JSON.parse(arr[i].modal),
+    //           auction: {
+    //             deposit: null, 
+    //             step: null,
+    //             bidders: [0,0,0],
+    //             reg: JSON.parse(arr[i].auction.reg)
+    //           }
+    //         }
+    //       );
+    //     }
+    //   };
+    //   tables = deserialized;
+    //   // console.log('REFRESH',tables);
+    // };    
   };
 
   if (matchedCustomer) {

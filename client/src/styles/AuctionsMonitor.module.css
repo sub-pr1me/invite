@@ -60,7 +60,7 @@
   justify-content: flex-start;
   overflow-y: scroll;
   overflow-x: hidden;
-  scrollbar-width: thin;
+  scrollbar-width: none;
   background-color: rgba(147, 85, 167, 0.089);
   box-sizing: border-box;
   gap: 5px;

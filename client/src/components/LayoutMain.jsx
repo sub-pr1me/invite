@@ -18,9 +18,9 @@ const LayoutMain = () => {
     <div className={`${styles.content}`}>
       <Outlet />     
     </div>
-    <Suspense fallback={<Loading message={''}/>}>        
+    {/* <Suspense fallback={<Loading message={''}/>}>        
       <Venues />
-    </Suspense> 
+    </Suspense>  */}
     </>
   )
 }

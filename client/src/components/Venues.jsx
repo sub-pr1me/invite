@@ -1,12 +1,12 @@
 import styles from '../styles/Venues.module.css'
-import { use } from 'react'
-import useAuth from '../hooks/useAuth';
+// import { use } from 'react'
+// import useAuth from '../hooks/useAuth';
 
 export default function Venues() {
 
-  const { auth, venuesPromise } = useAuth();
-  const fetched = use(venuesPromise);
-  const venues = fetched.filter((ven) => ven.avatar);  
+  // const { auth, venuesPromise } = useAuth();
+  // const fetched = use(venuesPromise);
+  // const venues = fetched.filter((ven) => ven.avatar);  
   // const getRandomKey = () => crypto.randomUUID();
 
   return (

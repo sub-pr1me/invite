@@ -6,7 +6,7 @@ import { useState, useEffect, useEffectEvent } from 'react'
 
 const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic }) => {
 
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [modal, setModal] = useState(null);
   const [fade, setFade] = useState(false);
@@ -74,8 +74,16 @@ const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic }) 
         }
       );
       setStatus('success');
-      setTimeout(() => {setModal(null)}, 310);
+      setTimeout(() => {setModal(null)}, 250);
       setFade(true);
+      const newBalance = await axiosPrivate.post('/balance_update',
+        {amount: update[0].bid * -1, acc_type: auth.roles[0]},
+        {
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          withCredentials: true
+        }
+      );
+      setAuth({...auth, credits: newBalance.data});
     } catch (err) {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');
@@ -128,7 +136,7 @@ const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic }) 
                   <button
                     type='button'
                     onClick={()=>{                       
-                      setTimeout(() => {setModal(null)}, 310);
+                      setTimeout(() => {setModal(null)}, 250);
                       setFade(true);
                     }}>Cancel</button>
                   <button>Submit</button>
@@ -141,9 +149,10 @@ const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic }) 
             return(
             <Customer 
               key={item === 0 ? getRandomKey() : JSON.stringify(item)}
-              content={item}/>
+              content={item}
+              modal={modal}/>
             )})
-          }          
+          }
         </div>
         {
           auth.roles[0] === 'customer' &&

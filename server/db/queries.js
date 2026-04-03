@@ -1,6 +1,8 @@
+import { act } from "react";
 import pool from "./pool.js";
 
 export async function getAllVenueData() {
+  console.log('getAllVenueData');
   const { rows } = await pool.query("SELECT * FROM venues");
   
   for (let i=0; i<rows.length; i++) {
@@ -12,6 +14,7 @@ export async function getAllVenueData() {
 };
 
 export async function getAllCustomerData() {
+  console.log('getAllCustomerData');
   const { rows } = await pool.query("SELECT * FROM customers");
   
   for (let i=0; i<rows.length; i++) {
@@ -23,16 +26,19 @@ export async function getAllCustomerData() {
 };
 
 export async function checkVenuesForMatch(email) {
+    // console.log('checkVenuesForMatch');
   const { rows } = await pool.query(`SELECT * FROM venues WHERE email LIKE '${email}'`);
   return rows[0];
 };
 
 export async function checkCustomersForMatch(email) {
+    // console.log('checkCustomersForMatch');
   const { rows } = await pool.query(`SELECT * FROM customers WHERE email LIKE '${email}'`);
   return rows[0];
 };
 
 export async function createNewUser(acc_type, name, email, password, stage, rating, tables, credits) {
+    console.log('createNewUser');
   if (acc_type === 'venue') {
     await pool.query(
       `INSERT INTO venues (
@@ -50,6 +56,7 @@ export async function createNewUser(acc_type, name, email, password, stage, rati
 };
 
 export async function getUserData(email, acc_type) {
+    console.log('getUserData');
   if (acc_type === 'venue') {
     const { rows } = await pool.query(`
       SELECT ${acc_type}, password, stage, avatar, album, rating, hours, tables, credits
@@ -65,26 +72,31 @@ export async function getUserData(email, acc_type) {
 };
 
 export async function addRefreshToken(acc_type, email, token) {
+    console.log('addRefreshToken');
   await pool.query(`UPDATE ${acc_type}s SET refToken = '${token}' WHERE email = '${email}'`);
   return 'success';
 };
 
 export async function checkVenueToken(token) {
+    // console.log('checkVenueToken');
   const { rows } = await pool.query(`SELECT * FROM venues WHERE reftoken LIKE '${token}'`);
   return rows[0];
 };
 
 export async function checkCustomerToken(token) {
+    // console.log('checkCustomerToken');
   const { rows } = await pool.query(`SELECT * FROM customers WHERE reftoken LIKE '${token}'`);
   return rows[0];
 };
 
 export async function deleteRefreshToken(acc_type, email) {
+    console.log('deleteRefreshToken');
   await pool.query(`UPDATE ${acc_type}s SET refToken = '' WHERE email = '${email}'`);
   return 'success';
 };
 
 export async function uploadNewAvatar(acc_type, email, link) {
+    console.log('uploadNewAvatar');
   const { rows } = await pool.query(`SELECT * FROM ${acc_type}s WHERE email LIKE '${email}'`);
   await pool.query(`UPDATE ${acc_type}s SET avatar = '${link}' WHERE email = '${email}'`);
   if (rows[0].stage === '0') await pool.query(`UPDATE ${acc_type}s SET stage = '1' WHERE email = '${email}'`);
@@ -93,15 +105,17 @@ export async function uploadNewAvatar(acc_type, email, link) {
 };
 
 export async function uploadNewAlbum(acc_type, email, links) {
+    console.log('uploadNewAlbum');
   await pool.query(`UPDATE ${acc_type}s SET album = '${links}' WHERE email = '${email}'`);
   await pool.query(`UPDATE ${acc_type}s SET stage = '2' WHERE email = '${email}'`);
   return 'ALBUM UPLOADED';
 };
 
 export async function infoUpload(acc_type, email, hours, tables, stage, dob, gender, interest, endreg) {
-  const deserialized = JSON.parse(tables);
+    console.log('infoUpload');
   if (acc_type === 'venue') {
     if (stage === '2') {  // pre-registration basic info
+      console.log('STAGE', stage);
       await pool.query(
         `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}'),
          stage = '3' WHERE email = '${email}'`);
@@ -114,8 +128,13 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
     };
 
     if (stage === '3' && !endreg) { // pre-registration table editing
+      console.log('STAGE', stage, 'endreg -', endreg);
+      console.log('line 132', tables[0]);
+      console.log('line 132', tables[1]);
+      console.log('line 132', tables[2]);
+      const stringified = JSON.stringify(tables);
       await pool.query(
-        `UPDATE venues SET tables = jsonb_set(tables, '{0}', '${tables}')
+        `UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}')
          WHERE email = '${email}'`);
         const { rows } = await pool.query(`
           SELECT tables
@@ -126,16 +145,26 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
     };
 
     if (stage === '3' && endreg) { // end venue registration
+      console.log('INFO UPLOAD STAGE', stage, 'endreg -', endreg);
+      console.log('line 146', tables[0].auction);
+      console.log('line 146', tables[1].auction);
+      console.log('line 146', tables[2].auction);
+      const stringified = JSON.stringify(tables);
       await pool.query(
-        `UPDATE venues SET tables = jsonb_set(tables, '{0}', '${tables}')
+        `UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}')
          WHERE email = '${email}'`);
       await pool.query(`UPDATE venues SET stage = '4' WHERE email = '${email}'`);
       return 'VENUE REGISTRATION COMPLETE';
     };
 
     if (stage === '4') { // post-registration table editing
+      console.log('INFO UPLOAD STAGE', stage);
+      console.log('line 156', tables[0].auction);
+      console.log('line 156', tables[1].auction);
+      console.log('line 156', tables[2].auction);
+      const stringified = JSON.stringify(tables);
       await pool.query(
-        `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}')
+        `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${stringified}')
         WHERE email = '${email}'`);
       const { rows } = await pool.query(`
         SELECT tables
@@ -161,10 +190,17 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
 };
 
 export async function tableInfoUpdate(email, id, link) {
+    console.log('tableInfoUpdate');
+    console.log(email);
+    console.log(id);
+    console.log(link);
+
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${email}'`);
   const tables = rows[0].tables[0];
-  const pic = tables.filter(item => item.id === id)[0].pic;
-  const updated = tables.map(item => {if (item.id === id) {return {...item, pic: link}} else {return item}});
+  console.log(tables[3]);
+  const pic = tables.filter(item => item.id === parseInt(id))[0].pic;
+  const updated = tables.map(item => {if (item.id === parseInt(id))
+    {return {...item, pic: link}} else {return item}});
   const stringified = JSON.stringify(updated);
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
@@ -175,12 +211,15 @@ export async function tableInfoUpdate(email, id, link) {
 };
 
 export async function auctionUpload(email, id, deposit, step, bidders, reg) {
+    console.log('auctionUpload');
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${email}'`);
   const tables = rows[0].tables[0];
   const updated = tables.map(item => {if (item.id === id.toString() || item.id === id)
     {return {...item, auction: {deposit: deposit, step: step, bidders: bidders, reg: reg}}} else {return item}}
   );
   const stringified = JSON.stringify(updated);
+  console.log('q206',updated[parseInt(id)-1]);
+  // console.log(stringified);
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
     WHERE email 
@@ -189,6 +228,7 @@ export async function auctionUpload(email, id, deposit, step, bidders, reg) {
 };
 
 export async function BalanceUpdate(email, amount, acc_type) {
+    console.log('BalanceUpdate');
   const { rows } = await pool.query(`SELECT credits FROM ${acc_type}s WHERE email LIKE '${email}'`);
   const balance = rows[0].credits;
   const cashout = parseInt(balance) - parseInt(amount);
@@ -202,12 +242,18 @@ export async function BalanceUpdate(email, amount, acc_type) {
 };
 
 export async function FetchAuctions() {
+    console.log('FetchAuctions');
   let auctions = [];
   const { rows } = await pool.query('SELECT venue, email, tables FROM venues');
 
     for (let i=0; i<rows.length; i++) {
     if (rows[i].tables[0]) {
       const filtered = rows[i].tables[0].filter(item => item.auction.deposit);
+      console.log('FETCH', filtered[0]?.auction);
+      console.log('FETCH', filtered[1]?.auction);
+      console.log('FETCH', filtered[2]?.auction);
+
+      // console.log('FILTEREDDDDDDDDDDD',filtered);
 
       filtered.map(item => {
         const arr = [];
@@ -224,7 +270,7 @@ export async function FetchAuctions() {
         item.step = parseInt(item.auction.step);
         item.deposit = parseInt(item.auction.deposit);
         item.bidders = arr;
-        item.reg = JSON.parse(item.auction.reg);
+        item.reg = item.auction.reg;
         delete item.modal;
         delete item.active;
         delete item.auction;
@@ -232,16 +278,21 @@ export async function FetchAuctions() {
       });
     };
   };
+
   return auctions;
 };
 
 export async function BiddersUpdate(bidders, venue_email, table) {
+    console.log('BiddersUpdate');
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${venue_email}'`);
   const tables = rows[0].tables[0];
-  const updated = tables.map(item => {if (item.id === table.toString() || item.id === table)
+  
+  console.log(`BEFORE #${parseInt(table)} BID UPDATE`, tables[parseInt(table)-1].auction)
+  const updated = tables.map(item => {if (item.id === parseInt(table))
     {return {...item, auction: {...item.auction, bidders: JSON.parse(bidders)}}} else {return item}}
   );
-
+  
+  console.log(`AFTER #${parseInt(table)} BID UPDATE`,updated[parseInt(table)-1].auction);
   const stringified = JSON.stringify(updated);
 
   await pool.query(`
@@ -252,4 +303,34 @@ export async function BiddersUpdate(bidders, venue_email, table) {
 
   return 'BIDDERS UPDATED?'
 
+};
+
+export async function AddTable(email, id, active) {
+    console.log('AddTable:', id);
+  const new_table = {
+    id: parseInt(id), 
+    pic: '', 
+    active: JSON.parse(active), 
+    modal: false, 
+    auction: {deposit: null, step: null, bidders: [0,0,0], reg: true}
+  };
+  const { rows } = await pool.query(`
+    SELECT tables
+    FROM venues 
+    WHERE email LIKE '${email}'`
+  );
+  const tables = rows[0].tables[0];
+  const updated = tables.map(item => {if (item.id === parseInt(id)) {
+    console.log('SOVPAD');
+    return new_table;
+  } else {return item}});
+  const stringified = JSON.stringify(updated);
+  console.log(updated[1]);
+  
+  await pool.query(`
+    UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
+    WHERE email 
+    LIKE '${email}'`
+  );
+  return updated;
 };

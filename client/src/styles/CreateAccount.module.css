@@ -63,11 +63,13 @@ input:focus {
 }
 
 .check {
-  filter: invert(50%) sepia(50%) saturate(600%) hue-rotate(250deg) brightness(15%) contrast(100%);;
+  filter: invert(50%) sepia(50%) saturate(600%) hue-rotate(250deg) brightness(15%) contrast(100%);
+  padding-left: 3px;
 }
 
 .x {
-  filter: invert(50%) sepia(50%) saturate(600%) hue-rotate(250deg) brightness(15%) contrast(100%);;
+  filter: invert(50%) sepia(50%) saturate(600%) hue-rotate(250deg) brightness(15%) contrast(100%);
+  padding-left: 3px;
 }
 
 .note {

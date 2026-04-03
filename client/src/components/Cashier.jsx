@@ -19,7 +19,7 @@ const Cashier = ({ setActive }) => {
           withCredentials: true
         }
       );
-      setAuth({...auth, credits: response.data})
+      setAuth({...auth, credits: response.data});
     } catch (err) {
       console.log(err);
     };
