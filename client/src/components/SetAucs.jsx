@@ -8,7 +8,7 @@ import AuctionSetup from './AuctionSetup'
 import { useState, useEffect, useEffectEvent } from 'react';
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
-const SetAucs = ({ setAuctions, tablePreview }) => {
+const SetAucs = ({ setAuctions, tablePreview, hostPreview }) => {
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth, customize, setCustomize } = useAuth();
   const [active, setActive] = useState(auth.tables.filter((item) => item.active === true).length);
@@ -106,7 +106,9 @@ const SetAucs = ({ setAuctions, tablePreview }) => {
           auth.tables.map((item) =>(
             <div 
               key={item.id}
-              className={`${styles.item} ${customize || tablePreview ? styles.unclickable : null}`}
+              className={`
+                ${styles.item} 
+                ${customize || tablePreview || hostPreview ? styles.unclickable : null}`}
               onClick={()=>{
                 if (item.active) {
                   setAuth({...auth,

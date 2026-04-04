@@ -8,6 +8,7 @@ const Auctions = ({ setActive, auctions, setAuctions }) => {
   
   const [section, setSection] = useState('current');
   const [tablePreview, setTablePreview] = useState(null);
+  const [hostPreview, setHostPreview] = useState(null);
   const { auth, customize } = useAuth();
   const onRefresh = useEffectEvent(()=>{setActive('auctions')});
   
@@ -30,6 +31,8 @@ const Auctions = ({ setActive, auctions, setAuctions }) => {
           setAuctions={setAuctions}
           tablePreview={tablePreview}
           setTablePreview={setTablePreview}
+          hostPreview={hostPreview}
+          setHostPreview={setHostPreview}
         />
       }
       <div className={`${styles.bottom}`}>
@@ -37,6 +40,7 @@ const Auctions = ({ setActive, auctions, setAuctions }) => {
         <SetAucs 
           setAuctions={setAuctions}
           tablePreview={tablePreview}
+          hostPreview={hostPreview}
         />}
         {/* { MAPPED CUSTOMER'S AUCTIONS} */}
       </div>

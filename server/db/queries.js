@@ -322,11 +322,9 @@ export async function AddTable(email, id, active) {
   );
   const tables = rows[0].tables[0];
   const updated = tables.map(item => {if (item.id === parseInt(id)) {
-    console.log('SOVPAD');
     return new_table;
   } else {return item}});
   const stringified = JSON.stringify(updated);
-  console.log(updated[1]);
   
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 

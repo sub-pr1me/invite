@@ -4,7 +4,8 @@ import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useEffect, useEffectEvent } from 'react'
 
-const AuctionsMonitor = ({section, setSection, auctions, setAuctions, tablePreview, setTablePreview}) => {
+const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
+  tablePreview, setTablePreview, hostPreview, setHostPreview}) => {
 
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
@@ -116,6 +117,16 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions, tablePrevi
             <button onClick={()=>{setTablePreview(null)}}>Close</button>
           </div>
         }
+        { hostPreview !== null &&
+          <div className={`${styles.host_preview}`}>
+            <img src={hostPreview} alt='' />
+            <div className={`${styles.btns}`}>
+              <button onClick={()=>{setHostPreview(null)}}>Close<br />Preview</button>
+              <button onClick={()=>{console.log('Profile')}}>See<br />Profile</button>
+              <button onClick={()=>{console.log('Accept')}}>Accept<br />Invitation</button>
+            </div>
+          </div>
+        }
         <div className={`
           ${styles.navigate}
           ${auth.roles[0] === 'customer' ? styles.navigate2 : null}`}>
@@ -152,6 +163,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions, tablePrevi
                     venue={item.name}
                     pic={item.pic}
                     setTablePreview={setTablePreview}
+                    setHostPreview={setHostPreview}
                   />
                 )
                 }

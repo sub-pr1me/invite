@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from '../styles/Customer.module.css'
 
-const Customer = ({ content, modal, award }) => {
+const Customer = ({ content, modal, award, setHostPreview }) => {
 
   const [text, setText] = useState('');
   const medals = ['../../img/gold.png','../../img/silver.png','../../img/bronze.png'];
@@ -17,8 +17,9 @@ const Customer = ({ content, modal, award }) => {
       {content !==0 &&
         <div 
         className={`${styles.slot_text}`}
-        onMouseEnter={()=>{setText('See Profile')}}
+        onMouseEnter={()=>{setText('See Options')}}
         onMouseLeave={()=>{setText('')}}
+        onClick={()=> {if (content.avatar) {setHostPreview(content.avatar)}}}
         >{text}
       </div>
       }

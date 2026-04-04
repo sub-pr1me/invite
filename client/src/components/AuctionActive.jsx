@@ -4,7 +4,7 @@ import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useState, useEffect, useEffectEvent } from 'react'
 
-const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic, setTablePreview }) => {
+const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic, setTablePreview, setHostPreview }) => {
 
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
@@ -168,6 +168,7 @@ const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic, se
               content={item}
               modal={modal}
               award={bidders.indexOf(item)}
+              setHostPreview={setHostPreview}
               />              
             )})
           }
