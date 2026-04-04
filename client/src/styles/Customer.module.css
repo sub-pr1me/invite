@@ -29,11 +29,13 @@
 
 .medal {
   position: absolute;
-  z-index: 0;
+  z-index: 1;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   height: 100%;
+  animation: opacity 0.8s  both;
+  will-change: opacity;
 }
 
 .empty {
@@ -48,10 +50,13 @@
 .customer img {
   height: 100%;
   border-radius: 50%;
+  animation: appear 0.8s both, opacity 0.8s  both;
+  will-change: transform, opacity;
 }
 
 .bid {
   position: absolute;
+  z-index: 2;
   bottom: -10%;
   width: 45%;
   height: fit-content;
@@ -74,6 +79,7 @@
 
 .slot_text {
   position: absolute;
+  z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -92,10 +98,19 @@
 
 @keyframes appear {
     0% {
-      transform: scale(0%);
+      transform: scale(1%);
     }
     100% {
       transform: scale(100%);
+    }
+}
+
+@keyframes opacity {
+    0% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 1;
     }
 }
 

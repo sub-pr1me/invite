@@ -160,6 +160,8 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  animation: appear 0.8s both, opacity 0.8s  both;
+  will-change: transform, opacity;
 }
 
 .table div {
@@ -278,10 +280,19 @@
 
 @keyframes appear {
     0% {
-      transform: scaleX(0%);
+      transform: scale(1%);
     }
     100% {
-      transform: scaleX(100%);
+      transform: scale(100%);
+    }
+}
+
+@keyframes opacity {
+    0% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 1;
     }
 }
 
