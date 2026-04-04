@@ -126,7 +126,7 @@ const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic, se
             className={`${styles.table_text} `}
             onMouseEnter={()=>{if (pic) {setTableText('See Photo')} else {setTableText('No Photo')}}}
             onMouseLeave={()=>{setTableText(`Table ${id}`)}}
-            onClick={()=> {setTablePreview(pic)}}
+            onClick={()=> {if (pic) {setTablePreview(pic)}}}
             >{tableText}
           </div>
           {pic && <img src={pic} alt=''/>}
