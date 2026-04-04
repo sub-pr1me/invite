@@ -1,4 +1,3 @@
-import { act } from "react";
 import pool from "./pool.js";
 
 export async function getAllVenueData() {
@@ -116,8 +115,9 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
   if (acc_type === 'venue') {
     if (stage === '2') {  // pre-registration basic info
       console.log('STAGE', stage);
+      const stringified = JSON.stringify(tables);
       await pool.query(
-        `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${tables}'),
+        `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${stringified}'),
          stage = '3' WHERE email = '${email}'`);
         const { rows } = await pool.query(`
           SELECT tables
@@ -218,7 +218,7 @@ export async function auctionUpload(email, id, deposit, step, bidders, reg) {
     {return {...item, auction: {deposit: deposit, step: step, bidders: bidders, reg: reg}}} else {return item}}
   );
   const stringified = JSON.stringify(updated);
-  console.log('q206',updated[parseInt(id)-1]);
+  // console.log('q221',updated[parseInt(id)-1]);
   // console.log(stringified);
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
@@ -238,6 +238,7 @@ export async function BalanceUpdate(email, amount, acc_type) {
     WHERE email 
     LIKE '${email}'`);
   if (acc_type === 'venue') return cashout;
+
   return deposit;
 };
 
@@ -249,9 +250,9 @@ export async function FetchAuctions() {
     for (let i=0; i<rows.length; i++) {
     if (rows[i].tables[0]) {
       const filtered = rows[i].tables[0].filter(item => item.auction.deposit);
-      console.log('FETCH', filtered[0]?.auction);
-      console.log('FETCH', filtered[1]?.auction);
-      console.log('FETCH', filtered[2]?.auction);
+      // console.log('FETCH', filtered[0]?.auction);
+      // console.log('FETCH', filtered[1]?.auction);
+      // console.log('FETCH', filtered[2]?.auction);
 
       // console.log('FILTEREDDDDDDDDDDD',filtered);
 
@@ -287,12 +288,12 @@ export async function BiddersUpdate(bidders, venue_email, table) {
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${venue_email}'`);
   const tables = rows[0].tables[0];
   
-  console.log(`BEFORE #${parseInt(table)} BID UPDATE`, tables[parseInt(table)-1].auction)
+  // console.log(`BEFORE #${parseInt(table)} BID UPDATE`, tables[parseInt(table)-1].auction)
   const updated = tables.map(item => {if (item.id === parseInt(table))
     {return {...item, auction: {...item.auction, bidders: JSON.parse(bidders)}}} else {return item}}
   );
   
-  console.log(`AFTER #${parseInt(table)} BID UPDATE`,updated[parseInt(table)-1].auction);
+  // console.log(`AFTER #${parseInt(table)} BID UPDATE`,updated[parseInt(table)-1].auction);
   const stringified = JSON.stringify(updated);
 
   await pool.query(`

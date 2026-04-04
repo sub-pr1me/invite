@@ -185,8 +185,8 @@
 }
 
 .table_text {
-    font-size: clamp(11px, 2.3vw, 13px) !important;
-    padding: 0px 10%;
+  font-size: clamp(11px, 2.3vw, 13px) !important;
+  padding: 0px 10%;
 }
 
 .table_text:hover {

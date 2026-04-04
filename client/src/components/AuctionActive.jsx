@@ -45,8 +45,17 @@ const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic }) 
     };
 
     const bid = parseInt(formData.get('deposit'));
+    const existingBid = bidders.filter(item => item.name === auth.name)[0]?.bid;
+    
+    let difference;
+    
+    if (existingBid) {
+      difference = bid - existingBid;
+    } else {
+      difference = !bidders[0] ? bid : bid - bidders[0].bid;
+    }
 
-    if (bid <= auth.credits) {update.unshift({
+    if (difference <= auth.credits) {update.unshift({
           name: auth.name,
           email: auth.email,
           avatar: auth.avatar,
@@ -60,6 +69,8 @@ const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic }) 
     while (update.length > 3) update.pop();
 
     try {
+      console.log('bid:', bid);
+      console.log('difference:', difference);
       await axiosPrivate.post('/bidders_update',
         {bidders: JSON.stringify(update), venue_email: venue_email, table: id},
         {
@@ -77,7 +88,10 @@ const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic }) 
       setTimeout(() => {setModal(null)}, 250);
       setFade(true);
       const newBalance = await axiosPrivate.post('/balance_update',
-        {amount: update[0].bid * -1, acc_type: auth.roles[0]},
+        {
+          amount: existingBid ? difference * -1 : bid * -1, 
+          acc_type: auth.roles[0]
+        },          
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
@@ -112,7 +126,8 @@ const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic }) 
             className={`${styles.table_text} `}
             onMouseEnter={()=>{if (pic) {setTableText('See Photo')} else {setTableText('No Photo')}}}
             onMouseLeave={()=>{setTableText(`Table ${id}`)}}
-            >{tableText}</div>
+            >{tableText}
+          </div>
           {pic && <img src={pic} alt=''/>}
         </div>
         <div className={`${styles.details} ${auth.roles[0] === 'customer' ? styles.short : null}`}>          

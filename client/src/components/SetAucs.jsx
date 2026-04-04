@@ -37,10 +37,12 @@ const SetAucs = ({ setAuctions }) => {
   });
 
   const EndVenueRegistration = async () => {
-    const tables = auth.tables;
+    const tables = auth.tables.map(item => {
+      if (typeof item.auction === 'string') {
+        return {...item, auction: JSON.parse(item.auction)}
+      } else {return item}});
     tables.map((item) => item.auction.reg = true);
     try {
-      console.log(tables);
       await axiosPrivate.post("/info_upload",
         {hours: auth.hours, tables: JSON.stringify(tables), stage: auth.stage, endreg: true},
         {
