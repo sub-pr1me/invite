@@ -166,7 +166,9 @@ const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic, se
             <Customer 
               key={item === 0 ? getRandomKey() : JSON.stringify(item)}
               content={item}
-              modal={modal}/>
+              modal={modal}
+              award={bidders.indexOf(item)}
+              />              
             )})
           }
         </div>

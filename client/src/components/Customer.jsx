@@ -1,13 +1,19 @@
 import { useState } from 'react';
 import styles from '../styles/Customer.module.css'
 
-const Customer = ({ content, modal }) => {
+const Customer = ({ content, modal, award }) => {
 
   const [text, setText] = useState('');
+  const medals = ['../../img/gold.png','../../img/silver.png','../../img/bronze.png'];
 
   return (
     <>
     <div className={`${styles.customer}`}>
+      {content !==0 &&
+        <div className={`${styles.medal}`}>
+          <img src={`${medals[award]}`} alt='' />
+        </div>
+      }
       {content !==0 &&
         <div 
         className={`${styles.slot_text}`}
