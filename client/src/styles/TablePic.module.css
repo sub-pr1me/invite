@@ -25,6 +25,8 @@
   font-size: 14px;
   font-weight: 500;
   position: relative;
+  animation: opacity 0.5s  both;
+  will-change: opacity;
 }
 
 .cust_name {
@@ -34,6 +36,8 @@
   font-size: 16px;
   line-height: 1.2;
   margin-top: clamp(5px, 1vw, 10px);
+  animation: appear 0.8s both, opacity 0.8s  both;
+  will-change: transform, opacity;
 }
 
 .message {
@@ -49,6 +53,8 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
+  animation: opacity 0.5s  both;
+  will-change: opacity;
 }
 
 .message img {
@@ -128,8 +134,8 @@
   align-items: center;
   border-radius: 5px;
   position: relative;
-  animation: appear 0.5s 0.5s both, opacity 0.5s 0.6s both;
-  will-change: transform, opacity;
+  animation: opacity 0.5s  both;
+  will-change: opacity;
   margin-top: 20px;
   margin-bottom: clamp(0px, 3vw, 160px);
 }
@@ -141,6 +147,8 @@
   max-height: 100%;
   border: 5px solid rgba(246, 179, 255, 0.884);
   box-sizing: border-box;
+  animation: appear 0.8s both, opacity 0.8s  both;
+  will-change: transform, opacity;
 }
 
 .uploaded_image div {
@@ -159,6 +167,8 @@
   font-weight: 500;
   border: 2px solid rgba(246, 179, 255, 0.884);
   cursor: default;
+  animation: opacity 0.5s  both;
+  will-change: opacity;
 }
 
 .uploaded_image button {
@@ -171,11 +181,13 @@
   width: 60px;
   bottom: 3%;
   z-index: 3;
+  animation: appear 0.8s both, opacity 0.8s  both;
+  will-change: transform, opacity;
 }
 
 @keyframes appear {
     0% {
-      transform: scale(0%);
+      transform: scale(1%);
     }
     100% {
       transform: scale(100%);

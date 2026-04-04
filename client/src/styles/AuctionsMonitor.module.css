@@ -107,3 +107,55 @@
 .non_highlighted {
   color: rgb(140, 92, 145);
 }
+
+.table_preview {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.493);
+  border-radius: 30px;
+  animation: opacity 0.5s  both;
+  will-change: opacity;
+}
+
+.table_preview img {
+  height: 100%;
+  max-width: 100%;
+  border-radius: 30px;
+  bottom: 0%;
+  border: 2px solid rgb(248, 192, 255);
+  animation: appear 0.8s both, opacity 0.8s  both;
+  will-change: transform, opacity;
+}
+
+.table_preview button {
+  position: absolute;
+  bottom: 5%;
+  background-color: rgb(94, 94, 221);
+  outline: 2px solid rgb(248, 192, 255);
+  animation: appear 0.8s both, opacity 0.8s  both;
+  will-change: transform, opacity;
+}
+
+@keyframes appear {
+    0% {
+      transform: scale(1%);
+    }
+    100% {
+      transform: scale(100%);
+    }
+}
+
+@keyframes opacity {
+    0% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 1;
+    }
+}

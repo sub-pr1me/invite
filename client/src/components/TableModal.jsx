@@ -13,7 +13,7 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
   });
 
   const hideModal = useEffectEvent((modal)=>{
-    if (!modal) setTimeout(() => { setHidden(true) }, 310);
+    if (!modal) setTimeout(() => { setHidden(true) }, 250);
   });
 
   const removeTable = async () => {
@@ -64,7 +64,7 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
           setAuctions(auctions.data);
           setAuth({...auth, tables: update.data});
         };
-        setTimeout(() => {setStatus('success');}, 500);
+        setTimeout(() => {setStatus('success')}, 250);
 
       } catch (err) {
         console.error(err)

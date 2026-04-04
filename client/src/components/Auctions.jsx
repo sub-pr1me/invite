@@ -7,6 +7,7 @@ import AuctionsMonitor from './AuctionsMonitor'
 const Auctions = ({ setActive, auctions, setAuctions }) => {
   
   const [section, setSection] = useState('current');
+  const [tablePreview, setTablePreview] = useState(null);
   const { auth, customize } = useAuth();
   const onRefresh = useEffectEvent(()=>{setActive('auctions')});
   
@@ -27,12 +28,15 @@ const Auctions = ({ setActive, auctions, setAuctions }) => {
           setSection={setSection}
           auctions={auctions}
           setAuctions={setAuctions}
+          tablePreview={tablePreview}
+          setTablePreview={setTablePreview}
         />
       }
       <div className={`${styles.bottom}`}>
         {auth.roles[0] === 'venue' && 
         <SetAucs 
           setAuctions={setAuctions}
+          tablePreview={tablePreview}
         />}
         {/* { MAPPED CUSTOMER'S AUCTIONS} */}
       </div>

@@ -4,7 +4,7 @@ import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useState, useEffect, useEffectEvent } from 'react'
 
-const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic }) => {
+const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic, setTablePreview }) => {
 
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
@@ -126,6 +126,7 @@ const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic }) 
             className={`${styles.table_text} `}
             onMouseEnter={()=>{if (pic) {setTableText('See Photo')} else {setTableText('No Photo')}}}
             onMouseLeave={()=>{setTableText(`Table ${id}`)}}
+            onClick={()=> {setTablePreview(pic)}}
             >{tableText}
           </div>
           {pic && <img src={pic} alt=''/>}
