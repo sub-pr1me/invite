@@ -14,6 +14,7 @@ export default async function handleRefreshToken(req, res) {
   if (!matchedVenue && !matchedCustomer) return res.sendStatus(403);// Forbidden
 
   let roles = null;
+  let id = null;
   let email = null;
   let name = null;
   let avatar = null;
@@ -30,8 +31,9 @@ export default async function handleRefreshToken(req, res) {
   let gender = null;
   let interest = null;
 
-  if (matchedVenue) {    
+  if (matchedVenue) {
     roles = ['venue'];
+    id = matchedVenue.id;
     email = matchedVenue.email;
     name = matchedVenue.venue;
     avatar = matchedVenue.avatar;
@@ -41,69 +43,14 @@ export default async function handleRefreshToken(req, res) {
     hours = matchedVenue.hours;
     credits = matchedVenue.credits;
 
-
     console.log('REFRESH ARR');
 
     tables = matchedVenue.tables[0];
-
-    // if (matchedVenue.tables[0]) { // deserialize data
-    //   const arr = matchedVenue.tables[0];
-    //   const deserialized = [];
-    //   for (let i=0; i<arr.length; i++) {
-    //     if (arr[i].auction && arr[i].auction.deposit) {
-    //       deserialized.push(
-    //         {
-    //           id: parseInt(arr[i].id),
-    //           pic: `${arr[i].pic}`,
-    //           active: JSON.parse(arr[i].active),
-    //           modal: JSON.parse(arr[i].modal),
-    //           auction: {
-    //             deposit: arr[i].auction.deposit, 
-    //             step: arr[i].auction.step,
-    //             bidders: arr[i].auction.bidders,
-    //             reg: arr[i].auction.reg
-    //           }
-    //         }
-    //       );
-    //     } else if (arr[i].auction && !arr[i].auction.deposit) {
-    //       deserialized.push(
-    //         {
-    //           id: parseInt(arr[i].id),
-    //           pic: `${arr[i].pic}`,
-    //           active: JSON.parse(arr[i].active),
-    //           modal: JSON.parse(arr[i].modal),
-    //           auction: {
-    //             deposit: null, 
-    //             step: null,
-    //             bidders: [0,0,0],
-    //             reg: JSON.parse(arr[i].auction.reg)
-    //           }
-    //         }
-    //       );
-    //     } else {
-    //       deserialized.push(
-    //         {
-    //           id: parseInt(arr[i].id),
-    //           pic: `${arr[i].pic}`,
-    //           active: JSON.parse(arr[i].active),
-    //           modal: JSON.parse(arr[i].modal),
-    //           auction: {
-    //             deposit: null, 
-    //             step: null,
-    //             bidders: [0,0,0],
-    //             reg: JSON.parse(arr[i].auction.reg)
-    //           }
-    //         }
-    //       );
-    //     }
-    //   };
-    //   tables = deserialized;
-    //   // console.log('REFRESH',tables);
-    // };    
   };
 
   if (matchedCustomer) {
     roles = ['customer'];
+    id = matchedCustomer.id;
     email = matchedCustomer.email;
     name = matchedCustomer.customer;
     avatar = matchedCustomer.avatar;
@@ -132,10 +79,10 @@ export default async function handleRefreshToken(req, res) {
       );
       // console.log('NEW TOKEN - ', accessToken);
       if (matchedVenue) res.json({ 
-        accessToken, roles, email, name, avatar, album, stage, rating, hours, tables, credits
+        accessToken, roles, id, email, name, avatar, album, stage, rating, hours, tables, credits
       });
       if (matchedCustomer) res.json({ 
-        accessToken, roles, email, name, avatar, album, stage, likes, age, gender, interest, credits
+        accessToken, roles, id, email, name, avatar, album, stage, likes, age, gender, interest, credits
       });
     }
   );  

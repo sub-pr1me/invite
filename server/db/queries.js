@@ -58,13 +58,13 @@ export async function getUserData(email, acc_type) {
     console.log('getUserData');
   if (acc_type === 'venue') {
     const { rows } = await pool.query(`
-      SELECT ${acc_type}, password, stage, avatar, album, rating, hours, tables, credits
+      SELECT ${acc_type}, id, password, stage, avatar, album, rating, hours, tables, credits
       FROM ${acc_type}s 
       WHERE email LIKE '${email}'`);
     return rows[0];
   };
   const { rows } = await pool.query(`
-    SELECT ${acc_type}, password, stage, avatar, album, age, gender, interest, likes, credits 
+    SELECT ${acc_type}, id, password, stage, avatar, album, age, gender, interest, likes, credits 
     FROM ${acc_type}s 
     WHERE email LIKE '${email}'`);
     return rows[0];

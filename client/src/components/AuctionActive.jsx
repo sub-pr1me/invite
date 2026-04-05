@@ -57,7 +57,7 @@ const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic, se
 
     if (difference <= auth.credits) {update.unshift({
           name: auth.name,
-          email: auth.email,
+          id: `${auth.roles[0]}${auth.id}`,
           avatar: auth.avatar,
           bid: bid
         })

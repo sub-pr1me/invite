@@ -32,6 +32,7 @@ export default async function LogInController(req, res) {
   const dbData = await getUserData(email, accType);
   const match = await bcrypt.compare(req.body.password, dbData.password);
 
+  let id = null;
   let name = null;
   let rating = null;
   let likes = null;
@@ -46,66 +47,15 @@ export default async function LogInController(req, res) {
   const credits = dbData.credits
 
   if (matchedVenues) {
+    id = dbData.id;
     name = dbData.venue;
     rating = dbData.rating;
     hours = dbData.hours;
     tables = dbData.tables[0];
-    // if (dbData.tables[0]) { // deserialize data
-    //   const arr = dbData.tables[0];
-    //   const deserialized = [];
-    //   for (let i=0; i<arr.length; i++) {
-    //     if (arr[i].auction && arr[i].auction.deposit) {
-    //       deserialized.push(
-    //         {
-    //           id: parseInt(arr[i].id),
-    //           pic: `${arr[i].pic}`,
-    //           active: JSON.parse(arr[i].active),
-    //           modal: JSON.parse(arr[i].modal),
-    //           auction: {
-    //             deposit: parseInt(arr[i].auction.deposit), 
-    //             step: parseInt(arr[i].auction.step),
-    //             bidders: arr[i].auction.bidders,
-    //             reg: JSON.parse(arr[i].auction.reg)
-    //           }
-    //         }
-    //       );
-    //     } else if (arr[i].auction && !arr[i].auction.deposit) {
-    //       deserialized.push(
-    //         {
-    //           id: parseInt(arr[i].id),
-    //           pic: `${arr[i].pic}`,
-    //           active: JSON.parse(arr[i].active),
-    //           modal: JSON.parse(arr[i].modal),
-    //           auction: {
-    //             deposit: null, 
-    //             step: null,
-    //             bidders: [0,0,0],
-    //             reg: JSON.parse(arr[i].auction.reg)
-    //           }
-    //         }
-    //       );
-    //     } else {
-    //       deserialized.push(
-    //         {
-    //           id: parseInt(arr[i].id),
-    //           pic: `${arr[i].pic}`,
-    //           active: JSON.parse(arr[i].active),
-    //           modal: JSON.parse(arr[i].modal),
-    //           auction: {
-    //             deposit: null, 
-    //             step: null,
-    //             bidders: [0,0,0],
-    //             reg: JSON.parse(arr[i].auction.reg)
-    //           }
-    //         }
-    //       );
-    //     }
-    //   };
-    //   tables = deserialized;
-    // };
   };
 
   if (matchedCustomers) {
+    id = dbData.id
     name = dbData.customer;
     likes = dbData.likes;
     age = dbData.age;
@@ -130,13 +80,15 @@ export default async function LogInController(req, res) {
     // SAVE JWT WITH USER IN DB
     addRefreshToken(accType, email, refreshToken);
 
+    console.log('LOGIN ID:',id);
+
     // SEND TOKEN TO USER
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
     if (accType === 'venue') res.json({ 
-      accessToken, accType, name, stage, avatar, album, rating, hours, tables, credits
+      accessToken, accType, id, name, stage, avatar, album, rating, hours, tables, credits
     });
     if (accType === 'customer') res.json({ 
-      accessToken, accType, name, stage, avatar, album, likes, age, gender, interest, credits
+      accessToken, accType, id, name, stage, avatar, album, likes, age, gender, interest, credits
     });
   } else {
     res.status(401).send('WRONG PASSWORD');
