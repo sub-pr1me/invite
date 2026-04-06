@@ -5,8 +5,9 @@ const handleTransformTable = async (req, res) => {
     const email = req.email;
     const id = req.body.id;
     const active = req.body.active;
+    const venue_id = req.body.venue_id
 
-    const result = await AddTable(email, id, active);
+    const result = await AddTable(email, id, active, venue_id);
     res.status(200).send(result);
   } catch (err) {
     console.log(err);

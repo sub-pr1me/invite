@@ -10,20 +10,22 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
   const depositRef = useRef();
   
   async function Upload(formData) {
-
     try {
-      await axiosPrivate.post("/auction_upload",
+      const response = await axiosPrivate.post('/auction_upload',
         {
           id: customize,
           deposit: formData.get('deposit'),
           step: formData.get('step'),
           bidders: JSON.stringify([0,0,0]),
-          reg: auth.stage !== '4' ? false : true},
+          reg: auth.stage !== '4' ? false : true,
+          venue_id: auth.id
+        },
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
         }
       );
+      console.log(response.data);
       setAuth({
         ...auth, tables: auth.tables.map(
           table => {
@@ -33,7 +35,8 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
                   deposit: formData.get('deposit'),
                   step: formData.get('step'),
                   bidders: [0,0,0],
-                  reg: auth.stage !== '4' ? false : true
+                  reg: auth.stage !== '4' ? false : true,
+                  venue_id: auth.id
                 }
               };
             } else {

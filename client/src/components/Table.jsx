@@ -13,10 +13,9 @@ const Table = ({ id, active, modal, setStatus, customize, pic }) => {
     let update;
     try {
       if (auth.stage !== '4') {
-
         update = auth.tables.map(item => {return {...item, modal: false}});
         update.splice(index, 1, {'id': id, 'pic': '', 'active': true, 'modal': false, 'auction': {
-          deposit: null, step: null, bidders: [0,0,0], reg: auth.stage !== '4' ? false : true
+          deposit: null, step: null, bidders: [0,0,0], reg: auth.stage !== '4' ? false : true, venue_id: auth.id
         }});
 
         await axiosPrivate.post('/info_upload',
@@ -29,7 +28,7 @@ const Table = ({ id, active, modal, setStatus, customize, pic }) => {
         setAuth({...auth, tables: update});
       } else {
         update = await axiosPrivate.post('/transform_table',
-          {id: id, active: true},
+          {id: id, active: true, venue_id: auth.id},
           {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             withCredentials: true

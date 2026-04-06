@@ -26,7 +26,11 @@ const InfoUpload = () => {
           'active': true, 
           'modal': false, 
           'auction': JSON.stringify({
-            deposit: null, step: null, bidders: [0,0,0], reg: auth.stage !== '4' ? false : true
+            deposit: null,
+            step: null,
+            bidders: [0,0,0],
+            reg: auth.stage !== '4' ? false : true,
+            venue_id: auth.id
           })
         });
       };
@@ -38,7 +42,11 @@ const InfoUpload = () => {
           'active': false, 
           'modal': false, 
           'auction': JSON.stringify({
-            deposit: null, step: null, bidders: [0,0,0], reg: auth.stage !== '4' ? false : true
+            deposit: null,
+            step: null,
+            bidders: [0,0,0],
+            reg: auth.stage !== '4' ? false : true,
+            venue_id: auth.id
           })
         });
       };

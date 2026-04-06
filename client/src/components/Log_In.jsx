@@ -82,8 +82,6 @@ const Log_In = () => {
       const interest = response?.data?.interest;
       const credits = parseInt(response?.data?.credits);
 
-      console.log('LOGIN ID:',id);
-
       if (accType === 'venue') setAuth({ 
         token: accessToken, id, roles: [accType], email, name, stage, avatar, album, rating, hours, tables, credits
       });

@@ -21,9 +21,13 @@ const handleInfoUpload = async (req, res)=> {
     
     if (accType === 'venue') {
 
+      hours = req.body.hours;
+      stage = req.body.stage;
+      endreg = req.body.endreg;
+
       if (typeof req.body.tables === 'string') {
         tables = JSON.parse(req.body.tables);
-        console.log('INFO UPLOAD CONTROLLER UNPARSED STRING', tables[0]);
+        // console.log('INFO UPLOAD CONTROLLER UNPARSED STRING', tables[0]);
         for (let i=0; i<tables.length; i++) {
           if (typeof tables[i].auction.deposit === 'string') {
             parsed.push(
@@ -35,7 +39,9 @@ const handleInfoUpload = async (req, res)=> {
                 auction: {
                   deposit: parseInt(tables[i].auction.deposit),
                   step: parseInt(tables[i].auction.step),
-                  bidders: tables[i].auction.bidders
+                  bidders: tables[i].auction.bidders,
+                  reg: JSON.parse(endreg),
+                  venue_id: tables[i].auction.venue_id
                 }
               }
             )
@@ -45,7 +51,7 @@ const handleInfoUpload = async (req, res)=> {
         };
       } else {
         tables = req.body.tables;
-        console.log('INFO UPLOAD CONTROLLER UNPARSED OBJECT', tables[0]);
+        // console.log('INFO UPLOAD CONTROLLER UNPARSED OBJECT', tables[0]);
         for (let i=0; i<tables.length; i++) {
           if (typeof tables[i].id === 'string') {
             parsed.push(
@@ -63,23 +69,11 @@ const handleInfoUpload = async (req, res)=> {
         };
       };
 
+      
 
-
-      // if (typeof req.body.tables === 'string') {
-      //   tables_arr = JSON.parse(req.body.tables);
-      // } else {
-      //   tables_arr = req.body.tables;
-      // };
-      // tables_arr.map(item => {
-      //   if (typeof item.auction === 'string') item.auction = JSON.parse(item.auction);
-      // });
-      hours = req.body.hours;
-      stage = req.body.stage;
-      endreg = req.body.endreg;
-
-      console.log('INFO UPLOAD CONTROLLER',parsed[0].auction);
-      console.log('INFO UPLOAD CONTROLLER',parsed[1].auction);
-      console.log('INFO UPLOAD CONTROLLER',parsed[2].auction);
+      // console.log('INFO UPLOAD CONTROLLER',parsed[0].auction);
+      // console.log('INFO UPLOAD CONTROLLER',parsed[1].auction);
+      // console.log('INFO UPLOAD CONTROLLER',parsed[2].auction);
     };
     
     if (accType === 'customer') {

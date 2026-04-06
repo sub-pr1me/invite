@@ -40,11 +40,14 @@ const SetAucs = ({ setAuctions, tablePreview, hostPreview }) => {
     const tables = auth.tables.map(item => {
       if (typeof item.auction === 'string') {
         return {...item, auction: JSON.parse(item.auction)}
-      } else {return item}});
-    tables.map((item) => item.auction.reg = true);
+      } else {return item}
+    });
+    
+    const updated = tables.map(item => {return {...item, auction: {...item.auction, reg: true}}});
+
     try {
-      await axiosPrivate.post("/info_upload",
-        {hours: auth.hours, tables: JSON.stringify(tables), stage: auth.stage, endreg: true},
+      await axiosPrivate.post('/info_upload',
+        {hours: auth.hours, tables: JSON.stringify(updated), stage: auth.stage, endreg: true},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true

@@ -20,6 +20,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           withCredentials: true
         }
       );
+      console.log(response.data);
       const arr = response.data.filter(item => item.venue_email === auth.email);
 
       // console.log(arr[0].bidders);
@@ -124,7 +125,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
             <img src={hostPreview.avatar} alt='' />
             <div className={`${styles.btns}`}>
               <button onClick={()=>{setHostPreview(null)}}>Close<br />Preview</button>
-              <button onClick={()=>{navigate(`/dashboard/${hostPreview.id}`);}}>See<br />Profile</button>
+              <button onClick={()=>{navigate(`/dashboard/${hostPreview.id}`)}}>See<br />Profile</button>
               <button onClick={()=>{console.log('Accept')}}>Accept<br />Invitation</button>
             </div>
           </div>
@@ -163,6 +164,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
                     bidders={item.bidders}
                     venue_email={item.venue_email}
                     venue={item.name}
+                    venue_id={item.venue_id}
                     pic={item.pic}
                     setTablePreview={setTablePreview}
                     setHostPreview={setHostPreview}

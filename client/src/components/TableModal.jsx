@@ -25,7 +25,7 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
         if (auth.stage !== '4') {
           update = auth.tables;
           update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': {
-            deposit: null, step: null, bidders: [0,0,0], reg: auth.stage !== '4' ? false : true
+            deposit: null, step: null, bidders: [0,0,0], reg: auth.stage !== '4' ? false : true, venue_id: auth.id
           }});
 
           await axiosPrivate.post('/info_upload',
@@ -47,7 +47,7 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
 
         } else {
           update = await axiosPrivate.post('/transform_table',
-            {id: id, active: false},
+            {id: id, active: false, venue_id: auth.id},
             {
               headers: {'Content-Type': 'application/x-www-form-urlencoded'},
               withCredentials: true

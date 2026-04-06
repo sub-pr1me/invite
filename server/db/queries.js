@@ -1,3 +1,4 @@
+import TypeOverrides from "pg/lib/type-overrides";
 import pool from "./pool.js";
 
 export async function getAllVenueData() {
@@ -129,9 +130,9 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
 
     if (stage === '3' && !endreg) { // pre-registration table editing
       console.log('STAGE', stage, 'endreg -', endreg);
-      console.log('line 132', tables[0]);
-      console.log('line 132', tables[1]);
-      console.log('line 132', tables[2]);
+      // console.log('line 132', tables[0]);
+      // console.log('line 132', tables[1]);
+      // console.log('line 132', tables[2]);
       const stringified = JSON.stringify(tables);
       await pool.query(
         `UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}')
@@ -146,9 +147,9 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
 
     if (stage === '3' && endreg) { // end venue registration
       console.log('INFO UPLOAD STAGE', stage, 'endreg -', endreg);
-      console.log('line 146', tables[0].auction);
-      console.log('line 146', tables[1].auction);
-      console.log('line 146', tables[2].auction);
+      // console.log('line 146', tables[0]);
+      // console.log('line 146', tables[1]);
+      // console.log('line 146', tables[2]);
       const stringified = JSON.stringify(tables);
       await pool.query(
         `UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}')
@@ -159,9 +160,9 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
 
     if (stage === '4') { // post-registration table editing
       console.log('INFO UPLOAD STAGE', stage);
-      console.log('line 156', tables[0].auction);
-      console.log('line 156', tables[1].auction);
-      console.log('line 156', tables[2].auction);
+      // console.log('line 156', tables[0].auction);
+      // console.log('line 156', tables[1].auction);
+      // console.log('line 156', tables[2].auction);
       const stringified = JSON.stringify(tables);
       await pool.query(
         `UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${stringified}')
@@ -210,12 +211,12 @@ export async function tableInfoUpdate(email, id, link) {
   return null;
 };
 
-export async function auctionUpload(email, id, deposit, step, bidders, reg) {
+export async function auctionUpload(email, id, deposit, step, bidders, reg, venue_id) {
     console.log('auctionUpload');
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${email}'`);
   const tables = rows[0].tables[0];
   const updated = tables.map(item => {if (item.id === id.toString() || item.id === id)
-    {return {...item, auction: {deposit: deposit, step: step, bidders: bidders, reg: reg}}} else {return item}}
+    {return {...item, auction: {deposit: deposit, step: step, bidders: bidders, reg: reg, venue_id: venue_id}}} else {return item}}
   );
   const stringified = JSON.stringify(updated);
   // console.log('q221',updated[parseInt(id)-1]);
@@ -224,7 +225,7 @@ export async function auctionUpload(email, id, deposit, step, bidders, reg) {
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
     WHERE email 
     LIKE '${email}'`);
-  return 'AUCTION SET';
+  return updated;
 };
 
 export async function BalanceUpdate(email, amount, acc_type) {
@@ -263,8 +264,9 @@ export async function FetchAuctions() {
             arr.push(JSON.parse(item.auction.bidders[i]));
           } else {
             arr.push(item.auction.bidders[i]);
-          }          
+          }
         };
+        item.venue_id = item.auction.venue_id;
         item.venue_email = rows[i].email;
         item.name = rows[i].venue;
         item.id = parseInt(item.id);
@@ -306,14 +308,14 @@ export async function BiddersUpdate(bidders, venue_email, table) {
 
 };
 
-export async function AddTable(email, id, active) {
+export async function AddTable(email, id, active, venue_id) {
     console.log('AddTable:', id);
   const new_table = {
     id: parseInt(id), 
     pic: '', 
     active: JSON.parse(active), 
     modal: false, 
-    auction: {deposit: null, step: null, bidders: [0,0,0], reg: true}
+    auction: {deposit: null, step: null, bidders: [0,0,0], reg: true, venue_id: venue_id}
   };
   const { rows } = await pool.query(`
     SELECT tables

@@ -4,13 +4,16 @@ export default async function handleAuctionUpload(req, res) {
 
   if (req.errorMessage) return res.status(422);
 
+  console.log(typeof req.body.venue_id, req.body.venue_id);
+  
   const response = await auctionUpload(
     req.email, 
     parseInt(req.body.id), 
     parseInt(req.body.deposit), 
     parseInt(req.body.step),
     JSON.parse(req.body.bidders),
-    JSON.parse(req.body.reg)
+    JSON.parse(req.body.reg),
+    parseInt(req.body.venue_id)
   );
   res.status(200).send(response);
 };

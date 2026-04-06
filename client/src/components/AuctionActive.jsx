@@ -3,9 +3,9 @@ import Customer from './Customer'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useState, useEffect, useEffectEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic, setTablePreview, setHostPreview }) => {
-
+const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidders, pic, setTablePreview, setHostPreview }) => {
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [modal, setModal] = useState(null);
@@ -14,6 +14,7 @@ const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic, se
   const [hover, setHover] = useState(false);
   const [status, setStatus] = useState('idle');
   const getRandomKey = () => crypto.randomUUID();
+  const navigate = useNavigate();
 
   const resetStatus = useEffectEvent(()=>{setStatus('idle')});
 
@@ -119,7 +120,11 @@ const AuctionActive = ({ id, venue_email, venue, deposit, step, bidders, pic, se
         onMouseLeave={()=>{setHover(false)}}>        
         {
           auth.roles[0] === 'customer' &&
-          <div className={`${styles.venue_name} ${hover ? styles.highlight : null}`}>{venue}</div>
+          <div 
+            className={`${styles.venue_name} ${hover ? styles.highlight : null}`}
+            onClick={()=>{navigate(`/dashboard/venue${venue_id}`)}}
+          >{venue}
+          </div>
         }
         <div className={`${styles.table}`}>
           <div 
