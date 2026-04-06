@@ -112,13 +112,13 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
     <>
     <div className={`${styles.monitor}`}>
         { tablePreview !== null &&
-          <div className={`${styles.table_preview}`}>
+          <div className={`${styles.table_preview} ${auth.roles[0] === 'customer' ? styles.alt : null}`}>
             <img src={tablePreview} alt='' />
             <button onClick={()=>{setTablePreview(null)}}>Close</button>
           </div>
         }
         { hostPreview !== null &&
-          <div className={`${styles.host_preview}`}>
+          <div className={`${styles.host_preview} ${auth.roles[0] === 'customer' ? styles.alt : null}`}>
             <img src={hostPreview} alt='' />
             <div className={`${styles.btns}`}>
               <button onClick={()=>{setHostPreview(null)}}>Close<br />Preview</button>

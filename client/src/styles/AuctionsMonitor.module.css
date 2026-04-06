@@ -144,6 +144,18 @@
   will-change: transform, opacity;
 }
 
+.alt img {
+  height: auto;
+  max-height: 90%;
+  width: 100%;
+  max-width: fit-content;
+  margin-bottom: 10px;
+}
+
+.alt button {
+  position: relative;
+}
+
 .btns {
   position: absolute;
   bottom: 0%;
