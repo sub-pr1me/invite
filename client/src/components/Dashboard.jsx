@@ -7,6 +7,7 @@ import Profile from './Profile'
 import Auctions from './Auctions'
 import Cashier from './Cashier'
 import Explore from './Explore'
+import HomeScreen from './HomeScreen'
 import useAuth from '../hooks/useAuth'
 
 const Dashboard = () => {
@@ -16,7 +17,8 @@ const Dashboard = () => {
     <>
     <Routes>
       <Route path='/' element={<LayoutDashboard />}>
-          <Route index element={<Home setAuctions={setAuctions}/>} />
+          <Route index element={<Home setAuctions={setAuctions}/>}/>
+          <Route path=':userId' element={<HomeScreen />} />
           <Route path='/explore' element={<Explore setActive={setActive}/>} />
           <Route path='/clients' element={<Clients setActive={setActive}/>} />
           <Route path='/profile' element={<Profile setActive={setActive}/>} />

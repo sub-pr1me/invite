@@ -19,7 +19,7 @@ const Customer = ({ content, modal, award, setHostPreview }) => {
         className={`${styles.slot_text}`}
         onMouseEnter={()=>{setText('See Options')}}
         onMouseLeave={()=>{setText('')}}
-        onClick={()=> {if (content.avatar) {setHostPreview(content.avatar)}}}
+        onClick={()=> {if (content.avatar) {setHostPreview({avatar: content.avatar, id: content.id})}}}
         >{text}
       </div>
       }

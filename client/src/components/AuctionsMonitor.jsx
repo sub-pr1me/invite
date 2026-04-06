@@ -3,12 +3,14 @@ import AuctionActive from './AuctionActive'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useEffect, useEffectEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
   tablePreview, setTablePreview, hostPreview, setHostPreview}) => {
 
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
+  const navigate = useNavigate();
 
   const AuctionsUpdate = useEffectEvent(async () => {
     try {
@@ -119,10 +121,10 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
         }
         { hostPreview !== null &&
           <div className={`${styles.host_preview} ${auth.roles[0] === 'customer' ? styles.alt : null}`}>
-            <img src={hostPreview} alt='' />
+            <img src={hostPreview.avatar} alt='' />
             <div className={`${styles.btns}`}>
               <button onClick={()=>{setHostPreview(null)}}>Close<br />Preview</button>
-              <button onClick={()=>{console.log('Profile')}}>See<br />Profile</button>
+              <button onClick={()=>{navigate(`/dashboard/${hostPreview.id}`);}}>See<br />Profile</button>
               <button onClick={()=>{console.log('Accept')}}>Accept<br />Invitation</button>
             </div>
           </div>
