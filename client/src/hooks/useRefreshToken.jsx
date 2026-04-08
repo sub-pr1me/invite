@@ -20,6 +20,7 @@ const useRefreshToken = () => {
             avatar: response?.data?.avatar,
             album: response?.data?.album,
             stage: response?.data?.stage,
+            likes: response?.data?.likes,
             rating: response?.data?.rating,
             hours: response?.data?.hours,
             tables: response?.data?.tables,

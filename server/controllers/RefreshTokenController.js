@@ -39,12 +39,10 @@ export default async function handleRefreshToken(req, res) {
     avatar = matchedVenue.avatar;
     album = matchedVenue.album;
     stage = matchedVenue.stage;
+    likes = matchedVenue.likes;
     rating = matchedVenue.rating;
     hours = matchedVenue.hours;
     credits = matchedVenue.credits;
-
-    console.log('REFRESH ARR');
-
     tables = matchedVenue.tables[0];
   };
 
@@ -79,7 +77,7 @@ export default async function handleRefreshToken(req, res) {
       );
       // console.log('NEW TOKEN - ', accessToken);
       if (matchedVenue) res.json({ 
-        accessToken, roles, id, email, name, avatar, album, stage, rating, hours, tables, credits
+        accessToken, roles, id, email, name, avatar, album, stage, likes, rating, hours, tables, credits
       });
       if (matchedCustomer) res.json({ 
         accessToken, roles, id, email, name, avatar, album, stage, likes, age, gender, interest, credits

@@ -22,3 +22,21 @@
   color: rgb(248, 172, 255);
   overflow: hidden;
 }
+
+.avatar img {
+  max-height: 120px;
+  border-radius: 50%;
+}
+
+.album {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.album img {
+  max-height: 100px;
+  border-radius: 10px;
+}

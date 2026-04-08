@@ -11,7 +11,7 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
   
   async function Upload(formData) {
     try {
-      const response = await axiosPrivate.post('/auction_upload',
+      await axiosPrivate.post('/auction_upload',
         {
           id: customize,
           deposit: formData.get('deposit'),
@@ -25,7 +25,6 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
           withCredentials: true
         }
       );
-      console.log(response.data);
       setAuth({
         ...auth, tables: auth.tables.map(
           table => {

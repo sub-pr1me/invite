@@ -83,7 +83,7 @@ const Log_In = () => {
       const credits = parseInt(response?.data?.credits);
 
       if (accType === 'venue') setAuth({ 
-        token: accessToken, id, roles: [accType], email, name, stage, avatar, album, rating, hours, tables, credits
+        token: accessToken, id, roles: [accType], email, name, stage, avatar, album, likes, rating, hours, tables, credits
       });
 
       if (accType === 'customer') setAuth({ 

@@ -49,6 +49,7 @@ export default async function LogInController(req, res) {
   if (matchedVenues) {
     id = dbData.id;
     name = dbData.venue;
+    likes = dbData.likes;
     rating = dbData.rating;
     hours = dbData.hours;
     tables = dbData.tables[0];
@@ -80,12 +81,10 @@ export default async function LogInController(req, res) {
     // SAVE JWT WITH USER IN DB
     addRefreshToken(accType, email, refreshToken);
 
-    console.log('LOGIN ID:',id);
-
     // SEND TOKEN TO USER
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
     if (accType === 'venue') res.json({ 
-      accessToken, accType, id, name, stage, avatar, album, rating, hours, tables, credits
+      accessToken, accType, id, name, stage, avatar, album, likes, rating, hours, tables, credits
     });
     if (accType === 'customer') res.json({ 
       accessToken, accType, id, name, stage, avatar, album, likes, age, gender, interest, credits

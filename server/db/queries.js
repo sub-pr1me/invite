@@ -1,4 +1,3 @@
-import TypeOverrides from "pg/lib/type-overrides";
 import pool from "./pool.js";
 
 export async function getAllVenueData() {
@@ -59,7 +58,7 @@ export async function getUserData(email, acc_type) {
     console.log('getUserData');
   if (acc_type === 'venue') {
     const { rows } = await pool.query(`
-      SELECT ${acc_type}, id, password, stage, avatar, album, rating, hours, tables, credits
+      SELECT ${acc_type}, id, password, stage, avatar, album, rating, hours, tables, likes, credits
       FROM ${acc_type}s 
       WHERE email LIKE '${email}'`);
     return rows[0];
@@ -334,4 +333,22 @@ export async function AddTable(email, id, active, venue_id) {
     LIKE '${email}'`
   );
   return updated;
+};
+
+export async function FetchProfileData(role, id) {
+    console.log('FetchProfileData');
+  if (role === 'venue') {
+    const { rows } = await pool.query(`
+      SELECT venue, avatar, album, hours, tables, likes, credits
+      FROM venues 
+      WHERE id = ${parseInt(id)}`
+    );
+    return rows[0];
+  };
+  const { rows } = await pool.query(`
+    SELECT customer, avatar, album, dob, gender, interest, likes, credits, dates 
+    FROM customers 
+    WHERE id = ${parseInt(id)}`
+  );
+    return rows[0];
 };

@@ -14,6 +14,7 @@ import AuctionUploadRouter from './routes/AuctionUploadRouter.js'
 import BalanceUpdateRouter from './routes/BalanceUpdateRouter.js'
 import BiddersUpdateRouter from './routes/BiddersUpdateRouter.js'
 import TransformTableRouter from './routes/TransformTableRouter.js'
+import FetchProfileDataRouter from './routes/FetchProfileDataRouter.js'
 import { FetchAuctions } from './db/queries.js'
 import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
@@ -69,6 +70,7 @@ app.post('/auctions_update', async (req, res) => {
 app.use('/balance_update', BalanceUpdateRouter);
 app.use('/bidders_update', BiddersUpdateRouter);
 app.use('/transform_table', TransformTableRouter);
+app.use('/fetch_profile_data', FetchProfileDataRouter);
 
 server.listen(PORT, HOST, (error) => {  
   if (error) {console.error(error)}

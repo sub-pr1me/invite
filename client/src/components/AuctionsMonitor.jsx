@@ -20,7 +20,6 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           withCredentials: true
         }
       );
-      console.log(response.data);
       const arr = response.data.filter(item => item.venue_email === auth.email);
 
       // console.log(arr[0].bidders);
