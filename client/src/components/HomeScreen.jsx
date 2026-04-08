@@ -3,6 +3,7 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import useAuth from '../hooks/useAuth'
 import { useParams } from 'react-router-dom'
 import { useState, useEffect, useEffectEvent } from 'react';
+import Thumb from './Thumb';
 
 const HomeScreen = () => {
   const [profileData, setProfileData] = useState(null);
@@ -12,9 +13,13 @@ const HomeScreen = () => {
 
   let role;
   let id;
+  let showLikes = false;
   if (userId) {role = userId[0] === 'c' ? 'customer' : 'venue'};
   if (role === 'customer') {id = userId?.substring(8)} else {id = userId?.substring(5)};
-
+  if (!role && auth.roles[0] === 'venue') showLikes = true;
+  if (role && role === 'venue') showLikes = true;
+  
+  
   function getAge(dob) {
     const date = new Date(dob);
     const currentDate = new Date();
@@ -46,44 +51,83 @@ const HomeScreen = () => {
         response.data.age = getAge(response.data.dob)
         delete response.data.customer;
       };
-      console.log(response.data);
       setProfileData(response.data);
     } catch (err) {
       console.log(err);
     };
   });
 
-useEffect(()=>{
-  if (userId && !profileData) FetchProfileData(role, id);
-},[userId, profileData, role, id]);
+  useEffect(()=>{
+    if (userId && !profileData) FetchProfileData(role, id);
+  },[userId, profileData, role, id]);
 
   return (
     <>
       <div className={`${styles.homescreen_container}`}>
-        {role && <div><img src={profileData?.avatar} alt='' /></div>}
-        {role && <div>Name: {profileData?.name}</div>}
-        {role === 'customer' && <div>Age: {profileData ? getAge(profileData.dob) : null}</div>}
-        {role && <div>Balance: {profileData?.credits}</div>}
-        {role && <div>Photos: {profileData?.album}</div>}
-        {role && <div>Likes: {profileData?.likes}</div>}
-        {role && <div>Dates: {profileData?.dates}</div>}
+        <div className={`${styles.edge_fader}`}></div>
+        <div className={`${styles.top}`}>
+          <div className={`${styles.avatar}`}>
+            <img src={auth && !role ? auth.avatar : profileData?.avatar} alt='' />
+          </div>
+          <div className={`${styles.name}`}>{auth && !role ? auth.name : profileData?.name}</div>
+          <div className={`${styles.hours}`}>{auth && !role ? auth.hours : profileData?.hours}</div>
+        </div>      
+      
+        <div className={`${styles.carousel}`}>
+          <div className={`${styles.album}`}>
+              {!role ?
+                auth?.album?.map(item => {
+                return (
+                <Thumb
+                  key={auth?.album?.indexOf(item)}
+                  cloudName={item.split('/')[3]}
+                  publicId={item.split('/')[7].split('.')[0]}
+                  alt={''}
+                />
+                )})
+                :
+                profileData?.album?.map(item => {
+                return (
+                <Thumb
+                  key={profileData?.album.indexOf(item)}
+                  cloudName={item.split('/')[3]}
+                  publicId={item.split('/')[7].split('.')[0]}
+                  alt={''}
+                />
+                )})
+              }           
+          </div>
+          <div className={`${styles.album}`} aria-hidden>
+              {!role ?
+                auth?.album?.map(item => {
+                return (
+                <Thumb
+                  key={auth?.album?.indexOf(item)}
+                  cloudName={item.split('/')[3]}
+                  publicId={item.split('/')[7].split('.')[0]}
+                  alt={''}
+                />
+                )})
+                :
+                profileData?.album?.map(item => {
+                return (
+                <Thumb
+                  key={profileData?.album.indexOf(item)}
+                  cloudName={item.split('/')[3]}
+                  publicId={item.split('/')[7].split('.')[0]}
+                  alt={''}
+                />
+                )})
+              }           
+          </div>
+        </div>
 
-        {!role && <div className={`${styles.avatar}`}><img src={auth.avatar} alt='' /></div>}
-        {!role && <div className={`${styles.name}`}>{auth.name}</div>}
-        {!role && <div className={`${styles.hours}`}>{auth.hours}</div>}
-        <br />
-        {!role && 
-          <div className={`${styles.album}`}>
-            Photos:
-            <div>{auth.album.map(item => {return (<img key={`${auth.name}${auth.album.indexOf(item)}`} src={item} alt='' />)})}</div>            
-          </div>}
-          <br />
-        {/* {!role && 
-          <div className={`${styles.album}`}>
-            Tables:
-            <div>{auth.tables.map(item => {return (<img key={item.id} src={item.pic ? item.pic : null} alt='' />)})}</div>            
-          </div>} */}
-        {!role && <div className={`${styles.likes}`}>People who like this place:{auth.likes}</div>}
+        {showLikes &&
+          <div className={`${styles.likes}`}>
+            <div>People who like this place:</div>
+            <div>{auth?.likes ? auth.likes : profileData?.likes}</div>
+          </div>
+        }
       </div>
     </>
   );
