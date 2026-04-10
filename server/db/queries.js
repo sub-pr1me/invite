@@ -197,7 +197,6 @@ export async function tableInfoUpdate(email, id, link) {
 
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${email}'`);
   const tables = rows[0].tables[0];
-  console.log(tables[3]);
   const pic = tables.filter(item => item.id === parseInt(id))[0].pic;
   const updated = tables.map(item => {if (item.id === parseInt(id))
     {return {...item, pic: link}} else {return item}});
@@ -351,4 +350,48 @@ export async function FetchProfileData(role, id) {
     WHERE id = ${parseInt(id)}`
   );
     return rows[0];
+};
+
+export async function SwitchLike(email, role, id) {
+    console.log('SwitchLike');
+  if (role === 'venue') {
+    const { rows } = await pool.query(`SELECT likes FROM venues WHERE id = ${parseInt(id)}`);
+    const arr = rows[0].likes;
+    console.log('CURRENT LIKES:', arr);
+    if (!arr[0]) {
+      const updated = [];
+      await pool.query(`UPDATE venues SET likes = '{${email}}' WHERE id = '${parseInt(id)}'`);
+      updated.push(email);
+      return updated;
+    };
+    if (arr.includes(email)) {
+      const updated = [];
+      for (const item of arr) if (item !== email) updated.push(item);
+      await pool.query(`UPDATE venues SET likes = '{${updated.toString()}}' WHERE id = '${parseInt(id)}'`);
+      return updated;
+    };
+    if (!arr.includes(email)) {
+      arr.push(email);
+      await pool.query(`UPDATE venues SET likes = '{${arr.toString()}}' WHERE id = '${parseInt(id)}'`);
+      return arr;
+    };
+  };
+};
+
+export async function FetchAvatar(email, role) {
+    console.log('FetchAvatar');
+    console.log(email);
+    console.log(role);
+  if (role === 'venue') {
+    const { rows } = await pool.query(`
+      SELECT avatar, id FROM venues 
+      WHERE email LIKE '${email}'`
+    );
+    return rows[0];
+  };
+  const { rows } = await pool.query(`
+    SELECT avatar, id FROM customers 
+    WHERE email LIKE '${email}'`
+  );
+  return rows[0];
 };

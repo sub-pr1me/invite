@@ -15,6 +15,8 @@ import BalanceUpdateRouter from './routes/BalanceUpdateRouter.js'
 import BiddersUpdateRouter from './routes/BiddersUpdateRouter.js'
 import TransformTableRouter from './routes/TransformTableRouter.js'
 import FetchProfileDataRouter from './routes/FetchProfileDataRouter.js'
+import SwitchLikeRouter from './routes/SwitchLikeRouter.js'
+import FetchAvatarRouter from './routes/FetchAvatarRouter.js'
 import { FetchAuctions } from './db/queries.js'
 import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
@@ -71,6 +73,8 @@ app.use('/balance_update', BalanceUpdateRouter);
 app.use('/bidders_update', BiddersUpdateRouter);
 app.use('/transform_table', TransformTableRouter);
 app.use('/fetch_profile_data', FetchProfileDataRouter);
+app.use('/switch_like', SwitchLikeRouter);
+app.use('/fetch_avatar', FetchAvatarRouter);
 
 server.listen(PORT, HOST, (error) => {  
   if (error) {console.error(error)}

@@ -130,8 +130,6 @@ const AlbumUpload = () => {
     }    
   },[files, status]);
 
-  const getRandomKey = () => crypto.randomUUID();
-
   return (
     <>
     {status === 'idle'
@@ -188,7 +186,7 @@ const AlbumUpload = () => {
               </div>          
             </div>          
             <ul>{previewSrc?.map((item) => (
-              <div key={getRandomKey()}
+              <div key={domKey()}
                    className={`${styles.item} ${mainPreview === item ? styles.focused : null}`}>
                   <img src={item[1]} alt='IMG' onClick={() => setMainPreview(item)}/>
               </div>
