@@ -13,12 +13,13 @@ import useAuth from '../hooks/useAuth'
 const Dashboard = () => {
   const { setActive } = useAuth();
     const [auctions, setAuctions] = useState(null);
+    const [visit, setVisit] = useState(null);
   return (
     <>
     <Routes>
       <Route path='/' element={<LayoutDashboard />}>
           <Route index element={<Home setAuctions={setAuctions}/>}/>
-          <Route path=':userId' element={<HomeScreen />} />
+          <Route path=':userId' element={<HomeScreen key={visit} setVisit={setVisit}/>} />
           <Route path='/explore' element={<Explore setActive={setActive}/>} />
           <Route path='/clients' element={<Clients setActive={setActive}/>} />
           <Route path='/profile' element={<Profile setActive={setActive}/>} />

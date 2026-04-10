@@ -1,14 +1,12 @@
 import styles from '../styles/Person.module.css'
 import { useEffect, useEffectEvent, useState } from 'react'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import { useNavigate } from 'react-router-dom'
 
-const Person = ({ email, role }) => {
+const Person = ({ email, role, VisitProfile }) => {
 
   const axiosPrivate = useAxiosPrivate();
   const [pic, setPic] = useState(null);
   const [id, setId] = useState(null);
-  const navigate = useNavigate();
   
   const FetchProfilePic = useEffectEvent(async (email) => {
     try {
@@ -20,7 +18,7 @@ const Person = ({ email, role }) => {
         }
       );
       setPic(response.data.avatar);
-      setId(response.data.id);
+      setId(`customer${response.data.id}`);
     } catch (err) {
       console.log(err);
     };
@@ -33,7 +31,8 @@ const Person = ({ email, role }) => {
   return (
     <>
       <div 
-        className={`${styles.person_container}`}>
+        className={`${styles.person_container}`}
+        onClick={()=>{VisitProfile(id)}}>
         <img src={pic} alt='' />
       </div>    
     </>

@@ -1,13 +1,13 @@
 import styles from '../styles/HomeScreen.module.css'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import useAuth from '../hooks/useAuth'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useState, useEffect, useEffectEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Thumb from './Thumb'
 import Person from './Person'
 
-const HomeScreen = () => {
+const HomeScreen = ({ setVisit }) => {
   const [profileData, setProfileData] = useState(null);
   const [liked, setLiked] = useState(false);
   const { auth } = useAuth();
@@ -80,6 +80,11 @@ const HomeScreen = () => {
     };
   };
 
+  const VisitProfile = (id) => {
+    if (role) setVisit(`${getRandomKey()}-${id}`);
+    navigate(`/dashboard/${id}`);
+  };
+
   useEffect(()=>{
     if (userId && !profileData) FetchProfileData(role, id);
     if (auth.roles[0] === 'venue' && !role && auth.likes[0]) likeIsOn(true);
@@ -94,14 +99,13 @@ const HomeScreen = () => {
           <div className={`${styles.avatar}`}>
             <img src={auth && !role ? auth.avatar : profileData?.avatar} alt='' />
           </div>
-          {role &&
+          {role && role !== 'customer' &&
             <div 
               className={`${styles.favourite} ${role === 'venue' && profileData?.likes.includes(auth.email) ? styles.liked : null}`}
               onClick={()=>{switchLike(auth.email)}}>
               <img src='../../public//img/star.png' alt='' />
             </div>
           }
-          <button onClick={()=> {navigate('/dashboard/customer2')}}>Click</button>
           <div className={`${styles.name}`}>{auth && !role ? auth.name : profileData?.name}</div>
           <div className={`${styles.hours}`}>{auth && !role ? auth.hours : profileData?.hours}</div>
         </div>
@@ -160,16 +164,12 @@ const HomeScreen = () => {
               {auth?.likes
               ? auth.likes.map(item => {
                   return (
-                    <Link to={`/dashboard/customer2`} key={getRandomKey()}>
-                      <Person email={item} role='customer'/>
-                    </Link>
+                    <Person email={item} role='customer' key={getRandomKey()} VisitProfile={VisitProfile}/>
                   );
                 })
               : profileData?.likes.map(item => {
                   return (
-                    <Link to={`/dashboard/customer2`} key={getRandomKey()}>
-                      <Person  email={item} role='customer'/>
-                    </Link>
+                    <Person  email={item} role='customer' key={getRandomKey()} VisitProfile={VisitProfile}/>
                   );
                 })
               }
@@ -183,16 +183,12 @@ const HomeScreen = () => {
               {auth?.likes
               ? auth.likes.map(item => {
                   return (
-                    <Link to={`/dashboard/customer2`} key={getRandomKey()}>
-                      <Person email={item} role='customer'/>
-                    </Link>
+                    <Person email={item} role='customer' key={getRandomKey()} VisitProfile={VisitProfile}/>
                   );
                 })
               : profileData?.likes.map(item => {
                   return (
-                    <Link to={`/dashboard/customer2`} key={getRandomKey()}>
-                      <Person email={item} role='customer'/>
-                    </Link>
+                    <Person email={item} role='customer' key={getRandomKey()} VisitProfile={VisitProfile}/>
                   );
                 })
               }
