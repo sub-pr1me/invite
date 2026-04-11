@@ -2,7 +2,7 @@ import styles from '../styles/Person.module.css'
 import { useEffect, useEffectEvent, useState } from 'react'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
-const Person = ({ email, role, VisitProfile }) => {
+const Person = ({ email, role, VisitProfile, setProfileData }) => {
 
   const axiosPrivate = useAxiosPrivate();
   const [pic, setPic] = useState(null);
@@ -32,7 +32,10 @@ const Person = ({ email, role, VisitProfile }) => {
     <>
       <div 
         className={`${styles.person_container}`}
-        onClick={()=>{VisitProfile(id)}}>
+        onClick={()=>{
+          setProfileData(null);
+          VisitProfile(id);
+        }}>
         <img src={pic} alt='' />
       </div>    
     </>

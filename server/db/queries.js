@@ -354,34 +354,30 @@ export async function FetchProfileData(role, id) {
 
 export async function SwitchLike(email, role, id) {
     console.log('SwitchLike');
-  if (role === 'venue') {
-    const { rows } = await pool.query(`SELECT likes FROM venues WHERE id = ${parseInt(id)}`);
-    const arr = rows[0].likes;
-    console.log('CURRENT LIKES:', arr);
-    if (!arr[0]) {
-      const updated = [];
-      await pool.query(`UPDATE venues SET likes = '{${email}}' WHERE id = '${parseInt(id)}'`);
-      updated.push(email);
-      return updated;
-    };
-    if (arr.includes(email)) {
-      const updated = [];
-      for (const item of arr) if (item !== email) updated.push(item);
-      await pool.query(`UPDATE venues SET likes = '{${updated.toString()}}' WHERE id = '${parseInt(id)}'`);
-      return updated;
-    };
-    if (!arr.includes(email)) {
-      arr.push(email);
-      await pool.query(`UPDATE venues SET likes = '{${arr.toString()}}' WHERE id = '${parseInt(id)}'`);
-      return arr;
-    };
+  const { rows } = await pool.query(`SELECT likes FROM ${role}s WHERE id = ${parseInt(id)}`);
+  const arr = rows[0].likes;
+  console.log('CURRENT LIKES:', arr);
+  if (!arr || !arr[0]) {
+    const updated = [];
+    await pool.query(`UPDATE ${role}s SET likes = '{${email}}' WHERE id = '${parseInt(id)}'`);
+    updated.push(email);
+    return updated;
+  };
+  if (arr.includes(email)) {
+    const updated = [];
+    for (const item of arr) if (item !== email) updated.push(item);
+    await pool.query(`UPDATE ${role}s SET likes = '{${updated.toString()}}' WHERE id = '${parseInt(id)}'`);
+    return updated;
+  };
+  if (!arr.includes(email)) {
+    arr.push(email);
+    await pool.query(`UPDATE ${role}s SET likes = '{${arr.toString()}}' WHERE id = '${parseInt(id)}'`);
+    return arr;
   };
 };
 
 export async function FetchAvatar(email, role) {
     console.log('FetchAvatar');
-    console.log(email);
-    console.log(role);
   if (role === 'venue') {
     const { rows } = await pool.query(`
       SELECT avatar, id FROM venues 

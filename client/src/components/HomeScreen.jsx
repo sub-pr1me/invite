@@ -22,7 +22,7 @@ const HomeScreen = ({ setVisit }) => {
   if (userId) {role = userId[0] === 'c' ? 'customer' : 'venue'};
   if (role === 'customer') {id = userId?.substring(8)} else {id = userId?.substring(5)};
   if (!role && auth.roles[0] === 'venue' && auth.likes) showLikes = true;
-  if (role && role === 'venue' && profileData?.likes) showLikes = true;
+  if (role && profileData?.likes) showLikes = true;
   
   
   function getAge(dob) {
@@ -65,7 +65,7 @@ const HomeScreen = ({ setVisit }) => {
   const likeIsOn = useEffectEvent((arg)=>{setLiked(arg)});
 
   const switchLike = async (email) => {
-    try {
+    try {      
       const response = await axiosPrivate.post('/switch_like',
         {email: email, role: role, id: id},
         {
@@ -73,8 +73,13 @@ const HomeScreen = ({ setVisit }) => {
           withCredentials: true
         }
       );
-      if (profileData && response.data[0]) {setProfileData({...profileData, likes: response.data})};
+
+      if (profileData) {
+        setProfileData({...profileData, likes: response.data});
+      };
+      
       setLiked(!liked);
+
     } catch (err) {
       console.log(err);
     };
@@ -87,9 +92,11 @@ const HomeScreen = ({ setVisit }) => {
 
   useEffect(()=>{
     if (userId && !profileData) FetchProfileData(role, id);
+
     if (auth.roles[0] === 'venue' && !role && auth.likes[0]) likeIsOn(true);
     if (auth.roles[0] === 'venue' && !role && !auth.likes[0]) likeIsOn(false);
-  },[userId, profileData, role, id, auth.roles, auth.likes, liked]);
+
+  },[userId, profileData, role, id, auth.roles, auth.likes, liked, auth.email]);
 
   return (
     <>
@@ -99,11 +106,14 @@ const HomeScreen = ({ setVisit }) => {
           <div className={`${styles.avatar}`}>
             <img src={auth && !role ? auth.avatar : profileData?.avatar} alt='' />
           </div>
-          {role && role !== 'customer' &&
+          {role && auth.roles[0] !== 'venue' &&
             <div 
-              className={`${styles.favourite} ${role === 'venue' && profileData?.likes.includes(auth.email) ? styles.liked : null}`}
+              className={`
+                ${styles.favourite} 
+                ${profileData?.likes?.includes(auth.email) ? styles.liked : null}
+              `}
               onClick={()=>{switchLike(auth.email)}}>
-              <img src='../../public//img/star.png' alt='' />
+              <img src={role === 'customer' ? '../../img/heart.png' : '../../img/star.png'} alt='' />
             </div>
           }
           <div className={`${styles.name}`}>{auth && !role ? auth.name : profileData?.name}</div>
@@ -159,36 +169,60 @@ const HomeScreen = ({ setVisit }) => {
         </div>
         {showLikes && auth.roles[0] === 'venue' && auth.likes[0] && !role &&
           <div className={`${styles.likes_container}`}>
-            <div className={`${styles.likes_title}`}>People who like this place:</div>
+            <div className={`${styles.likes_title}`}>
+              People who like this {role === 'customer' ? 'person' : 'place'}:
+            </div>
             <div className={`${styles.likes_content}`}>
               {auth?.likes
               ? auth.likes.map(item => {
                   return (
-                    <Person email={item} role='customer' key={getRandomKey()} VisitProfile={VisitProfile}/>
+                    <Person 
+                      email={item} 
+                      role='customer' 
+                      key={getRandomKey()} 
+                      VisitProfile={VisitProfile}
+                      setProfileData={setProfileData}/>
                   );
                 })
               : profileData?.likes.map(item => {
                   return (
-                    <Person  email={item} role='customer' key={getRandomKey()} VisitProfile={VisitProfile}/>
+                    <Person  
+                      email={item} 
+                      role='customer' 
+                      key={getRandomKey()} 
+                      VisitProfile={VisitProfile}
+                      setProfileData={setProfileData}/>
                   );
                 })
               }
             </div>
           </div>
         }
-        {showLikes && auth.roles[0] === 'customer' && profileData?.likes[0] && role === 'venue' &&
+        {showLikes && auth.roles[0] === 'customer' && profileData?.likes[0] &&
           <div className={`${styles.likes_container}`}>
-            <div className={`${styles.likes_title}`}>People who like this place:</div>
+            <div className={`${styles.likes_title}`}>
+              People who like this {role === 'customer' ? 'person' : 'place'}:
+            </div>
             <div className={`${styles.likes_content}`}>
               {auth?.likes
               ? auth.likes.map(item => {
                   return (
-                    <Person email={item} role='customer' key={getRandomKey()} VisitProfile={VisitProfile}/>
+                    <Person 
+                      email={item} 
+                      role='customer' 
+                      key={getRandomKey()} 
+                      VisitProfile={VisitProfile}
+                      setProfileData={setProfileData}/>
                   );
                 })
               : profileData?.likes.map(item => {
                   return (
-                    <Person email={item} role='customer' key={getRandomKey()} VisitProfile={VisitProfile}/>
+                    <Person 
+                      email={item} 
+                      role='customer' 
+                      key={getRandomKey()} 
+                      VisitProfile={VisitProfile}
+                      setProfileData={setProfileData}/>
                   );
                 })
               }
