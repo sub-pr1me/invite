@@ -249,11 +249,6 @@ export async function FetchAuctions() {
     for (let i=0; i<rows.length; i++) {
     if (rows[i].tables[0]) {
       const filtered = rows[i].tables[0].filter(item => item.auction.deposit);
-      // console.log('FETCH', filtered[0]?.auction);
-      // console.log('FETCH', filtered[1]?.auction);
-      // console.log('FETCH', filtered[2]?.auction);
-
-      // console.log('FILTEREDDDDDDDDDDD',filtered);
 
       filtered.map(item => {
         const arr = [];

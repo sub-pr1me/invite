@@ -24,6 +24,7 @@
   position: relative;
 }
 
+
 .top {
   height: 100vh;
 }
@@ -57,8 +58,6 @@
   z-index: 1;
   font-weight: 600;
   margin-top: 3%;
-  animation: appear 0.5s both, opacity 1s  both;
-  will-change: transform, opacity;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -73,11 +72,13 @@
 }
 
 .likes_content {
+  width: 100%;
+  min-height: 140px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10px;
-  gap: 10px;
+  gap: 20px;
 }
 
 .avatar {
@@ -89,6 +90,7 @@
   height: 100%;
   border-radius: 50%;
   box-shadow: 0 0 6pt 4pt rgb(225, 150, 255);
+
 }
 
 .name {
@@ -115,8 +117,7 @@
   margin: 2px 0px -5px;
   cursor: pointer;
   filter: saturate(0%);
-  animation: appear 0.6s both, opacity 1s  both;
-  will-change: transform, opacity;
+
 }
 
 .favourite img {  
@@ -132,8 +133,6 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  animation: appear 0.6s both, opacity 1s  both;
-  will-change: transform, opacity;
 }
 
 .album {
@@ -148,6 +147,25 @@
 .album img {
   width: 100%;
   filter: brightness(75%);
+}
+
+.btn_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 32px;
+}
+
+.btn_container button {
+  border: 1px solid rgb(255, 192, 255);
+  margin: 0px;
+  animation: appear 0.5s both, opacity 0.6s  both;
+  will-change: transform, opacity;
+}
+
+.btn_container button:hover {
+  box-shadow: 0 0 3pt 2pt rgb(225, 150, 255);
 }
 
 @keyframes spin {

@@ -1,8 +1,9 @@
 import styles from '../styles/Person.module.css'
 import { useEffect, useEffectEvent, useState } from 'react'
+import { Link } from 'react-router-dom';
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
-const Person = ({ email, role, VisitProfile, setProfileData }) => {
+const Person = ({ email, role, setProfileData }) => {
 
   const axiosPrivate = useAxiosPrivate();
   const [pic, setPic] = useState(null);
@@ -32,12 +33,11 @@ const Person = ({ email, role, VisitProfile, setProfileData }) => {
     <>
       <div 
         className={`${styles.person_container}`}
-        onClick={()=>{
-          setProfileData(null);
-          VisitProfile(id);
-        }}>
-        <img src={pic} alt='' />
-      </div>    
+        onClick={()=>{setTimeout(() => {setProfileData(null)}, 0)}}>
+        <Link to={`/dashboard/${id}`}>
+          <img src={pic} alt='' />
+        </Link>   
+      </div>
     </>
   );
 };

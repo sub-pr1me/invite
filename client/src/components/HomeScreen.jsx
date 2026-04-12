@@ -1,15 +1,16 @@
 import styles from '../styles/HomeScreen.module.css'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import useAuth from '../hooks/useAuth'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect, useEffectEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Thumb from './Thumb'
 import Person from './Person'
+import LikesLoading from './LikesLoading'
 
 const HomeScreen = ({ setVisit }) => {
   const [profileData, setProfileData] = useState(null);
   const [liked, setLiked] = useState(false);
+  const [status, setStatus] = useState('idle');
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { userId } = useParams();
@@ -19,11 +20,15 @@ const HomeScreen = ({ setVisit }) => {
   let role;
   let id;
   let showLikes = false;
+  let canLike = false;
+
   if (userId) {role = userId[0] === 'c' ? 'customer' : 'venue'};
   if (role === 'customer') {id = userId?.substring(8)} else {id = userId?.substring(5)};
   if (!role && auth.roles[0] === 'venue' && auth.likes) showLikes = true;
   if (role && profileData?.likes) showLikes = true;
-  
+
+  if (profileData?.interest && auth.gender === profileData?.interest) canLike = true;
+  if (role === 'venue') canLike = true;
   
   function getAge(dob) {
     const date = new Date(dob);
@@ -74,11 +79,9 @@ const HomeScreen = ({ setVisit }) => {
         }
       );
 
-      if (profileData) {
-        setProfileData({...profileData, likes: response.data});
-      };
-      
+      if (profileData) {setProfileData({...profileData, likes: response.data})};      
       setLiked(!liked);
+      setStatus('success');
 
     } catch (err) {
       console.log(err);
@@ -87,16 +90,23 @@ const HomeScreen = ({ setVisit }) => {
 
   const VisitProfile = (id) => {
     if (role) setVisit(`${getRandomKey()}-${id}`);
+    setProfileData(null);
     navigate(`/dashboard/${id}`);
   };
 
+  const ResetProfileData = () => {setProfileData(null)};
+  const ResetStatus = useEffectEvent(() => {setStatus('idle')});
+
   useEffect(()=>{
     if (userId && !profileData) FetchProfileData(role, id);
-
     if (auth.roles[0] === 'venue' && !role && auth.likes[0]) likeIsOn(true);
     if (auth.roles[0] === 'venue' && !role && !auth.likes[0]) likeIsOn(false);
+    if (status === 'success') ResetStatus();
 
-  },[userId, profileData, role, id, auth.roles, auth.likes, liked, auth.email]);
+    window.addEventListener("popstate", () => {ResetProfileData()});
+    console.log(profileData?.likes);
+
+  },[userId, profileData, role, id, auth.roles, auth.likes, liked, auth.email, status]);
 
   return (
     <>
@@ -106,13 +116,22 @@ const HomeScreen = ({ setVisit }) => {
           <div className={`${styles.avatar}`}>
             <img src={auth && !role ? auth.avatar : profileData?.avatar} alt='' />
           </div>
-          {role && auth.roles[0] !== 'venue' &&
+          {role 
+           && auth.roles[0] !== 'venue'
+           && canLike 
+           &&
             <div 
               className={`
                 ${styles.favourite} 
                 ${profileData?.likes?.includes(auth.email) ? styles.liked : null}
               `}
-              onClick={()=>{switchLike(auth.email)}}>
+              onClick={()=>{                
+                if (role === 'venue') {
+                  setStatus('pending');
+                  setTimeout(() => {switchLike(auth.email)}, 800);
+                } else {switchLike(auth.email)};
+              }}
+            >
               <img src={role === 'customer' ? '../../img/heart.png' : '../../img/star.png'} alt='' />
             </div>
           }
@@ -167,64 +186,83 @@ const HomeScreen = ({ setVisit }) => {
               }           
           </div>
         </div>
-        {showLikes && auth.roles[0] === 'venue' && auth.likes[0] && !role &&
+        {showLikes 
+         && auth.roles[0] === 'venue' 
+         && auth.likes[0] 
+         && !role         
+         &&
           <div className={`${styles.likes_container}`}>
             <div className={`${styles.likes_title}`}>
               People who like this {role === 'customer' ? 'person' : 'place'}:
             </div>
             <div className={`${styles.likes_content}`}>
-              {auth?.likes
-              ? auth.likes.map(item => {
-                  return (
-                    <Person 
-                      email={item} 
-                      role='customer' 
-                      key={getRandomKey()} 
-                      VisitProfile={VisitProfile}
-                      setProfileData={setProfileData}/>
-                  );
+              {status === 'pending'
+               &&
+               <LikesLoading />
+              }
+              {auth?.likes 
+               && auth?.likes[0] 
+               && status !== 'pending' 
+               &&
+                auth.likes.map(item => {
+                  if (auth.likes.indexOf(item) < 3) {
+                    return (
+                      <Person 
+                        email={item} 
+                        role='customer' 
+                        key={item} 
+                        VisitProfile={VisitProfile}
+                        setProfileData={setProfileData}
+                      />
+                    );
+                  };
                 })
-              : profileData?.likes.map(item => {
-                  return (
-                    <Person  
-                      email={item} 
-                      role='customer' 
-                      key={getRandomKey()} 
-                      VisitProfile={VisitProfile}
-                      setProfileData={setProfileData}/>
-                  );
-                })
+              }
+            </div>
+            <div className={`${styles.btn_container}`}>
+              {auth?.likes?.length > 3 
+               && status !== 'pending' 
+               &&
+               <button>See Full List</button>
               }
             </div>
           </div>
         }
-        {showLikes && auth.roles[0] === 'customer' && profileData?.likes[0] &&
+        {showLikes
+         && auth.roles[0] === 'customer' 
+         && profileData?.likes[0] 
+         && role !== 'customer'         
+         &&
           <div className={`${styles.likes_container}`}>
             <div className={`${styles.likes_title}`}>
               People who like this {role === 'customer' ? 'person' : 'place'}:
             </div>
             <div className={`${styles.likes_content}`}>
-              {auth?.likes
-              ? auth.likes.map(item => {
-                  return (
-                    <Person 
-                      email={item} 
-                      role='customer' 
-                      key={getRandomKey()} 
-                      VisitProfile={VisitProfile}
-                      setProfileData={setProfileData}/>
-                  );
+              {status === 'pending'
+               &&
+               <LikesLoading />
+              }
+              {status !== 'pending' &&
+                profileData?.likes.map(item => {
+                  if (profileData?.likes?.indexOf(item) < 3) {
+                    return (
+                      <Person 
+                        email={item} 
+                        role='customer' 
+                        key={getRandomKey()} 
+                        VisitProfile={VisitProfile}
+                        setProfileData={setProfileData}
+                      />
+                    );
+                  };
                 })
-              : profileData?.likes.map(item => {
-                  return (
-                    <Person 
-                      email={item} 
-                      role='customer' 
-                      key={getRandomKey()} 
-                      VisitProfile={VisitProfile}
-                      setProfileData={setProfileData}/>
-                  );
-                })
+              }
+            </div>
+            <div className={`${styles.btn_container}`}>
+              {profileData?.likes?.length > 3 
+               && status !== 'pending' 
+               &&
+               <button>See Full List</button>
               }
             </div>
           </div>
