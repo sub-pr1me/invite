@@ -38,7 +38,7 @@
 
 .modal {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   left: -4px;
   height: 100%;
   width: calc(99% + 10px);
@@ -130,7 +130,7 @@
   white-space: nowrap;
   cursor: pointer;
   overflow: hidden;
-  z-index: 2;
+  z-index: 3;
 }
 
 .highlight {

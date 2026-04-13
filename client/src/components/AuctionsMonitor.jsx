@@ -21,15 +21,10 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
         }
       );
       const arr = response.data.filter(item => item.venue_email === auth.email);
-
-      // console.log(arr[0].bidders);
-      // console.log(arr[1].bidders);
-      // console.log(arr[2].bidders);
       
       if (auth.roles[0] === 'venue') for (let i=0; i<arr.length; i++) {
         for (const table of auth.tables) {
           if (arr[i].id === table.id && arr[i].bidders[0].toString() !== table.auction.bidders[0].toString()) {
-            console.log(`UPDATING TABLE ${table.id}`);
             setAuth({...auth, tables: auth.tables.map(table => {
               if (table.id) {
                 return {...table, auction: {...table.auction, bidders: arr[i].bidders}};
@@ -38,9 +33,6 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           };
         }
       };
-      // console.log('Auth', auth.tables[0].auction.bidders);
-      // console.log('Auth', auth.tables[1].auction.bidders);
-      // console.log('Auth', auth.tables[2].auction.bidders);
     } catch (err) {
       if (!err?.response) {
         console.log('NO SERVER RESPONSE');
@@ -103,11 +95,6 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
   useEffect(() => {
     AuctionsUpdate();
     BroadcastAuctions();
-    // if (auth.roles[0] === 'venue') {
-    //   console.log('Auth', auth.tables[0].auction.bidders);
-    //   console.log('Auth', auth.tables[1].auction.bidders);
-    //   console.log('Auth', auth.tables[2].auction.bidders);
-    // }
   },[]);
 
   return (
@@ -125,7 +112,12 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
             <div className={`${styles.btns}`}>
               <button onClick={()=>{setHostPreview(null)}}>Close<br />Preview</button>
               <button onClick={()=>{navigate(`/dashboard/${hostPreview.id}`)}}>See<br />Profile</button>
+              {auth.roles[0] !== 'venue'
+               && auth.gender === hostPreview.interest
+               && auth.likes.includes(hostPreview.email)
+               &&
               <button onClick={()=>{console.log('Accept')}}>Accept<br />Invitation</button>
+              }
             </div>
           </div>
         }

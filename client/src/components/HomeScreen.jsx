@@ -108,8 +108,8 @@ const HomeScreen = ({ setVisit }) => {
 
   useEffect(()=>{
     if (userId && !profileData) FetchProfileData(role, id);
-    if (auth.roles[0] === 'venue' && !role && auth.likes[0]) likeIsOn(true);
-    if (auth.roles[0] === 'venue' && !role && !auth.likes[0]) likeIsOn(false);
+    if (auth.roles[0] === 'venue' && !role && auth.likes && auth.likes[0]) likeIsOn(true);
+    if (auth.roles[0] === 'venue' && !role && auth.likes && !auth.likes[0]) likeIsOn(false);
     if (status === 'success') ResetStatus();
 
     window.addEventListener("popstate", () => {ResetProfileData()});
@@ -134,7 +134,7 @@ const HomeScreen = ({ setVisit }) => {
                 ${profileData?.likes?.includes(auth.email) ? styles.liked : null}
               `}
               onClick={()=>{                
-                if (role === 'venue') {
+                if (role === 'venue' && profileData?.likes.length > 3) {
                   setStatus('pending');
                   setTimeout(() => {switchLike(auth.email)}, 800);
                 } else {switchLike(auth.email)};

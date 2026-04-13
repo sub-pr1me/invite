@@ -60,6 +60,8 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
           name: auth.name,
           id: `${auth.roles[0]}${auth.id}`,
           avatar: auth.avatar,
+          interest: auth.interest,
+          email: auth.email,
           bid: bid
         })
     } else {
@@ -70,8 +72,6 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
     while (update.length > 3) update.pop();
 
     try {
-      console.log('bid:', bid);
-      console.log('difference:', difference);
       await axiosPrivate.post('/bidders_update',
         {bidders: JSON.stringify(update), venue_email: venue_email, table: id},
         {
