@@ -11,6 +11,7 @@ const HomeScreen = ({ setVisit }) => {
   const [profileData, setProfileData] = useState(null);
   const [liked, setLiked] = useState(false);
   const [status, setStatus] = useState('idle');
+  const [expanded, setExpanded] = useState(false);
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { userId } = useParams();
@@ -19,6 +20,7 @@ const HomeScreen = ({ setVisit }) => {
 
   let role;
   let id;
+  let age = null;
   let showLikes = false;
   let canLike = false;
 
@@ -29,6 +31,9 @@ const HomeScreen = ({ setVisit }) => {
 
   if (profileData?.interest && auth.gender === profileData?.interest) canLike = true;
   if (role === 'venue') canLike = true;
+
+  if (role === 'customer') age = getAge(profileData?.dob);
+  if (auth.roles[0] === 'customer' && !role) age = auth.age;
   
   function getAge(dob) {
     const date = new Date(dob);
@@ -40,7 +45,7 @@ const HomeScreen = ({ setVisit }) => {
         age--;
     };
     return age;
-  }
+  };
 
   const FetchProfileData = useEffectEvent(async (role, id) => {
     try {
@@ -91,10 +96,14 @@ const HomeScreen = ({ setVisit }) => {
   const VisitProfile = (id) => {
     if (role) setVisit(`${getRandomKey()}-${id}`);
     setProfileData(null);
+    setExpanded(false);
     navigate(`/dashboard/${id}`);
   };
 
-  const ResetProfileData = () => {setProfileData(null)};
+  const ResetProfileData = () => {
+    setProfileData(null);
+    setExpanded(false);
+  };
   const ResetStatus = useEffectEvent(() => {setStatus('idle')});
 
   useEffect(()=>{
@@ -104,7 +113,6 @@ const HomeScreen = ({ setVisit }) => {
     if (status === 'success') ResetStatus();
 
     window.addEventListener("popstate", () => {ResetProfileData()});
-    console.log(profileData?.likes);
 
   },[userId, profileData, role, id, auth.roles, auth.likes, liked, auth.email, status]);
 
@@ -135,7 +143,9 @@ const HomeScreen = ({ setVisit }) => {
               <img src={role === 'customer' ? '../../img/heart.png' : '../../img/star.png'} alt='' />
             </div>
           }
-          <div className={`${styles.name}`}>{auth && !role ? auth.name : profileData?.name}</div>
+          <div className={`${styles.name}`}>
+            {`${auth && !role ? auth.name : profileData?.name}${age? ' (' + age + ')': ''}`}
+          </div>
           <div className={`${styles.hours}`}>{auth && !role ? auth.hours : profileData?.hours}</div>
         </div>
         <div className={`${styles.carousel}`}>
@@ -191,11 +201,11 @@ const HomeScreen = ({ setVisit }) => {
          && auth.likes[0] 
          && !role         
          &&
-          <div className={`${styles.likes_container}`}>
+          <div className={`${styles.likes_container} ${expanded ? styles.expanded_container : null}`}>
             <div className={`${styles.likes_title}`}>
               People who like this {role === 'customer' ? 'person' : 'place'}:
             </div>
-            <div className={`${styles.likes_content}`}>
+            <div className={`${styles.likes_content} ${expanded ? styles.expanded_content : null}`}>
               {status === 'pending'
                &&
                <LikesLoading />
@@ -205,15 +215,28 @@ const HomeScreen = ({ setVisit }) => {
                && status !== 'pending' 
                &&
                 auth.likes.map(item => {
-                  if (auth.likes.indexOf(item) < 3) {
+                  if (!expanded) {
+                    if (auth.likes.indexOf(item) < 3) {
+                      return (
+                        <Person 
+                          email={item} 
+                          role='customer' 
+                          key={item} 
+                          VisitProfile={VisitProfile}
+                          setProfileData={setProfileData}
+                        />
+                      );
+                    };
+                  } else {
+                    if (auth.likes.length < 4) setExpanded(false);
                     return (
-                      <Person 
-                        email={item} 
-                        role='customer' 
-                        key={item} 
-                        VisitProfile={VisitProfile}
-                        setProfileData={setProfileData}
-                      />
+                        <Person 
+                          email={item} 
+                          role='customer' 
+                          key={item} 
+                          VisitProfile={VisitProfile}
+                          setProfileData={setProfileData}
+                        />
                     );
                   };
                 })
@@ -223,7 +246,7 @@ const HomeScreen = ({ setVisit }) => {
               {auth?.likes?.length > 3 
                && status !== 'pending' 
                &&
-               <button>See Full List</button>
+               <button onClick={()=>{setExpanded(!expanded)}}>{expanded ? 'Collapse' : 'See Full List'}</button>
               }
             </div>
           </div>
@@ -233,28 +256,40 @@ const HomeScreen = ({ setVisit }) => {
          && profileData?.likes[0] 
          && role !== 'customer'         
          &&
-          <div className={`${styles.likes_container}`}>
+          <div className={`${styles.likes_container} ${expanded ? styles.expanded_container : null}`}>
             <div className={`${styles.likes_title}`}>
               People who like this {role === 'customer' ? 'person' : 'place'}:
             </div>
-            <div className={`${styles.likes_content}`}>
+            <div className={`${styles.likes_content} ${expanded ? styles.expanded_content : null}`}>
               {status === 'pending'
                &&
                <LikesLoading />
               }
               {status !== 'pending' &&
                 profileData?.likes.map(item => {
-                  if (profileData?.likes?.indexOf(item) < 3) {
+                  if (!expanded) {  
+                    if (profileData?.likes?.indexOf(item) < 3) {
+                      return (
+                        <Person 
+                          email={item} 
+                          role='customer' 
+                          key={getRandomKey()} 
+                          VisitProfile={VisitProfile}
+                          setProfileData={setProfileData}
+                        />
+                      );
+                    };
+                  } else {
                     return (
-                      <Person 
-                        email={item} 
-                        role='customer' 
-                        key={getRandomKey()} 
-                        VisitProfile={VisitProfile}
-                        setProfileData={setProfileData}
-                      />
+                        <Person 
+                          email={item} 
+                          role='customer' 
+                          key={getRandomKey()} 
+                          VisitProfile={VisitProfile}
+                          setProfileData={setProfileData}
+                        />
                     );
-                  };
+                  }; 
                 })
               }
             </div>
@@ -262,7 +297,7 @@ const HomeScreen = ({ setVisit }) => {
               {profileData?.likes?.length > 3 
                && status !== 'pending' 
                &&
-               <button>See Full List</button>
+               <button onClick={()=>{setExpanded(!expanded)}}>{expanded ? 'Collapse' : 'See Full List'}</button>
               }
             </div>
           </div>

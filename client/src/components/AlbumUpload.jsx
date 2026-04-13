@@ -11,6 +11,7 @@ const AlbumUpload = () => {
   const [status, setStatus] = useState('idle');
   const [previewSrc, setPreviewSrc] = useState(null);
   const [mainPreview, setMainPreview] = useState(null);
+  const getRandomKey = () => crypto.randomUUID();
 
   async function handleFilesChange(e) {
     const arr = Array.from(e.target.files);
@@ -186,7 +187,7 @@ const AlbumUpload = () => {
               </div>          
             </div>          
             <ul>{previewSrc?.map((item) => (
-              <div key={domKey()}
+              <div key={getRandomKey()}
                    className={`${styles.item} ${mainPreview === item ? styles.focused : null}`}>
                   <img src={item[1]} alt='IMG' onClick={() => setMainPreview(item)}/>
               </div>
