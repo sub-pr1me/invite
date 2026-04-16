@@ -116,7 +116,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
                && auth.gender === hostPreview.interest
                && auth.likes.includes(hostPreview.email)
                &&
-              <button onClick={()=>{console.log('Accept')}}>Accept<br />Invitation</button>
+              <button onClick={()=>{console.log('Accept')}}>Accept<br />Invitation!</button>
               }
             </div>
           </div>

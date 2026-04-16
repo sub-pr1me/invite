@@ -49,6 +49,7 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
     const existingBid = bidders.filter(item => item.name === auth.name)[0]?.bid;
     
     let difference;
+    let ejected = null;
     
     if (existingBid) {
       difference = bid - existingBid;
@@ -69,7 +70,7 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
       return;
     };
 
-    while (update.length > 3) update.pop();
+    if (update.length > 3) {ejected = update.pop()};
 
     try {
       await axiosPrivate.post('/bidders_update',
@@ -90,6 +91,7 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
       setFade(true);
       const newBalance = await axiosPrivate.post('/balance_update',
         {
+          email: auth.email,
           amount: existingBid ? difference * -1 : bid * -1, 
           acc_type: auth.roles[0]
         },          
@@ -98,6 +100,19 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
           withCredentials: true
         }
       );
+      if (ejected) {
+        await axiosPrivate.post('/balance_update',
+          {
+            email: ejected.email,
+            amount: ejected.bid, 
+            acc_type: 'customer'
+          },
+          {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            withCredentials: true
+          }
+        );
+      };
       setAuth({...auth, credits: newBalance.data});
     } catch (err) {
       if (!err?.response) {

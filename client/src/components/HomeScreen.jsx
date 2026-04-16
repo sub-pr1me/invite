@@ -35,6 +35,10 @@ const HomeScreen = ({ setVisit }) => {
   if (role === 'customer') age = getAge(profileData?.dob);
   if (auth.roles[0] === 'customer' && !role) age = auth.age;
   
+  const ResetStatus = useEffectEvent(() => {setStatus('idle')});
+
+  const likeIsOn = useEffectEvent((arg)=>{setLiked(arg)});
+  
   function getAge(dob) {
     const date = new Date(dob);
     const currentDate = new Date();
@@ -72,8 +76,6 @@ const HomeScreen = ({ setVisit }) => {
     };
   });
 
-  const likeIsOn = useEffectEvent((arg)=>{setLiked(arg)});
-
   const switchLike = async (email) => {
     try {      
       const response = await axiosPrivate.post('/switch_like',
@@ -104,7 +106,6 @@ const HomeScreen = ({ setVisit }) => {
     setProfileData(null);
     setExpanded(false);
   };
-  const ResetStatus = useEffectEvent(() => {setStatus('idle')});
 
   useEffect(()=>{
     if (userId && !profileData) FetchProfileData(role, id);
@@ -210,8 +211,8 @@ const HomeScreen = ({ setVisit }) => {
                &&
                <LikesLoading />
               }
-              {auth?.likes 
-               && auth?.likes[0] 
+              {auth.likes 
+               && auth.likes[0] 
                && status !== 'pending' 
                &&
                 auth.likes.map(item => {
@@ -252,7 +253,8 @@ const HomeScreen = ({ setVisit }) => {
           </div>
         }
         {showLikes
-         && auth.roles[0] === 'customer' 
+         && auth.roles[0] === 'customer'
+         && profileData?.likes 
          && profileData?.likes[0] 
          && role !== 'customer'         
          &&
@@ -301,6 +303,46 @@ const HomeScreen = ({ setVisit }) => {
               }
             </div>
           </div>
+        }
+        {auth.roles[0] === 'customer'
+         && auth.likes
+         && auth.likes[0]
+         && !role
+         &&
+         <div className={`${styles.customer_likes} ${expanded ? styles.expanded_container : null}`}>
+          <div className={`${styles.likes_label}`}>People who like you:</div>
+          <div className={`${styles.customer_likes_content} ${expanded ? styles.expanded_content : null}`}>
+            {auth?.likes?.map(item => {
+              if (!expanded) {  
+                if (auth.likes?.indexOf(item) < 3) {
+                  return (
+                    <Person 
+                      email={item} 
+                      role='customer' 
+                      key={getRandomKey()} 
+                      VisitProfile={VisitProfile}
+                      setProfileData={setProfileData}
+                    />
+                  );
+                };
+              } else {
+                return (
+                  <Person 
+                    email={item} 
+                    role='customer' 
+                    key={getRandomKey()} 
+                    VisitProfile={VisitProfile}
+                    setProfileData={setProfileData}
+                  />
+                );
+              };
+            })}
+          </div>
+          {auth?.likes?.length > 3
+           &&
+           <button onClick={()=>{setExpanded(!expanded)}}>{expanded ? 'Collapse' : 'See Full List'}</button>            
+          }          
+         </div>
         }
       </div>
     </>

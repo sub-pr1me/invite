@@ -2,7 +2,7 @@ import { BalanceUpdate } from '../db/queries.js'
 
 const handleBalanceUpdate = async (req, res) => {
   try {
-    const email = req.email;
+    const email = req.body.email;
     const amount = req.body.amount;
     const acc_type = req.body.acc_type;
 

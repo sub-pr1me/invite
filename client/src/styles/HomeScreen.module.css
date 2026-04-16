@@ -25,7 +25,7 @@
 }
 
 .top {
-  height: 100vh;
+  height: fit-content;
   margin-top: 10px !important;
 }
 
@@ -82,7 +82,7 @@
 }
 
 .avatar {
-  height: 16%;
+  height: 150px;
   aspect-ratio: 1/1;
   margin-bottom: 5px;
 }
@@ -160,7 +160,8 @@
   min-height: 32px;
 }
 
-.btn_container button {
+.btn_container button,
+.customer_likes button {
   box-shadow: 0 0 2pt 1pt rgb(225, 150, 255);
   color: rgb(242, 208, 255);
   margin: 0px;
@@ -174,7 +175,8 @@
 }
 
 .expanded_container {
-  height: 56%;
+  height: fit-content;
+  max-height: 56%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -188,6 +190,31 @@
   overflow-y: scroll;
   scrollbar-width: none;
   align-content: flex-start;
+}
+
+.customer_likes {
+  z-index: 1;
+  margin-bottom: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+}
+
+.likes_label {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.customer_likes_content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px 0px;
+  gap: 20px;
 }
 
 @keyframes spin {
