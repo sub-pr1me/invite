@@ -17,7 +17,7 @@ const Clients = ({ setActive }) => {
     <div className={`${styles.clients_container}`}>
       <div>Hosts</div>
       <div>Guests</div>
-      <div>Explore</div>
+      <div>Explore People</div>
     </div>
     </>   
   );

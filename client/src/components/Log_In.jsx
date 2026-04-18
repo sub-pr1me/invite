@@ -77,7 +77,7 @@ const Log_In = () => {
       const hours = response?.data?.hours;
       const tables = response?.data?.tables;
       const likes = response?.data?.likes;
-      const age = response?.data?.age;
+      const dob = response?.data?.dob;
       const gender = response?.data?.gender;
       const interest = response?.data?.interest;
       const credits = parseInt(response?.data?.credits);
@@ -87,7 +87,7 @@ const Log_In = () => {
       });
 
       if (accType === 'customer') setAuth({ 
-        token: accessToken, id, roles: [accType], email, name, stage, avatar, album, likes, age, gender, interest, credits
+        token: accessToken, id, roles: [accType], email, name, stage, avatar, album, likes, dob, gender, interest, credits
       });
 
       console.log('LOGGED IN');

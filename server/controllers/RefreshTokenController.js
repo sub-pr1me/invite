@@ -27,7 +27,7 @@ export default async function handleRefreshToken(req, res) {
   let tables = null;
 
   let likes = null;
-  let age = null;
+  let dob = null;
   let gender = null;
   let interest = null;
 
@@ -55,7 +55,7 @@ export default async function handleRefreshToken(req, res) {
     album = matchedCustomer.album;
     stage = matchedCustomer.stage;
     likes = matchedCustomer.likes;
-    age = matchedCustomer.age;
+    dob = matchedCustomer.dob;
     gender = matchedCustomer.gender;
     interest = matchedCustomer.interest;
     credits = matchedCustomer.credits;
@@ -80,7 +80,7 @@ export default async function handleRefreshToken(req, res) {
         accessToken, roles, id, email, name, avatar, album, stage, likes, rating, hours, tables, credits
       });
       if (matchedCustomer) res.json({ 
-        accessToken, roles, id, email, name, avatar, album, stage, likes, age, gender, interest, credits
+        accessToken, roles, id, email, name, avatar, album, stage, likes, dob, gender, interest, credits
       });
     }
   );  

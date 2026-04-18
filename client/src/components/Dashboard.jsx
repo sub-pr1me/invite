@@ -12,15 +12,28 @@ import useAuth from '../hooks/useAuth'
 
 const Dashboard = () => {
   const { setActive } = useAuth();
-    const [auctions, setAuctions] = useState(null);
-    const [visit, setVisit] = useState(null);
+  const [auctions, setAuctions] = useState(null);
+  const [profileData, setProfileData] = useState(null);
+  const getRandomKey = () => crypto.randomUUID();
+
   return (
     <>
     <Routes>
       <Route path='/' element={<LayoutDashboard />}>
           <Route index element={<Home setAuctions={setAuctions}/>}/>
-          <Route path=':userId' element={<HomeScreen key={visit} setVisit={setVisit}/>} />
-          <Route path='/explore' element={<Explore setActive={setActive}/>} />
+          <Route path=':userId' element={
+            <HomeScreen 
+              key={getRandomKey()}
+              profileData={profileData}
+              setProfileData={setProfileData}
+            />} 
+          />
+          <Route path='/explore' element={
+            <Explore 
+              setActive={setActive}
+              setProfileData={setProfileData}
+            />}
+          />
           <Route path='/clients' element={<Clients setActive={setActive}/>} />
           <Route path='/profile' element={<Profile setActive={setActive}/>} />
           <Route path='/auctions' element={<Auctions setActive={setActive} auctions={auctions} setAuctions={setAuctions}/>} />

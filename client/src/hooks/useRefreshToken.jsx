@@ -39,7 +39,7 @@ const useRefreshToken = () => {
             album: response?.data?.album,
             stage: response?.data?.stage,
             likes: response?.data?.likes,
-            age: response?.data?.age,
+            dob: response?.data?.dob,
             gender: response?.data?.gender,
             interest: response?.data?.interest,
             credits: parseInt(response?.data?.credits)

@@ -1,12 +1,13 @@
-import pool from "./pool.js";
+import pool from './pool.js';
 
 export async function getAllVenueData() {
   console.log('getAllVenueData');
-  const { rows } = await pool.query("SELECT * FROM venues");
+  const { rows } = await pool.query('SELECT * FROM venues');
   
   for (let i=0; i<rows.length; i++) {
-    delete rows[i].email;
     delete rows[i].password;
+    delete rows[i].reftoken;
+    delete rows[i].credits;
   };
   
   return rows;
@@ -14,11 +15,12 @@ export async function getAllVenueData() {
 
 export async function getAllCustomerData() {
   console.log('getAllCustomerData');
-  const { rows } = await pool.query("SELECT * FROM customers");
+  const { rows } = await pool.query('SELECT * FROM customers');
   
   for (let i=0; i<rows.length; i++) {
-    delete rows[i].email;
     delete rows[i].password;
+    delete rows[i].reftoken;
+    delete rows[i].credits;
   };
   
   return rows;
@@ -64,7 +66,7 @@ export async function getUserData(email, acc_type) {
     return rows[0];
   };
   const { rows } = await pool.query(`
-    SELECT ${acc_type}, id, password, stage, avatar, album, age, gender, interest, likes, credits 
+    SELECT ${acc_type}, id, password, stage, avatar, album, dob, gender, interest, likes, credits 
     FROM ${acc_type}s 
     WHERE email LIKE '${email}'`);
     return rows[0];

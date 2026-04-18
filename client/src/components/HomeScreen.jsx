@@ -1,22 +1,20 @@
 import styles from '../styles/HomeScreen.module.css'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import useAuth from '../hooks/useAuth'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useState, useEffect, useEffectEvent } from 'react'
-import Thumb from './Thumb'
-import Person from './Person'
+import UserProfile from './UserProfile'
 import LikesLoading from './LikesLoading'
+import Carousel from './Carousel'
 
-const HomeScreen = ({ setVisit }) => {
-  const [profileData, setProfileData] = useState(null);
+const HomeScreen = ({ profileData, setProfileData }) => {
   const [liked, setLiked] = useState(false);
   const [status, setStatus] = useState('idle');
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false); 
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { userId } = useParams();
   const getRandomKey = () => crypto.randomUUID();
-  const navigate = useNavigate();
 
   let role;
   let id;
@@ -33,7 +31,7 @@ const HomeScreen = ({ setVisit }) => {
   if (role === 'venue') canLike = true;
 
   if (role === 'customer') age = getAge(profileData?.dob);
-  if (auth.roles[0] === 'customer' && !role) age = auth.age;
+  if (auth.roles[0] === 'customer' && !role) age = getAge(auth.dob);
   
   const ResetStatus = useEffectEvent(() => {setStatus('idle')});
 
@@ -95,17 +93,10 @@ const HomeScreen = ({ setVisit }) => {
     };
   };
 
-  const VisitProfile = (id) => {
-    if (role) setVisit(`${getRandomKey()}-${id}`);
+  const ResetProfileData = useEffectEvent(() => {
     setProfileData(null);
     setExpanded(false);
-    navigate(`/dashboard/${id}`);
-  };
-
-  const ResetProfileData = () => {
-    setProfileData(null);
-    setExpanded(false);
-  };
+  });
 
   useEffect(()=>{
     if (userId && !profileData) FetchProfileData(role, id);
@@ -113,7 +104,11 @@ const HomeScreen = ({ setVisit }) => {
     if (auth.roles[0] === 'venue' && !role && auth.likes && !auth.likes[0]) likeIsOn(false);
     if (status === 'success') ResetStatus();
 
-    window.addEventListener("popstate", () => {ResetProfileData()});
+    window.addEventListener("popstate", () => {ResetProfileData});
+
+    return () => {
+      window.removeEventListener("popstate", ResetProfileData);
+    };
 
   },[userId, profileData, role, id, auth.roles, auth.likes, liked, auth.email, status]);
 
@@ -135,7 +130,7 @@ const HomeScreen = ({ setVisit }) => {
                 ${profileData?.likes?.includes(auth.email) ? styles.liked : null}
               `}
               onClick={()=>{                
-                if (role === 'venue' && profileData?.likes.length > 3) {
+                if (role === 'venue' && profileData?.likes?.length > 3) {
                   setStatus('pending');
                   setTimeout(() => {switchLike(auth.email)}, 800);
                 } else {switchLike(auth.email)};
@@ -149,54 +144,7 @@ const HomeScreen = ({ setVisit }) => {
           </div>
           <div className={`${styles.hours}`}>{auth && !role ? auth.hours : profileData?.hours}</div>
         </div>
-        <div className={`${styles.carousel}`}>
-          <div className={`${styles.album}`}>
-              {!role ?
-                auth?.album?.map(item => {
-                return (
-                <Thumb
-                  key={auth?.album?.indexOf(item)}
-                  cloudName={item.split('/')[3]}
-                  publicId={item.split('/')[7].split('.')[0]}
-                  alt={''}
-                />
-                )})
-                :
-                profileData?.album?.map(item => {
-                return (
-                <Thumb
-                  key={profileData?.album.indexOf(item)}
-                  cloudName={item.split('/')[3]}
-                  publicId={item.split('/')[7].split('.')[0]}
-                  alt={''}
-                />
-                )})
-              }           
-          </div>
-          <div className={`${styles.album}`} aria-hidden>
-              {!role ?
-                auth?.album?.map(item => {
-                return (
-                <Thumb
-                  key={auth?.album?.indexOf(item)}
-                  cloudName={item.split('/')[3]}
-                  publicId={item.split('/')[7].split('.')[0]}
-                  alt={''}
-                />
-                )})
-                :
-                profileData?.album?.map(item => {
-                return (
-                <Thumb
-                  key={profileData?.album.indexOf(item)}
-                  cloudName={item.split('/')[3]}
-                  publicId={item.split('/')[7].split('.')[0]}
-                  alt={''}
-                />
-                )})
-              }           
-          </div>
-        </div>
+        <Carousel role={role} profileData={profileData} />
         {showLikes 
          && auth.roles[0] === 'venue' 
          && auth.likes[0] 
@@ -219,11 +167,10 @@ const HomeScreen = ({ setVisit }) => {
                   if (!expanded) {
                     if (auth.likes.indexOf(item) < 3) {
                       return (
-                        <Person 
+                        <UserProfile 
                           email={item} 
                           role='customer' 
                           key={item} 
-                          VisitProfile={VisitProfile}
                           setProfileData={setProfileData}
                         />
                       );
@@ -231,11 +178,10 @@ const HomeScreen = ({ setVisit }) => {
                   } else {
                     if (auth.likes.length < 4) setExpanded(false);
                     return (
-                        <Person 
+                        <UserProfile 
                           email={item} 
                           role='customer' 
                           key={item} 
-                          VisitProfile={VisitProfile}
                           setProfileData={setProfileData}
                         />
                     );
@@ -260,7 +206,7 @@ const HomeScreen = ({ setVisit }) => {
          &&
           <div className={`${styles.likes_container} ${expanded ? styles.expanded_container : null}`}>
             <div className={`${styles.likes_title}`}>
-              People who like this {role === 'customer' ? 'person' : 'place'}:
+              People who like this {role === 'customer' ? 'UserProfile' : 'place'}:
             </div>
             <div className={`${styles.likes_content} ${expanded ? styles.expanded_content : null}`}>
               {status === 'pending'
@@ -268,26 +214,24 @@ const HomeScreen = ({ setVisit }) => {
                <LikesLoading />
               }
               {status !== 'pending' &&
-                profileData?.likes.map(item => {
+                profileData?.likes?.map(item => {
                   if (!expanded) {  
                     if (profileData?.likes?.indexOf(item) < 3) {
                       return (
-                        <Person 
+                        <UserProfile 
                           email={item} 
                           role='customer' 
                           key={getRandomKey()} 
-                          VisitProfile={VisitProfile}
                           setProfileData={setProfileData}
                         />
                       );
                     };
                   } else {
                     return (
-                        <Person 
+                        <UserProfile 
                           email={item} 
                           role='customer' 
                           key={getRandomKey()} 
-                          VisitProfile={VisitProfile}
                           setProfileData={setProfileData}
                         />
                     );
@@ -316,22 +260,20 @@ const HomeScreen = ({ setVisit }) => {
               if (!expanded) {  
                 if (auth.likes?.indexOf(item) < 3) {
                   return (
-                    <Person 
+                    <UserProfile 
                       email={item} 
                       role='customer' 
                       key={getRandomKey()} 
-                      VisitProfile={VisitProfile}
                       setProfileData={setProfileData}
                     />
                   );
                 };
               } else {
                 return (
-                  <Person 
+                  <UserProfile 
                     email={item} 
                     role='customer' 
                     key={getRandomKey()} 
-                    VisitProfile={VisitProfile}
                     setProfileData={setProfileData}
                   />
                 );

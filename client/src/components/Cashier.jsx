@@ -13,7 +13,10 @@ const Cashier = ({ setActive }) => {
 
     try {
       const response = await axiosPrivate.post('/balance_update',
-        {amount: amount, acc_type: auth.roles[0]},
+        {
+          email: auth.email,
+          amount: amount,
+          acc_type: auth.roles[0]},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true

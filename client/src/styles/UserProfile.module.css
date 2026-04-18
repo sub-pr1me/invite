@@ -6,7 +6,7 @@
   outline: rgb(109, 155, 40) 1px solid;
 } */
 
-.person_container {
+.user_container {
   height: clamp(80px, 20vw, 100px);
   aspect-ratio: 1/1;
   border-radius: 50%;
@@ -14,9 +14,15 @@
   cursor: pointer;
   animation: appear 0.5s both, opacity 0.6s both;
   will-change: transform, opacity;
+  margin-bottom: 20px;
 }
 
-.person_container img{
+.user_container div {
+  font-size: clamp(12px, 2vw, 14px);
+  color: rgb(255, 255, 255);
+}
+
+.user_container img{
   width: 100%;
   aspect-ratio: 1/1;
   border-radius: 50%;
@@ -24,7 +30,7 @@
   will-change: transform, opacity;
 }
 
-.person_container:hover {
+.user_container:hover {
   box-shadow: 0 0 6pt 4pt rgb(225, 150, 255);
 }
 

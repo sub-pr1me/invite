@@ -1,9 +1,9 @@
-import styles from '../styles/Person.module.css'
-import { useEffect, useEffectEvent, useState } from 'react'
+import styles from '../styles/UserProfile.module.css'
+import { useEffect, useEffectEvent, useState, memo } from 'react'
 import { Link } from 'react-router-dom';
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
-const Person = ({ email, role, setProfileData }) => {
+const UserProfile = ({ email, role, setProfileData, name }) => {
 
   const axiosPrivate = useAxiosPrivate();
   const [pic, setPic] = useState(null);
@@ -19,7 +19,7 @@ const Person = ({ email, role, setProfileData }) => {
         }
       );
       setPic(response.data.avatar);
-      setId(`customer${response.data.id}`);
+      setId(`${role}${response.data.id}`);
     } catch (err) {
       console.log(err);
     };
@@ -32,14 +32,17 @@ const Person = ({ email, role, setProfileData }) => {
   return (
     <>
       <div 
-        className={`${styles.person_container}`}
+        className={`${styles.user_container}`}
         onClick={()=>{setTimeout(() => {setProfileData(null)}, 0)}}>
         <Link to={`/dashboard/${id}`}>
           <img src={pic} alt='' />
+          {name &&
+            <div>{name}</div>
+          }
         </Link>   
       </div>
     </>
   );
 };
 
-export default Person
+export default memo(UserProfile);

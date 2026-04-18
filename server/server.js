@@ -17,6 +17,8 @@ import TransformTableRouter from './routes/TransformTableRouter.js'
 import FetchProfileDataRouter from './routes/FetchProfileDataRouter.js'
 import SwitchLikeRouter from './routes/SwitchLikeRouter.js'
 import FetchAvatarRouter from './routes/FetchAvatarRouter.js'
+import FetchVenuesRouter from './routes/FetchVenuesRouter.js'
+import FetchCustomersRouter from './routes/FetchCustomersRouter.js'
 import { FetchAuctions } from './db/queries.js'
 import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
@@ -75,6 +77,8 @@ app.use('/transform_table', TransformTableRouter);
 app.use('/fetch_profile_data', FetchProfileDataRouter);
 app.use('/switch_like', SwitchLikeRouter);
 app.use('/fetch_avatar', FetchAvatarRouter);
+app.use('/fetch_venues', FetchVenuesRouter);
+app.use('/fetch_customers', FetchCustomersRouter);
 
 server.listen(PORT, HOST, (error) => {  
   if (error) {console.error(error)}

@@ -1,25 +1,93 @@
 import styles from '../styles/Explore.module.css'
+import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import useAuth from '../hooks/useAuth'
-import { useEffect, useEffectEvent } from 'react'
+import { useEffect, useEffectEvent, useState, memo } from 'react'
+import UserProfile from './UserProfile'
 
-const Explore = ({ setActive }) => {
+const Explore = ({ setActive, setProfileData }) => {
+  const [venues, setVenues] = useState(null);
+  const [customers, setCustomers] = useState(null);
 
-  const { auth } = useAuth();
   const onRefresh = useEffectEvent(()=>{setActive('explore')});
+  const axiosPrivate = useAxiosPrivate();
+    const { auth } = useAuth();
+  const getRandomKey = () => crypto.randomUUID();
+
+  const FetchVenues = useEffectEvent(async () => {
+    const response = await axiosPrivate.get('/fetch_venues',
+      {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        withCredentials: true,
+        params: {role: 'venue'}
+      }
+    );
+    setVenues(response.data);
+  });
+
+  const FetchCustomers = useEffectEvent(async () => {
+    const response = await axiosPrivate.get('/fetch_customers',
+      {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        withCredentials: true,
+        params: {role: 'customer'}
+      }
+    );
+    setCustomers(response.data);
+  });
 
   useEffect(()=>{
     onRefresh();
   },[]);
 
+  useEffect(() => {
+    if (!venues) FetchVenues();
+    if (!customers) FetchCustomers();
+  }, [venues, customers]);
+
   return (
     <>
     <title>Explore</title>
     <div className={`${styles.explore_container}`}>
-      <div>Explore Venues</div>
-      <div>Explore People</div>
+      <div className={`${styles.venues}`}>
+        <div className={`${styles.label}`}>Explore Venues:</div>
+        <div className={`${styles.venues_content}`}>
+          {
+            venues?.map(item => {
+              return (
+                <UserProfile 
+                  email={item.email} 
+                  role='venue' 
+                  key={getRandomKey()}
+                  setProfileData={setProfileData}
+                  name={item.venue}
+                />
+              )
+            })
+          }
+        </div>
+      </div>
+      <div className={`${styles.people}`}>
+        <div className={`${styles.label}`}>Explore People:</div>
+        <div className={`${styles.people_content}`}>
+          {customers?.filter(item => item.email !== auth.email 
+          && item.gender === auth.interest && item.interest === auth.gender)
+            .map(item => {
+              return (
+                <UserProfile 
+                  email={item.email} 
+                  role='customer' 
+                  key={getRandomKey()}
+                  setProfileData={setProfileData}
+                  name={item.customer}
+                />
+              )
+            })
+          }
+        </div>
+      </div>
     </div>
     </>   
   );
 };
 
-export default Explore
+export default memo(Explore);

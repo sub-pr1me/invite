@@ -10,7 +10,7 @@ const handleFetchAvatar = async (req, res) => {
 
   } catch (err) {
     console.log(err);
-    res.status(500).send('SWITCH LIKE CONTROLLER ERROR');
+    res.status(500).send('FETCH AVATAR CONTROLLER ERROR');
   };
 };
 
