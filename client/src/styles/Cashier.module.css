@@ -54,16 +54,25 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
+}
+
+.cashier_container label {
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .cashier_container form input{
-  width: 80px;
+  width: 90px;
+  height: 22px;
+  font-size: 18px;
   border: none;
   background-color: black;
-  outline: 1px solid rgba(248, 172, 255, 0.63);
+  outline: 2px solid rgba(248, 172, 255, 0.63);
 }
 
 .cashier_container form button{
   background-color: rgb(65, 53, 179);
+  margin: 0px;
+  font-size: 14px;
 }

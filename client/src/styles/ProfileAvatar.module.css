@@ -1,0 +1,40 @@
+.hidden {
+    display: none !important;
+}
+
+/* .avatar * {
+  outline: rgb(135, 197, 43) 1px solid;
+} */
+
+.avatar {
+  height: 150px;
+  aspect-ratio: 1/1;
+  margin-bottom: 5px;
+}
+
+.avatar img {
+  height: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  box-shadow: 0 0 6pt 4pt rgb(225, 150, 255);
+  /* animation: appear 0.5s both, opacity 0.6s  both;
+  will-change: transform, opacity; */
+}
+
+@keyframes appear {
+  0% {
+    transform: scale(0%);
+  }
+  100% {
+    transform: scale(100%);
+  }
+}
+
+@keyframes opacity {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}

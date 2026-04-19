@@ -4,7 +4,7 @@ import { useState, useEffect, useEffectEvent } from 'react'
 import SetAucs from './SetAucs'
 import AuctionsMonitor from './AuctionsMonitor'
 
-const Auctions = ({ setActive, auctions, setAuctions }) => {
+const Auctions = ({ setActive, auctions, setAuctions, setProfileData }) => {
   
   const [section, setSection] = useState('current');
   const [tablePreview, setTablePreview] = useState(null);
@@ -33,6 +33,7 @@ const Auctions = ({ setActive, auctions, setAuctions }) => {
           setTablePreview={setTablePreview}
           hostPreview={hostPreview}
           setHostPreview={setHostPreview}
+          setProfileData={setProfileData}
         />
       }
       <div className={`${styles.bottom}`}>

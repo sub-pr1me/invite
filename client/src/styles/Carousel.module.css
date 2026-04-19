@@ -2,7 +2,7 @@
     display: none !important;
 }
 
-/* .homescreen_container * {
+/* .carousel * {
   outline: rgb(135, 197, 43) 1px solid;
 } */
 
@@ -12,6 +12,8 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .album {
@@ -20,13 +22,32 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  animation: appear 1s, spin 60s infinite linear, opacity 1s  both;
   will-change: transform, opacity;
 }
 
 .album img {
   width: 100%;
   filter: brightness(75%);
+}
+
+.length1 {
+  animation: appear 1s, spin 10s infinite linear, opacity 1s both;
+}
+
+.length2 {
+  animation: appear 1s, spin 20s infinite linear, opacity 1s both;
+}
+
+.length3 {
+  animation: appear 1s, spin 30s infinite linear, opacity 1s both;
+}
+
+.length4 {
+  animation: appear 1s, spin 40s infinite linear, opacity 1s both;
+}
+
+.length5 {
+  animation: appear 1s, spin 50s infinite linear, opacity 1s both;
 }
 
 @keyframes spin {

@@ -24,11 +24,6 @@
   position: relative;
 }
 
-.top {
-  height: fit-content;
-  margin-top: 10px !important;
-}
-
 .edge_fader {
   position: absolute;
   z-index: 1;
@@ -53,148 +48,13 @@
     );
 }
 
-.top,
-.likes_container {
-  z-index: 1;
-  font-weight: 600;
-  margin-top: 3%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-}
 
-.likes_container {
-  position: absolute;
-  width: 100%;
-  bottom: 5%;
-  z-index: 1;
-}
 
-.likes_content {
-  width: 100%;
-  min-height: 140px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  gap: 20px;
-}
 
-.avatar {
-  height: 150px;
-  aspect-ratio: 1/1;
-  margin-bottom: 5px;
-}
 
-.avatar img {
-  height: 100%;
-  aspect-ratio: 1/1;
-  border-radius: 50%;
-  box-shadow: 0 0 6pt 4pt rgb(225, 150, 255);
-  animation: appear 0.5s both, opacity 0.6s  both;
-  will-change: transform, opacity;
-}
 
-.name {
-  font-size: 20px;
-  margin-top: 5px;
-}
 
-.name, 
-.hours,
-.likes_title {
-  background-color: rgba(0, 0, 0, 0.66);
-  padding: 2px 5px;
-  border-radius: 10px;
-  width: fit-content;
-  cursor: default;
-}
 
-.favourite {
-  max-height: 50px;
-  margin-top: 10px;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.75);
-  padding: 10px;
-  margin: 2px 0px -5px;
-  cursor: pointer;
-  filter: saturate(0%);
-
-}
-
-.favourite img {  
-  height: 100%;
-}
-
-.liked {
-  filter: saturate(100%);
-}
-
-.btn_container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  min-height: 32px;
-}
-
-.btn_container button,
-.customer_likes button {
-  box-shadow: 0 0 2pt 1pt rgb(225, 150, 255);
-  color: rgb(242, 208, 255);
-  margin: 0px;
-  animation: appear 0.5s both, opacity 0.6s  both;
-  will-change: transform, opacity;
-}
-
-.btn_container button:hover {
-  color: rgb(255, 255, 255);
-  box-shadow: 0 0 5pt 3pt rgb(225, 150, 255);
-}
-
-.expanded_container {
-  height: fit-content;
-  max-height: 56%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.expanded_content {
-  background-color: rgba(0, 0, 0, 0.6);
-  height: 85%;
-  flex-wrap: wrap;
-  overflow-y: scroll;
-  scrollbar-width: none;
-  align-content: flex-start;
-}
-
-.customer_likes {
-  z-index: 1;
-  margin-bottom: 10px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-weight: 600;
-}
-
-.likes_label {
-  width: 100%;
-  margin-bottom: 5px;
-}
-
-.customer_likes_content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 20px 0px;
-  gap: 20px;
-}
 
 @keyframes appear {
   0% {
