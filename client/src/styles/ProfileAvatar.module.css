@@ -10,6 +10,8 @@
   height: 150px;
   aspect-ratio: 1/1;
   margin-bottom: 5px;
+  animation: appear 0.5s both, opacity 0.6s both;
+  will-change: transform, opacity;
 }
 
 .avatar img {
@@ -17,8 +19,6 @@
   aspect-ratio: 1/1;
   border-radius: 50%;
   box-shadow: 0 0 6pt 4pt rgb(225, 150, 255);
-  /* animation: appear 0.5s both, opacity 0.6s  both;
-  will-change: transform, opacity; */
 }
 
 @keyframes appear {

@@ -73,7 +73,7 @@ export default async function handleRefreshToken(req, res) {
       const accessToken = jwt.sign(
         { 'email': decoded.email },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '8s' }
+        { expiresIn: '60s' }
       );
       // console.log('NEW TOKEN - ', accessToken);
       if (matchedVenue) res.json({ 

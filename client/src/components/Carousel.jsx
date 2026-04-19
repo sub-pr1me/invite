@@ -1,7 +1,6 @@
 import styles from '../styles/Carousel.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import Thumb from './Thumb'
 import Image from './Image'
 import { useParams } from 'react-router-dom'
 import { memo, useEffect, useEffectEvent, useState } from 'react'
@@ -17,7 +16,6 @@ const Carousel = () => {
       setAlbum(auth.album);
     } else {
       try {
-        console.log('fetched');
         const response = await axiosPrivate.get('/fetch_profile_data',
           {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
