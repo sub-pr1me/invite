@@ -41,7 +41,7 @@ const ProfileLikesSection = ({ userData, setUserData }) => {
           <div className={`${styles.btn_container}`}>
             { userData?.likes?.length > 3 &&
               <button onClick={()=>{setExpanded(!expanded)}}>
-                {!expanded ? 'See Full List' : 'Collapse'}
+                {!expanded ? 'View Full List' : 'Collapse'}
               </button>
             }
           </div>

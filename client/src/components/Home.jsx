@@ -27,7 +27,7 @@ const Home = ({ setAuctions }) => {
           `Please start by uploading your profile photo!`}
         </div>
       }
-      {auth.stage === '1' && <AlbumUpload />}
+      {auth.stage === '1' && <AlbumUpload postreg={false}/>}
       {auth.stage === '2' && <InfoUpload />}
       {auth.stage === '3' && auth.tables && <SetAucs setAuctions={setAuctions}/>}
       {auth.stage === '4' && <HomeScreen />}

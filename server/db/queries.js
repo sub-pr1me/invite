@@ -105,10 +105,10 @@ export async function uploadNewAvatar(acc_type, email, link) {
   return null;
 };
 
-export async function uploadNewAlbum(acc_type, email, links) {
+export async function uploadNewAlbum(acc_type, email, links, postreg) {
     console.log('uploadNewAlbum');
   await pool.query(`UPDATE ${acc_type}s SET album = '${links}' WHERE email = '${email}'`);
-  await pool.query(`UPDATE ${acc_type}s SET stage = '2' WHERE email = '${email}'`);
+  if (!postreg) await pool.query(`UPDATE ${acc_type}s SET stage = '2' WHERE email = '${email}'`);
   return 'ALBUM UPLOADED';
 };
 

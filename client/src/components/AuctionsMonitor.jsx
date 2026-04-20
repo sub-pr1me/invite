@@ -111,7 +111,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
             <img src={hostPreview.avatar} alt='' />
             <div className={`${styles.btns}`}>
               <button onClick={()=>{setHostPreview(null)}}>Close<br />Preview</button>
-              <button onClick={()=>{navigate(`/dashboard/${hostPreview.id}`)}}>See<br />Profile</button>
+              <button onClick={()=>{navigate(`/dashboard/${hostPreview.id}`)}}>View<br />Profile</button>
               {auth.roles[0] !== 'venue'
                && auth.gender === hostPreview.interest
                && auth.likes.includes(hostPreview.email)

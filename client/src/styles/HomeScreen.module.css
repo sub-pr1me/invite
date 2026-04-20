@@ -48,13 +48,36 @@
     );
 }
 
+.no_photos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-weight: 600;
+  z-index: 1;
+  position: absolute;
+  top: 40%;
+}
 
+.no_photos button {
+  box-shadow: 0 0 2pt 1pt rgb(225, 150, 255);
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-size: 13px;
+}
 
+.no_photos button:hover {
+  box-shadow: 0 0 5pt 3pt rgb(225, 150, 255) !important;
+}
 
-
-
-
-
+.upload_modal {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0%;
+  z-index: 1;
+  background-color: aqua;
+}
 
 @keyframes appear {
   0% {

@@ -13,6 +13,7 @@ const handleAlbumUpload = asyncHandler(async (req, res)=> {
 
     const images = req.files;
     const imageURLs = [];
+    const postreg = JSON.parse(req.query.postreg);
 
     for (let i=0; i<images.length; i++) {
       console.log('UPLOADING FILE -',images[i].filename);
@@ -24,7 +25,7 @@ const handleAlbumUpload = asyncHandler(async (req, res)=> {
     
     const psqlArr = '{' + imageURLs.toString() + '}';
 
-    const result = await uploadNewAlbum(accType, email, psqlArr);
+    const result = await uploadNewAlbum(accType, email, psqlArr, postreg);
     console.log(result);
     res.status(200).send(imageURLs);
 

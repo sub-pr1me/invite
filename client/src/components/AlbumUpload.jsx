@@ -1,10 +1,11 @@
 import styles from '../styles/AlbumUpload.module.css'
 import { useState, useEffect, useEffectEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import fileToDataString from '../utils/fileToDataString'
 
-const AlbumUpload = () => {
+const AlbumUpload = ({ albumUploadPending, setAlbumUploadPending, postreg }) => {
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
   const [files, setFiles] = useState(null);
@@ -12,6 +13,7 @@ const AlbumUpload = () => {
   const [previewSrc, setPreviewSrc] = useState(null);
   const [mainPreview, setMainPreview] = useState(null);
   const getRandomKey = () => crypto.randomUUID();
+  const navigate = useNavigate();
 
   async function handleFilesChange(e) {
     const arr = Array.from(e.target.files);
@@ -97,10 +99,15 @@ const AlbumUpload = () => {
         {
           headers: {'Content-Type': 'multipart/form-data'},
           withCredentials: true,
+          params: {postreg: postreg}
         });
       setStatus('success');
       console.log('ALBUM UPLOADED -', response.data);
-      if (auth.stage === '1') setAuth({...auth, stage: '2'});
+      if (auth.stage === '1' && !postreg) setAuth({...auth, stage: '2'});
+      if (albumUploadPending) {
+        setAlbumUploadPending(false);
+        navigate(0);
+      };
 
     } catch(err) {
       setFiles(null);
@@ -167,7 +174,11 @@ const AlbumUpload = () => {
                 name='album'
                 onChange={handleFilesChange}/>
             </label>
-            <button onClick={()=> {setAuth({...auth, stage: '2'})}}>Maybe Later</button>
+            <button 
+              onClick={()=> {
+                if (!postreg) setAuth({...auth, stage: '2'})
+                if (albumUploadPending) setAlbumUploadPending(false);
+              }}>Maybe Later</button>
           </div>
         }</div>
         <div className={`${styles.preview} ${previewSrc ? null : styles.hidden}`}>

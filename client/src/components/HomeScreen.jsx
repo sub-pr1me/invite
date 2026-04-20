@@ -6,13 +6,15 @@ import { useState, useEffect, useEffectEvent } from 'react'
 import ProfileTopSection from './ProfileTopSection'
 import ProfileLikesSection from './ProfileLikesSection'
 import Carousel from './Carousel'
+import AlbumUpload from './AlbumUpload'
 
 const HomeScreen = () => {
+  console.log('RENDERED');
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { userId } = useParams();
-
   const [userData, setUserData] = useState(null);
+  const [albumUploadPending, setAlbumUploadPending] = useState(false);
 
   const applyUserData = useEffectEvent(async (userId)=>{
     if (!userId) {
@@ -43,10 +45,26 @@ const HomeScreen = () => {
   return (
     <>
       <div className={`${styles.homescreen_container}`}>
-        <div className={`${styles.edge_fader}`}></div>        
+        <div className={`${styles.edge_fader}`}></div>
+        {albumUploadPending &&
+          <div className={`${styles.upload_modal}`}>
+            <AlbumUpload 
+              setAlbumUploadPending={setAlbumUploadPending}
+              albumUploadPending={albumUploadPending}
+              postreg={true}
+            />
+          </div>
+        }
         <Carousel />
-        <ProfileTopSection userData={userData} setUserData={setUserData}/>
-        <ProfileLikesSection userData={userData} setUserData={setUserData}/>
+        {!albumUploadPending && <ProfileTopSection userData={userData} setUserData={setUserData}/>}
+        {auth.roles[0] === 'customer' && !auth.album && !userId && !albumUploadPending &&
+          <div className={`${styles.no_photos}`}>
+            Upload some photos <br />
+            to make your profile more attractive!
+            <button onClick={()=>{setAlbumUploadPending(true)}}>Let's do it!</button>
+          </div>          
+        }
+        {!albumUploadPending && <ProfileLikesSection userData={userData} setUserData={setUserData}/>}        
       </div>
     </>
   );
