@@ -7,7 +7,7 @@
 } */
 
 .user_container {
-  height: clamp(80px, 20vw, 100px);
+  height: clamp(80px, 15vw, 100px);
   aspect-ratio: 1/1;
   border-radius: 50%;
   box-shadow: 0 0 3pt 2pt rgb(225, 150, 255);

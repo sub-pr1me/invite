@@ -4,35 +4,12 @@ import ProfileLike from './ProfileLike'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useParams } from 'react-router-dom'
-import { useEffect, useEffectEvent, useState, useCallback } from 'react';
+import { useCallback } from 'react'
 
-const ProfileTopSection = () => {
+const ProfileTopSection = ({ userData, setUserData }) => {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { userId } = useParams();
-  const [userData, setUserData] = useState(null);
-
-  const applyUserData = useEffectEvent(async (userId)=>{
-    if (!userId) {
-      setUserData(auth);
-    } else {
-      try {
-        const response = await axiosPrivate.get('/fetch_profile_data',
-          {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            withCredentials: true,
-            params: {
-              role: userId[0] === 'c' ? 'customer' : 'venue',
-              id: userId[0] === 'c' ? userId?.substring(8) : userId?.substring(5)
-            }
-          }
-        );
-        setUserData(response.data);
-      } catch (err) {
-        console.log(err);
-      };
-    };
-  });
 
   const getAge = useCallback((dob) => {
     const date = new Date(dob);
@@ -45,6 +22,11 @@ const ProfileTopSection = () => {
     };
     return age;
   },[]);
+
+  let allowLikes = true;
+  if (
+    userData?.role === 'customer' && auth.gender !== userData?.interest 
+    || userData?.role === 'customer' && auth.interest !== userData?.gender) allowLikes = false;
 
   const switchLike = useCallback(
     async (email) => {
@@ -65,12 +47,8 @@ const ProfileTopSection = () => {
       } catch (err) {
         console.log(err);
       };
-    },[axiosPrivate, userData, userId]
+    },[axiosPrivate, userData, setUserData, userId]
   );
-
-  useEffect(()=>{
-    applyUserData(userId);
-  },[userId]);
 
   return (
     <>
@@ -85,7 +63,7 @@ const ProfileTopSection = () => {
         </div>
         <div className={styles.hours}>{userData?.hours}</div>
 
-        {userId && auth?.roles[0] !== 'venue' &&
+        {userId && auth?.roles[0] !== 'venue' && allowLikes &&
         <ProfileLike 
           icon={userData?.dob ? 'heart' : 'star'} 
           liked={userData?.likes?.includes(auth.email)}

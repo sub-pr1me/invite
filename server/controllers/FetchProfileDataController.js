@@ -6,6 +6,9 @@ const handleFetchProfileData = async (req, res) => {
     const id = req.query.id;
 
     const result = await FetchProfileData(role, id);
+    result.role = role;
+    delete result.credits;
+
     res.status(200).send(result);
 
   } catch (err) {
