@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useParams } from 'react-router-dom'
 import { useState } from 'react'
 import LayoutDashboard from './LayoutDashboard'
 import Home from './Home'
@@ -13,8 +13,7 @@ import useAuth from '../hooks/useAuth'
 const Dashboard = () => {
   const { setActive } = useAuth();
   const [auctions, setAuctions] = useState(null);
-  const [profileData, setProfileData] = useState(null);
-  const getRandomKey = () => crypto.randomUUID();
+  const { userId } = useParams();
 
   return (
     <>
@@ -23,15 +22,12 @@ const Dashboard = () => {
           <Route index element={<Home setAuctions={setAuctions}/>}/>
           <Route path=':userId' element={
             <HomeScreen 
-              key={getRandomKey()}
-              profileData={profileData}
-              setProfileData={setProfileData}
+              key={userId}
             />} 
           />
           <Route path='/explore' element={
             <Explore 
               setActive={setActive}
-              setProfileData={setProfileData}
             />}
           />
           <Route path='/clients' element={<Clients setActive={setActive}/>} />
@@ -40,8 +36,7 @@ const Dashboard = () => {
             <Auctions 
               setActive={setActive} 
               auctions={auctions} 
-              setAuctions={setAuctions}
-              setProfileData={setProfileData}/>} />
+              setAuctions={setAuctions}/>} />
           <Route path='/cashier' element={<Cashier setActive={setActive}/>} />
       </Route>
     </Routes>

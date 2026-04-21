@@ -331,8 +331,8 @@ export async function AddTable(email, id, active, venue_id) {
   return updated;
 };
 
-export async function FetchProfileData(role, id) {
-    console.log('FetchProfileData');
+export async function FetchProfileData(role, id, from) {
+    console.log('FetchProfileData', role, id, 'from', from);
   if (role === 'venue') {
     const { rows } = await pool.query(`
       SELECT venue, avatar, album, hours, tables, likes, credits

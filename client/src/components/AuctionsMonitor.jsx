@@ -6,7 +6,7 @@ import { useEffect, useEffectEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
-  tablePreview, setTablePreview, hostPreview, setHostPreview, setProfileData}) => {
+  tablePreview, setTablePreview, hostPreview, setHostPreview}) => {
 
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
@@ -159,7 +159,6 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
                     pic={item.pic}
                     setTablePreview={setTablePreview}
                     setHostPreview={setHostPreview}
-                    setProfileData={setProfileData}
                   />
                 )
                 }

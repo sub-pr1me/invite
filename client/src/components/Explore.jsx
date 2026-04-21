@@ -4,7 +4,7 @@ import useAuth from '../hooks/useAuth'
 import { useEffect, useEffectEvent, useState, memo } from 'react'
 import UserProfile from './UserProfile'
 
-const Explore = ({ setActive, setProfileData }) => {
+const Explore = ({ setActive }) => {
   const [venues, setVenues] = useState(null);
   const [customers, setCustomers] = useState(null);
 
@@ -58,7 +58,6 @@ const Explore = ({ setActive, setProfileData }) => {
                   email={item.email} 
                   role='venue' 
                   key={getRandomKey()}
-                  setProfileData={setProfileData}
                   name={item.venue}
                 />
               )
@@ -77,7 +76,6 @@ const Explore = ({ setActive, setProfileData }) => {
                   email={item.email} 
                   role='customer' 
                   key={getRandomKey()}
-                  setProfileData={setProfileData}
                   name={item.customer}
                 />
               )

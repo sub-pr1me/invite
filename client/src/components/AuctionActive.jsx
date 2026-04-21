@@ -6,7 +6,7 @@ import { useState, useEffect, useEffectEvent } from 'react'
 import { Link } from 'react-router-dom'
 
 const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidders, 
-                         pic, setTablePreview, setHostPreview, setProfileData }) => {
+                         pic, setTablePreview, setHostPreview }) => {
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [modal, setModal] = useState(null);
@@ -138,7 +138,6 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
           <Link to={`/dashboard/venue${venue_id}`}>
             <div 
               className={`${styles.venue_name} ${hover ? styles.highlight : null}`}
-              onClick={()=>{setProfileData(null)}}
             >{venue}
             </div>
           </Link>

@@ -3,7 +3,7 @@ import { useEffect, useEffectEvent, useState, memo } from 'react'
 import { Link } from 'react-router-dom';
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
-const UserProfile = ({ email, role, setProfileData, name }) => {
+const UserProfile = ({ email, role, setUserData, name }) => {
 
   const axiosPrivate = useAxiosPrivate();
   const [pic, setPic] = useState(null);
@@ -33,7 +33,7 @@ const UserProfile = ({ email, role, setProfileData, name }) => {
     <>
       <div 
         className={`${styles.user_container}`}
-        onClick={()=>{setTimeout(() => {setProfileData(null)}, 0)}}>
+        onClick={()=>{setTimeout(() => {setUserData(null)}, 0)}}>
         <Link to={`/dashboard/${id}`}>
           <img src={pic} alt='' />
           {name &&

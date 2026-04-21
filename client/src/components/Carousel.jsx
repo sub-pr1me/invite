@@ -22,7 +22,8 @@ const Carousel = () => {
             withCredentials: true,
             params: {
               role: userId[0] === 'c' ? 'customer' : 'venue',
-              id: userId[0] === 'c' ? userId?.substring(8) : userId?.substring(5)
+              id: userId[0] === 'c' ? userId?.substring(8) : userId?.substring(5),
+              from: 'Carousel'
             }
           }
         );

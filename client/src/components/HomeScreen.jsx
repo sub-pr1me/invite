@@ -2,7 +2,7 @@ import styles from '../styles/HomeScreen.module.css'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import useAuth from '../hooks/useAuth'
 import { useParams } from 'react-router-dom'
-import { useState, useEffect, useEffectEvent } from 'react'
+import { useState, useEffect, useEffectEvent, memo } from 'react'
 import ProfileTopSection from './ProfileTopSection'
 import ProfileLikesSection from './ProfileLikesSection'
 import Carousel from './Carousel'
@@ -10,16 +10,19 @@ import AlbumUpload from './AlbumUpload'
 
 const HomeScreen = () => {
   console.log('RENDERED');
+
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { userId } = useParams();
   const [userData, setUserData] = useState(null);
   const [albumUploadPending, setAlbumUploadPending] = useState(false);
+  console.log('USER ID PRE: ',userId);
 
   const applyUserData = useEffectEvent(async (userId)=>{
     if (!userId) {
       setUserData(auth);
     } else {
+      console.log('USER ID EXISTS');
       try {
         const response = await axiosPrivate.get('/fetch_profile_data',
           {
@@ -27,7 +30,8 @@ const HomeScreen = () => {
             withCredentials: true,
             params: {
               role: userId[0] === 'c' ? 'customer' : 'venue',
-              id: userId[0] === 'c' ? userId?.substring(8) : userId?.substring(5)
+              id: userId[0] === 'c' ? userId?.substring(8) : userId?.substring(5),
+              from: 'HomeScreen'
             }
           }
         );
@@ -39,6 +43,7 @@ const HomeScreen = () => {
   });
 
   useEffect(()=>{
+    console.log('USER ID POST: ',userId);
     applyUserData(userId);
   },[userId]);
 
@@ -70,4 +75,4 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen
+export default memo(HomeScreen);

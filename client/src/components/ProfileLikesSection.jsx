@@ -31,7 +31,7 @@ const ProfileLikesSection = ({ userData, setUserData }) => {
                       key={item}  
                       email={item}                      
                       role='customer'
-                      setProfileData={setUserData}
+                      setUserData={setUserData}
                     />
                   )
                 })

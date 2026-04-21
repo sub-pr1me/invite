@@ -62,7 +62,7 @@ app.post('/auctions_update', async (req, res) => {
     const result = await FetchAuctions(email);
     if (req.app.locals.broadcastAuctionsUpdated) {
       req.app.locals.broadcastAuctionsUpdated(result);
-    }
+    };
 
     res.status(200).send(result);
     

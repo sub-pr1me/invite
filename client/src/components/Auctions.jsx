@@ -1,10 +1,10 @@
 import styles from '../styles/Auctions.module.css'
 import useAuth from '../hooks/useAuth'
-import { useState, useEffect, useEffectEvent } from 'react'
+import { useState, useEffect, useEffectEvent, memo } from 'react'
 import SetAucs from './SetAucs'
 import AuctionsMonitor from './AuctionsMonitor'
 
-const Auctions = ({ setActive, auctions, setAuctions, setProfileData }) => {
+const Auctions = ({ setActive, auctions, setAuctions }) => {
   
   const [section, setSection] = useState('current');
   const [tablePreview, setTablePreview] = useState(null);
@@ -33,7 +33,6 @@ const Auctions = ({ setActive, auctions, setAuctions, setProfileData }) => {
           setTablePreview={setTablePreview}
           hostPreview={hostPreview}
           setHostPreview={setHostPreview}
-          setProfileData={setProfileData}
         />
       }
       <div className={`${styles.bottom}`}>
@@ -50,4 +49,4 @@ const Auctions = ({ setActive, auctions, setAuctions, setProfileData }) => {
   );
 };
 
-export default Auctions
+export default memo(Auctions);
