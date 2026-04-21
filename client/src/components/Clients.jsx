@@ -45,6 +45,8 @@ const Clients = ({ setActive }) => {
                   name={item.customer}
                   avatar={item.avatar}
                   passedID={item.id}
+                  host={true}
+                  guest={true}
                 />
               )
             })

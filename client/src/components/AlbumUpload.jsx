@@ -103,7 +103,7 @@ const AlbumUpload = ({ albumUploadPending, setAlbumUploadPending, postreg }) => 
         });
       setStatus('success');
       console.log('ALBUM UPLOADED -', response.data);
-      if (auth.stage === '1' && !postreg) setAuth({...auth, stage: '2'});
+      if (auth.stage === '1' && !postreg) setAuth({...auth, stage: '2', album: response.data});
       if (albumUploadPending) {
         setAlbumUploadPending(false);
         navigate(0);
