@@ -2,9 +2,10 @@ import styles from '../styles/UserProfile.module.css'
 import { useEffect, useEffectEvent, useState, memo } from 'react'
 import { Link } from 'react-router-dom';
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useAuth from '../hooks/useAuth'
 
-const UserProfile = ({ email, role, setUserData, name, avatar, passedID }) => {
-
+const UserProfile = ({ email, role, setUserData, name, avatar, passedID, host, guest }) => {
+  const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [pic, setPic] = useState(null);
   const [id, setId] = useState(null);
@@ -33,13 +34,19 @@ const UserProfile = ({ email, role, setUserData, name, avatar, passedID }) => {
     <>
       <div 
         className={`${styles.user_container}`}
-        onClick={()=>{setTimeout(() => {setUserData(null)}, 0)}}>
+        onClick={()=>{if (!passedID) setTimeout(() => {setUserData(null)}, 0)}}>
         <Link to={`/dashboard/${passedID ? role+passedID : id}`}>
           <img src={pic ? pic : avatar} alt='' />
           {name &&
             <div>{name}</div>
           }
-        </Link>   
+        </Link>
+        {auth.roles[0] === 'venue' && host &&
+        <div className={`${styles.host_label}`}>H</div>
+        }
+        {auth.roles[0] === 'venue' && guest &&
+        <div className={`${styles.guest_label}`}>G</div>
+        }
       </div>
     </>
   );

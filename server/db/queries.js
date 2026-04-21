@@ -332,7 +332,9 @@ export async function AddTable(email, id, active, venue_id) {
 };
 
 export async function FetchProfileData(role, id, from) {
-    console.log('FetchProfileData', role, id, 'from', from);
+  
+  console.log('FetchProfileData', role, id, 'from', from);
+  
   if (role === 'venue') {
     const { rows } = await pool.query(`
       SELECT venue, avatar, album, hours, tables, likes, dates, credits
@@ -341,12 +343,13 @@ export async function FetchProfileData(role, id, from) {
     );
     return rows[0];
   };
+
   const { rows } = await pool.query(`
-    SELECT customer, avatar, album, dob, gender, interest, likes, dates, credits, 
+    SELECT customer, avatar, album, dob, gender, interest, likes, dates, credits 
     FROM customers 
     WHERE id = ${parseInt(id)}`
   );
-    return rows[0];
+  return rows[0];
 };
 
 export async function SwitchLike(email, role, id) {

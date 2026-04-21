@@ -53,7 +53,7 @@ const InfoUpload = () => {
     };
 
     try {
-      const response = await axiosPrivate.post('/info_upload',
+      await axiosPrivate.post('/info_upload',
         {hours: hours, tables: tables_arr, stage: auth.stage, dob: dob, gender: gender, interest: interest},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},

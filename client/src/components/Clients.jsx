@@ -6,6 +6,8 @@ import UserProfile from './UserProfile'
 
 const Clients = ({ setActive }) => {
   const [customers, setCustomers] = useState(null);
+  const [hosts, setHosts] = useState(null);
+  const [guests, setGuests] = useState(null);
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useAuth();
   const onRefresh = useEffectEvent(()=>{setActive('clients')});
@@ -19,6 +21,16 @@ const Clients = ({ setActive }) => {
       }
     );
     setCustomers(response.data);
+    let hostArr = [];
+    let guestArr = [];
+    for (const item of response.data) {
+      const host = item.dates.find(obj => obj.place === auth.email && obj.host === item.email);
+      if (host) hostArr.push(item.email);
+      const guest = item.dates.find(obj => obj.place === auth.email && obj.guest === item.email);
+      if (guest) guestArr.push(item.email);
+    };
+    setHosts(hostArr);
+    setGuests(guestArr);
   });
 
   useEffect(()=>{
@@ -45,8 +57,8 @@ const Clients = ({ setActive }) => {
                   name={item.customer}
                   avatar={item.avatar}
                   passedID={item.id}
-                  host={true}
-                  guest={true}
+                  host={hosts?.includes(item.email) ? true : false}
+                  guest={guests?.includes(item.email) ? true : false}
                 />
               )
             })
