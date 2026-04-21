@@ -3,7 +3,7 @@ import { useEffect, useEffectEvent, useState, memo } from 'react'
 import { Link } from 'react-router-dom';
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
-const UserProfile = ({ email, role, setUserData, name }) => {
+const UserProfile = ({ email, role, setUserData, name, avatar, passedID }) => {
 
   const axiosPrivate = useAxiosPrivate();
   const [pic, setPic] = useState(null);
@@ -26,16 +26,16 @@ const UserProfile = ({ email, role, setUserData, name }) => {
   });
 
   useEffect(()=>{
-    if (!pic) FetchProfilePic(email)
-  },[pic, email]);
+    if (!pic && !avatar) FetchProfilePic(email);
+  },[pic, email, avatar]);
 
   return (
     <>
       <div 
         className={`${styles.user_container}`}
         onClick={()=>{setTimeout(() => {setUserData(null)}, 0)}}>
-        <Link to={`/dashboard/${id}`}>
-          <img src={pic} alt='' />
+        <Link to={`/dashboard/${passedID ? role+passedID : id}`}>
+          <img src={pic ? pic : avatar} alt='' />
           {name &&
             <div>{name}</div>
           }

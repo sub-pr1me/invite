@@ -10,8 +10,7 @@ const Explore = ({ setActive }) => {
 
   const onRefresh = useEffectEvent(()=>{setActive('explore')});
   const axiosPrivate = useAxiosPrivate();
-    const { auth } = useAuth();
-  const getRandomKey = () => crypto.randomUUID();
+  const { auth } = useAuth();
 
   const FetchVenues = useEffectEvent(async () => {
     const response = await axiosPrivate.get('/fetch_venues',
@@ -42,6 +41,7 @@ const Explore = ({ setActive }) => {
   useEffect(() => {
     if (!venues) FetchVenues();
     if (!customers) FetchCustomers();
+    console.log('VENUES',venues);
   }, [venues, customers]);
 
   return (
@@ -57,8 +57,10 @@ const Explore = ({ setActive }) => {
                 <UserProfile 
                   email={item.email} 
                   role='venue' 
-                  key={getRandomKey()}
+                  key={item.email}
                   name={item.venue}
+                  avatar={item.avatar}
+                  passedID={item.id}
                 />
               )
             })
@@ -75,8 +77,10 @@ const Explore = ({ setActive }) => {
                 <UserProfile 
                   email={item.email} 
                   role='customer' 
-                  key={getRandomKey()}
+                  key={item.email}
                   name={item.customer}
+                  avatar={item.avatar}
+                  passedID={item.id}
                 />
               )
             })

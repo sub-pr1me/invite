@@ -1,12 +1,7 @@
 import { getAllVenueData, getAllCustomerData } from '../db/queries.js'
 
-const handleFetchUsers = async (req, res) => {
-  console.log('START');
-  
-  const role = req.query.role;
-
-  console.log('ROLE - ',role);
-  
+const handleFetchUsers = async (req, res) => {  
+  const role = req.query.role;  
   try {
     if (role === 'venue') {
 
@@ -21,7 +16,7 @@ const handleFetchUsers = async (req, res) => {
 
   } catch (err) {
     console.log(err);
-    res.status(500).send('FETCH PROFILE CONTROLLER ERROR');
+    res.status(500).send('FETCH USER CONTROLLER ERROR');
   };
 };
 
