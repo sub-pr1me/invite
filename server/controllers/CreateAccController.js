@@ -30,8 +30,9 @@ export default async function CreateAccController(req, res) {
   const stage = '0';
   const rating = 0;
   const tables = [];
+  const dates = [];
   const credits = 0;
 
-  const result = await createNewUser(acc_type, name, email, password, stage, rating, tables, credits);
+  const result = await createNewUser(acc_type, name, email, password, stage, rating, tables, dates, credits);
   res.send(result);
 };

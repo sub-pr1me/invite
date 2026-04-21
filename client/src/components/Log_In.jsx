@@ -80,14 +80,15 @@ const Log_In = () => {
       const dob = response?.data?.dob;
       const gender = response?.data?.gender;
       const interest = response?.data?.interest;
+      const dates = response?.data?.dates;
       const credits = parseInt(response?.data?.credits);
 
       if (accType === 'venue') setAuth({ 
-        token: accessToken, id, roles: [accType], email, name, stage, avatar, album, likes, rating, hours, tables, credits
+        token: accessToken, id, roles: [accType], email, name, stage, avatar, album, likes, rating, hours, tables, dates, credits
       });
 
       if (accType === 'customer') setAuth({ 
-        token: accessToken, id, roles: [accType], email, name, stage, avatar, album, likes, dob, gender, interest, credits
+        token: accessToken, id, roles: [accType], email, name, stage, avatar, album, likes, dob, gender, interest, dates, credits
       });
 
       console.log('LOGGED IN');

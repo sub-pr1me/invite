@@ -50,3 +50,11 @@
   overflow-y: scroll;
   scrollbar-width: none;
 }
+
+.venues_content > div {
+  margin-bottom: 35px;
+}
+
+.people_content {
+  align-content: flex-start;
+}

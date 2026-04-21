@@ -9,20 +9,16 @@ import Carousel from './Carousel'
 import AlbumUpload from './AlbumUpload'
 
 const HomeScreen = () => {
-  console.log('RENDERED');
-
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { userId } = useParams();
   const [userData, setUserData] = useState(null);
   const [albumUploadPending, setAlbumUploadPending] = useState(false);
-  console.log('USER ID PRE: ',userId);
 
   const applyUserData = useEffectEvent(async (userId)=>{
     if (!userId) {
       setUserData(auth);
     } else {
-      console.log('USER ID EXISTS');
       try {
         const response = await axiosPrivate.get('/fetch_profile_data',
           {
@@ -43,7 +39,6 @@ const HomeScreen = () => {
   });
 
   useEffect(()=>{
-    console.log('USER ID POST: ',userId);
     applyUserData(userId);
   },[userId]);
 

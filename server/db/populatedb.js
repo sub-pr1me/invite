@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS venues (
   hours VARCHAR ( 255 ),
   tables JSONB,
   auctions JSONB,
+  dates JSONB,
   credits NUMERIC (4,0),
   reftoken VARCHAR ( 255 )
 );
@@ -40,7 +41,7 @@ CREATE TABLE IF NOT EXISTS customers (
   reftoken VARCHAR ( 255 )
 );
 
-INSERT INTO venues (venue, email, password, stage, avatar, album, hours, tables, credits)
+INSERT INTO venues (venue, email, password, stage, avatar, album, hours, tables, dates, credits)
 VALUES
   ('ALMAR Seafood Bar', 
    'almar@gmail.com', 
@@ -73,6 +74,7 @@ VALUES
     {"id": 18, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null, "bidders": [0,0,0], "reg": false, "venue_id": 1}}, 
     {"id": 19, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null, "bidders": [0,0,0], "reg": false, "venue_id": 1}}, 
     {"id": 20, "pic": "", "modal": false, "active": false, "auction": {"deposit": null, "step": null, "bidders": [0,0,0], "reg": false, "venue_id": 1}}]}',
+   '{}',
    '0'),
 
   ('Elia Backyard Restaurant', 
@@ -82,7 +84,8 @@ VALUES
    'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1769500654/ajbjnizwpbwq7jwrf65h.jpg', 
    '{}', 
    '10:00-22:00', 
-   '{}', 
+   '{}',
+   '{}',
    '0'),
 
   ('Savino Rock Bar', 
@@ -91,10 +94,11 @@ VALUES
    '1', 'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1769501496/i3lre8meevjwwxez3rsp.jpg', 
    '{}', 
    '10:00-22:00', 
-   '{}', 
+   '{}',
+   '{}',
    '0');
 
-  INSERT INTO customers (customer, email, password, stage, avatar, dob, gender, interest, credits)
+  INSERT INTO customers (customer, email, password, stage, avatar, dob, gender, interest, dates, credits)
   VALUES
   ('Stan Marsh', 
    'stan@gmail.com', 
@@ -104,6 +108,7 @@ VALUES
    '1988-07-29', 
    'Male', 
    'Female',
+   '{}',
    '0');
 `;
 

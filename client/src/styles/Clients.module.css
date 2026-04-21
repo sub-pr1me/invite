@@ -22,3 +22,29 @@
   color: rgb(248, 172, 255);
   overflow: hidden;
 }
+
+.people {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  height: 98%;
+  background-color: rgba(255, 192, 203, 0.103);
+  border-radius: 20px;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.people_content {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  padding: 20px;
+  gap: 25px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}

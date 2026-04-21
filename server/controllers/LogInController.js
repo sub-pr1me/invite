@@ -41,10 +41,11 @@ export default async function LogInController(req, res) {
   let interest = null;
   let hours = null;
   let tables = null;
-  const stage = dbData.stage
-  const avatar = dbData.avatar
-  const album = dbData.album
-  const credits = dbData.credits
+  const stage = dbData.stage;
+  const avatar = dbData.avatar;
+  const album = dbData.album;
+  const dates = dbData.dates[0];
+  const credits = dbData.credits;
 
   if (matchedVenues) {
     id = dbData.id;
@@ -84,10 +85,10 @@ export default async function LogInController(req, res) {
     // SEND TOKEN TO USER
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
     if (accType === 'venue') res.json({ 
-      accessToken, accType, id, name, stage, avatar, album, likes, rating, hours, tables, credits
+      accessToken, accType, id, name, stage, avatar, album, likes, rating, hours, tables, dates, credits
     });
     if (accType === 'customer') res.json({ 
-      accessToken, accType, id, name, stage, avatar, album, likes, dob, gender, interest, credits
+      accessToken, accType, id, name, stage, avatar, album, likes, dob, gender, interest, dates, credits
     });
   } else {
     res.status(401).send('WRONG PASSWORD');

@@ -20,6 +20,7 @@ export default async function handleRefreshToken(req, res) {
   let avatar = null;
   let album = null;
   let stage = null;
+  let dates = null;
   let credits = null;
 
   let rating = null;
@@ -42,6 +43,7 @@ export default async function handleRefreshToken(req, res) {
     likes = matchedVenue.likes;
     rating = matchedVenue.rating;
     hours = matchedVenue.hours;
+    dates = matchedVenue.dates[0];
     credits = matchedVenue.credits;
     tables = matchedVenue.tables[0];
   };
@@ -58,6 +60,7 @@ export default async function handleRefreshToken(req, res) {
     dob = matchedCustomer.dob;
     gender = matchedCustomer.gender;
     interest = matchedCustomer.interest;
+    dates = matchedCustomer.dates[0];
     credits = matchedCustomer.credits;
   }
 
@@ -77,10 +80,10 @@ export default async function handleRefreshToken(req, res) {
       );
       // console.log('NEW TOKEN - ', accessToken);
       if (matchedVenue) res.json({ 
-        accessToken, roles, id, email, name, avatar, album, stage, likes, rating, hours, tables, credits
+        accessToken, roles, id, email, name, avatar, album, stage, likes, rating, hours, tables, dates, credits
       });
       if (matchedCustomer) res.json({ 
-        accessToken, roles, id, email, name, avatar, album, stage, likes, dob, gender, interest, credits
+        accessToken, roles, id, email, name, avatar, album, stage, likes, dob, gender, interest, dates, credits
       });
     }
   );  

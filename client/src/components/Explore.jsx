@@ -7,10 +7,9 @@ import UserProfile from './UserProfile'
 const Explore = ({ setActive }) => {
   const [venues, setVenues] = useState(null);
   const [customers, setCustomers] = useState(null);
-
-  const onRefresh = useEffectEvent(()=>{setActive('explore')});
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useAuth();
+  const onRefresh = useEffectEvent(()=>{setActive('explore')});
 
   const FetchVenues = useEffectEvent(async () => {
     const response = await axiosPrivate.get('/fetch_venues',
@@ -41,7 +40,6 @@ const Explore = ({ setActive }) => {
   useEffect(() => {
     if (!venues) FetchVenues();
     if (!customers) FetchCustomers();
-    console.log('VENUES',venues);
   }, [venues, customers]);
 
   return (

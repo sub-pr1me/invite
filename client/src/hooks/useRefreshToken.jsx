@@ -24,6 +24,7 @@ const useRefreshToken = () => {
             rating: response?.data?.rating,
             hours: response?.data?.hours,
             tables: response?.data?.tables,
+            dates: response?.data?.dates,
             credits: parseInt(response?.data?.credits)
           }
         });
@@ -42,6 +43,7 @@ const useRefreshToken = () => {
             dob: response?.data?.dob,
             gender: response?.data?.gender,
             interest: response?.data?.interest,
+            dates: response?.data?.dates,
             credits: parseInt(response?.data?.credits)
           }
         });
