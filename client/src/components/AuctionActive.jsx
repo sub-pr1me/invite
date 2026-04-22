@@ -6,7 +6,8 @@ import { useState, useEffect, useEffectEvent } from 'react'
 import { Link } from 'react-router-dom'
 
 const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidders, 
-                         pic, setTablePreview, setHostPreview }) => {
+  pic, setTablePreview, setHostPreview }) => {
+    
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [modal, setModal] = useState(null);

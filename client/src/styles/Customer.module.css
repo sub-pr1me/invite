@@ -79,6 +79,10 @@
   transform-origin: center;
 }
 
+.green {
+  color: rgb(77, 255, 92);
+}
+
 .fade {
   animation: disappear 0.3s forwards;
   will-change: transform;

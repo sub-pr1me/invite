@@ -42,6 +42,25 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
     };
   });
 
+  const LikesUpdate = useEffectEvent(async ()=>{
+    try {
+      const response = await axiosPrivate.get('/fetch_profile_data',
+        {
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          withCredentials: true,
+          params: {
+            role: 'customer',
+            id: auth.id,
+            from: 'AuctionsMonitor'
+          }
+        }
+      );
+      setAuth({...auth, likes: response.data.likes});
+    } catch (err) {
+      console.log(err);
+    };
+  });
+
   const BroadcastAuctions = useEffectEvent(() => {
 
     let attempt = 0;
@@ -95,6 +114,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
   useEffect(() => {
     AuctionsUpdate();
     BroadcastAuctions();
+    LikesUpdate();
   },[]);
 
   return (

@@ -1,8 +1,9 @@
-import { useState } from 'react';
 import styles from '../styles/Customer.module.css'
+import useAuth from '../hooks/useAuth'
+import { useState } from 'react';
 
 const Customer = ({ content, modal, award, setHostPreview }) => {
-
+  const { auth } = useAuth();
   const [text, setText] = useState('');
   const medals = ['../../img/gold.png','../../img/silver.png','../../img/bronze.png'];
 
@@ -32,7 +33,11 @@ const Customer = ({ content, modal, award, setHostPreview }) => {
       ? <div className={`${styles.empty}`}>Empty<br />Seat</div> 
       : <img className={`${styles.avatar}`}src={`${content.avatar}`} alt='' /> }
       {content !==0 &&
-        <div className={`${styles.bid} ${modal ? styles.fade : null}`}>
+        <div className={`
+          ${styles.bid} 
+          ${auth.likes?.includes(content.email) ? styles.green : null} 
+          ${modal ? styles.fade : null}`
+        }>
           {content ? content.bid : null}
         </div>
       }

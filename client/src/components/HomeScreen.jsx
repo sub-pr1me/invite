@@ -16,31 +16,28 @@ const HomeScreen = () => {
   const [albumUploadPending, setAlbumUploadPending] = useState(false);
 
   const applyUserData = useEffectEvent(async (userId)=>{
-    if (!userId) {
-      setUserData(auth);
-    } else {
-      try {
-        const response = await axiosPrivate.get('/fetch_profile_data',
-          {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            withCredentials: true,
-            params: {
-              role: userId[0] === 'c' ? 'customer' : 'venue',
-              id: userId[0] === 'c' ? userId?.substring(8) : userId?.substring(5),
-              from: 'HomeScreen'
-            }
+    try {
+      const response = await axiosPrivate.get('/fetch_profile_data',
+        {
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          withCredentials: true,
+          params: {
+            role: userId[0] === 'c' ? 'customer' : 'venue',
+            id: userId[0] === 'c' ? userId?.substring(8) : userId?.substring(5),
+            from: 'HomeScreen'
           }
-        );
-        setUserData(response.data);
-      } catch (err) {
-        console.log(err);
-      };
+        }
+      );
+      setUserData(response.data);
+    } catch (err) {
+      console.log(err);
     };
   });
 
   useEffect(()=>{
-    applyUserData(userId);
-  },[userId]);
+    if (userId) applyUserData(userId);
+    if (!userId) applyUserData(auth.roles[0]+auth.id);
+  },[userId, auth.roles, auth.id]);
 
   return (
     <>
