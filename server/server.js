@@ -19,6 +19,7 @@ import SwitchLikeRouter from './routes/SwitchLikeRouter.js'
 import FetchAvatarRouter from './routes/FetchAvatarRouter.js'
 import FetchVenuesRouter from './routes/FetchVenuesRouter.js'
 import FetchCustomersRouter from './routes/FetchCustomersRouter.js'
+import NewDateRouter from './routes/NewDateRouter.js'
 import { FetchAuctions } from './db/queries.js'
 import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
@@ -79,6 +80,7 @@ app.use('/switch_like', SwitchLikeRouter);
 app.use('/fetch_avatar', FetchAvatarRouter);
 app.use('/fetch_venues', FetchVenuesRouter);
 app.use('/fetch_customers', FetchCustomersRouter);
+app.use('/new_date', NewDateRouter);
 
 server.listen(PORT, HOST, (error) => {  
   if (error) {console.error(error)}

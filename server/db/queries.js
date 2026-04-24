@@ -219,8 +219,7 @@ export async function auctionUpload(email, id, deposit, step, bidders, reg, venu
     {return {...item, auction: {deposit: deposit, step: step, bidders: bidders, reg: reg, venue_id: venue_id}}} else {return item}}
   );
   const stringified = JSON.stringify(updated);
-  // console.log('q221',updated[parseInt(id)-1]);
-  // console.log(stringified);
+
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
     WHERE email 
@@ -228,19 +227,19 @@ export async function auctionUpload(email, id, deposit, step, bidders, reg, venu
   return updated;
 };
 
-export async function BalanceUpdate(email, amount, acc_type) {
+export async function BalanceUpdate(email, amount, acc_type, deposit) {
     console.log('BalanceUpdate');
   const { rows } = await pool.query(`SELECT credits FROM ${acc_type}s WHERE email LIKE '${email}'`);
   const balance = rows[0].credits;
   const cashout = parseInt(balance) - parseInt(amount);
-  const deposit = parseInt(balance) + parseInt(amount);
+  const dep = parseInt(balance) + parseInt(amount);
   await pool.query(`
-    UPDATE ${acc_type}s SET credits = '${acc_type === 'venue' ? cashout : deposit}' 
+    UPDATE ${acc_type}s SET credits = '${acc_type === 'venue' && !deposit ? cashout : dep}' 
     WHERE email 
     LIKE '${email}'`);
-  if (acc_type === 'venue') return cashout;
+  if (acc_type === 'venue' && !deposit) return cashout;
 
-  return deposit;
+  return dep;
 };
 
 export async function FetchAuctions() {
@@ -390,4 +389,65 @@ export async function FetchAvatar(email, role) {
     WHERE email LIKE '${email}'`
   );
   return rows[0];
+};
+
+export async function NewDateUpload(venue, host, guest, new_date) {
+    console.log('NewDateUpload');
+
+  const arr = [host, guest, venue];
+
+  while (arr.length) {
+    if (arr.length > 1) {
+      const { rows } = await pool.query(`SELECT dates FROM customers WHERE email LIKE '${arr[0]}'`);
+      let dates = rows[0].dates[0];
+
+    if (dates) {
+      dates.push(new_date);
+    } else {
+      dates = [new_date];
+    };
+      
+      const stringified = JSON.stringify(dates);
+
+      await pool.query(`
+        UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}') 
+        WHERE email 
+        LIKE '${arr[0]}'`
+      );
+      arr.shift();
+    } else {
+      const { rows } = await pool.query(`SELECT dates FROM venues WHERE email LIKE '${arr[0]}'`);
+      let dates = rows[0].dates[0];
+      if (dates) {
+        dates.push(new_date);
+      } else {
+        dates = [new_date];
+      };
+
+      const stringified = JSON.stringify(dates);
+
+      await pool.query(`
+        UPDATE venues SET dates = jsonb_set(dates, '{0}', '${stringified}') 
+        WHERE email 
+        LIKE '${arr[0]}'`
+      );
+      arr.shift();
+    };
+  };
+
+  const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${venue}'`);
+  const tables = rows[0].tables[0];
+  const updated = tables.map(item => {
+    if (item.id === parseInt(new_date.table)) {
+      return {...item, auction: {deposit: null, step: null, bidders: [0,0,0], reg: true, venue_id: parseInt(new_date.table)}};
+    } else { return item };
+  });
+
+  const stringified = JSON.stringify(updated);
+
+  await pool.query(`
+    UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
+    WHERE email 
+    LIKE '${venue}'`);
+  return updated;
 };

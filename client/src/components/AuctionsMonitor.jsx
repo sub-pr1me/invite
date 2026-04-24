@@ -2,13 +2,14 @@ import styles from '../styles/AuctionsMonitor.module.css'
 import AuctionActive from './AuctionActive'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import { useEffect, useEffectEvent } from 'react'
+import { useEffect, useEffectEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
   tablePreview, setTablePreview, hostPreview, setHostPreview}) => {
 
   const axiosPrivate = useAxiosPrivate();
+  const [status, setStatus] = useState('idle');
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
 
@@ -69,7 +70,9 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
     const connect = () => {
       const websocket = new WebSocket('ws://localhost:3000/ws');
 
-      websocket.onopen = () => console.log('Connected');
+      websocket.onopen = () => {
+        // console.log('Connected');
+      }
       websocket.onmessage = (event) => {
         const parsed = JSON.parse(event.data);
         if (parsed.type === 'auctions_updated') {
@@ -80,7 +83,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
         }
       };
       websocket.onclose = () => {
-        console.log('Disconnected');
+        // console.log('Disconnected');
         reconnect();
       }
 
@@ -111,11 +114,93 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
     };
   });
 
+  const AcceptNewDate = async () => {
+    setStatus('pending');
+    const auctionToDelete = auctions.filter(
+      item => item.venue_email === hostPreview.venue && item.id === hostPreview.auction_id
+    )[0];
+
+    const newDate = {
+      venue: hostPreview.venue,
+      table: hostPreview.auction_id,
+      table_pic: auctionToDelete.pic,
+      host: hostPreview.email,
+      guest: auth.email,
+      deposit: hostPreview.bid,
+      status: 'upcoming'
+    };
+
+    const refunds = auctionToDelete.bidders.filter(item => item && item.email !== hostPreview.email);
+    
+    try {
+      await axiosPrivate.post('/new_date', // upload new date + remove the auction
+          {
+            venue: newDate.venue,
+            host: newDate.host,
+            guest: newDate.guest,
+            new_date: newDate},
+          {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            withCredentials: true
+          }
+      );
+
+      const venueDeposit = await axiosPrivate.post('/balance_update', // deposit to the venue
+        {
+          email: hostPreview.venue,
+          amount: hostPreview.bid,
+          acc_type: 'venue',
+          deposit: true
+        },
+        {
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          withCredentials: true
+        }
+      );
+      if (venueDeposit) {
+        console.log(`${hostPreview.bid} bid was deposited to ${auctionToDelete.name}`);
+      } else { 
+        console.log(`Error depositing ${hostPreview.bid} bid to ${auctionToDelete.name}`);
+      };
+
+      while (refunds.length) {
+        const customersRefunds = await axiosPrivate.post('/balance_update', // refund customers
+          {
+            email: refunds[0].email,
+            amount: refunds[0].bid,
+            acc_type: 'customer'},
+          {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            withCredentials: true
+          }
+        );
+        if (customersRefunds) {
+          console.log(`${refunds[0].bid} bid was refunded to ${refunds[0].name}`);
+          refunds.shift();
+        } else { 
+          console.log(`Error refunding ${refunds[0].bid} bid to ${refunds[0].name}`);
+          break;
+        };
+      };
+      setStatus('success');
+      setHostPreview(null);
+    } catch (err) {
+      if (!err?.response) {
+        console.log('NO SERVER RESPONSE');
+      } else {
+        console.log('SOMETHING WENT WRONG');
+      };
+    };
+  };
+
+  const resetStatus = useEffectEvent(()=>{setStatus('idle')}); 
+
   useEffect(() => {
     AuctionsUpdate();
     BroadcastAuctions();
     LikesUpdate();
-  },[]);
+    if (status === 'success') resetStatus();
+  },[status]);
 
   return (
     <>
@@ -136,7 +221,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
                && auth.gender === hostPreview.interest
                && auth.likes.includes(hostPreview.email)
                &&
-              <button onClick={()=>{console.log('Accept')}}>Accept<br />Invitation!</button>
+              <button onClick={()=>{AcceptNewDate()}}>Accept<br />Invitation!</button>
               }
             </div>
           </div>
@@ -147,12 +232,12 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           <div 
             className={`${styles.current} ${section !== 'current' ? styles.non_highlighted : null}`} 
             onClick={()=>{setSection('current')}}
-            >Current
+            >Live Auctions
           </div>
           <div 
             className={`${styles.history} ${section !== 'history' ? styles.non_highlighted : null}`} 
             onClick={()=>{setSection('history')}}
-            >History
+            >Dates History
           </div>
         </div>
         <div className={`${styles.line} ${section === 'current' ? styles.left : styles.right}`}></div>
@@ -160,7 +245,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           ${styles.sections} 
           ${section !== 'current' ? styles.curr : styles.hist}
           ${auth.roles[0] === 'customer' ? styles.sections2 : null}`}>
-          <div className={`${styles.history_section}`}>History</div>          
+          <div className={`${styles.history_section}`}>Dates History</div>
           <div className={`${styles.current_section}`}>
             { auctions &&
               auctions.map((item) => {       

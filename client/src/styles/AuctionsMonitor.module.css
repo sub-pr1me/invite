@@ -27,7 +27,7 @@
 
 .line {
   height: 5px;
-  width: 25%;
+  width: 35%;
   background-color: rgb(248, 172, 255);
   border-radius: 1000px;
 }
@@ -61,13 +61,13 @@
   overflow-y: scroll;
   overflow-x: hidden;
   scrollbar-width: none;
-  background-color: rgba(147, 85, 167, 0.089);
+  background-color: rgba(147, 85, 167, 0.09);
   box-sizing: border-box;
   gap: 5px;
 }
 
 .history_section {
-  background-color: rgba(0, 225, 255, 0.116);
+  background-color: rgba(147, 85, 167, 0.09);
   justify-content: center;
   align-items: center;
 }
@@ -85,12 +85,12 @@
 }
 
 .left {
-  transform: translateX(50%);
+  transform: translateX(20%);
   transition: all 0.2s ease-in;
 }
 
 .right {
-  transform: translateX(250%);
+  transform: translateX(165%);
   transition: all 0.2s ease-in;
 }
 

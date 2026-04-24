@@ -191,6 +191,8 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
               modal={modal}
               award={bidders.indexOf(item)}
               setHostPreview={setHostPreview}
+              venue={venue_email}
+              auction_id={id}
               />              
             )})
           }

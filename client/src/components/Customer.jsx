@@ -2,7 +2,7 @@ import styles from '../styles/Customer.module.css'
 import useAuth from '../hooks/useAuth'
 import { useState } from 'react';
 
-const Customer = ({ content, modal, award, setHostPreview }) => {
+const Customer = ({ content, modal, award, setHostPreview, venue, auction_id }) => {
   const { auth } = useAuth();
   const [text, setText] = useState('');
   const medals = ['../../img/gold.png','../../img/silver.png','../../img/bronze.png'];
@@ -20,11 +20,15 @@ const Customer = ({ content, modal, award, setHostPreview }) => {
         className={`${styles.slot_text}`}
         onMouseEnter={()=>{setText('View Options')}}
         onMouseLeave={()=>{setText('')}}
-        onClick={()=> {if (content.avatar) {setHostPreview({
+        onClick={()=> {if (content.avatar) {
+          setHostPreview({
           avatar: content.avatar, 
           id: content.id,
           interest: content.interest,
-          email: content.email})}}}
+          email: content.email,
+          bid: content.bid,
+          venue: venue,
+          auction_id: auction_id})}}}
         >{text}
       </div>
       }

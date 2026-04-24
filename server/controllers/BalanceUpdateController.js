@@ -5,8 +5,9 @@ const handleBalanceUpdate = async (req, res) => {
     const email = req.body.email;
     const amount = req.body.amount;
     const acc_type = req.body.acc_type;
+    const deposit = req.body.deposit;
 
-    const result = await BalanceUpdate(email, amount, acc_type);
+    const result = await BalanceUpdate(email, amount, acc_type, deposit);
     res.status(200).send(result);
   } catch (err) {
     console.log(err);
