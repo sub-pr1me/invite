@@ -39,6 +39,7 @@
   position: absolute;
   z-index: 999;
   bottom: 0%;
+  cursor: default;
   animation: appear 0.5s both, opacity 0.6s both;
   will-change: transform, opacity;
 }

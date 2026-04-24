@@ -14,8 +14,8 @@ const ProfileLikesSection = ({ userData, setUserData }) => {
       {userData?.likes &&
         <div className={`${styles.likes_container} ${expanded ? styles.expanded_container : null}`}>
           <div className={styles.title}>
-            {!userId && auth.roles[0] === 'venue' && auth.likes[0] ? 'People who like your place:' : null}
-            {!userId && auth.roles[0] === 'customer' && auth.likes[0] ? 'People who like you:' : null}
+            {!userId && auth.roles[0] === 'venue' && userData?.likes[0] ? 'People who like your place:' : null}
+            {!userId && auth.roles[0] === 'customer' && userData?.likes[0] ? 'People who like you:' : null}
             {userId && userData?.dob && userData?.likes[0] ? 'People who like this person:' : null}
             {userId && !userData?.dob && userData?.likes[0] ? 'People who like this place:' : null}
           </div>
