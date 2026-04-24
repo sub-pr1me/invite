@@ -5,12 +5,14 @@ const handleFetchUsers = async (req, res) => {
   try {
     if (role === 'venue') {
 
-      const response = await getAllVenueData();      
+      const response = await getAllVenueData();
+      response.map(item => item.dates = item.dates[0]);
       res.status(200).send(response);
 
     } else if (role === 'customer') {
 
-      const response = await getAllCustomerData();      
+      const response = await getAllCustomerData();
+      response.map(item => item.dates = item.dates[0]);
       res.status(200).send(response);
     };
 

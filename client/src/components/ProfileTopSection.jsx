@@ -50,10 +50,17 @@ const ProfileTopSection = ({ userData, setUserData }) => {
     },[axiosPrivate, userData, setUserData, userId]
   );
 
+  const host = userData?.dates?.find((item) => item.venue === auth.email && item.host === userData.email);
+  const guest = userData?.dates?.find((item) => item.venue === auth.email && item.guest === userData.email);
+
   return (
     <>
       <div className={styles.top_container}>
-        <ProfileAvatar avatar={userData?.avatar}/>
+        <ProfileAvatar 
+          avatar={userData?.avatar}
+          host={ auth.roles[0] === 'venue' && host ? true : false}
+          guest={ auth.roles[0] === 'venue' && guest ? true : false}
+        />
 
         <div className={styles.name}>
           {!userId && auth.roles[0] === 'venue' ? auth.name : null}

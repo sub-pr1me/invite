@@ -3,8 +3,6 @@ import { auctionUpload } from '../db/queries.js'
 export default async function handleAuctionUpload(req, res) {
 
   if (req.errorMessage) return res.status(422);
-
-  console.log(typeof req.body.venue_id, req.body.venue_id);
   
   const response = await auctionUpload(
     req.email, 

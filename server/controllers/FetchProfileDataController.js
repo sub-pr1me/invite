@@ -8,6 +8,7 @@ const handleFetchProfileData = async (req, res) => {
 
     const result = await FetchProfileData(role, id, from);
     result.role = role;
+    result.dates = result.dates[0];
     delete result.credits;
 
     res.status(200).send(result);

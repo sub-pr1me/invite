@@ -122,6 +122,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
 
     const newDate = {
       venue: hostPreview.venue,
+      venue_name: auctionToDelete.name,
       table: hostPreview.auction_id,
       table_pic: auctionToDelete.pic,
       host: hostPreview.email,
@@ -192,6 +193,8 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
       };
     };
   };
+
+
 
   const resetStatus = useEffectEvent(()=>{setStatus('idle')}); 
 

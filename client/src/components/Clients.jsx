@@ -24,9 +24,9 @@ const Clients = ({ setActive }) => {
     let hostArr = [];
     let guestArr = [];
     for (const item of response.data) {
-      const host = item.dates.find(obj => obj.place === auth.email && obj.host === item.email);
+      const host = item.dates?.find(obj => obj.venue === auth.email && obj.host === item.email);
       if (host) hostArr.push(item.email);
-      const guest = item.dates.find(obj => obj.place === auth.email && obj.guest === item.email);
+      const guest = item.dates?.find(obj => obj.venue === auth.email && obj.guest === item.email);
       if (guest) guestArr.push(item.email);
     };
     setHosts(hostArr);

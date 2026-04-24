@@ -336,7 +336,7 @@ export async function FetchProfileData(role, id, from) {
   
   if (role === 'venue') {
     const { rows } = await pool.query(`
-      SELECT venue, avatar, album, hours, tables, likes, dates, credits
+      SELECT venue, email, avatar, album, hours, tables, likes, dates, credits
       FROM venues 
       WHERE id = ${parseInt(id)}`
     );
@@ -344,7 +344,7 @@ export async function FetchProfileData(role, id, from) {
   };
 
   const { rows } = await pool.query(`
-    SELECT customer, avatar, album, dob, gender, interest, likes, dates, credits 
+    SELECT customer, email, avatar, album, dob, gender, interest, likes, dates, credits 
     FROM customers 
     WHERE id = ${parseInt(id)}`
   );
