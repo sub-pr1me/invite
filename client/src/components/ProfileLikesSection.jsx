@@ -32,6 +32,7 @@ const ProfileLikesSection = ({ userData, setUserData }) => {
                       email={item}                      
                       role='customer'
                       setUserData={setUserData}
+                      setExpanded={setExpanded}
                     />
                   )
                 })
