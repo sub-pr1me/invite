@@ -23,6 +23,7 @@ const Explore = ({ setActive }) => {
   });
 
   const FetchCustomers = useEffectEvent(async () => {
+    console.log('FETCHED CUSTOMERS!');
     const response = await axiosPrivate.get('/fetch_customers',
       {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -30,7 +31,9 @@ const Explore = ({ setActive }) => {
         params: {role: 'customer'}
       }
     );
-    setCustomers(response.data);
+    const filtered = response.data.filter(item => item.stage === "4");
+    console.log(filtered);
+    setCustomers(filtered);
   });
 
   useEffect(()=>{
@@ -71,16 +74,18 @@ const Explore = ({ setActive }) => {
           {customers?.filter(item => item.email !== auth.email 
           && item.gender === auth.interest && item.interest === auth.gender)
             .map(item => {
-              return (
-                <UserProfile 
-                  email={item.email} 
-                  role='customer' 
-                  key={item.email}
-                  name={item.customer}
-                  avatar={item.avatar}
-                  passedID={item.id}
-                />
-              )
+              if (item.avatar) {
+                return (
+                  <UserProfile 
+                    email={item.email} 
+                    role='customer' 
+                    key={item.email}
+                    name={item.customer}
+                    avatar={item.avatar}
+                    passedID={item.id}
+                  />
+                )
+              }
             })
           }
         </div>

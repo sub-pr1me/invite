@@ -55,8 +55,15 @@
   flex-direction: column;
   font-weight: 600;
   z-index: 1;
+  position: relative;
+  animation: appear 0.5s both, opacity 0.6s  both;
+  will-change: transform, opacity;
+}
+
+.shifted {
   position: absolute;
   top: 40%;
+  z-index: 1;
 }
 
 .no_photos button {

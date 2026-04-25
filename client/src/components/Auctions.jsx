@@ -42,7 +42,6 @@ const Auctions = ({ setActive, auctions, setAuctions }) => {
           tablePreview={tablePreview}
           hostPreview={hostPreview}
         />}
-        {/* { MAPPED CUSTOMER'S AUCTIONS} */}
       </div>
     </div>
     </>

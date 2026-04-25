@@ -1,0 +1,195 @@
+.hidden {
+  display: none !important;
+}
+
+ /* * {
+  outline: rgb(135, 197, 43) 1px solid;
+} */
+
+.date_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  animation: appear 0.5s both, opacity 0.6s  both;
+  will-change: transform, opacity;
+}
+
+.preview_mode {
+  position: absolute;
+  top: 250%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto auto;
+}
+
+.prev,
+.next {
+  height: 55%;
+  aspect-ratio: 1/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.prev:hover,
+.next:hover {
+  box-shadow: 0 0 5pt 3pt rgb(225, 150, 255);
+}
+
+.prev {
+  margin-right: 13px;
+}
+
+.next {
+  margin-left: 13px;
+}
+
+.prev img,
+.next img,
+.no_table {
+  filter: 
+    invert(50%) 
+    sepia(50%) 
+    saturate(300%) 
+    hue-rotate(230deg) 
+    brightness(120%) 
+    contrast(100%);
+}
+
+.prev img,
+.next img {
+  height: 70%;
+}
+
+.prev img {
+  transform: scaleX(80%);
+}
+
+.next img {
+  transform: scaleX(80%) rotate(180deg);
+}
+
+.no_show {
+  box-shadow: none !important;
+  cursor: default;
+}
+
+.no_show img {
+  display: none;
+}
+
+.images {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  border-radius: 50px;
+    animation: appear 0.5s both, opacity 0.6s  both;
+  will-change: transform, opacity;
+}
+
+.images img {
+  max-height: 90px;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.images img:nth-child(2),
+.images img:nth-child(3) {
+  border: 3px solid rgb(246, 179, 255);
+  height: 100%;
+}
+
+.images img:nth-child(2):hover,
+.images img:nth-child(3):hover {
+  box-shadow: 0 0 5pt 3pt rgb(225, 150, 255);
+}
+
+.date_title,
+.date_title_customer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 78%;
+  margin: auto auto;
+  background-color: black;
+  height: fit-content;
+  width: fit-content;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  color: rgb(139, 255, 226);
+  border: 2px solid rgb(246, 179, 255);
+  cursor: default;
+}
+
+.date_title_customer {
+  cursor: pointer;
+}
+
+.date_title_customer:hover {
+  color: rgb(255, 227, 104);
+  box-shadow: 0 0 5pt 3pt rgb(225, 150, 255);
+}
+
+.table_preview {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 80vh;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.493);
+  border-radius: 30px;
+  animation: opacity 0.5s  both;
+  will-change: opacity;
+}
+
+.table_preview img {
+  height: 100%;
+  max-width: 100%;
+  border-radius: 30px;
+  bottom: 0%;
+  border: 2px solid rgb(248, 192, 255);
+  animation: appear 0.8s both, opacity 0.8s  both;
+  will-change: transform, opacity;
+}
+
+.table_preview button {
+  position: absolute;
+  bottom: 0%;
+  background-color: rgb(94, 94, 221);
+  outline: 2px solid rgb(248, 192, 255);
+  animation: appear 0.8s both, opacity 0.8s  both;
+  will-change: transform, opacity;
+}
+
+@keyframes appear {
+    0% {
+      transform: scale(1%);
+    }
+    100% {
+      transform: scale(100%);
+    }
+}
+
+@keyframes opacity {
+    0% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 1;
+    }
+}

@@ -4,6 +4,7 @@ import useAuth from '../hooks/useAuth'
 import { useParams } from 'react-router-dom'
 import { useState, useEffect, useEffectEvent, memo } from 'react'
 import ProfileTopSection from './ProfileTopSection'
+import ProfileDatesSection from './ProfileDatesSection'
 import ProfileLikesSection from './ProfileLikesSection'
 import Carousel from './Carousel'
 import AlbumUpload from './AlbumUpload'
@@ -14,6 +15,7 @@ const HomeScreen = () => {
   const { userId } = useParams();
   const [userData, setUserData] = useState(null);
   const [albumUploadPending, setAlbumUploadPending] = useState(false);
+  const [tablePreview, setTablePreview] = useState(false);
 
   const applyUserData = useEffectEvent(async (userId)=>{
     try {
@@ -42,7 +44,9 @@ const HomeScreen = () => {
   return (
     <>
       <div className={`${styles.homescreen_container}`}>
+        
         <div className={`${styles.edge_fader}`}></div>
+
         {albumUploadPending &&
           <div className={`${styles.upload_modal}`}>
             <AlbumUpload 
@@ -52,16 +56,39 @@ const HomeScreen = () => {
             />
           </div>
         }
+
+        {!tablePreview && 
         <Carousel />
-        {!albumUploadPending && <ProfileTopSection userData={userData} setUserData={setUserData}/>}
-        {auth.roles[0] === 'customer' && !auth.album && !userId && !albumUploadPending &&
-          <div className={`${styles.no_photos}`}>
+        }
+
+        {!albumUploadPending && 
+         !tablePreview && 
+         <ProfileTopSection userData={userData} setUserData={setUserData}/>
+        }
+        
+        {auth.roles[0] === 'customer' && !auth.album && !userId && !albumUploadPending && !tablePreview &&
+          <div className={`${styles.no_photos} ${!auth.likes && ! auth.dates ? styles.shifted : null}`}>
             Upload some photos <br />
             to make your profile more attractive!
             <button onClick={()=>{setAlbumUploadPending(true)}}>Let's do it!</button>
           </div>          
         }
-        {!albumUploadPending && <ProfileLikesSection userData={userData} setUserData={setUserData}/>}        
+
+        {auth.dates && auth.dates[0] && !userId && !albumUploadPending &&
+          <ProfileDatesSection 
+            dates={auth.dates} 
+            tablePreview={tablePreview} 
+            setTablePreview={setTablePreview}
+          />
+        }
+
+        {!albumUploadPending && 
+          <ProfileLikesSection 
+            userData={userData} 
+            setUserData={setUserData}
+            tablePreview={tablePreview}
+          />
+        }        
       </div>
     </>
   );

@@ -25,6 +25,8 @@
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.7);
   cursor: default;
+  animation: appear 0.5s both, opacity 0.6s both;
+  will-change: transform, opacity;
 }
 
 .name {
@@ -33,4 +35,22 @@
 
 .hours {
   font-size: clamp(10px, 4vw, 16px);
+}
+
+@keyframes appear {
+  0% {
+    transform: scale(0%);
+  }
+  100% {
+    transform: scale(100%);
+  }
+}
+
+@keyframes opacity {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
 }

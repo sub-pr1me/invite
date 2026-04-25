@@ -115,6 +115,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
   });
 
   const AcceptNewDate = async () => {
+
     setStatus('pending');
     const auctionToDelete = auctions.filter(
       item => item.venue_email === hostPreview.venue && item.id === hostPreview.auction_id
@@ -123,16 +124,20 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
     const newDate = {
       venue: hostPreview.venue,
       venue_name: auctionToDelete.name,
+      venue_id: `venue${auctionToDelete.venue_id}`,
       table: hostPreview.auction_id,
       table_pic: auctionToDelete.pic,
       host: hostPreview.email,
+      host_id: hostPreview.id,
+      host_pic: hostPreview.avatar,
       guest: auth.email,
+      guest_id: `customer${auth.id}`,
+      guest_pic: auth.avatar,
       deposit: hostPreview.bid,
       status: 'upcoming'
     };
 
     const refunds = auctionToDelete.bidders.filter(item => item && item.email !== hostPreview.email);
-    
     try {
       await axiosPrivate.post('/new_date', // upload new date + remove the auction
           {

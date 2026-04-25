@@ -4,14 +4,14 @@ import UserProfile from './UserProfile'
 import { useParams } from 'react-router-dom'
 import { useState } from 'react';
 
-const ProfileLikesSection = ({ userData, setUserData }) => {
+const ProfileLikesSection = ({ userData, setUserData, tablePreview }) => {
   const { auth } = useAuth();
   const { userId } = useParams();
   const [expanded, setExpanded] = useState(null);
 
   return (
     <>
-      {userData?.likes &&
+      {userData?.likes && !tablePreview &&
         <div className={`${styles.likes_container} ${expanded ? styles.expanded_container : null}`}>
           <div className={styles.title}>
             {!userId && auth.roles[0] === 'venue' && userData?.likes[0] ? 'People who like your place:' : null}
@@ -28,10 +28,11 @@ const ProfileLikesSection = ({ userData, setUserData }) => {
                     || expanded)
                   return (
                     <UserProfile 
-                      key={item}  
+                      key={item}
                       email={item}                      
                       role='customer'
                       setUserData={setUserData}
+                      expanded={expanded}
                       setExpanded={setExpanded}
                     />
                   )

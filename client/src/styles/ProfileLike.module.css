@@ -15,11 +15,13 @@
   aspect-ratio: 1/1;;
   background-color: rgba(0, 0, 0, 0.7);
   cursor: pointer;
+  animation: appear 0.5s both, opacity 0.6s both;
+  will-change: transform, opacity;
 }
 
 .like_container img {
   height: 60%;
-  filter: saturate(0%);
+  filter: saturate(0%) brightness(170%);
 }
 
 .move_down {
@@ -28,4 +30,22 @@
 
 .like_container .liked {
   filter: saturate(100%);
+}
+
+@keyframes appear {
+  0% {
+    transform: scale(0%);
+  }
+  100% {
+    transform: scale(100%);
+  }
+}
+
+@keyframes opacity {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
 }

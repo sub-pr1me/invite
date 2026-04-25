@@ -1,0 +1,95 @@
+.hidden {
+  display: none !important;
+}
+
+ /* * {
+  outline: rgb(135, 197, 43) 1px solid;
+} */
+
+.dates_container {
+  z-index: 1;
+  height: 20%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  animation: appear 0.5s both, opacity 0.6s both;
+  will-change: transform, opacity;
+}
+
+.background {
+  position: absolute;
+  bottom: 0;
+  z-index: 0;
+  height: 80%;
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  mask-image: linear-gradient(
+    to right, 
+    transparent,
+     black, 
+     black, 
+     black, 
+    transparent
+  );
+  animation: appear 0.5s both, opacity 0.6s both;
+  will-change: transform, opacity;
+}
+
+.title {
+  z-index: 1;
+  display: flex;
+  font-size: clamp(11px, 2vh, 16px);
+  font-weight: 600;
+  padding: 0px 7px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  cursor: default;
+  margin-bottom: 5px;
+  animation: appear 0.5s both, opacity 0.6s  both;
+  will-change: transform, opacity;
+}
+
+.amount {
+  color: white;
+  margin: 0px 3px;
+}
+
+.dates_content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.shifted {
+  position: absolute;
+  top: 40%;
+  z-index: 1;
+}
+
+@keyframes appear {
+  0% {
+    transform: scale(0%);
+  }
+  100% {
+    transform: scale(100%);
+  }
+}
+
+@keyframes opacity {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}

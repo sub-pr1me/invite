@@ -49,6 +49,7 @@ const Clients = ({ setActive }) => {
         <div className={`${styles.label}`}>Explore People:</div>
         <div className={`${styles.people_content}`}>
           {customers?.map(item => {
+            if (item.avatar) {
               return (
                 <UserProfile 
                   email={item.email} 
@@ -61,8 +62,8 @@ const Clients = ({ setActive }) => {
                   guest={guests?.includes(item.email) ? true : false}
                 />
               )
-            })
-          }
+            }
+          })}
         </div>
       </div>
     </div>

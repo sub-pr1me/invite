@@ -21,6 +21,7 @@ const Customer = ({ content, modal, award, setHostPreview, venue, auction_id }) 
         onMouseEnter={()=>{setText('View Options')}}
         onMouseLeave={()=>{setText('')}}
         onClick={()=> {if (content.avatar) {
+          console.log('CONTENT:',content);
           setHostPreview({
           avatar: content.avatar, 
           id: content.id,

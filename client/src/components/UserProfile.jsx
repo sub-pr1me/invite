@@ -1,10 +1,10 @@
 import styles from '../styles/UserProfile.module.css'
 import { useEffect, useEffectEvent, useState, memo } from 'react'
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import useAuth from '../hooks/useAuth'
 
-const UserProfile = ({ email, role, setUserData, setExpanded, name, avatar, passedID, host, guest }) => {
+const UserProfile = ({ email, role, setUserData, expanded, setExpanded, name, avatar, passedID, host, guest }) => {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [pic, setPic] = useState(null);
@@ -36,7 +36,7 @@ const UserProfile = ({ email, role, setUserData, setExpanded, name, avatar, pass
         className={`${styles.user_container}`}
         onClick={()=>{
           if (!passedID) setTimeout(() => {setUserData(null)}, 0);
-          setExpanded(null);
+          if (expanded) setExpanded(null);
         }}>
         <Link to={`/dashboard/${passedID ? role+passedID : id}`}>
           <img src={pic ? pic : avatar} alt='' />
