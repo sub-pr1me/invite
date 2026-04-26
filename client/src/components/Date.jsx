@@ -51,7 +51,7 @@ const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }) 
 
             {date.table_pic 
               ? <img src={date.table_pic} alt='' onClick={()=>{setTablePreview(true)}}/> 
-              : <img className={`${styles.no_table}`} src='../../public/img/table.png' alt='' />
+              : <img className={`${styles.no_table}`} src='../../img/table.png' alt='' />
             }
             
             <img src={auth.email === date.guest ? date.host_pic : date.guest_pic} alt=''
