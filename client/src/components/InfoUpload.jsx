@@ -64,7 +64,7 @@ const InfoUpload = () => {
       if (auth.stage === '2' && auth.roles[0] === 'venue') setAuth({...auth, stage: '3', tables: tables_arr});
 
 
-      if (auth.stage === '2' && auth.roles[0] === 'customer') setAuth({...auth, stage: '4'});
+      if (auth.stage === '2' && auth.roles[0] === 'customer') setAuth({...auth, stage: '4', dob: dob, gender: gender, interest: interest});
 
     } catch (err) {
       if (!err?.response) {

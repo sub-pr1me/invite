@@ -7,6 +7,7 @@ const ProfileDatesSection = ({ dates, tablePreview, setTablePreview }) => {
   const { auth } = useAuth();
   const [index, setIndex] = useState(0);
   const amount = dates?.length;
+
   return (
     <>
       <div className={`

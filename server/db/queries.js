@@ -439,7 +439,12 @@ export async function NewDateUpload(venue, host, guest, new_date) {
   const tables = rows[0].tables[0];
   const updated = tables.map(item => {
     if (item.id === parseInt(new_date.table)) {
-      return {...item, auction: {deposit: null, step: null, bidders: [0,0,0], reg: true, venue_id: parseInt(new_date.table)}};
+      return {...item, auction: {
+        deposit: null, 
+        step: null, 
+        bidders: [0,0,0], 
+        reg: true, 
+        venue_id: parseInt(new_date.table)}};
     } else { return item };
   });
 
@@ -448,6 +453,76 @@ export async function NewDateUpload(venue, host, guest, new_date) {
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
     WHERE email 
-    LIKE '${venue}'`);
+    LIKE '${venue}'`
+  );
   return updated;
+};
+
+export async function ArchiveVenueDate (venue, date) {
+  console.log('ArchiveVenueDate');
+
+    const { rows } = await pool.query(`SELECT dates FROM venues WHERE email LIKE '${venue}'`);
+    
+    let dates = rows[0].dates[0];
+
+    const updated = dates.map(item => {
+      if (item.venue === date.venue && item.host === date.host && item.guest === date.guest) {
+        return {...item, status: 'archived'}      
+      } else { return item }
+    });
+    
+    const stringified = JSON.stringify(updated);
+
+    await pool.query(`
+      UPDATE venues SET dates = jsonb_set(dates, '{0}', '${stringified}') 
+      WHERE email 
+      LIKE '${venue}'`
+    );
+  return 'success';
+};
+
+export async function ArchiveHostDate (host, date) {
+  console.log('ArchiveHostDate');
+
+    const { rows } = await pool.query(`SELECT dates FROM customers WHERE email LIKE '${host}'`);
+    
+    let dates = rows[0].dates[0];
+
+    const updated = dates.map(item => {
+      if (item.venue === date.venue && item.host === date.host && item.guest === date.guest) {
+        return {...item, status: 'archived'}      
+      } else { return item }
+    });
+    
+    const stringified = JSON.stringify(updated);
+
+    await pool.query(`
+      UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}') 
+      WHERE email 
+      LIKE '${host}'`
+    );
+  return 'success';
+};
+
+export async function ArchiveGuestDate (guest, date) {
+  console.log('ArchiveGuestDate');
+
+    const { rows } = await pool.query(`SELECT dates FROM customers WHERE email LIKE '${guest}'`);
+    
+    let dates = rows[0].dates[0];
+
+    const updated = dates.map(item => {
+      if (item.venue === date.venue && item.host === date.host && item.guest === date.guest) {
+        return {...item, status: 'archived'}      
+      } else { return item }
+    });
+    
+    const stringified = JSON.stringify(updated);
+
+    await pool.query(`
+      UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}') 
+      WHERE email 
+      LIKE '${guest}'`
+    );
+  return 'success';
 };

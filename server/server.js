@@ -20,6 +20,7 @@ import FetchAvatarRouter from './routes/FetchAvatarRouter.js'
 import FetchVenuesRouter from './routes/FetchVenuesRouter.js'
 import FetchCustomersRouter from './routes/FetchCustomersRouter.js'
 import NewDateRouter from './routes/NewDateRouter.js'
+import ArchiveDateRouter from './routes/ArchiveDateRouter.js'
 import { FetchAuctions } from './db/queries.js'
 import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
@@ -81,6 +82,7 @@ app.use('/fetch_avatar', FetchAvatarRouter);
 app.use('/fetch_venues', FetchVenuesRouter);
 app.use('/fetch_customers', FetchCustomersRouter);
 app.use('/new_date', NewDateRouter);
+app.use('/archive_date', ArchiveDateRouter);
 
 server.listen(PORT, HOST, (error) => {  
   if (error) {console.error(error)}

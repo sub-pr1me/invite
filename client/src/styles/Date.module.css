@@ -19,6 +19,52 @@
   will-change: transform, opacity;
 }
 
+.date_container * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  outline: 0;
+}
+
+.end_date {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  z-index: 1;
+  top: 10%;
+  height: 75%;
+  width: 70px;
+  background-color: black;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 2px 5px 10px;
+  border-radius: 10px 10px 0px 0px;
+  border-top: 2px solid rgb(246, 179, 255);
+  border-left: 2px solid rgb(246, 179, 255);
+  border-right: 2px solid rgb(246, 179, 255);
+  color: rgb(255, 144, 144);
+  cursor: pointer;
+  transform-origin: bottom;
+  animation: appear2 0.3s forwards;
+  will-change: transform;
+}
+
+.end_date:hover {
+  background-color: rgb(150, 29, 29);
+  color: white;
+}
+
+.fade {
+  animation: disappear 0.3s forwards;
+  will-change: transform;
+}
+
 .preview_mode {
   position: absolute;
   top: 250%;
@@ -117,6 +163,7 @@
 .date_title,
 .date_title_customer {
   position: absolute;
+  z-index: 2;
   left: 0;
   right: 0;
   top: 78%;
@@ -131,16 +178,23 @@
   line-height: 1;
   color: rgb(139, 255, 226);
   border: 2px solid rgb(246, 179, 255);
-  cursor: default;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  outline: 0;
 }
 
-.date_title_customer {
-  cursor: pointer;
+.date_title:hover,
+.date_title_customer:hover {
+  box-shadow: 0 0 5pt 3pt rgb(225, 150, 255);
 }
 
 .date_title_customer:hover {
   color: rgb(255, 227, 104);
-  box-shadow: 0 0 5pt 3pt rgb(225, 150, 255);
 }
 
 .table_preview {
@@ -192,5 +246,23 @@
     }
     100% {
         opacity: 1;
+    }
+}
+
+@keyframes appear2 {
+    0% {
+      transform: scaleY(1%);
+    }
+    100% {
+      transform: scaleY(100%);
+    }
+}
+
+@keyframes disappear {
+    0% {
+      transform: scaleY(100%);
+    }
+    100% {
+      transform: scaleY(1%);
     }
 }

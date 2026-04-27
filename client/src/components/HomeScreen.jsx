@@ -17,6 +17,8 @@ const HomeScreen = () => {
   const [albumUploadPending, setAlbumUploadPending] = useState(false);
   const [tablePreview, setTablePreview] = useState(false);
 
+  const upcomingDates = auth.dates?.filter(item => item.status === 'upcoming');
+
   const applyUserData = useEffectEvent(async (userId)=>{
     try {
       const response = await axiosPrivate.get('/fetch_profile_data',
@@ -39,7 +41,7 @@ const HomeScreen = () => {
   useEffect(()=>{
     if (userId) applyUserData(userId);
     if (!userId) applyUserData(auth.roles[0]+auth.id);
-  },[userId, auth.roles, auth.id]);
+  },[userId, auth.roles, auth.id, auth.dates, albumUploadPending, upcomingDates?.length]);
 
   return (
     <>
@@ -67,16 +69,16 @@ const HomeScreen = () => {
         }
         
         {auth.roles[0] === 'customer' && !auth.album && !userId && !albumUploadPending && !tablePreview &&
-          <div className={`${styles.no_photos} ${!auth.likes && ! auth.dates ? styles.shifted : null}`}>
+          <div className={`${styles.no_photos} ${!auth.likes && !upcomingDates?.length ? styles.shifted : null}`}>
             Upload some photos <br />
             to make your profile more attractive!
             <button onClick={()=>{setAlbumUploadPending(true)}}>Let's do it!</button>
           </div>          
         }
 
-        {auth.dates && auth.dates[0] && !userId && !albumUploadPending &&
+        {auth.dates?.length > 0 && !userId && !albumUploadPending && upcomingDates?.length > 0 &&
           <ProfileDatesSection 
-            dates={auth.dates} 
+            dates={upcomingDates} 
             tablePreview={tablePreview} 
             setTablePreview={setTablePreview}
           />
@@ -88,7 +90,7 @@ const HomeScreen = () => {
             setUserData={setUserData}
             tablePreview={tablePreview}
           />
-        }        
+        }
       </div>
     </>
   );

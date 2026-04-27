@@ -29,7 +29,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
             setAuth({...auth, tables: auth.tables.map(table => {
               if (table.id) {
                 return {...table, auction: {...table.auction, bidders: arr[i].bidders}};
-              } else {return table}
+              } else {return table};
             })});
           };
         }
