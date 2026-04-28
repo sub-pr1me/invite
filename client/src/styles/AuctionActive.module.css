@@ -11,13 +11,13 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 4px;
   border-top: 2px solid rgba(246, 179, 255, 0.555);
   border-right: 2px solid rgba(246, 179, 255, 0.555);
   border-bottom: 2px solid rgba(246, 179, 255, 0.555);
   box-sizing: content-box;
   margin: 1%;
   position: relative;
+  width: fit-content;
 }
 
 .auction2 {
@@ -209,6 +209,7 @@
   border-right: 2px solid rgba(246, 179, 255, 0.555);
   cursor: default;
   color: rgb(247, 186, 255);
+  margin-right: 4px;
 }
 
 .details div {
@@ -240,11 +241,10 @@
   max-width: 345px !important;
   gap: 4px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: center;
   border-radius: 0px 1000px 1000px 0px;
   position: relative;
-  gap: 6px;
 }
 
 .new_bid {

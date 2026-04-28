@@ -66,7 +66,6 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
           email: auth.email,
           bid: bid
     });
-    console.log('UPDATE ZERO:', update[0]);
 
     } else {
       console.log('Insufficient Balance');
