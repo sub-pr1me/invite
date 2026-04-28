@@ -36,7 +36,7 @@
   align-items: center;
   flex-wrap: wrap;
   z-index: 1;
-  top: 10%;
+  top: 20%;
   height: 75%;
   width: 70px;
   background-color: black;
@@ -166,7 +166,7 @@
   z-index: 2;
   left: 0;
   right: 0;
-  top: 78%;
+  top: 85%;
   margin: auto auto;
   background-color: black;
   height: fit-content;

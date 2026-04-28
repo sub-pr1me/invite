@@ -2,11 +2,14 @@ import styles from '../styles/Date.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }) => {
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
+  const [hidden, setHidden] = useState(true);
+  const [end, setEnd] = useState(false);
 
   const ArchiveDate = async () => {
     try {
@@ -28,6 +31,8 @@ const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }) 
           return {...item, status: 'archived'}
         } else { return item };
       })});
+
+      if (index > 0) setIndex(index-1);
 
       console.log(response.data);
     
@@ -65,7 +70,25 @@ const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }) 
               <img src='../../img/arrow2.png' alt='' />
             </div>
 
-            <div className={styles.date_title} onClick={()=>{ArchiveDate()}}> {`Table ${date?.table}`} </div>
+            <div className={`
+              ${styles.end_date} 
+              ${hidden ? styles.hidden : null}
+              ${!end ? styles.fade : null}`} 
+              onClick={()=>{
+                ArchiveDate();
+                setEnd(!end);
+                if (hidden) {setHidden(false)} else {setTimeout(() => {setHidden(true)}, 300)} 
+              }}> 
+              End Date 
+            </div>
+
+            <div 
+              className={styles.date_title}
+              onClick={()=>{
+                setEnd(!end);
+                if (hidden) {setHidden(false)} else {setTimeout(() => {setHidden(true)}, 300)} 
+              }}
+              > {`Table ${date?.table}`} </div>
 
           </div>
         }
@@ -86,7 +109,9 @@ const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }) 
             
             <img src={auth.email === date?.guest ? date?.host_pic : date?.guest_pic} alt=''
               onClick={()=>{
-                auth.email === date?.guest ? navigate(`/dashboard/${date?.host_id}`) : navigate(`/dashboard/${date?.guest_id}`)
+                auth.email === date?.guest 
+                ? navigate(`/dashboard/${date?.host_id}`) 
+                : navigate(`/dashboard/${date?.guest_id}`)
               }}
             />
 

@@ -63,12 +63,18 @@ const HomeScreen = () => {
         <Carousel />
         }
 
-        {!albumUploadPending && 
-         !tablePreview && 
+        {!albumUploadPending 
+        && !tablePreview 
+        && 
          <ProfileTopSection userData={userData} setUserData={setUserData}/>
         }
         
-        {auth.roles[0] === 'customer' && !auth.album && !userId && !albumUploadPending && !tablePreview &&
+        {auth.roles[0] === 'customer' 
+        && !auth.album 
+        && !userId 
+        && !albumUploadPending 
+        && !tablePreview 
+        &&
           <div className={`${styles.no_photos} ${!auth.likes && !upcomingDates?.length ? styles.shifted : null}`}>
             Upload some photos <br />
             to make your profile more attractive!
@@ -76,7 +82,11 @@ const HomeScreen = () => {
           </div>          
         }
 
-        {auth.dates?.length > 0 && !userId && !albumUploadPending && upcomingDates?.length > 0 &&
+        {auth.dates?.length > 0 
+        && !userId 
+        && !albumUploadPending 
+        && upcomingDates?.length > 0 
+        &&
           <ProfileDatesSection 
             dates={upcomingDates} 
             tablePreview={tablePreview} 
