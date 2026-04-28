@@ -40,7 +40,10 @@ const Customer = ({ content, modal, award, setHostPreview, venue, auction_id }) 
       {content !==0 &&
         <div className={`
           ${styles.bid} 
-          ${auth.likes?.includes(content.email) ? styles.green : null} 
+          ${auth.likes?.includes(content.email) 
+            && auth.roles[0] === 'customer' 
+            ? styles.green 
+            : null} 
           ${modal ? styles.fade : null}`
         }>
           {content ? content.bid : null}

@@ -4,6 +4,7 @@ import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useEffect, useEffectEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import ArchivedDate from './ArchivedDate'
 
 const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
   tablePreview, setTablePreview, hostPreview, setHostPreview}) => {
@@ -227,7 +228,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
               <button onClick={()=>{navigate(`/dashboard/${hostPreview.id}`)}}>View<br />Profile</button>
               {auth.roles[0] !== 'venue'
                && auth.gender === hostPreview.interest
-               && auth.likes.includes(hostPreview.email)
+               && auth.likes?.includes(hostPreview.email)
                &&
               <button onClick={()=>{AcceptNewDate()}}>Accept<br />Invitation!</button>
               }
@@ -245,7 +246,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           <div 
             className={`${styles.history} ${section !== 'history' ? styles.non_highlighted : null}`} 
             onClick={()=>{setSection('history')}}
-            >Dates History
+            >Dates History              
           </div>
         </div>
         <div className={`${styles.line} ${section === 'current' ? styles.left : styles.right}`}></div>
@@ -253,7 +254,19 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           ${styles.sections} 
           ${section !== 'current' ? styles.curr : styles.hist}
           ${auth.roles[0] === 'customer' ? styles.sections2 : null}`}>
-          <div className={`${styles.history_section}`}>Dates History</div>
+          <div className={`${styles.history_section}`}>
+            {
+              auth.dates?.map(item => {
+                return (
+                  <ArchivedDate 
+                    date={item}
+                    tablePreview={tablePreview}
+                    setTablePreview={setTablePreview}
+                  />
+                )
+              })
+            }
+          </div>
           <div className={`${styles.current_section}`}>
             { auctions &&
               auctions.map((item) => {       

@@ -458,7 +458,7 @@ export async function NewDateUpload(venue, host, guest, new_date) {
   return updated;
 };
 
-export async function ArchiveVenueDate (venue, date) {
+export async function ArchiveVenueDate (venue, date, endTime) {
   console.log('ArchiveVenueDate');
 
     const { rows } = await pool.query(`SELECT dates FROM venues WHERE email LIKE '${venue}'`);
@@ -467,7 +467,7 @@ export async function ArchiveVenueDate (venue, date) {
 
     const updated = dates.map(item => {
       if (item.venue === date.venue && item.host === date.host && item.guest === date.guest) {
-        return {...item, status: 'archived'}      
+        return {...item, status: 'archived', endTime: endTime}      
       } else { return item }
     });
     
@@ -481,7 +481,7 @@ export async function ArchiveVenueDate (venue, date) {
   return 'success';
 };
 
-export async function ArchiveHostDate (host, date) {
+export async function ArchiveHostDate (host, date, endTime) {
   console.log('ArchiveHostDate');
 
     const { rows } = await pool.query(`SELECT dates FROM customers WHERE email LIKE '${host}'`);
@@ -490,7 +490,7 @@ export async function ArchiveHostDate (host, date) {
 
     const updated = dates.map(item => {
       if (item.venue === date.venue && item.host === date.host && item.guest === date.guest) {
-        return {...item, status: 'archived'}      
+        return {...item, status: 'archived', endTime: endTime}      
       } else { return item }
     });
     
@@ -504,7 +504,7 @@ export async function ArchiveHostDate (host, date) {
   return 'success';
 };
 
-export async function ArchiveGuestDate (guest, date) {
+export async function ArchiveGuestDate (guest, date, endTime) {
   console.log('ArchiveGuestDate');
 
     const { rows } = await pool.query(`SELECT dates FROM customers WHERE email LIKE '${guest}'`);
@@ -513,7 +513,7 @@ export async function ArchiveGuestDate (guest, date) {
 
     const updated = dates.map(item => {
       if (item.venue === date.venue && item.host === date.host && item.guest === date.guest) {
-        return {...item, status: 'archived'}      
+        return {...item, status: 'archived', endTime: endTime}      
       } else { return item }
     });
     

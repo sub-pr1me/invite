@@ -2,13 +2,11 @@ import { ArchiveVenueDate, ArchiveHostDate, ArchiveGuestDate } from '../db/queri
 
 export default async function handleArchiveDate(req, res) {
 
-  const response1 = await ArchiveVenueDate(req.body.venue, req.body.date);
-  const response2 = await ArchiveHostDate(req.body.host, req.body.date);
-  const response3 = await ArchiveGuestDate(req.body.guest, req.body.date);
+  const endTime = Date.now();
 
-  console.log('venue: ', response1);
-  console.log('host: ', response2);
-  console.log('guest: ', response3);
+  await ArchiveVenueDate(req.body.venue, req.body.date, endTime);
+  await ArchiveHostDate(req.body.host, req.body.date, endTime);
+  await ArchiveGuestDate(req.body.guest, req.body.date, endTime);
 
-  res.status(200).send('DATE HAS BEEN ARCHIVED');
+  res.status(200).send(endTime);
 };

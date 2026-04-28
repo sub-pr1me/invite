@@ -27,14 +27,12 @@ const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }) 
       );
       
       setAuth({...auth, dates: auth.dates.map(item => {
-        if (JSON.stringify(item) === JSON.stringify(date)) { 
-          return {...item, status: 'archived'}
+        if (JSON.stringify(item) === JSON.stringify(date)) {
+          return {...item, status: 'archived', endTime: response.data}
         } else { return item };
       })});
 
       if (index > 0) setIndex(index-1);
-
-      console.log(response.data);
     
     } catch (err) {
       console.log(err);
