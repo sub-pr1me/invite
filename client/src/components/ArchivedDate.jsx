@@ -32,7 +32,7 @@ const ArchivedDate = ({ date, tablePreview, setTablePreview }) => {
           <div className={`${styles.images}`}>
 
             {date?.table_pic 
-              ? <img src={date?.table_pic} alt='' onClick={()=>{setTablePreview(true)}}/> 
+              ? <img src={date?.table_pic} alt='' onClick={()=>{setTablePreview(date.table_pic)}}/> 
               : <img className={`${styles.no_table}`} src='../../img/table.png' alt='' />
             }
             

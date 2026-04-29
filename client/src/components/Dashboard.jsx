@@ -30,13 +30,20 @@ const Dashboard = () => {
               setActive={setActive}
             />}
           />
-          <Route path='/clients' element={<Clients setActive={setActive}/>} />
-          <Route path='/profile' element={<Profile setActive={setActive}/>} />
+          <Route path='/clients' element={
+            <Clients 
+              setActive={setActive}/>} 
+            />
+          <Route path='/profile' element={
+            <Profile 
+              setActive={setActive}/>}
+            />
           <Route path='/auctions' element={
             <Auctions 
               setActive={setActive} 
               auctions={auctions} 
-              setAuctions={setAuctions}/>} />
+              setAuctions={setAuctions}/>} 
+            />
           <Route path='/cashier' element={<Cashier setActive={setActive}/>} />
       </Route>
     </Routes>

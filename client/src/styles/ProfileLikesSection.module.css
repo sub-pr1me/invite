@@ -15,11 +15,11 @@
   justify-content: flex-end;
   align-items: center;
   flex-direction: column;
-  padding-bottom: 20px;
+  padding-bottom: clamp(10px, 1.8vh, 16px);
 }
 
 .title {
-  font-size: clamp(11px, 2vh, 16px);
+  font-size: clamp(10px, 1.8vh, 16px);
   font-weight: 600;
   padding: 0px 7px;
   border-radius: 10px;
@@ -34,7 +34,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding-top: 20px;
+  padding-top: clamp(10px, 1.8vh, 20px);
 }
 
 .limit {
@@ -51,6 +51,9 @@
   box-shadow: 0 0 2pt 1pt rgb(225, 150, 255);
   color: rgb(255, 255, 255);
   margin: 0px;
+  font-size: clamp(10px, 1.6vh, 13px);
+  font-weight: 600;
+  padding: 5px;
 }
 
 .likes_container button:hover {
@@ -68,7 +71,7 @@
 
 .expanded_container {
   height: fit-content;
-  max-height: 55%;
+  height: 70%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -92,6 +95,10 @@
 
 .limit > div {
   margin-bottom: 0px;
+}
+
+.expanded_limit > div {
+  height: clamp(60px, 12vh, 100px);
 }
 
 @keyframes appear {

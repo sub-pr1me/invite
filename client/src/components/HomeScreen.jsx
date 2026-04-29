@@ -16,6 +16,7 @@ const HomeScreen = () => {
   const [userData, setUserData] = useState(null);
   const [albumUploadPending, setAlbumUploadPending] = useState(false);
   const [tablePreview, setTablePreview] = useState(false);
+  const [expanded, setExpanded] = useState(null);
 
   const upcomingDates = auth.dates?.filter(item => item.status === 'upcoming');
 
@@ -73,19 +74,20 @@ const HomeScreen = () => {
         && !auth.album 
         && !userId 
         && !albumUploadPending 
-        && !tablePreview 
+        && !tablePreview
+        && !expanded
         &&
           <div className={`${styles.no_photos} ${!auth.likes && !upcomingDates?.length ? styles.shifted : null}`}>
-            Upload some photos <br />
-            to make your profile more attractive!
-            <button onClick={()=>{setAlbumUploadPending(true)}}>Let's do it!</button>
+            Upload some photos to your album!
+            <button onClick={()=>{setAlbumUploadPending(true)}}>Let's do it</button>
           </div>          
         }
 
         {auth.dates?.length > 0 
         && !userId 
         && !albumUploadPending 
-        && upcomingDates?.length > 0 
+        && upcomingDates?.length > 0
+        && !expanded 
         &&
           <ProfileDatesSection 
             dates={upcomingDates} 
@@ -99,6 +101,8 @@ const HomeScreen = () => {
             userData={userData} 
             setUserData={setUserData}
             tablePreview={tablePreview}
+            expanded={expanded}
+            setExpanded={setExpanded}
           />
         }
       </div>

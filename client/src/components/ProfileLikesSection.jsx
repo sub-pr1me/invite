@@ -2,12 +2,10 @@ import styles from '../styles/ProfileLikesSection.module.css'
 import useAuth from '../hooks/useAuth'
 import UserProfile from './UserProfile'
 import { useParams } from 'react-router-dom'
-import { useState } from 'react';
 
-const ProfileLikesSection = ({ userData, setUserData, tablePreview }) => {
+const ProfileLikesSection = ({ userData, setUserData, tablePreview, expanded, setExpanded }) => {
   const { auth } = useAuth();
   const { userId } = useParams();
-  const [expanded, setExpanded] = useState(null);
 
   return (
     <>
@@ -20,7 +18,7 @@ const ProfileLikesSection = ({ userData, setUserData, tablePreview }) => {
             {userId && !userData?.dob && userData?.likes[0] ? 'People who like this place:' : null}
           </div>
           <div className={`${styles.likes} ${expanded ? styles.expanded_content : null}`}>
-            <div className={styles.limit}>
+            <div className={`${styles.limit} ${expanded ? styles.expanded_limit : null}`}>
               {
                 userData?.likes.map(item => {
                   if (

@@ -17,3 +17,7 @@ a {
   height: 100%;
   width: 100%;
 }
+
+.logout_container:hover {
+  box-shadow: 0 0 4pt 2pt rgb(225, 150, 255);
+}

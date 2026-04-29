@@ -257,13 +257,15 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           <div className={`${styles.history_section}`}>
             {
               auth.dates?.map(item => {
-                return (
-                  <ArchivedDate 
-                    date={item}
-                    tablePreview={tablePreview}
-                    setTablePreview={setTablePreview}
-                  />
-                )
+                if (item.status === 'archived') {
+                  return (
+                    <ArchivedDate 
+                      date={item}
+                      tablePreview={tablePreview}
+                      setTablePreview={setTablePreview}
+                    />
+                  )
+                }
               })
             }
           </div>
