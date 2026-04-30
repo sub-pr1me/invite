@@ -181,6 +181,7 @@ const AlbumUpload = ({ albumUploadPending, setAlbumUploadPending, postreg }) => 
               }}>Maybe Later</button>
           </div>
         }</div>
+
         <div className={`${styles.preview} ${previewSrc ? null : styles.hidden}`}>
           <div className={`${styles.album}`}>          
             <div className={`${styles.preview_section}`}>
@@ -196,7 +197,8 @@ const AlbumUpload = ({ albumUploadPending, setAlbumUploadPending, postreg }) => 
               <div className={`${styles.next}`} onClick={() => nextPic(mainPreview)}>
                 <img src='../../img/right-arrow.png' alt='NEXT' />
               </div>          
-            </div>          
+            </div>
+            
             <ul>{previewSrc?.map((item) => (
               <div key={getRandomKey()}
                    className={`${styles.item} ${mainPreview === item ? styles.focused : null}`}>
@@ -204,6 +206,7 @@ const AlbumUpload = ({ albumUploadPending, setAlbumUploadPending, postreg }) => 
               </div>
               ))}
             </ul>
+
             <div className={`${styles.btns}`}>
               <button onClick={()=> {extractFiles()}}>Upload</button>
               <button onClick={()=> {setPreviewSrc(null)}}>Cancel</button>
