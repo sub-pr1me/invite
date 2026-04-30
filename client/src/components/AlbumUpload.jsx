@@ -219,7 +219,7 @@ const AlbumUpload = ({ albumUploadPending, setAlbumUploadPending, postreg }) => 
     </div>
     }  
     </>
-  )
-}
+  );
+};
 
 export default AlbumUpload

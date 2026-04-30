@@ -11,6 +11,7 @@
 
 .logout_container {
   padding: 8px;
+  box-shadow: 0 0 2pt 1pt rgb(126, 76, 146);
 }
 
 a {

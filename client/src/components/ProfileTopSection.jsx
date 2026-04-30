@@ -68,7 +68,7 @@ const ProfileTopSection = ({ userData, setUserData }) => {
           {userId && userData?.dob ? `${userData?.customer} (${getAge(userData?.dob)})` : null}
           {userId && !userData?.dob ? userData?.venue : null}
         </div>
-        <div className={styles.hours}>{userData?.hours}</div>
+        {userData?.hours && <div className={styles.hours}>{userData?.hours}</div>}
 
         {userId && auth?.roles[0] !== 'venue' && allowLikes &&
         <ProfileLike 

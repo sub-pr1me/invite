@@ -58,6 +58,7 @@
   padding: 0px 7px;
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 4pt 2pt rgb(126, 76, 146);
   cursor: default;
   margin-bottom: 10px !important;
   animation: appear 0.5s both, opacity 0.6s  both;

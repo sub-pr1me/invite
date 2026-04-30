@@ -24,6 +24,7 @@
   padding: 0px 7px;
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 4pt 2pt rgb(126, 76, 146);
   cursor: default;
   animation: appear 0.5s both, opacity 0.6s both;
   will-change: transform, opacity;
@@ -48,7 +49,7 @@
 }
 
 .likes_container button {
-  box-shadow: 0 0 2pt 1pt rgb(225, 150, 255);
+  box-shadow: 0 0 2pt 1pt rgb(159, 103, 182);
   color: rgb(255, 255, 255);
   margin: 0px;
   font-size: clamp(10px, 1.6vh, 13px);
