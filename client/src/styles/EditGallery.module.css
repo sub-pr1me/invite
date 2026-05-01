@@ -63,7 +63,6 @@
   border-radius: 50%;
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.7);
-  padding: 7px;
   top: 45%;
 }
 
@@ -94,17 +93,11 @@
 
 .prev img,
 .next img {
-  height: 80%;
+  height: 100%;
 }
 
 .prev img {
-  transform: scaleX(80%);
-  margin-right: 3px;
-}
-
-.next img {
-  transform: scaleX(80%) rotate(180deg);
-  margin-left: 3px;
+  transform: rotate(180deg);
 }
 
 .photos {
@@ -190,7 +183,8 @@
   display: none;
 }
 
-.label {
+.label,
+.buttons button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -208,6 +202,8 @@
   box-shadow: 0 0 2pt 1pt rgb(159, 79, 190); 
 }
 
-.label:hover {
+.label:hover,
+.buttons button:hover {
   box-shadow: 0 0 3pt 2pt rgb(225, 150, 255); 
 }
+

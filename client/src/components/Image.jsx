@@ -10,5 +10,5 @@ export default function Image({ cloudName, publicId, alt, profileGallery }) {
 
   return <img src={imageSource} alt={alt} 
     className={`${profileGallery ? styles.profile : null}`} 
-  />;
-}
+  />
+};
