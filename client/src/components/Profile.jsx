@@ -1,8 +1,12 @@
 import styles from '../styles/Profile.module.css'
-import { useEffect, useEffectEvent } from 'react'
+import { useEffect, useEffectEvent, useState } from 'react'
 import EditGallery from './EditGallery'
 
 const Profile = ({ setActive }) => {
+  const [previewSrc, setPreviewSrc] = useState(null);
+  const [showUploadAnimation, SetShowUploadAnimation] = useState(false);
+  const [fade, setFade] = useState(false);
+  const [hidden, setHidden] = useState(true);
     
   const onRefresh = useEffectEvent(()=>{setActive('profile')});
 
@@ -13,6 +17,19 @@ const Profile = ({ setActive }) => {
   return (
     <>
     <title>Profile</title>
+    {showUploadAnimation && 
+      <div className={`
+        ${styles.loading} 
+        ${hidden ? styles.hidden : null}
+        ${fade ? styles.fade : null}`}>         
+          <div>
+            <img src='../../img/loading.gif' alt='PLEASE WAIT' />
+            <br />
+            <div>UPLOADING...</div>
+          </div>        
+      </div>      
+    }
+
     <div className={`${styles.profile_container}`}>
       <div className={`${styles.top}`}>
         <div className={``}>NAME</div>
@@ -20,7 +37,13 @@ const Profile = ({ setActive }) => {
         <div className={``}>HOURS</div>
       </div>
 
-      <EditGallery />
+      <EditGallery
+        SetShowUploadAnimation={SetShowUploadAnimation}
+        previewSrc={previewSrc}
+        setPreviewSrc={setPreviewSrc}
+        setFade={setFade}
+        setHidden={setHidden}
+      />
     </div>
     </>
   );

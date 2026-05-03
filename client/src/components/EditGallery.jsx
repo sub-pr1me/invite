@@ -6,21 +6,24 @@ import fileToDataString from '../utils/fileToDataString'
 import Image from './Image';
 import Thumb from './Thumb';
 
-const EditGallery = () => {
+const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHidden }) => {
   const axiosPrivate = useAxiosPrivate();
-  const { auth } = useAuth();
+  const { auth, setAuth} = useAuth();
   const [status, setStatus] = useState('idle');
   const [files, setFiles] = useState(null);
-  const [previewSrc, setPreviewSrc] = useState(null);
   const [mainPreview, setMainPreview] = useState(null);
+  const [empty, setEmpty] = useState(false);
 
   const InitializePreview = useEffectEvent(()=>{
-    const arr = [];
+    setTimeout(() => { SetShowUploadAnimation(false) }, 2500);
+    const arr = [];    
     for (let i=0; i<auth.album.length; i++) {
       arr.push({ pic: auth.album[i], index: i, file: null });
     };
     setPreviewSrc(arr);
     setMainPreview(arr[0]);
+    setStatus('idle');
+    setEmpty(false);
   });
 
   function removePic(item) {
@@ -29,16 +32,26 @@ const EditGallery = () => {
     if (arr.length === 1) {
       setPreviewSrc(null);
       setMainPreview(null);
+      setEmpty(true);
       return;
     };
-    const index = previewSrc.indexOf(item);
+    const index = previewSrc?.indexOf(item);
     arr.splice(index, 1);
     const newArr = [];
     for (let i=0; i<arr.length; i++) {
-      newArr.push({ pic: arr[i].pic, index: i, dataString: arr[i].dataString })
+      newArr.push({ pic: arr[i].pic, index: i, file: arr[i].file })
     };
     setPreviewSrc(newArr);
     setMainPreview(newArr[0]);
+  };
+
+  function extractFiles() {
+    let arr = [];
+    for (let i=0; i<previewSrc?.length; i++) {
+      if (previewSrc[i].file) arr.push(previewSrc[i].file);
+    };
+    setFiles(arr);
+    setStatus('start');
   };
 
   async function handleFilesChange(e) {
@@ -46,7 +59,7 @@ const EditGallery = () => {
 
     const arr = Array.from(e.target.files);
     
-    while (arr.length > 5 - previewSrc.length) arr.pop();
+    while (arr.length > 5 - previewSrc?.length) arr.pop();
     
     const arrData = [];
     const valid = ['image/jpeg', 'image/png'];
@@ -57,7 +70,7 @@ const EditGallery = () => {
         if (valid.includes(arr[i].type)) { arrData.push({ pic: str, index: i, file: arr[i] }) }
       };
       
-      for (let i=0; i<previewSrc.length; i++) { 
+      for (let i=0; i<previewSrc?.length; i++) { 
         arrData.push({ pic: previewSrc[i].pic, index: arrData.length, file: previewSrc[i].file }) 
       };
       
@@ -70,26 +83,76 @@ const EditGallery = () => {
     }
   };
 
-  function extractFiles() {
-    let arr = [];
-    for (let i=0; i<previewSrc.length; i++) {
-      arr.push(previewSrc[i][0]);
-    };
-    setFiles(arr);
-    setPreviewSrc(null);
-  };
+
 
   const resetStatus = useEffectEvent(()=>{
-      setFiles(null);
-      setStatus('idle');
-      setPreviewSrc(null);
+    setStatus('idle');
+    setPreviewSrc(null);
   });
 
+  const handleAlbumUpload = useEffectEvent(async (files) => {
+    setStatus('uploading');
+    SetShowUploadAnimation(true);
+    setHidden(false);
+
+    const valid = ['image/jpeg', 'image/png'];
+
+    if (files.length) {
+      for (let i=0; i<files.length; i++) {
+        if (!valid.includes(files[i].type)) {
+          console.log('INVALID FILE EXTENSION');
+          setFiles(null);
+          setStatus('idle');
+          return;
+        }
+      };
+    };
+
+    const untouched = [];
+    
+    for (let i=0; i<previewSrc?.length; i++) {
+      if (previewSrc[i].file === null) untouched.push(previewSrc[i].pic);
+    };
+
+    const formData = new FormData();
+    for (let i=0; i<files.length; i++) {
+      formData.append('album', files[i]);
+    };
+
+    try {
+      const response = await axiosPrivate.post('/album_upload', formData,
+        {
+          headers: {'Content-Type': 'multipart/form-data'},
+          withCredentials: true,
+          params: {postreg: true, untouched: JSON.stringify(untouched)}
+        });      
+      setStatus('success');
+      setAuth({...auth, album: response.data});
+
+    } catch(err) {
+      setFiles(null);
+      setStatus('change');
+      if (!err?.response) {
+        console.log('NO SERVER RESPONSE');
+      } else if (err.response?.status === 422) {
+        console.log('INVALID FILE EXTENSION');
+      } else if (err.response?.status === 401) {
+        console.log('UNAUTHORIZED');
+      } else {
+        console.log('SOMETHING WENT WRONG');
+      }
+    }
+  });
+
+  const delayEmpty = useEffectEvent((command, time)=>{setTimeout(() => {setEmpty(command)}, time)});
   
   useEffect(()=>{
-    if (!previewSrc && status === 'idle') InitializePreview();
+    if (!previewSrc && status === 'idle') {InitializePreview()};
+    if (status === 'start') handleAlbumUpload(files);
     if (status === 'success') resetStatus();
-  },[previewSrc, status]);
+    if (previewSrc && !previewSrc.length) delayEmpty(true, 0);
+    if (previewSrc && previewSrc.length) delayEmpty(false, 0);
+  },[previewSrc, status, files]);
   
   return (
     <>
@@ -97,7 +160,9 @@ const EditGallery = () => {
 
         <div className={`${styles.preview}`}>
           
-          {!mainPreview && <div className={styles.empty}>Your gallery is empty</div>}
+          {empty && <div className={`${styles.empty}`}>
+            Your gallery is empty
+          </div>}
           
           
           {mainPreview &&
@@ -128,7 +193,7 @@ const EditGallery = () => {
               if (index < previewSrc?.length - 1) {setMainPreview(previewSrc[index + 1])
               } else {setMainPreview(previewSrc[0])}
             }}>
-            <img src='../../img/right-arrow.png' alt='' loading='lazy' />
+            <img src='../../img/right-arrow.png' alt='' />
           </div>}
             
         </div>
@@ -138,7 +203,8 @@ const EditGallery = () => {
             previewSrc?.map(item => {
               return (
                 <div className={`
-                    ${styles.photos_wrapper} 
+                    ${styles.photos_wrapper}
+                    ${!mainPreview ? styles.hidden : null}
                     ${previewSrc?.indexOf(item) === mainPreview?.index ? styles.highlighted : null}`
                   }
                   onClick={()=>{setMainPreview(previewSrc[item.index])}}>
@@ -153,16 +219,16 @@ const EditGallery = () => {
                         e.stopPropagation();
                         removePic(mainPreview);
                       }}>
-                      <img key={item.pic} src='../../img/trash.png' alt='' />
+                      <img key={item.index} src='../../img/trash.png' alt='' />
                     </div>
                   }
 
                   {item?.pic.includes('cloudinary') &&
-                    <Thumb src={item?.pic} alt={'Main Preview'}/>
+                    <Thumb key={item.index} src={item?.pic} alt={'Main Preview'}/>
                   }
 
                   {!item?.pic.includes('cloudinary') &&
-                    <img src={item?.pic} alt={'Main Preview'}/>
+                    <img key={item.index} src={item?.pic} alt={'Main Preview'}/>
                   }
 
                 </div>

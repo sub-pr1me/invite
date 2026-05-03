@@ -99,7 +99,7 @@ const AlbumUpload = ({ albumUploadPending, setAlbumUploadPending, postreg }) => 
         {
           headers: {'Content-Type': 'multipart/form-data'},
           withCredentials: true,
-          params: {postreg: postreg}
+          params: {postreg: postreg, untouched: null}
         });
       setStatus('success');
       console.log('ALBUM UPLOADED -', response.data);

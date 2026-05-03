@@ -62,8 +62,6 @@
   padding: 10px 20px;
   border-radius: 10px;
   margin-top: 12vh;
-  animation: appear 0.6s both, opacity 0.7s  both;
-  will-change: transform, opacity;
 }
 
 .prev,
@@ -134,7 +132,7 @@
   border-radius: 10px;
   overflow: hidden;
   position: relative;
-  animation: appear 0.8s both, opacity 0.9s  both;
+  animation: appear 0.6s both, opacity 0.7s both;
   will-change: transform, opacity;
 }
 
@@ -197,8 +195,6 @@
   width: 100%;
   margin-top: 10px;
   gap: 12px;
-  animation: appear 0.8s both, opacity 0.9s  both;
-  will-change: transform, opacity;
 }
 
 .upload {
