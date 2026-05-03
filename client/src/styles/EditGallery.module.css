@@ -2,7 +2,7 @@
     display: none !important;
 }
 
-/* .gallery_container * {
+/* * {
   outline: rgba(37, 255, 8, 0.959) 1px solid;
 } */
 
@@ -31,7 +31,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 70%;
+  height: 65%;
   position: relative;
   gap: 10px;
   width: 100%;
@@ -45,12 +45,25 @@
   justify-content: center;
   align-items: center;
   object-fit: fill;
+  animation: appear 0.5s both, opacity 0.6s  both;
+  will-change: transform, opacity;
 }
 
 .preview_wrapper img {
   border-radius: 20px;
   max-height: 100%;
   max-width: 100%;
+}
+
+.empty {
+  background-color: rgba(248, 172, 255, 0.1);
+  font-size: 18px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-top: 12vh;
+  animation: appear 0.6s both, opacity 0.7s  both;
+  will-change: transform, opacity;
 }
 
 .prev,
@@ -64,19 +77,13 @@
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.7);
   top: 45%;
+  animation: appear 0.7s both, opacity 0.8s  both;
+  will-change: transform, opacity;
 }
 
 .prev:hover,
 .next:hover {
   box-shadow: 0 0 5pt 3pt rgb(225, 150, 255);
-}
-
-.prev {
-  left: 2%;
-}
-
-.next {
-  right: 2%;
 }
 
 .prev img,
@@ -115,16 +122,20 @@
   border-radius: 10px;
   cursor: pointer;
   border: none;
+  height: 100%;
+  width: 100%;
 }
 
-.wrapper {
+.photos_wrapper {
   display: flex;
   justify-content: center;
   height: 100%;
-  width: clamp(65px, 17%, 100px);
+  width: clamp(60px, 17%, 100px);
   border-radius: 10px;
   overflow: hidden;
   position: relative;
+  animation: appear 0.8s both, opacity 0.9s  both;
+  will-change: transform, opacity;
 }
 
 .wrapper img {
@@ -140,7 +151,6 @@
   aspect-ratio: 1/1;
   position: absolute;
   z-index: 1;
-  background-color: black;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -157,11 +167,8 @@
   border-radius: 0px;
 }
 
-.red {
+.remove:hover {
   outline: 2px solid rgb(255, 89, 89);
-}
-
-.red img {
     filter: 
     invert(50%) 
     sepia(50%) 
@@ -171,12 +178,27 @@
     contrast(100%);
 }
 
+.bg {
+  height: 25px;
+  aspect-ratio: 1/1;
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  top: 3px;
+  right: 3px;
+  background-color: black;
+  border-radius: 50%;
+}
+
 .buttons {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: rgba(0, 255, 255, 0.151);
+  margin-top: 10px;
+  gap: 12px;
+  animation: appear 0.8s both, opacity 0.9s  both;
+  will-change: transform, opacity;
 }
 
 .upload {
@@ -202,8 +224,34 @@
   box-shadow: 0 0 2pt 1pt rgb(159, 79, 190); 
 }
 
+.buttons button {
+  margin: 0px;
+}
+
 .label:hover,
 .buttons button:hover {
   box-shadow: 0 0 3pt 2pt rgb(225, 150, 255); 
 }
 
+.full {
+  font-size: clamp(11px, 2.7vw, 15px);
+  font-weight: 600;
+}
+
+@keyframes appear {
+    0% {
+      transform: scale(1%);
+    }
+    100% {
+      transform: scale(100%);
+    }
+}
+
+@keyframes opacity {
+    0% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 1;
+    }
+}

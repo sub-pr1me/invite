@@ -2,7 +2,6 @@ import { useState, useEffect, useEffectEvent } from 'react'
 import useAuth from '../hooks/useAuth'
 import styles from '../styles/LogoUpload.module.css'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import { Suspense } from 'react'
 
 const LogoUpload = () => {
   const [file, setFile] = useState(null);

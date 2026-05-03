@@ -54,8 +54,7 @@ const Carousel = () => {
             return (
               <Image
                 key={album?.indexOf(item)}
-                cloudName={item.split('/')[3]}
-                publicId={item.split('/')[7].split('.')[0]}
+                src={item}
                 alt={''}
               />
             )
@@ -76,8 +75,7 @@ const Carousel = () => {
             return (
               <Image
                 key={album?.indexOf(item)}
-                cloudName={item.split('/')[3]}
-                publicId={item.split('/')[7].split('.')[0]}
+                src={item}
                 alt={''}
               />
             )

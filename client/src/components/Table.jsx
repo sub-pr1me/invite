@@ -1,6 +1,7 @@
 import styles from '../styles/Table.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import Thumb from './Thumb';
 
 const Table = ({ id, active, modal, setStatus, customize, pic }) => {
 
@@ -62,7 +63,7 @@ const Table = ({ id, active, modal, setStatus, customize, pic }) => {
                 <img src='../../img/auctions.png' alt='' />
               </div>
               <div className={`${styles.bottom}`}>Table {id}</div>
-              <img src={pic ? pic : null} alt='' className={`${!pic ? styles.hidden : null}`}/>
+              {pic && <Thumb src={pic} alt={'Table Image'}/>}
             </div>
           : <div className={`${styles.empty}`}>
             <img src='../../img/add.png' alt='' />
