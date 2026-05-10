@@ -71,10 +71,13 @@ const Cashier = ({ setActive }) => {
               type="number"
               min='10'
               max={auth.credits}
-              placeholder={`10-${auth.credits}`}
-              required 
+              placeholder={auth.credits > 10 ? `10-${auth.credits}` : ''}
+              disabled={auth.credits < 10 || !auth.credits}
+              required
             />
-            <button>Cash Out</button>
+            <button disabled={auth.credits < 10 || !auth.credits}>
+              Cash Out
+            </button>
           </form>
         </div>
       }

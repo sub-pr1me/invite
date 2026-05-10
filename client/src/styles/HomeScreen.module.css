@@ -24,6 +24,11 @@
   position: relative;
 }
 
+.homescreen_container img {
+  animation: opacity 2.5s both;
+  will-change: opacity;
+}
+
 .edge_fader {
   position: absolute;
   z-index: 1;

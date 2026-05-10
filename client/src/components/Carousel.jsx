@@ -74,7 +74,7 @@ const Carousel = () => {
           album?.map(item => {
             return (
               <Image
-                key={album?.indexOf(item)}
+                key={JSON.stringify(item)}
                 src={item}
                 alt={''}
               />

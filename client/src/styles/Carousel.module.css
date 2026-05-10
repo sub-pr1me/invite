@@ -22,6 +22,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  animation: appear 0.7s both, opacity 0.8s both;
   will-change: transform, opacity;
 }
 
