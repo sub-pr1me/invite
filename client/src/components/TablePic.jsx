@@ -83,7 +83,7 @@ const TablePic = ({ setCustomize, customize }) => {
       <div className={`${styles.loading}`}>
         <img src='../../img/load.gif' alt='' />
         <br />
-        <div>UPLOADING...</div>
+        <div>LOADING...</div>
       </div>
       }
       {status === 'success' && auth.tables[customize-1].pic

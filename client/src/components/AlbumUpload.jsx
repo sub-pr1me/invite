@@ -218,7 +218,7 @@ const AlbumUpload = ({ albumUploadPending, setAlbumUploadPending, postreg }) => 
     <div className={`${styles.loading}`}>
       <img src='../../img/loading.gif' alt='PLEASE WAIT' />
       <br />
-      <div>UPLOADING...</div>
+      <div>LOADING...</div>
     </div>
     }  
     </>

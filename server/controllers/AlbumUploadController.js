@@ -15,8 +15,7 @@ const handleAlbumUpload = asyncHandler(async (req, res)=> {
     const imageURLs = [];
     const postreg = JSON.parse(req.query.postreg);
     const untouched = JSON.parse(req.query.untouched);
-
-    console.log('UNTOUCHED:', untouched);
+    const toRemove = JSON.parse(req.query.toRemove);
 
     for (let i=0; i<images.length; i++) {
       console.log('UPLOADING FILE -',images[i].filename);
@@ -32,6 +31,14 @@ const handleAlbumUpload = asyncHandler(async (req, res)=> {
 
     const result = await uploadNewAlbum(accType, email, psqlArr, postreg);
     console.log(result);
+
+    for (let i=0; i<toRemove.length; i++) {
+      const arr = toRemove[i].split("/");
+      const arr2 = arr[arr.length - 1].split(".");
+      const oldImgID = arr2[arr2.length -2];
+      cloudinary.uploader.destroy(oldImgID).then(console.log('old image deleted!'));
+    };
+
     res.status(200).send(imageURLs);
 
   } catch (err) {

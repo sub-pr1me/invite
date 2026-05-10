@@ -13,6 +13,7 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
   const [files, setFiles] = useState(null);
   const [mainPreview, setMainPreview] = useState(null);
   const [empty, setEmpty] = useState(false);
+  const [toRemove, setToRemove] = useState([]);
 
   const InitializePreview = useEffectEvent(()=>{
     setTimeout(() => { SetShowUploadAnimation(false) }, 2500);
@@ -29,14 +30,19 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
   function removePic(item) {
     setStatus('change');
     const arr = previewSrc;
+
     if (arr.length === 1) {
+      setToRemove([...toRemove, arr[0].pic]);
       setPreviewSrc(null);
       setMainPreview(null);
       setEmpty(true);
       return;
     };
+
     const index = previewSrc?.indexOf(item);
-    arr.splice(index, 1);
+    const removed = arr.splice(index, 1);
+    setToRemove([...toRemove, removed[0].pic]);
+
     const newArr = [];
     for (let i=0; i<arr.length; i++) {
       newArr.push({ pic: arr[i].pic, index: i, file: arr[i].file })
@@ -83,8 +89,6 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
     }
   };
 
-
-
   const resetStatus = useEffectEvent(()=>{
     setStatus('idle');
     setPreviewSrc(null);
@@ -124,10 +128,11 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
         {
           headers: {'Content-Type': 'multipart/form-data'},
           withCredentials: true,
-          params: {postreg: true, untouched: JSON.stringify(untouched)}
+          params: {postreg: true, untouched: JSON.stringify(untouched), toRemove: JSON.stringify(toRemove)}
         });      
       setStatus('success');
       setAuth({...auth, album: response.data});
+      setToRemove([]);
 
     } catch(err) {
       setFiles(null);
@@ -223,11 +228,11 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
                     </div>
                   }
 
-                  {item?.pic.includes('cloudinary') &&
+                  {item?.pic?.includes('cloudinary') &&
                     <Thumb key={item.index} src={item?.pic} alt={'Main Preview'}/>
                   }
 
-                  {!item?.pic.includes('cloudinary') &&
+                  {!item?.pic?.includes('cloudinary') &&
                     <img key={item.index} src={item?.pic} alt={'Main Preview'}/>
                   }
 

@@ -25,7 +25,7 @@ const Profile = ({ setActive }) => {
           <div>
             <img src='../../img/loading.gif' alt='PLEASE WAIT' />
             <br />
-            <div>UPLOADING...</div>
+            <div>LOADING...</div>
           </div>        
       </div>      
     }
