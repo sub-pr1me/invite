@@ -1,0 +1,38 @@
+.hidden {
+  display: none !important;
+}
+
+ /* * {
+  outline: rgb(135, 197, 43) 1px solid;
+} */
+
+.edit_container {
+  background: linear-gradient(
+      rgb(32, 0, 51),
+      rgb(76, 32, 95),
+      rgb(32, 0, 51)
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  height: 200px;
+  width: 300px;
+  border-radius: 50px;
+  border: 2px solid rgba(246, 179, 255, 0.541);
+  position: absolute;
+  top: 20%;
+  gap: 15px;
+}
+
+.title {
+  font-weight: 500;
+}
+
+.edit_container input,
+.edit_container select {
+  background-color: black;
+  border: none;
+  outline: 1px solid rgba(248, 172, 255, 0.63);
+}
