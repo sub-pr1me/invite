@@ -18,7 +18,7 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
   const InitializePreview = useEffectEvent(()=>{
     setTimeout(() => { SetShowUploadAnimation(false) }, 2500);
     const arr = [];    
-    for (let i=0; i<auth.album.length; i++) {
+    for (let i=0; i<auth.album?.length; i++) {
       arr.push({ pic: auth.album[i], index: i, file: null });
     };
     setPreviewSrc(arr);
@@ -39,9 +39,22 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
       return;
     };
 
+    const existing = [];
+    for (item of auth.album) {
+      const arr = item.split('/');
+      const arr2 = arr[arr.length - 1].split('.');
+      const imgID = arr2[arr2.length -2];
+      existing.push(imgID)
+    };
+
     const index = previewSrc?.indexOf(item);
     const removed = arr.splice(index, 1);
-    setToRemove([...toRemove, removed[0].pic]);
+
+    const arrX = removed[0].pic.split('/');
+    const arrY = arrX[arrX.length - 1].split('.');
+    const removedID = arrY[arrY.length -2];
+
+    if (existing.includes(removedID)) setToRemove([...toRemove, removed[0].pic]);
 
     const newArr = [];
     for (let i=0; i<arr.length; i++) {
@@ -134,7 +147,7 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
       setAuth({...auth, album: response.data});
       setToRemove([]);
 
-    } catch(err) {
+    } catch (err) {
       setFiles(null);
       setStatus('change');
       if (!err?.response) {
@@ -224,16 +237,16 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
                         e.stopPropagation();
                         removePic(mainPreview);
                       }}>
-                      <img key={item.index} src='../../img/trash.png' alt='' />
+                      <img key={item.index+'x'} src='../../img/trash.png' alt='' />
                     </div>
                   }
 
                   {item?.pic?.includes('cloudinary') &&
-                    <Thumb key={item.index} src={item?.pic} alt={'Main Preview'}/>
+                    <Thumb key={item.index+'y'} src={item?.pic} alt={'Main Preview'}/>
                   }
 
                   {!item?.pic?.includes('cloudinary') &&
-                    <img key={item.index} src={item?.pic} alt={'Main Preview'}/>
+                    <img key={item.index+'z'} src={item?.pic} alt={'Main Preview'}/>
                   }
 
                 </div>

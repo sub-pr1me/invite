@@ -17,6 +17,8 @@ const handleAlbumUpload = asyncHandler(async (req, res)=> {
     const untouched = JSON.parse(req.query.untouched);
     const toRemove = JSON.parse(req.query.toRemove);
 
+    console.log('IMGS: ', images);
+
     for (let i=0; i<images.length; i++) {
       console.log('UPLOADING FILE -',images[i].filename);
       const result = await cloudinary.uploader.upload(images[i].path, {resource_type: "image"});

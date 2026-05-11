@@ -32,9 +32,10 @@ const Profile = ({ setActive }) => {
 
     <div className={`${styles.profile_container}`}>
       <div className={`${styles.top}`}>
-        <div className={``}>NAME</div>
-        <div className={``}>EMAIL</div>
-        <div className={``}>HOURS</div>
+        <button className={``}>Edit Name</button>
+        <button className={``}>Edit E-mail</button>
+        <button className={``}>Edit Hours</button>
+        <button className={``}>Delete Account</button>
       </div>
 
       <EditGallery

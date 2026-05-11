@@ -32,6 +32,14 @@
   align-items: center;
 }
 
+.top button {
+  box-shadow: 0 0 2pt 1pt rgb(126, 76, 146);
+}
+
+.top button:hover {
+  box-shadow: 0 0 4pt 2pt rgb(225, 150, 255);
+}
+
 .loading {
   position: absolute;
   z-index: 1;

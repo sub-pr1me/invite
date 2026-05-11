@@ -71,6 +71,10 @@
   will-change: transform, opacity;
 }
 
+.no_photos button {
+  font-size: clamp(9px, 1.5vh, 13px) !important;
+}
+
 .shifted {
   position: absolute;
   top: 40%;

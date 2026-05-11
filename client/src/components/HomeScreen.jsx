@@ -78,7 +78,7 @@ const HomeScreen = () => {
         && !expanded
         &&
           <div className={`${styles.no_photos} ${!auth.likes && !upcomingDates?.length ? styles.shifted : null}`}>
-            Upload some photos to your album!
+            Upload some photos to your gallery!
             <button onClick={()=>{setAlbumUploadPending(true)}}>Let's do it</button>
           </div>          
         }

@@ -9,7 +9,7 @@ const ProfileLikesSection = ({ userData, setUserData, tablePreview, expanded, se
 
   return (
     <>
-      {userData?.likes && !tablePreview &&
+      {userData?.likes?.length > 0 && !tablePreview &&
         <div className={`${styles.likes_container} ${expanded ? styles.expanded_container : null}`}>
           <div className={styles.title}>
             {!userId && auth.roles[0] === 'venue' && userData?.likes[0] ? 'People who like your place:' : null}
