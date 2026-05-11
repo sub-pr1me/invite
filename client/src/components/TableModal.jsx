@@ -90,7 +90,7 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
         <button onClick={()=>{CustomizeTable(id)}}>
           Photo
           </button>
-        <button onClick={()=>{
+        <button disabled={auth.tables[id-1].auction.step} onClick={()=>{
           setStatus('auction');
           CustomizeTable(id);
           }}>

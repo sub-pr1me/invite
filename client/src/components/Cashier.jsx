@@ -3,8 +3,8 @@ import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useEffect, useEffectEvent } from 'react'
 
-const Cashier = ({ setActive }) => {
-  const { auth, setAuth } = useAuth();
+const Cashier = () => {
+  const { auth, setAuth, setActive } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
   const UpdateBalance = async (formData) => {

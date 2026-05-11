@@ -1,12 +1,14 @@
 import styles from '../styles/Profile.module.css'
+import useAuth from '../hooks/useAuth'
 import { useEffect, useEffectEvent, useState } from 'react'
 import EditGallery from './EditGallery'
 
-const Profile = ({ setActive }) => {
+const Profile = () => {
   const [previewSrc, setPreviewSrc] = useState(null);
   const [showUploadAnimation, SetShowUploadAnimation] = useState(false);
   const [fade, setFade] = useState(false);
   const [hidden, setHidden] = useState(true);
+  const { setActive } = useAuth();
     
   const onRefresh = useEffectEvent(()=>{setActive('profile')});
 

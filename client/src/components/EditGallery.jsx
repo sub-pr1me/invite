@@ -274,7 +274,7 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
 
           {previewSrc?.length !== 5 &&
             <label htmlFor='album' className={`${styles.label}`}>
-              Upload Images
+              Upload Photos
               <input
                 className={`${styles.upload}`}
                 multiple

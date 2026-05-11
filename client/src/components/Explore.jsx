@@ -4,12 +4,11 @@ import useAuth from '../hooks/useAuth'
 import { useEffect, useEffectEvent, useState, memo } from 'react'
 import UserProfile from './UserProfile'
 
-const Explore = ({ setActive }) => {
+const Explore = () => {
   const [venues, setVenues] = useState(null);
   const [customers, setCustomers] = useState(null);
   const axiosPrivate = useAxiosPrivate();
-  const { auth } = useAuth();
-  const onRefresh = useEffectEvent(()=>{setActive('explore')});
+  const { auth, setActive } = useAuth();
 
   const FetchVenues = useEffectEvent(async () => {
     const response = await axiosPrivate.get('/fetch_venues',
@@ -35,6 +34,8 @@ const Explore = ({ setActive }) => {
     console.log(filtered);
     setCustomers(filtered);
   });
+
+  const onRefresh = useEffectEvent(()=>{setActive('explore')});
 
   useEffect(()=>{
     onRefresh();

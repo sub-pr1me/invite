@@ -4,12 +4,12 @@ import { useState, useEffect, useEffectEvent, memo } from 'react'
 import SetAucs from './SetAucs'
 import AuctionsMonitor from './AuctionsMonitor'
 
-const Auctions = ({ setActive, auctions, setAuctions }) => {
+const Auctions = ({ auctions, setAuctions }) => {
   
   const [section, setSection] = useState('current');
   const [tablePreview, setTablePreview] = useState(null);
   const [hostPreview, setHostPreview] = useState(null);
-  const { auth, customize } = useAuth();
+  const { auth, customize, setActive } = useAuth();
   const onRefresh = useEffectEvent(()=>{setActive('auctions')});
   
   useEffect(()=>{

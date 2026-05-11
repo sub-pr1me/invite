@@ -4,13 +4,12 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useEffect, useEffectEvent, useState, memo } from 'react'
 import UserProfile from './UserProfile'
 
-const Clients = ({ setActive }) => {
+const Clients = () => {
   const [customers, setCustomers] = useState(null);
   const [hosts, setHosts] = useState(null);
   const [guests, setGuests] = useState(null);
   const axiosPrivate = useAxiosPrivate();
-  const { auth } = useAuth();
-  const onRefresh = useEffectEvent(()=>{setActive('clients')});
+  const { auth, setActive } = useAuth();
 
   const FetchCustomers = useEffectEvent(async () => {
     const response = await axiosPrivate.get('/fetch_customers',
@@ -32,6 +31,8 @@ const Clients = ({ setActive }) => {
     setHosts(hostArr);
     setGuests(guestArr);
   });
+
+  const onRefresh = useEffectEvent(()=>{setActive('clients')});
 
   useEffect(()=>{
     onRefresh();

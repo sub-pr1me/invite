@@ -21,26 +21,19 @@ const Dashboard = () => {
       <Route path='/' element={<LayoutDashboard />}>
           <Route index element={<Home setAuctions={setAuctions}/>}/>
           <Route path=':userId' element={
-            <HomeScreen 
-              key={userId}
-            />} 
+            <HomeScreen key={userId}/>} 
           />
           <Route path='/explore' element={
-            <Explore 
-              setActive={setActive}
-            />}
+            <Explore/>}
           />
           <Route path='/clients' element={
-            <Clients 
-              setActive={setActive}/>} 
+            <Clients/>} 
             />
           <Route path='/profile' element={
-            <Profile 
-              setActive={setActive}/>}
+            <Profile/>}
             />
           <Route path='/auctions' element={
             <Auctions 
-              setActive={setActive} 
               auctions={auctions} 
               setAuctions={setAuctions}/>} 
             />

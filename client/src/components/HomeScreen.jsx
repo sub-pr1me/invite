@@ -10,7 +10,7 @@ import Carousel from './Carousel'
 import AlbumUpload from './AlbumUpload'
 
 const HomeScreen = () => {
-  const { auth } = useAuth();
+  const { auth, setActive } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { userId } = useParams();
   const [userData, setUserData] = useState(null);
@@ -38,6 +38,12 @@ const HomeScreen = () => {
       console.log(err);
     };
   });
+
+  const onRefresh = useEffectEvent(()=>{setActive('home')});
+
+  useEffect(()=>{
+    onRefresh();
+  },[]);
 
   useEffect(()=>{
     if (userId) applyUserData(userId);
@@ -71,7 +77,7 @@ const HomeScreen = () => {
         }
         
         {auth.roles[0] === 'customer' 
-        && !auth.album 
+        && !auth.album?.length
         && !userId 
         && !albumUploadPending 
         && !tablePreview
