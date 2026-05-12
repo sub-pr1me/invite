@@ -59,6 +59,8 @@ const TablePic = ({ setCustomize, customize }) => {
         console.log('INVALID FILE EXTENSION');
       } else if (err.response?.status === 401) {
         console.log('UNAUTHORIZED');
+      } else if (err.response?.status === 413) {
+        console.log('FILE IS TOO LARGE');
       } else {
         console.log('SOMETHING WENT WRONG');
       }

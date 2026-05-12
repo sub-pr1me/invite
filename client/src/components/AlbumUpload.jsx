@@ -118,6 +118,8 @@ const AlbumUpload = ({ albumUploadPending, setAlbumUploadPending, postreg }) => 
         console.log('INVALID FILE EXTENSION');
       } else if (err.response?.status === 401) {
         console.log('UNAUTHORIZED');
+      } else if (err.response?.status === 413) {
+        console.log('ONE OR MORE FILES ARE TOO LARGE');
       } else {
         console.log('SOMETHING WENT WRONG');
       }

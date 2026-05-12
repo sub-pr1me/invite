@@ -38,7 +38,7 @@ const LogoUpload = () => {
           withCredentials: true,
         });
       setStatus('success');
-      console.log('LOGO UPLOADED');      
+      console.log('AVATAR UPLOADED');      
       setAuth({...auth, avatar: response.data});
       
     } catch(err) {
@@ -50,6 +50,8 @@ const LogoUpload = () => {
         console.log('INVALID FILE EXTENSION');
       } else if (err.response?.status === 401) {
         console.log('UNAUTHORIZED');
+      } else if (err.response?.status === 413) {
+        console.log('FILE IS TOO LARGE');
       } else {
         console.log('SOMETHING WENT WRONG');
       }
@@ -82,7 +84,7 @@ const LogoUpload = () => {
       </label>
     </div>      
     </>
-  )
-}
+  );
+};
 
 export default LogoUpload

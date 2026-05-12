@@ -28,7 +28,7 @@ export default async function handleLogoUpload(req, res) {
       const arr = renew.split("/");
       const arr2 = arr[arr.length - 1].split(".");
       const oldLogoID = arr2[arr2.length -2];
-      cloudinary.uploader.destroy(oldLogoID).then(console.log('old logo deleted!'));
+      cloudinary.uploader.destroy(oldLogoID).then(console.log('old avatar deleted!'));
     };
     
     const response = await result.secure_url;
