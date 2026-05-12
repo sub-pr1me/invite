@@ -46,16 +46,18 @@ const Cashier = () => {
         auth.roles[0] === 'customer' && 
         <div className={`${styles.deposit}`}>
           <form action={UpdateBalance}>
-            <label htmlFor='amount'>Amount:</label>
-            <input
-              name='amount'
-              id='amount'
-              type="number"
-              min='50'
-              max={9999 - auth.credits}
-              placeholder={`50-${9999-auth.credits}`}
-              required 
-            />
+            <div>
+              <label htmlFor='amount'>Amount:</label>
+              <input
+                name='amount'
+                id='amount'
+                type="number"
+                min='50'
+                max={9999 - auth.credits}
+                placeholder={`50-${9999-auth.credits}`}
+                required 
+              />
+            </div>
             <button>Deposit</button>
           </form>
         </div>
@@ -64,17 +66,19 @@ const Cashier = () => {
         auth.roles[0] === 'venue' && 
         <div className={`${styles.cashout}`}>
           <form action={UpdateBalance}>
-            <label htmlFor='amount'>Amount:</label>
-            <input
-              name='amount'
-              id='amount'
-              type="number"
-              min='10'
-              max={auth.credits}
-              placeholder={auth.credits > 10 ? `10-${auth.credits}` : ''}
-              disabled={auth.credits < 10 || !auth.credits}
-              required
-            />
+            <div>
+              <label htmlFor='amount'>Amount:</label>
+              <input
+                name='amount'
+                id='amount'
+                type="number"
+                min='10'
+                max={auth.credits}
+                placeholder={auth.credits > 10 ? `10-${auth.credits}` : ''}
+                disabled={auth.credits < 10 || !auth.credits}
+                required
+              />
+            </div>
             <button disabled={auth.credits < 10 || !auth.credits}>
               Cash Out
             </button>

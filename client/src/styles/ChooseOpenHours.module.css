@@ -18,6 +18,10 @@
   margin-bottom: -20px;
 }
 
+.form label {
+  font-weight: 500;
+}
+
 .time {
   width: 100%;
   display: flex;

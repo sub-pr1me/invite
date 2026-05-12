@@ -53,14 +53,16 @@
 
 .cashier_container form {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 30px;
 }
 
 .cashier_container label {
   font-size: 20px;
   font-weight: 600;
+  margin-right: 10px;
 }
 
 .cashier_container form input{
@@ -75,5 +77,6 @@
 .cashier_container form button{
   background-color: rgb(65, 53, 179);
   margin: 0px;
+  margin-bottom: 2px;
   font-size: 14px;
 }

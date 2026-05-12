@@ -1,7 +1,7 @@
 import styles from '../styles/EditProfile.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import ChooseOpenHours from './ChooseOpenHours'
 
 const EditProfile = ({ title, state, setState, btn, variable, type }) => {
@@ -9,6 +9,7 @@ const EditProfile = ({ title, state, setState, btn, variable, type }) => {
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [inputValue, setInputValue] = useState(null);
+  const inputRef = useRef();
 
   const EditProfileInfo = async () => {
     try {
@@ -32,6 +33,10 @@ const EditProfile = ({ title, state, setState, btn, variable, type }) => {
     }
   };
 
+  useEffect(()=>{
+    inputRef?.current?.focus();
+  },[]);
+
   return (
     <>
       <div className={`${styles.edit_container}`}>
@@ -42,7 +47,8 @@ const EditProfile = ({ title, state, setState, btn, variable, type }) => {
           required
           name={variable}
           id={variable}
-          type={type} 
+          type={type}
+          ref={inputRef}
           autoComplete='off'
           onChange={(e)=> setInputValue(e.target.value)}
         />

@@ -18,7 +18,7 @@
   align-items: center;
   gap: 10px;
   height: 200px;
-  width: 300px;
+  width: 320px;
   border-radius: 50px;
   border: 2px solid rgba(246, 179, 255, 0.541);
   position: absolute;
@@ -27,7 +27,7 @@
 }
 
 .title {
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .edit_container input,
@@ -35,4 +35,15 @@
   background-color: black;
   border: none;
   outline: 1px solid rgba(248, 172, 255, 0.63);
+  font-size: 14px;
+}
+
+.edit_container input {
+  width: 75%;
+  height: 12%;
+}
+
+.edit_container button {
+  background-color: rgb(78, 65, 199);
+  font-weight: 600;
 }
