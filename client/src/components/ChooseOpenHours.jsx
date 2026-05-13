@@ -15,7 +15,7 @@ const ChooseOpenHours = ({ state, setState }) => {
 
     try {
       await axiosPrivate.post('/info_edit',
-        {hours: hours},
+        {hours: hours, acc_type: 'venue'},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true

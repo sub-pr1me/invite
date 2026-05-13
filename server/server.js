@@ -21,6 +21,7 @@ import FetchVenuesRouter from './routes/FetchVenuesRouter.js'
 import FetchCustomersRouter from './routes/FetchCustomersRouter.js'
 import NewDateRouter from './routes/NewDateRouter.js'
 import ArchiveDateRouter from './routes/ArchiveDateRouter.js'
+import InfoEditRouter from './routes/InfoEditRouter.js'
 import { FetchAuctions } from './db/queries.js'
 import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
@@ -83,6 +84,7 @@ app.use('/fetch_venues', FetchVenuesRouter);
 app.use('/fetch_customers', FetchCustomersRouter);
 app.use('/new_date', NewDateRouter);
 app.use('/archive_date', ArchiveDateRouter);
+app.use('/info_edit', InfoEditRouter);
 
 server.listen(PORT, HOST, (error) => {  
   if (error) {console.error(error)}

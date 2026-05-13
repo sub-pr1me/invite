@@ -65,7 +65,7 @@
   margin-right: 10px;
 }
 
-.cashier_container form input{
+.cashier_container form input {
   width: 90px;
   height: 22px;
   font-size: 18px;
@@ -74,9 +74,14 @@
   outline: 2px solid rgba(248, 172, 255, 0.63);
 }
 
-.cashier_container form button{
+.cashier_container form button {
   background-color: rgb(65, 53, 179);
   margin: 0px;
   margin-bottom: 2px;
   font-size: 14px;
+  box-shadow: 0 0 2pt 1pt rgb(126, 76, 146);
+}
+
+.cashier_container form button:hover {
+  box-shadow: 0 0 4pt 2pt rgb(225, 150, 255);
 }
