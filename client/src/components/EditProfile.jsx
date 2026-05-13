@@ -8,14 +8,15 @@ const EditProfile = ({ title, state, setState, btn, variable, type }) => {
 
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
-  const [inputValue, setInputValue] = useState(null);
+  const [nameValue, setNameValue] = useState(null);
+  const [emailValue, setEmailValue] = useState(null);
   const inputRef = useRef();
 
   const EditProfileInfo = async () => {
 
     try {
       const response = await axiosPrivate.post('/info_edit',
-        {name: inputValue, email: inputValue, acc_type: auth.roles[0]},
+        {old_email: auth.email, new_name: nameValue, new_email: emailValue, acc_type: auth.roles[0]},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
@@ -26,14 +27,20 @@ const EditProfile = ({ title, state, setState, btn, variable, type }) => {
 
       if (variable === 'name') {
         if (auth.roles[0] === 'venue') {
-          setAuth({...auth, name: inputValue, dates: update.dates});
-        } else { setAuth({...auth, name: inputValue}) }
+          setAuth({...auth, name: update.name, dates: update.dates});
+        } else { setAuth({...auth, name: update.name}) }
+      };
+
+      if (variable === 'email') {
+        if (auth.roles[0] === 'venue') {
+          setAuth({...auth, email: update.email, dates: update.dates});
+        } else { setAuth({...auth, email: update.email}) }
       };
 
       console.log(update.message);
 
-      // if (variable === 'email') setAuth({...auth, email: inputValue});
-      setInputValue(null);
+      setNameValue(null);
+      setEmailValue(null);
       setState(null);
 
     } catch (err) {
@@ -62,7 +69,10 @@ const EditProfile = ({ title, state, setState, btn, variable, type }) => {
           type={type}
           ref={inputRef}
           autoComplete='off'
-          onChange={(e)=> setInputValue(e.target.value)}
+          onChange={(e)=> {
+            if (variable === 'name') setNameValue(e.target.value);
+            if (variable === 'email') setEmailValue(e.target.value);
+          }}
         />
         }
 

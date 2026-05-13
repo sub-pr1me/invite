@@ -14,7 +14,7 @@ const ChooseOpenHours = ({ state, setState }) => {
     const hours = open + '-' + close;
 
     try {
-      await axiosPrivate.post('/info_edit',
+      const response = await axiosPrivate.post('/info_edit',
         {hours: hours, acc_type: 'venue'},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -22,7 +22,11 @@ const ChooseOpenHours = ({ state, setState }) => {
         }
       );
 
-      setAuth({...auth, hours: hours});
+      const update = response.data;
+      console.log(update.message);
+      
+      setAuth({...auth, hours: update.hours});
+      setState(null);
 
     } catch (err) {
       if (!err?.response) {
