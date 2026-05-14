@@ -13,8 +13,8 @@ const Log_Out = () => {
           withCredentials: true,
         }
       );
-      await setActive('home');
-      await setAuth(null);
+      setActive('home');
+      setAuth(null);
       console.log('LOGGED OUT');
     } catch (err) {
       if (!err?.response) {

@@ -2,6 +2,7 @@ import styles from '../styles/EditProfile.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import ChooseOpenHours from './ChooseOpenHours'
 
 const EditProfile = ({ title, state, setState, variable, type }) => {
@@ -11,6 +12,7 @@ const EditProfile = ({ title, state, setState, variable, type }) => {
   const [nameValue, setNameValue] = useState(null);
   const [emailValue, setEmailValue] = useState(null);
   const inputRef = useRef();
+  const navigate = useNavigate();
 
   const EditProfileInfo = async () => {
 
@@ -52,7 +54,7 @@ const EditProfile = ({ title, state, setState, variable, type }) => {
     };
   };
 
-  const DeleteProfile = async () => {
+  const DeleteAccount = async () => {
     console.log('DELETE ACCOUNT');
 
     try {
@@ -64,25 +66,16 @@ const EditProfile = ({ title, state, setState, variable, type }) => {
         }
       );
 
-      const update = response.data;
+      await axiosPrivate.post('/auctions_update',
+        {
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          withCredentials: true
+        }
+      );
 
-      if (variable === 'name') {
-        if (auth.roles[0] === 'venue') {
-          setAuth({...auth, name: update.name, dates: update.dates});
-        } else { setAuth({...auth, name: update.name}) }
-      };
-
-      if (variable === 'email') {
-        if (auth.roles[0] === 'venue') {
-          setAuth({...auth, email: update.email, dates: update.dates});
-        } else { setAuth({...auth, email: update.email}) }
-      };
-
-      console.log(update.message);
-
-      setNameValue(null);
-      setEmailValue(null);
+      console.log(response.data);
       setState(null);
+      navigate('/');
 
     } catch (err) {
       if (!err?.response) {
@@ -91,16 +84,6 @@ const EditProfile = ({ title, state, setState, variable, type }) => {
         console.log('SOMETHING WENT WRONG');
       }
     };
-
-
-
-
-
-
-
-
-
-
   };
 
   useEffect(()=>{
@@ -145,7 +128,7 @@ const EditProfile = ({ title, state, setState, variable, type }) => {
           </button>
           <button onClick={()=>{
             if (variable !== 'delete') EditProfileInfo();
-            if (variable === 'delete') DeleteProfile();
+            if (variable === 'delete') DeleteAccount();
           }}>
             {variable === 'delete' ? 'Delete' : 'Submit'}
           </button>

@@ -145,7 +145,8 @@
 }
 
 .host_pic,
-.guest_pic {
+.guest_pic,
+.no_table {
   height: clamp(50px, 10vh, 90px) !important;
   aspect-ratio: 1/1;
   border-radius: 50%;

@@ -12,7 +12,7 @@ const ProfileDatesSection = ({ dates, tablePreview, setTablePreview }) => {
     <>
       <div className={`
         ${styles.dates_container}
-        ${!auth.likes && auth.roles[0] === 'venue' ? styles.shifted : null}`}>
+        ${!auth.likes?.length && auth.roles[0] === 'venue' ? styles.shifted : null}`}>
         {!tablePreview && <div className={styles.background}></div>}
           { !tablePreview &&
             <div className={styles.title}>

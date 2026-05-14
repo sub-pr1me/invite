@@ -52,7 +52,7 @@ const HomeScreen = () => {
 
   return (
     <>
-      <div className={`${styles.homescreen_container}`}>
+      <div className={`${styles.homescreen_container} ${!auth.likes?.length && !userId ? styles.shifted2 : null}`}>
         
         <div className={`${styles.edge_fader}`}></div>
 
@@ -83,7 +83,7 @@ const HomeScreen = () => {
         && !tablePreview
         && !expanded
         &&
-          <div className={`${styles.c} ${!auth.likes && !upcomingDates?.length ? styles.shifted : null}`}>
+          <div className={`${styles.no_photos} ${!auth.likes?.length && !upcomingDates?.length ? styles.shifted : null}`}>
             Upload some photos to your gallery!
             <button onClick={()=>{setAlbumUploadPending(true)}}>Let's do it</button>
           </div>          

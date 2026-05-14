@@ -4,7 +4,7 @@ const handleInfoEdit = async (req, res) => {
   try {
     
     const email = req.body.old_email;    
-    const acc_type = req.body.acc_type
+    const acc_type = req.body.acc_type;
 
     const new_name = req.body.new_name;
     const new_email = req.body.new_email;
@@ -14,7 +14,7 @@ const handleInfoEdit = async (req, res) => {
     res.status(200).send(response);
   } catch (err) {
     console.log(err);
-    res.status(500).send('DEPOSIT CONTROLLER ERROR');
+    res.status(500).send('INFO EDIT CONTROLLER ERROR');
   }
 };
 

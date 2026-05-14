@@ -11,6 +11,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
 
   const axiosPrivate = useAxiosPrivate();
   const [status, setStatus] = useState('idle');
+  const [warning, setWarning] = useState(false);
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
 
@@ -214,6 +215,12 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
   return (
     <>
     <div className={`${styles.monitor}`}>
+        {warning &&
+          <div className={`${styles.warning}`}>
+            You already have <br /> an upcoming date with this person!
+            <button onClick={()=>{setWarning(false)}}>OK</button>
+          </div>
+        }
         { tablePreview !== null &&
           <div className={`${styles.table_preview} ${auth.roles[0] === 'customer' ? styles.alt : null}`}>
             <img src={tablePreview} alt='' />
@@ -230,7 +237,13 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
                && auth.gender === hostPreview.interest
                && auth.likes?.includes(hostPreview.email)
                &&
-              <button onClick={()=>{AcceptNewDate()}}>Accept<br />Invitation!</button>
+              <button onClick={()=>{
+                const duplicate = auth.dates?.filter(
+                  item => item.status === 'upcoming' 
+                  && item.host === hostPreview.email || item.guest === hostPreview.email
+                );
+                if (!duplicate) { AcceptNewDate() } else {setWarning(true)};
+              }}>Accept<br />Invitation!</button>
               }
             </div>
           </div>

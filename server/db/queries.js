@@ -837,3 +837,185 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
     return updates;
   };
 };
+
+export async function DeleteAccount(email, acc_type) {
+  console.log('DeleteAccount');
+  console.log('EMAIL:', email);
+  console.log('ACC_TYPE:', acc_type);
+
+  // DELETE CUSTOMER FROM AUCTIONS
+  
+  if (acc_type === 'customer') {
+    const { rows } = await pool.query(`SELECT email, tables FROM venues`);
+    const haveTables = rows.filter(item => item.tables[0]);
+    for (let i=0; i<haveTables.length; i++) {
+      const tables = haveTables[i].tables[0];
+      let upd = false;
+
+      const updatedTables = tables.map(item => {
+        if (item.auction.bidders.some(obj => obj.email == email)) {
+          upd = true;
+          const updatedBidders = item.auction.bidders
+          .map(elem => {
+            if (elem.email === email) {
+              return 0;
+            } else { return elem }
+          })
+          .filter(item => item !== 0);
+
+          while (updatedBidders.length < 3) updatedBidders.push(0);
+          return {...item, auction: {...item.auction, bidders: updatedBidders}}
+        } else { return item };
+      });
+
+      if (upd) {
+        const stringified = JSON.stringify(updatedTables);
+        await pool.query(
+          `UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}')
+          WHERE email = '${haveTables[i].email}'`
+        );
+        console.log(`CUSTOMER REMOVED FROM AUCTION IN ${haveTables[i].email}`);
+      };
+    };
+  };
+
+  // DELETE CUSTOMER FROM VENUE / CUSTOMER LIKES
+
+  if (acc_type === 'customer') {
+    const { rows } = await pool.query(`SELECT email, likes FROM venues`);
+    const haveLikes = rows.filter(item => item.likes !== null && item.likes.length);
+    
+    for (let i=0; i<haveLikes.length; i++) {
+      const likes = haveLikes[i].likes;
+
+      if (likes.includes(email)) {
+        if (likes.length > 1) {
+          const updatedLikes = likes.filter(item => item !== email);
+          await pool.query(
+            `UPDATE venues SET likes = '{${updatedLikes.toString()}}' 
+            WHERE email = '${haveLikes[i].email}'`
+          );
+          console.log(`CUSTOMER REMOVED FROM LIKES IN ${haveLikes[i].email}`);
+        } else {
+          await pool.query(
+            `UPDATE venues SET likes = '{}' 
+            WHERE email = '${haveLikes[i].email}'`
+          );
+          console.log(`CUSTOMER REMOVED FROM LIKES IN ${haveLikes[i].email}`);
+        };
+      };
+    };
+  };
+
+  if (acc_type === 'customer') {
+    const { rows } = await pool.query(`SELECT email, likes FROM customers`);
+    const haveLikes = rows.filter(item => item.likes !== null && item.likes.length);
+    
+    for (let i=0; i<haveLikes.length; i++) {
+      const likes = haveLikes[i].likes;
+
+      if (likes.includes(email)) {
+        if (likes.length > 1) {
+          const updatedLikes = likes.filter(item => item !== email);
+          await pool.query(
+            `UPDATE customers SET likes = '{${updatedLikes.toString()}}' 
+            WHERE email = '${haveLikes[i].email}'`
+          );
+          console.log(`CUSTOMER REMOVED FROM LIKES IN ${haveLikes[i].email}`);
+        } else {
+          await pool.query(
+            `UPDATE customers SET likes = '{}' 
+            WHERE email = '${haveLikes[i].email}'`
+          );
+          console.log(`CUSTOMER REMOVED FROM LIKES IN ${haveLikes[i].email}`);
+        };
+      };
+    };
+  };
+  
+  // DELETE VENUE / CUSTOMER FROM DATES
+
+  if (acc_type === 'venue') {
+    const customerDatesData = await pool.query(`SELECT email, dates FROM customers`);    
+    const customersWithDates = customerDatesData.rows.filter(item => item.dates[0]);
+    for (let i=0; i<customersWithDates.length; i++) {
+      const dates = customersWithDates[i].dates[0];
+      if (dates.some(obj => obj.venue == email)) {
+        
+        if (dates.length > 1) {
+          const updatedDates = dates.filter(item => item.venue !== email);
+          const stringified = JSON.stringify(updatedDates);
+          await pool.query(
+            `UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}')
+            WHERE email = '${customersWithDates[i].email}'`
+          );
+          console.log(`VENUE REMOVED FROM DATES IN ${customersWithDates[i].email}`);
+        } else {
+          
+          await pool.query(
+            `UPDATE customers SET dates = jsonb_set(dates, '{0}', '[]')
+            WHERE email = '${customersWithDates[i].email}'`
+          );
+          console.log(`VENUE REMOVED FROM DATES IN ${customersWithDates[i].email}`);
+        };
+      };
+    };
+  };
+
+  if (acc_type === 'customer') {
+    const venueDatesData = await pool.query(`SELECT email, dates FROM venues`);    
+    const venuesWithDates = venueDatesData.rows.filter(item => item.dates[0]);
+    for (let i=0; i<venuesWithDates.length; i++) {
+      const dates = venuesWithDates[i].dates[0];
+      if (dates.some(obj => obj.host == email) || dates.some(obj => obj.guest == email)) {
+        
+        if (dates.length > 1) {
+          const updatedDates = dates.filter(item => item.host !== email && item.guest !== email);
+          const stringified = JSON.stringify(updatedDates);
+          await pool.query(
+            `UPDATE venues SET dates = jsonb_set(dates, '{0}', '${stringified}')
+            WHERE email = '${venuesWithDates[i].email}'`
+          );
+          console.log(`CUSTOMER REMOVED FROM DATES IN ${venuesWithDates[i].email}`);
+        } else {
+
+          await pool.query(
+            `UPDATE venues SET dates = jsonb_set(dates, '{0}', '[]')
+            WHERE email = '${venuesWithDates[i].email}'`
+          );
+          console.log(`CUSTOMER REMOVED FROM DATES IN ${venuesWithDates[i].email}`);
+        };
+      };
+    };
+
+    const customerDatesData = await pool.query(`SELECT email, dates FROM customers`);    
+    const customersWithDates = customerDatesData.rows.filter(item => item.dates[0]);
+    for (let i=0; i<customersWithDates.length; i++) {
+      const dates = customersWithDates[i].dates[0];
+      if (dates.some(obj => obj.host == email) || dates.some(obj => obj.guest == email)) {
+        
+        if (dates.length > 1) {
+          const updatedDates = dates.filter(item => item.host !== email && item.guest !== email);
+          const stringified = JSON.stringify(updatedDates);
+          await pool.query(
+            `UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}')
+            WHERE email = '${customersWithDates[i].email}'`
+          );
+          console.log(`CUSTOMER REMOVED FROM DATES IN ${customersWithDates[i].email}`);
+        } else {
+          
+          await pool.query(
+            `UPDATE customers SET dates = jsonb_set(dates, '{0}', '[]')
+            WHERE email = '${customersWithDates[i].email}'`
+          );
+          console.log(`CUSTOMER REMOVED FROM DATES IN ${customersWithDates[i].email}`);
+        };
+      };
+    };
+  };
+
+  // DELETE VENUE / CUSTOMER ACCOUNT FROM DB
+
+  await pool.query(`DELETE FROM ${acc_type}s WHERE email = '${email}'`);
+  return `ACCOUNT "${email}" HAS BEEN DELETED`;
+};

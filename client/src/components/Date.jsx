@@ -26,7 +26,7 @@ const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }) 
         }
       );
       
-      setAuth({...auth, dates: auth.dates.map(item => {
+      setAuth({...auth, dates: auth.dates?.map(item => {
         if (JSON.stringify(item) === JSON.stringify(date)) {
           return {...item, status: 'archived', endTime: response.data}
         } else { return item };
@@ -101,11 +101,12 @@ const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }) 
             </div>
 
             {date?.table_pic 
-              ? <img src={date?.table_pic} alt='' onClick={()=>{setTablePreview(true)}}/> 
+              ? <img className={`${styles.host_pic}`} src={date?.table_pic} alt='' onClick={()=>{setTablePreview(true)}}/> 
               : <img className={`${styles.no_table}`} src='../../img/table.png' alt='' />
             }
             
-            <img src={auth.email === date?.guest ? date?.host_pic : date?.guest_pic} alt=''
+            <img className={`${styles.host_pic}`}               
+              src={auth.email === date?.guest ? date?.host_pic : date?.guest_pic} alt=''
               onClick={()=>{
                 auth.email === date?.guest 
                 ? navigate(`/dashboard/${date?.host_id}`) 

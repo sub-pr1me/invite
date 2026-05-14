@@ -2,7 +2,6 @@ import express from 'express'
 import cors from 'cors'
 import http from 'http'
 import { attachWebSocketServer } from './ws/wsServer.js'
-import IndexPageRouter from './routes/IndexPageRouter.js'
 import CreateAccRouter from './routes/CreateAccRouter.js'
 import LogInRouter from './routes/LogInRouter.js'
 import RefreshRouter from './routes/RefreshRouter.js'
@@ -22,6 +21,7 @@ import FetchCustomersRouter from './routes/FetchCustomersRouter.js'
 import NewDateRouter from './routes/NewDateRouter.js'
 import ArchiveDateRouter from './routes/ArchiveDateRouter.js'
 import InfoEditRouter from './routes/InfoEditRouter.js'
+import DeleteAccountRouter from './routes/DeleteAccountRouter.js'
 import { FetchAuctions } from './db/queries.js'
 import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
@@ -46,7 +46,6 @@ app.use(cookieParser()); // middleware for cookies
 const corsOptions = {origin: ['http://localhost:5173'], credentials: true};
 app.use(cors(corsOptions));
 
-// app.use('/', IndexPageRouter);
 app.use('/create_account', CreateAccRouter);
 app.use('/login', LogInRouter);
 app.use('/refresh', RefreshRouter);
@@ -85,6 +84,7 @@ app.use('/fetch_customers', FetchCustomersRouter);
 app.use('/new_date', NewDateRouter);
 app.use('/archive_date', ArchiveDateRouter);
 app.use('/info_edit', InfoEditRouter);
+app.use('/delete_account', DeleteAccountRouter);
 
 server.listen(PORT, HOST, (error) => {  
   if (error) {console.error(error)}
