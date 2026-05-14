@@ -83,7 +83,7 @@ const HomeScreen = () => {
         && !tablePreview
         && !expanded
         &&
-          <div className={`${styles.no_photos} ${!auth.likes && !upcomingDates?.length ? styles.shifted : null}`}>
+          <div className={`${styles.c} ${!auth.likes && !upcomingDates?.length ? styles.shifted : null}`}>
             Upload some photos to your gallery!
             <button onClick={()=>{setAlbumUploadPending(true)}}>Let's do it</button>
           </div>          

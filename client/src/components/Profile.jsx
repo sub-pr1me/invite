@@ -2,7 +2,7 @@ import styles from '../styles/Profile.module.css'
 import useAuth from '../hooks/useAuth'
 import { useEffect, useEffectEvent, useState } from 'react'
 import EditGallery from './EditGallery'
-import EditProfile from './EditProfile';
+import EditProfile from './EditProfile'
 
 
 const Profile = () => {
@@ -95,8 +95,7 @@ const Profile = () => {
             title={'Delete account?'}
             state={editDelete} 
             setState={setEditDelete}
-            variable={'delete'}
-            btn={`Delete`}/>
+            variable={'delete'}/>
         </div>
         }
         <div className={`${styles.delete_acc}`}>

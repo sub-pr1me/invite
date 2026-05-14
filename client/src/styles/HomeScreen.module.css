@@ -24,7 +24,9 @@
   position: relative;
 }
 
-.homescreen_container img {
+.edge_fader,
+.upload_modal,
+.no_photos {
   animation: opacity 2.5s both;
   will-change: opacity;
 }

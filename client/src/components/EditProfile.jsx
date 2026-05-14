@@ -4,7 +4,7 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useState, useRef, useEffect } from 'react'
 import ChooseOpenHours from './ChooseOpenHours'
 
-const EditProfile = ({ title, state, setState, btn, variable, type }) => {
+const EditProfile = ({ title, state, setState, variable, type }) => {
 
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
@@ -49,7 +49,58 @@ const EditProfile = ({ title, state, setState, btn, variable, type }) => {
       } else {
         console.log('SOMETHING WENT WRONG');
       }
-    }
+    };
+  };
+
+  const DeleteProfile = async () => {
+    console.log('DELETE ACCOUNT');
+
+    try {
+      const response = await axiosPrivate.post('/delete_account',
+        {email: auth.email, acc_type: auth.roles[0]},
+        {
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          withCredentials: true
+        }
+      );
+
+      const update = response.data;
+
+      if (variable === 'name') {
+        if (auth.roles[0] === 'venue') {
+          setAuth({...auth, name: update.name, dates: update.dates});
+        } else { setAuth({...auth, name: update.name}) }
+      };
+
+      if (variable === 'email') {
+        if (auth.roles[0] === 'venue') {
+          setAuth({...auth, email: update.email, dates: update.dates});
+        } else { setAuth({...auth, email: update.email}) }
+      };
+
+      console.log(update.message);
+
+      setNameValue(null);
+      setEmailValue(null);
+      setState(null);
+
+    } catch (err) {
+      if (!err?.response) {
+        console.log('NO SERVER RESPONSE');
+      } else {
+        console.log('SOMETHING WENT WRONG');
+      }
+    };
+
+
+
+
+
+
+
+
+
+
   };
 
   useEffect(()=>{
@@ -92,8 +143,11 @@ const EditProfile = ({ title, state, setState, btn, variable, type }) => {
           <button onClick={()=>{setState(!state)}}>
             Cancel
           </button>
-          <button onClick={()=>{EditProfileInfo()}}>
-            {btn ? btn : 'Submit'}
+          <button onClick={()=>{
+            if (variable !== 'delete') EditProfileInfo();
+            if (variable === 'delete') DeleteProfile();
+          }}>
+            {variable === 'delete' ? 'Delete' : 'Submit'}
           </button>
         </div>
         }

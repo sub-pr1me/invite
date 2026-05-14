@@ -59,8 +59,8 @@ const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }) 
               <img src='../../img/arrow2.png' alt='' />
             </div>
 
-            <img src={date?.host_pic} alt='' onClick={()=>{navigate(`/dashboard/${date?.host_id}`)}}/>
-            <img src={date?.guest_pic} alt='' onClick={()=>{navigate(`/dashboard/${date?.guest_id}`)}}/>
+            <img className={`${styles.host_pic}`} src={date?.host_pic} alt='' onClick={()=>{navigate(`/dashboard/${date?.host_id}`)}}/>
+            <img className={`${styles.guest_pic}`} src={date?.guest_pic} alt='' onClick={()=>{navigate(`/dashboard/${date?.guest_id}`)}}/>
 
             <div 
               className={`${styles.next} ${index === amount - 1 ? styles.no_show : null}`} 

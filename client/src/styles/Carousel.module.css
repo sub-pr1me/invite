@@ -14,6 +14,8 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  animation: opacity 2.5s both;
+  will-change: opacity;
 }
 
 .album {
@@ -22,8 +24,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  animation: appear 0.7s both, opacity 0.8s both;
-  will-change: transform, opacity;
+
 }
 
 .album img {

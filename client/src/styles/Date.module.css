@@ -76,7 +76,7 @@
 
 .prev,
 .next {
-  height: 55%;
+  height: clamp(20px, 5vh, 90px) !important;
   aspect-ratio: 1/1;
   display: flex;
   justify-content: center;
@@ -112,15 +112,17 @@
 
 .prev img,
 .next img {
-  height: 70%;
+  height: 60%;
 }
 
 .prev img {
   transform: scaleX(80%);
+  margin-right: 3px;
 }
 
 .next img {
   transform: scaleX(80%) rotate(180deg);
+  margin-left: 3px;
 }
 
 .no_show {
@@ -142,11 +144,13 @@
   will-change: transform, opacity;
 }
 
-.images img {
+.host_pic,
+.guest_pic {
   height: clamp(50px, 10vh, 90px) !important;
   aspect-ratio: 1/1;
   border-radius: 50%;
   cursor: pointer;
+  animation: none !important;
 }
 
 .images img:nth-child(2),
