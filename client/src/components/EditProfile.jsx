@@ -57,9 +57,32 @@ const EditProfile = ({ title, state, setState, variable, type }) => {
   const DeleteAccount = async () => {
     console.log('DELETE ACCOUNT');
 
+    const links = [];
+    links.push(auth.avatar);
+    
+    if (auth.album?.length) {
+      const album = auth.album;
+      for (let item of album) links.push(item);
+    };
+
+    if (auth.roles[0] === 'venue') {
+      const tables = auth.tables.filter(item => item.pic);
+      for (let i=0; i<tables.length; i++) {
+        links.push(tables[i].pic);
+      };
+    };
+
+    const picsToRemove = [];
+    for (let str of links) {
+      const arr = str.split('/');
+      const arr2 = arr[arr.length - 1].split('.');
+      const imgID = arr2[arr2.length -2];
+      picsToRemove.push(imgID)
+    };
+
     try {
       const response = await axiosPrivate.post('/delete_account',
-        {email: auth.email, acc_type: auth.roles[0]},
+        {email: auth.email, acc_type: auth.roles[0], picsToRemove: picsToRemove},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true

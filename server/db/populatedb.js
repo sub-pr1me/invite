@@ -104,7 +104,7 @@ VALUES
    'stan@gmail.com', 
    '$2b$10$9fMzJPTDDSDAm71uSbew3u0gUyNcQ.DXW/8NoNvZ4OdjJcXZOMVW.', 
    '4',
-   'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1774449173/jpzdy6bnnimvlhfcuvpq.jpg', 
+   'https://res.cloudinary.com/dn1vxf0hg/image/upload/v1778840865/ihhpylmnf0mzybzm23zj.jpg', 
    '1988-07-29', 
    'Male', 
    'Female',

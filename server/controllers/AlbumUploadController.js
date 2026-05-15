@@ -13,11 +13,13 @@ const handleAlbumUpload = asyncHandler(async (req, res)=> {
 
     const images = req.files;
     const imageURLs = [];
-    const postreg = JSON.parse(req.query.postreg);
-    const untouched = JSON.parse(req.query.untouched);
-    const toRemove = JSON.parse(req.query.toRemove);
+    let postreg;
+    let untouched;
+    let toRemove;
 
-    console.log('IMGS: ', images);
+    if (req.query.postreg) postreg = JSON.parse(req.query.postreg);
+    if (req.query.untouched) untouched = JSON.parse(req.query.untouched);
+    if (req.query.toRemove) toRemove = JSON.parse(req.query.toRemove);
 
     for (let i=0; i<images.length; i++) {
       console.log('UPLOADING FILE -',images[i].filename);
@@ -34,7 +36,7 @@ const handleAlbumUpload = asyncHandler(async (req, res)=> {
     const result = await uploadNewAlbum(accType, email, psqlArr, postreg);
     console.log(result);
 
-    for (let i=0; i<toRemove.length; i++) {
+    for (let i=0; i<toRemove?.length; i++) {
       const arr = toRemove[i].split("/");
       const arr2 = arr[arr.length - 1].split(".");
       const oldImgID = arr2[arr2.length -2];

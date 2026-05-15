@@ -193,9 +193,6 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
 
 export async function tableInfoUpdate(email, id, link) {
     console.log('tableInfoUpdate');
-    console.log(email);
-    console.log(id);
-    console.log(link);
 
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${email}'`);
   const tables = rows[0].tables[0];
@@ -840,8 +837,6 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
 
 export async function DeleteAccount(email, acc_type) {
   console.log('DeleteAccount');
-  console.log('EMAIL:', email);
-  console.log('ACC_TYPE:', acc_type);
 
   // DELETE CUSTOMER FROM AUCTIONS
   

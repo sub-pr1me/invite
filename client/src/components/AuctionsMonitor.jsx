@@ -52,7 +52,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true,
           params: {
-            role: 'customer',
+            role: auth.roles[0],
             id: auth.id,
             from: 'AuctionsMonitor'
           }
@@ -242,7 +242,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
                   item => item.status === 'upcoming' 
                   && item.host === hostPreview.email || item.guest === hostPreview.email
                 );
-                if (!duplicate) { AcceptNewDate() } else {setWarning(true)};
+                if (!duplicate.length) { AcceptNewDate() } else {setWarning(true)};
               }}>Accept<br />Invitation!</button>
               }
             </div>
