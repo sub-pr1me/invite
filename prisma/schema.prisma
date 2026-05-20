@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model customers {
+  id       Int      @id @default(autoincrement())
+  customer String?  @db.VarChar(255)
+  email    String   @unique @db.Citext
+  password String?  @db.VarChar(255)
+  stage    String?  @db.VarChar(255)
+  avatar   String?  @db.VarChar(255)
+  album    String[]
+  likes    String[]
+  dob      String?  @db.VarChar(255)
+  age      String?  @db.VarChar(255)
+  gender   String?  @db.VarChar(255)
+  interest String?  @db.VarChar(255)
+  dates    Json?
+  credits  Decimal? @db.Decimal(4, 0)
+  reftoken String?  @db.VarChar(255)
+}
+
+model venues {
+  id       Int      @id @default(autoincrement())
+  venue    String   @unique @db.VarChar(255)
+  email    String   @unique @db.Citext
+  password String?  @db.VarChar(255)
+  stage    String?  @db.VarChar(255)
+  avatar   String?  @db.VarChar(255)
+  album    String[]
+  likes    String[]
+  rating   Decimal? @db.Decimal(2, 1)
+  hours    String?  @db.VarChar(255)
+  tables   Json?
+  auctions Json?
+  dates    Json?
+  credits  Decimal? @db.Decimal(4, 0)
+  reftoken String?  @db.VarChar(255)
+}
