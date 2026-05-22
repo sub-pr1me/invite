@@ -27,7 +27,7 @@ export async function getAllCustomerData() {
 };
 
 export async function checkVenuesForMatch(email) {
-    // console.log('checkVenuesForMatch');
+    console.log('checkVenuesForMatch');
   const { rows } = await pool.query(`SELECT * FROM venues WHERE email LIKE '${email}'`);
   return rows[0];
 };

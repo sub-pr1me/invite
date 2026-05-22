@@ -26,6 +26,7 @@ import { FetchAuctions } from './db/queries.js'
 import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
 import cookieParser from 'cookie-parser'
+import { stat } from 'fs'
 
 const app = express();
 
@@ -45,6 +46,12 @@ app.use(cookieParser()); // middleware for cookies
 
 const corsOptions = {origin: ['http://localhost:5173'], credentials: true};
 app.use(cors(corsOptions));
+
+app.get('/', (_,res) => {
+  return res.status(200).json({
+    status: 'Connected!'
+  });
+});
 
 app.use('/create_account', CreateAccRouter);
 app.use('/login', LogInRouter);

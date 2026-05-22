@@ -1,0 +1,57 @@
+name: invite-app
+
+services:
+
+  postgres:
+    image: postgres:16.13
+    container_name: invite_psql_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DATABASE}
+      POSTGRES_PASSWORD: ${PASSWORD}
+    ports:
+      - 5433:5432
+    volumes:
+      - postgres_data:/data/db
+    networks:
+      - invite-app
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./server/.env
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    networks:
+      - invite-app
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./client/.env
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    networks:
+      - invite-app
+    ports:
+      - 5173:5173
+    command: npm run dev -- --host
+    depends_on:
+      - backend
+
+volumes: 
+  postgres_data:
+
+networks:
+  invite-app:
+    driver: bridge
