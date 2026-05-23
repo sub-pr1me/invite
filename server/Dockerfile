@@ -8,5 +8,5 @@ RUN npm ci
 
 COPY . .
 
-CMD ["npm", "run", "dev"]
+CMD ["/bin/bash","-c","npm run populate && npm run dev"]
 

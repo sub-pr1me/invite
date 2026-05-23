@@ -1,4 +1,4 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 import { Client } from "pg";
 import 'dotenv/config.js';
 
@@ -96,7 +96,8 @@ VALUES
    '10:00-22:00', 
    '{}',
    '{}',
-   '0');
+   '0')
+   ON CONFLICT DO NOTHING;
 
   INSERT INTO customers (customer, email, password, stage, avatar, dob, gender, interest, dates, credits)
   VALUES
@@ -109,20 +110,26 @@ VALUES
    'Male', 
    'Female',
    '{}',
-   '0');
+   '0')
+   ON CONFLICT DO NOTHING;
 `;
-
-
 
 async function main() {
   console.log("seeding...");
   const client = new Client({
-    connectionString: `postgresql://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}:${process.env.PORT}/${process.env.DATABASE}`
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    host: process.env.HOST,
+    port: process.env.PORT,
+    database: process.env.DATABASE
   });
   await client.connect();
   await client.query(SQL);
   await client.end();
   console.log("db has been populated");
-};
+}
 
-main();
+main().catch(e => {
+  console.error(e);
+  process.exit(1);
+});
