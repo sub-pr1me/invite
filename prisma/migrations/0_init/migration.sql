@@ -1,5 +1,6 @@
 -- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "public";
+CREATE EXTENSION IF NOT EXISTS citext;
 
 -- CreateTable
 CREATE TABLE "customers" (
