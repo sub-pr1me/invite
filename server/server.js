@@ -95,7 +95,7 @@ app.use('/delete_account', DeleteAccountRouter);
 
 server.listen(PORT, HOST, (error) => {  
   if (error) {console.error(error)}
-  const baseUrl = HOST === '0.0.0.0' ? `http://localhost:${PORT}` : `http://${HOST}:${PORT}`;  
+  const baseUrl = `http://${HOST}:${PORT}`;  
   console.log(`Server is running on ${baseUrl}`);
   console.log(`WebSocket Server is running on ${baseUrl.replace('http', 'ws')}/ws`);
 });
