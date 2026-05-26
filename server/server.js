@@ -26,7 +26,7 @@ import { FetchAuctions } from './db/queries.js'
 import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
 import cookieParser from 'cookie-parser'
-import { stat } from 'fs'
+import ConnectionCheckRouter from './routes/ConnectionCheckRouter.js'
 
 const app = express();
 
@@ -52,6 +52,8 @@ app.get('/', (_,res) => {
     status: 'Connected!'
   });
 });
+
+app.use('/x', ConnectionCheckRouter);
 
 app.use('/create_account', CreateAccRouter);
 app.use('/login', LogInRouter);

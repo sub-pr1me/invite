@@ -1,5 +1,11 @@
 import pool from './pool.js';
 
+export async function checkConnection() {
+  console.log('checkConnection');
+  const { rows } = await pool.query('SELECT venue FROM venues');
+  return rows;
+};
+
 export async function getAllVenueData() {
   console.log('getAllVenueData');
   const { rows } = await pool.query('SELECT * FROM venues');
