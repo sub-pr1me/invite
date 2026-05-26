@@ -3,7 +3,7 @@ import 'dotenv/config.js';
 
 // This should be read from an environment variable
 const pool = new Pool({
-  connectionString: `postgresql://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}:${process.env.PORT}/${process.env.DATABASE}`
+  connectionString: `postgresql://sub-prime:omgitspsql88@localhost:5432/dating`
 });
 
 export default pool

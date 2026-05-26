@@ -33,7 +33,7 @@ const app = express();
 app.locals.test='TEST';
 
 const PORT = 3000;
-const HOST = '0.0.0.0'
+const HOST = 'localhost'
 
 const server = http.createServer(app);
 
