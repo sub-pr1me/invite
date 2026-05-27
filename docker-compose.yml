@@ -2,43 +2,6 @@ name: invite-app
 
 services:
 
-  postgres:
-    image: postgres:16.13
-    container_name: invite_psql_db
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: ${DATABASE}
-      POSTGRES_PASSWORD: ${PASSWORD}
-      POSTGRES_USER: ${USER_DOCKER}
-    ports:
-      - 5433:5432
-    volumes:
-      - postgres_data:/data/db
-    networks:
-      - invite-app
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 2s
-      timeout: 2s
-      retries: 5
-
-  backend:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    env_file: ./server/.env
-    volumes:
-      - ./server:/app
-      - /app/node_modules
-    networks:
-      - invite-app
-    ports:
-      - 3000:3000
-    depends_on:
-      postgres:
-        condition: service_healthy
-
   frontend:
     build:
       context: ./client
@@ -52,12 +15,3 @@ services:
       - invite-app
     ports:
       - 5173:5173
-    depends_on:
-      - backend
-
-volumes: 
-  postgres_data:
-
-networks:
-  invite-app:
-    driver: bridge
