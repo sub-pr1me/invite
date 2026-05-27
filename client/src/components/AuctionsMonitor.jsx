@@ -70,7 +70,15 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
     let maxAttempts = 5;
     
     const connect = () => {
-      const websocket = new WebSocket('ws://localhost:3000/ws');
+      let string;
+
+      if (import.meta.env.VITE_BACKEND_URL.includes('https')) {
+        string = `${import.meta.env.VITE_BACKEND_URL.replace('https', 'ws')}/ws`;
+      } else {
+        string = `${import.meta.env.VITE_BACKEND_URL.replace('http', 'ws')}/ws`;
+      };
+
+      const websocket = new WebSocket(string);
 
       websocket.onopen = () => {
         // console.log('Connected');
