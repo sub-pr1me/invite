@@ -27,12 +27,12 @@ import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
 import cookieParser from 'cookie-parser'
 import ConnectionCheckRouter from './routes/ConnectionCheckRouter.js'
+import 'dotenv/config.js';
 
 const app = express();
 
 app.locals.test='TEST';
 
-const PORT = 3000;
 const HOST = 'localhost'
 
 const server = http.createServer(app);
@@ -44,7 +44,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // encodes req.body into obj
 app.use(cookieParser()); // middleware for cookies
 
-const corsOptions = {origin: ['http://localhost:5173'], credentials: true};
+const corsOptions = {origin: [process.env.FRONTEND_URL], credentials: true};
 app.use(cors(corsOptions));
 
 app.get('/', (_,res) => {
@@ -95,9 +95,9 @@ app.use('/archive_date', ArchiveDateRouter);
 app.use('/info_edit', InfoEditRouter);
 app.use('/delete_account', DeleteAccountRouter);
 
-server.listen(PORT, HOST, (error) => {  
+server.listen(process.env.PORT, process.env.HOST, (error) => {  
   if (error) {console.error(error)}
-  const baseUrl = `http://${HOST}:${PORT}`;  
+  const baseUrl = `http://${process.env.HOST}:${process.env.PORT}`;
   console.log(`Server is running on ${baseUrl}`);
   console.log(`WebSocket Server is running on ${baseUrl.replace('http', 'ws')}/ws`);
 });
