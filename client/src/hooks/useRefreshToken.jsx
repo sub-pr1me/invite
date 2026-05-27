@@ -10,6 +10,7 @@ const useRefreshToken = () => {
     try {
       const response = await axios.get(`/refresh`, {withCredentials: true});
         if (response.data.roles[0] === 'venue') setAuth(prev => {
+          console.log('SETTING VENUE AUTH');
           return {
             ...prev,
             token: response?.data?.accessToken,
@@ -29,6 +30,7 @@ const useRefreshToken = () => {
           }
         });
         if (response.data.roles[0] === 'customer') setAuth(prev => {
+          console.log('SETTING CUSTOMER AUTH');
           return {
             ...prev,
             token: response?.data?.accessToken,
