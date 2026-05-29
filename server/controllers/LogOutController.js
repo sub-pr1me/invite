@@ -12,8 +12,8 @@ export default async function handleLogOut(req, res) {
   const matchedVenue = await checkVenueToken(refreshToken);
   const matchedCustomer = await checkCustomerToken(refreshToken);
 
-  if (!matchedVenue && !matchedCustomer) {    
-    res.clearCookie('jwt', { httpOnly: true, maxAge: 24*60*60*1000 });
+  if (!matchedVenue && !matchedCustomer) {
+    res.clearCookie('jwt', { httpOnly: true, secure: true, sameSite: 'None' });
     return res.sendStatus(204);  // No content to send back
   }
 
@@ -26,6 +26,6 @@ export default async function handleLogOut(req, res) {
 
   const result = await deleteRefreshToken(acc_type, email);
 
-  res.clearCookie('jwt', { httpOnly: true, maxAge: 24*60*60*1000 }); // secure: true - only serves on https
+  res.clearCookie('jwt', { httpOnly: true, secure: true, sameSite: 'None' }); // secure: true - only serves on https
   res.sendStatus(204);
 };
