@@ -73,7 +73,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
       let string;
 
       if (import.meta.env.VITE_BACKEND_URL.includes('https')) {
-        string = `${import.meta.env.VITE_BACKEND_URL.replace('https', 'ws')}/ws`;
+        string = `${import.meta.env.VITE_BACKEND_URL.replace('https', 'wss')}/ws`;
       } else {
         string = `${import.meta.env.VITE_BACKEND_URL.replace('http', 'ws')}/ws`;
       };
