@@ -85,13 +85,13 @@ export async function addRefreshToken(acc_type, email, token) {
 };
 
 export async function checkVenueToken(token) {
-    // console.log('checkVenueToken');
+    // console.log('checkVenueToken'); // RUTODO: should use = not like, performance
   const { rows } = await pool.query(`SELECT * FROM venues WHERE reftoken LIKE '${token}'`);
   return rows[0];
 };
 
 export async function checkCustomerToken(token) {
-    // console.log('checkCustomerToken');
+    // console.log('checkCustomerToken'); // RUTODO: should use = not like, performance
   const { rows } = await pool.query(`SELECT * FROM customers WHERE reftoken LIKE '${token}'`);
   return rows[0];
 };

@@ -8,7 +8,8 @@ export default async function handleRefreshToken(req, res) {
   if (!cookies?.jwt) return res.status(401);
 
   const refreshToken = cookies.jwt;
-
+  // RUTODO: youre checking both the venue and customer token every single time, 
+  // regardless of the type of the current user. can half this with better design
   const matchedVenue = await checkVenueToken(refreshToken);
   const matchedCustomer = await checkCustomerToken(refreshToken);
   if (!matchedVenue && !matchedCustomer) return res.sendStatus(403);// Forbidden
@@ -76,7 +77,7 @@ export default async function handleRefreshToken(req, res) {
       const accessToken = jwt.sign(
         { 'email': decoded.email },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '60s' }
+        { expiresIn: '60s' } // RUTODO: Set to 15m in production
       );
       // console.log('NEW TOKEN - ', accessToken);
       if (matchedVenue) res.json({ 

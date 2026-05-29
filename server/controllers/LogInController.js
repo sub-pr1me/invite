@@ -83,7 +83,7 @@ export default async function LogInController(req, res) {
     addRefreshToken(accType, email, refreshToken);
 
     // SEND TOKEN TO USER
-    res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24*60*60*1000 });
+    res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24*60*60*1000 });
     if (accType === 'venue') res.json({ 
       accessToken, accType, id, name, stage, avatar, album, likes, rating, hours, tables, dates, credits
     });
