@@ -10,7 +10,7 @@ import Carousel from './Carousel'
 import AlbumUpload from './AlbumUpload'
 
 const HomeScreen = () => {
-  const { auth, setActive } = useAuth();1
+  const { auth, setActive } = useAuth();
   // RUTODO: UseAxiosPrivate is doing way more than getting an axiols client. Either
   // rename, or bring multiple functions here to top level. lot of hidden complexity here,
   // including 2 database queries every time its called. not obvious from caller

@@ -6,9 +6,13 @@ const useRefreshToken = () => {
   const { setAuth } = useAuth();
   
   const refresh = async () => {
-
     try {
-      const response = await axios.get(`/refresh`, {withCredentials: true});
+      const response = await axios.get(`/refresh`, 
+        {
+          withCredentials: true, 
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }
+      );
         if (response.data.roles[0] === 'venue') setAuth(prev => {
           console.log('SETTING VENUE AUTH');
           return {
@@ -49,8 +53,6 @@ const useRefreshToken = () => {
             credits: parseInt(response?.data?.credits)
           }
         });
-
-      
       return response.data.accessToken;
 
     } catch (err) {

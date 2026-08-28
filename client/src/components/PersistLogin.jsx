@@ -24,12 +24,12 @@ const PersistLogin = () => {
 
   useEffect(()=>{
     persist();
-  },[])
+  },[]);
 
   useEffect(()=> {
     console.log(`isLoading: ${isLoading}`);
     console.log(`atToken: ${auth?.token}`);
-  }, [isLoading, auth?.token])
+  }, [isLoading, auth?.token]);
 
   return (
     <>

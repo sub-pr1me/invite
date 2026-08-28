@@ -4,10 +4,19 @@ import 'dotenv/config.js';
 
 export default async function handleRefreshToken(req, res) {
 
+  console.log('HANDLE REFRESH TOKEN');
+
   const cookies = req.cookies;
-  if (!cookies?.jwt) return res.status(401);
+  if (!cookies?.jwt) {
+    console.log('NO COOKIES');
+    return res.sendStatus(401);
+  };
 
   const refreshToken = cookies.jwt;
+
+  console.log('TOKEN - ', refreshToken);
+
+
   // RUTODO: youre checking both the venue and customer token every single time, 
   // regardless of the type of the current user. can half this with better design
   const matchedVenue = await checkVenueToken(refreshToken);
@@ -34,6 +43,7 @@ export default async function handleRefreshToken(req, res) {
   let interest = null;
 
   if (matchedVenue) {
+    console.log('VENUE', matchedVenue);
     roles = ['venue'];
     id = matchedVenue.id;
     email = matchedVenue.email;
@@ -50,6 +60,7 @@ export default async function handleRefreshToken(req, res) {
   };
 
   if (matchedCustomer) {
+    console.log('CUSTOMER', matchedCustomer);
     roles = ['customer'];
     id = matchedCustomer.id;
     email = matchedCustomer.email;
@@ -79,7 +90,7 @@ export default async function handleRefreshToken(req, res) {
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: '60s' } // RUTODO: Set to 15m in production
       );
-      // console.log('NEW TOKEN - ', accessToken);
+      console.log('NEW TOKEN - ', accessToken);
       if (matchedVenue) res.json({ 
         accessToken, roles, id, email, name, avatar, album, stage, likes, rating, hours, tables, dates, credits
       });

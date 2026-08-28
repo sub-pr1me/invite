@@ -33,8 +33,6 @@ const app = express();
 
 app.locals.test='TEST';
 
-const HOST = 'localhost'
-
 const server = http.createServer(app);
 
 const { broadcastAuctionsUpdated } = attachWebSocketServer(server);
@@ -44,7 +42,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // encodes req.body into obj
 app.use(cookieParser()); // middleware for cookies
 
-const corsOptions = {origin: [process.env.FRONTEND_URL], credentials: true};
+const corsOptions = {origin: process.env.FRONTEND_URL, credentials: true};
 app.use(cors(corsOptions));
 
 app.get('/', (_,res) => {
