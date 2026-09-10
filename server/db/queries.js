@@ -34,13 +34,13 @@ export async function getAllCustomerData() {
 
 export async function checkVenuesForMatch(email) {
     console.log('checkVenuesForMatch');
-  const { rows } = await pool.query(`SELECT * FROM venues WHERE email LIKE '${email}'`);
+  const { rows } = await pool.query(`SELECT * FROM venues WHERE email = '${email}'`);
   return rows[0];
 };
 
 export async function checkCustomersForMatch(email) {
     // console.log('checkCustomersForMatch');
-  const { rows } = await pool.query(`SELECT * FROM customers WHERE email LIKE '${email}'`);
+  const { rows } = await pool.query(`SELECT * FROM customers WHERE email = '${email}'`);
   return rows[0];
 };
 
@@ -68,13 +68,13 @@ export async function getUserData(email, acc_type) {
     const { rows } = await pool.query(`
       SELECT ${acc_type}, id, password, stage, avatar, album, rating, hours, tables, likes, dates, credits
       FROM ${acc_type}s 
-      WHERE email LIKE '${email}'`);
+      WHERE email = '${email}'`);
     return rows[0];
   };
   const { rows } = await pool.query(`
     SELECT ${acc_type}, id, password, stage, avatar, album, dob, gender, interest, likes, dates, credits 
     FROM ${acc_type}s 
-    WHERE email LIKE '${email}'`);
+    WHERE email = '${email}'`);
     return rows[0];
 };
 
@@ -85,14 +85,14 @@ export async function addRefreshToken(acc_type, email, token) {
 };
 
 export async function checkVenueToken(token) {
-    // console.log('checkVenueToken'); // RUTODO: should use = not like, performance
-  const { rows } = await pool.query(`SELECT * FROM venues WHERE reftoken LIKE '${token}'`);
+    console.log('checkVenueToken'); 
+  const { rows } = await pool.query(`SELECT * FROM venues WHERE reftoken = '${token}'`);
   return rows[0];
 };
 
 export async function checkCustomerToken(token) {
-    // console.log('checkCustomerToken'); // RUTODO: should use = not like, performance
-  const { rows } = await pool.query(`SELECT * FROM customers WHERE reftoken LIKE '${token}'`);
+    console.log('checkCustomerToken'); 
+  const { rows } = await pool.query(`SELECT * FROM customers WHERE reftoken = '${token}'`);
   return rows[0];
 };
 
@@ -104,7 +104,7 @@ export async function deleteRefreshToken(acc_type, email) {
 
 export async function uploadNewAvatar(acc_type, email, link) {
     console.log('uploadNewAvatar');
-  const { rows } = await pool.query(`SELECT * FROM ${acc_type}s WHERE email LIKE '${email}'`);
+  const { rows } = await pool.query(`SELECT * FROM ${acc_type}s WHERE email = '${email}'`);
   await pool.query(`UPDATE ${acc_type}s SET avatar = '${link}' WHERE email = '${email}'`);
   if (rows[0].stage === '0') await pool.query(`UPDATE ${acc_type}s SET stage = '1' WHERE email = '${email}'`);
   if (rows[0]) return rows[0].avatar;
@@ -130,7 +130,7 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
         const { rows } = await pool.query(`
           SELECT tables
           FROM venues 
-          WHERE email LIKE '${email}'`
+          WHERE email = '${email}'`
         );
         return rows[0];
     };
@@ -147,7 +147,7 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
         const { rows } = await pool.query(`
           SELECT tables
           FROM venues 
-          WHERE email LIKE '${email}'`
+          WHERE email = '${email}'`
         );
       return rows[0];
     };
@@ -177,7 +177,7 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
       const { rows } = await pool.query(`
         SELECT tables
         FROM venues 
-        WHERE email LIKE '${email}'`
+        WHERE email = '${email}'`
       );
       return rows[0];
     };
@@ -200,7 +200,7 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
 export async function tableInfoUpdate(email, id, link) {
     console.log('tableInfoUpdate');
 
-  const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${email}'`);
+  const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${email}'`);
   const tables = rows[0].tables[0];
   const pic = tables.filter(item => item.id === parseInt(id))[0].pic;
   const updated = tables.map(item => {if (item.id === parseInt(id))
@@ -208,15 +208,14 @@ export async function tableInfoUpdate(email, id, link) {
   const stringified = JSON.stringify(updated);
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
-    WHERE email 
-    LIKE '${email}'`);
+    WHERE email = '${email}'`);
   if (pic) return pic;
   return null;
 };
 
 export async function auctionUpload(email, id, deposit, step, bidders, reg, venue_id) {
     console.log('auctionUpload');
-  const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${email}'`);
+  const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${email}'`);
   const tables = rows[0].tables[0];
   const updated = tables.map(item => {if (item.id === id.toString() || item.id === id)
     {return {...item, auction: {deposit: deposit, step: step, bidders: bidders, reg: reg, venue_id: venue_id}}} else {return item}}
@@ -225,21 +224,19 @@ export async function auctionUpload(email, id, deposit, step, bidders, reg, venu
 
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
-    WHERE email 
-    LIKE '${email}'`);
+    WHERE email = '${email}'`);
   return updated;
 };
 
 export async function BalanceUpdate(email, amount, acc_type, deposit) {
     console.log('BalanceUpdate');
-  const { rows } = await pool.query(`SELECT credits FROM ${acc_type}s WHERE email LIKE '${email}'`);
+  const { rows } = await pool.query(`SELECT credits FROM ${acc_type}s WHERE email = '${email}'`);
   const balance = rows[0].credits;
   const cashout = parseInt(balance) - parseInt(amount);
   const dep = parseInt(balance) + parseInt(amount);
   await pool.query(`
     UPDATE ${acc_type}s SET credits = '${acc_type === 'venue' && !deposit ? cashout : dep}' 
-    WHERE email 
-    LIKE '${email}'`);
+    WHERE email = '${email}'`);
   if (acc_type === 'venue' && !deposit) return cashout;
 
   return dep;
@@ -284,7 +281,7 @@ export async function FetchAuctions() {
 
 export async function BiddersUpdate(bidders, venue_email, table) {
     console.log('BiddersUpdate');
-  const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${venue_email}'`);
+  const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${venue_email}'`);
   const tables = rows[0].tables[0];
   
   // console.log(`BEFORE #${parseInt(table)} BID UPDATE`, tables[parseInt(table)-1].auction)
@@ -297,12 +294,10 @@ export async function BiddersUpdate(bidders, venue_email, table) {
 
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
-    WHERE email 
-    LIKE '${venue_email}'`
+    WHERE email = '${venue_email}'`
   );
 
   return 'BIDDERS UPDATED?'
-
 };
 
 export async function AddTable(email, id, active, venue_id) {
@@ -317,7 +312,7 @@ export async function AddTable(email, id, active, venue_id) {
   const { rows } = await pool.query(`
     SELECT tables
     FROM venues 
-    WHERE email LIKE '${email}'`
+    WHERE email = '${email}'`
   );
   const tables = rows[0].tables[0];
   const updated = tables.map(item => {if (item.id === parseInt(id)) {
@@ -327,8 +322,7 @@ export async function AddTable(email, id, active, venue_id) {
   
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
-    WHERE email 
-    LIKE '${email}'`
+    WHERE email = '${email}'`
   );
   return updated;
 };
@@ -383,13 +377,13 @@ export async function FetchAvatar(email, role) {
   if (role === 'venue') {
     const { rows } = await pool.query(`
       SELECT avatar, id FROM venues 
-      WHERE email LIKE '${email}'`
+      WHERE email = '${email}'`
     );
     return rows[0];
   };
   const { rows } = await pool.query(`
     SELECT avatar, id FROM customers 
-    WHERE email LIKE '${email}'`
+    WHERE email = '${email}'`
   );
   return rows[0];
 };
@@ -401,7 +395,7 @@ export async function NewDateUpload(venue, host, guest, new_date) {
 
   while (arr.length) {
     if (arr.length > 1) {
-      const { rows } = await pool.query(`SELECT dates FROM customers WHERE email LIKE '${arr[0]}'`);
+      const { rows } = await pool.query(`SELECT dates FROM customers WHERE email = '${arr[0]}'`);
       let dates = rows[0].dates[0];
 
     if (dates) {
@@ -414,12 +408,11 @@ export async function NewDateUpload(venue, host, guest, new_date) {
 
       await pool.query(`
         UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}') 
-        WHERE email 
-        LIKE '${arr[0]}'`
+        WHERE email = '${arr[0]}'`
       );
       arr.shift();
     } else {
-      const { rows } = await pool.query(`SELECT dates FROM venues WHERE email LIKE '${arr[0]}'`);
+      const { rows } = await pool.query(`SELECT dates FROM venues WHERE email = '${arr[0]}'`);
       let dates = rows[0].dates[0];
       if (dates) {
         dates.push(new_date);
@@ -431,14 +424,13 @@ export async function NewDateUpload(venue, host, guest, new_date) {
 
       await pool.query(`
         UPDATE venues SET dates = jsonb_set(dates, '{0}', '${stringified}') 
-        WHERE email 
-        LIKE '${arr[0]}'`
+        WHERE email = '${arr[0]}'`
       );
       arr.shift();
     };
   };
 
-  const { rows } = await pool.query(`SELECT tables FROM venues WHERE email LIKE '${venue}'`);
+  const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${venue}'`);
   const tables = rows[0].tables[0];
   const updated = tables.map(item => {
     if (item.id === parseInt(new_date.table)) {
@@ -455,8 +447,7 @@ export async function NewDateUpload(venue, host, guest, new_date) {
 
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
-    WHERE email 
-    LIKE '${venue}'`
+    WHERE email = '${venue}'`
   );
   return updated;
 };
@@ -464,7 +455,7 @@ export async function NewDateUpload(venue, host, guest, new_date) {
 export async function ArchiveVenueDate (venue, date, endTime) {
   console.log('ArchiveVenueDate');
 
-    const { rows } = await pool.query(`SELECT dates FROM venues WHERE email LIKE '${venue}'`);
+    const { rows } = await pool.query(`SELECT dates FROM venues WHERE email = '${venue}'`);
     
     let dates = rows[0].dates[0];
 
@@ -478,8 +469,7 @@ export async function ArchiveVenueDate (venue, date, endTime) {
 
     await pool.query(`
       UPDATE venues SET dates = jsonb_set(dates, '{0}', '${stringified}') 
-      WHERE email 
-      LIKE '${venue}'`
+      WHERE email = '${venue}'`
     );
   return 'success';
 };
@@ -487,7 +477,7 @@ export async function ArchiveVenueDate (venue, date, endTime) {
 export async function ArchiveHostDate (host, date, endTime) {
   console.log('ArchiveHostDate');
 
-    const { rows } = await pool.query(`SELECT dates FROM customers WHERE email LIKE '${host}'`);
+    const { rows } = await pool.query(`SELECT dates FROM customers WHERE email = '${host}'`);
     
     let dates = rows[0].dates[0];
 
@@ -501,8 +491,7 @@ export async function ArchiveHostDate (host, date, endTime) {
 
     await pool.query(`
       UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}') 
-      WHERE email 
-      LIKE '${host}'`
+      WHERE email = '${host}'`
     );
   return 'success';
 };
@@ -510,7 +499,7 @@ export async function ArchiveHostDate (host, date, endTime) {
 export async function ArchiveGuestDate (guest, date, endTime) {
   console.log('ArchiveGuestDate');
 
-    const { rows } = await pool.query(`SELECT dates FROM customers WHERE email LIKE '${guest}'`);
+    const { rows } = await pool.query(`SELECT dates FROM customers WHERE email = '${guest}'`);
     
     let dates = rows[0].dates[0];
 
@@ -524,8 +513,7 @@ export async function ArchiveGuestDate (guest, date, endTime) {
 
     await pool.query(`
       UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}') 
-      WHERE email 
-      LIKE '${guest}'`
+      WHERE email = '${guest}'`
     );
   return 'success';
 };
@@ -578,7 +566,7 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
     // EDIT VENUE NAME IN DATES
 
     if (acc_type === 'venue') {
-      const { rows } = await pool.query(`SELECT dates FROM venues WHERE email LIKE '${email}'`);
+      const { rows } = await pool.query(`SELECT dates FROM venues WHERE email = '${email}'`);
 
       console.log('ROWS ZERO:', rows[0]);
 
@@ -688,7 +676,7 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
           const stringified = JSON.stringify(updatedLikes);
           await pool.query(
             `UPDATE venues SET likes = '{${stringified}}' 
-            WHERE email LIKE'${haveLikes[i].email}'`);
+            WHERE email ='${haveLikes[i].email}'`);
         };
       };
     };
@@ -713,7 +701,7 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
           const stringified = JSON.stringify(updatedLikes);
           await pool.query(
             `UPDATE customers SET likes = '{${stringified}}' 
-            WHERE email LIKE'${haveLikes[i].email}'`);
+            WHERE email ='${haveLikes[i].email}'`);
         };
       };
     };
@@ -721,7 +709,7 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
     // EDIT VENUE / GUEST / HOST E-MAIL IN DATES
 
     if (acc_type === 'venue') {
-      const { rows } = await pool.query(`SELECT dates FROM venues WHERE email LIKE '${email}'`);
+      const { rows } = await pool.query(`SELECT dates FROM venues WHERE email = '${email}'`);
       const dates = rows[0].dates[0];
 
       if (dates?.length) {
