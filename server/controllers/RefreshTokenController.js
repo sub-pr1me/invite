@@ -16,11 +16,10 @@ export default async function handleRefreshToken(req, res) {
 
   console.log('TOKEN - ', refreshToken);
 
-
-  // RUTODO: youre checking both the venue and customer token every single time, 
-  // regardless of the type of the current user. can half this with better design
   const matchedVenue = await checkVenueToken(refreshToken);
-  const matchedCustomer = await checkCustomerToken(refreshToken);
+  let matchedCustomer = null;
+
+  if (!matchedVenue) matchedCustomer = await checkCustomerToken(refreshToken);
   if (!matchedVenue && !matchedCustomer) return res.sendStatus(403);// Forbidden
 
   let roles = null;
