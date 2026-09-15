@@ -56,8 +56,7 @@ const Explore = () => {
           {
             venues?.map(item => {
               return (
-                <UserProfile 
-                  email={item.email} 
+                <UserProfile
                   role='venue' 
                   key={item.email}
                   name={item.venue}
@@ -77,8 +76,7 @@ const Explore = () => {
             .map(item => {
               if (item.avatar) {
                 return (
-                  <UserProfile 
-                    email={item.email} 
+                  <UserProfile
                     role='customer' 
                     key={item.email}
                     name={item.customer}

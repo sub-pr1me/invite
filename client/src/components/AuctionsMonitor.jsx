@@ -243,7 +243,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
               <button onClick={()=>{navigate(`/dashboard/${hostPreview.id}`)}}>View<br />Profile</button>
               {auth.roles[0] !== 'venue'
                && auth.gender === hostPreview.interest
-               && auth.likes?.includes(hostPreview.email)
+               && auth.likes?.some((like) => like[0] === hostPreview.email)
                &&
               <button onClick={()=>{
                 const duplicate = auth.dates?.filter(

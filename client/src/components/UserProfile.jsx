@@ -1,34 +1,10 @@
 import styles from '../styles/UserProfile.module.css'
-import { useEffect, useEffectEvent, useState, memo } from 'react'
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import useAuth from '../hooks/useAuth'
 
-const UserProfile = ({ email, role, setUserData, expanded, setExpanded, name, avatar, passedID, host, guest }) => {
+const UserProfile = ({ likesSection, name, avatar, role, id,setUserData, expanded, setExpanded, passedID, host, guest }) => {
   const { auth } = useAuth();
-  const axiosPrivate = useAxiosPrivate();
-  const [pic, setPic] = useState(null);
-  const [id, setId] = useState(null);
-  
-  const FetchProfilePic = useEffectEvent(async (email) => {
-    try {
-      const response = await axiosPrivate.get('/fetch_avatar',
-        {
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-          withCredentials: true,
-          params: {email: email, role: role}
-        }
-      );
-      setPic(response.data.avatar);
-      setId((role === auth.roles[0] && response.data.id === auth.id) ? '' : `${role}${response.data.id}`);
-    } catch (err) {
-      console.log(err);
-    };
-  });
-
-  useEffect(()=>{
-    if (!pic && !avatar) FetchProfilePic(email);
-  },[pic, email, avatar]);
 
   return (
     <>
@@ -38,9 +14,9 @@ const UserProfile = ({ email, role, setUserData, expanded, setExpanded, name, av
           if (!passedID) setTimeout(() => {setUserData(null)}, 0);
           if (expanded) setExpanded(null);
         }}>
-        <Link to={`/dashboard/${passedID ? role+passedID : id}`}>
-          <img src={pic ? pic : avatar} alt='' />
-          {name &&
+        <Link to={`/dashboard/${passedID ? role+passedID : (role === auth.roles[0] && id === auth.id) ? '' : `${role}${id}`}`}>
+          <img src={avatar} alt='' />
+          {name && !likesSection &&
             <div>{name}</div>
           }
         </Link>

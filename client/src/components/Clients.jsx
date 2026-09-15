@@ -52,8 +52,7 @@ const Clients = () => {
           {customers?.map(item => {
             if (item.avatar) {
               return (
-                <UserProfile 
-                  email={item.email} 
+                <UserProfile
                   role='customer' 
                   key={item.email}
                   name={item.customer}

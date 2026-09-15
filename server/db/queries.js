@@ -348,25 +348,26 @@ export async function FetchProfileData(role, id, from) {
   return rows[0];
 };
 
-export async function SwitchLike(email, role, id) {
+export async function SwitchLike(email, role, name, avatar, id) {
     console.log('DB QUERY - SwitchLike');
+    const user = [email, name, avatar];
   const { rows } = await pool.query(`SELECT likes FROM ${role}s WHERE id = ${parseInt(id)}`);
   const arr = rows[0].likes;
   console.log('CURRENT LIKES:', arr);
   if (!arr || !arr[0]) {
     const updated = [];
-    await pool.query(`UPDATE ${role}s SET likes = '{${email}}' WHERE id = '${parseInt(id)}'`);
-    updated.push(email);
+    await pool.query(`UPDATE ${role}s SET likes = '{{${email},${name},${avatar},${id}}}' WHERE id = '${parseInt(id)}'`);
+    updated.push(user);
     return updated;
   };
-  if (arr.includes(email)) {
+  if (arr.some((like) => like[0] === email)) {
     const updated = [];
-    for (const item of arr) if (item !== email) updated.push(item);
+    for (const item of arr) if (item[0] !== email) updated.push(item);
     await pool.query(`UPDATE ${role}s SET likes = '{${updated.toString()}}' WHERE id = '${parseInt(id)}'`);
     return updated;
   };
-  if (!arr.includes(email)) {
-    arr.push(email);
+  if (!arr.some((like) => like[0] === email)) {
+    arr.push([email, name, avatar]);
     await pool.query(`UPDATE ${role}s SET likes = '{${arr.toString()}}' WHERE id = '${parseInt(id)}'`);
     return arr;
   };
@@ -877,9 +878,9 @@ export async function DeleteAccount(email, acc_type) {
     for (let i=0; i<haveLikes.length; i++) {
       const likes = haveLikes[i].likes;
 
-      if (likes.includes(email)) {
+      if (likes.some((like) => like[0] === email)) {
         if (likes.length > 1) {
-          const updatedLikes = likes.filter(item => item !== email);
+          const updatedLikes = likes.filter(item => item[0][0] !== email);
           await pool.query(
             `UPDATE venues SET likes = '{${updatedLikes.toString()}}' 
             WHERE email = '${haveLikes[i].email}'`
@@ -903,9 +904,9 @@ export async function DeleteAccount(email, acc_type) {
     for (let i=0; i<haveLikes.length; i++) {
       const likes = haveLikes[i].likes;
 
-      if (likes.includes(email)) {
+      if (likes.some((like) => like[0] === email)) {
         if (likes.length > 1) {
-          const updatedLikes = likes.filter(item => item !== email);
+          const updatedLikes = likes.filter(item => item[0][0] !== email);
           await pool.query(
             `UPDATE customers SET likes = '{${updatedLikes.toString()}}' 
             WHERE email = '${haveLikes[i].email}'`

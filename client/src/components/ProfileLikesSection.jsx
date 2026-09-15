@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom'
 const ProfileLikesSection = ({ userData, setUserData, tablePreview, expanded, setExpanded }) => {
   const { auth } = useAuth();
   const { userId } = useParams();
+  console.log('LIKES', userData?.likes);
 
   return (
     <>
@@ -26,9 +27,12 @@ const ProfileLikesSection = ({ userData, setUserData, tablePreview, expanded, se
                     || expanded)
                   return (
                     <UserProfile 
-                      key={item}
-                      email={item}                      
+                      key={item[0]}
+                      likesSection={true}
+                      name={item[1]}
+                      avatar={item[2]}
                       role='customer'
+                      id={item[3]}
                       setUserData={setUserData}
                       expanded={expanded}
                       setExpanded={setExpanded}

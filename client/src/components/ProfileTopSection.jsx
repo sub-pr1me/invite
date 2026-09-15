@@ -34,6 +34,8 @@ const ProfileTopSection = ({ userData, setUserData }) => {
         const response = await axiosPrivate.post('/switch_like',
           {
             email: email,
+            name: auth.name,
+            avatar: auth.avatar,
             role: userId[0] === 'c' ? 'customer' : 'venue', 
             id: userId[0] === 'c' ? userId?.substring(8) : userId?.substring(5)},
           {
@@ -47,7 +49,7 @@ const ProfileTopSection = ({ userData, setUserData }) => {
       } catch (err) {
         console.log(err);
       };
-    },[axiosPrivate, userData, setUserData, userId]
+    },[axiosPrivate, userData, setUserData, userId, auth.name, auth.avatar]
   );
 
   const host = userData?.dates?.find((item) => item.venue === auth.email && item.host === userData.email);
@@ -73,7 +75,7 @@ const ProfileTopSection = ({ userData, setUserData }) => {
         {userId && auth?.roles[0] !== 'venue' && allowLikes &&
         <ProfileLike 
           icon={userData?.dob ? 'heart' : 'star'} 
-          liked={userData?.likes?.includes(auth.email)}
+          liked={userData?.likes?.some((like) => like[0] === auth.email)}
           switchLike={switchLike}/>
         }
       </div>
