@@ -20,7 +20,7 @@ const UserProfile = ({ email, role, setUserData, expanded, setExpanded, name, av
         }
       );
       setPic(response.data.avatar);
-      setId(`${role}${response.data.id}`);
+      setId((role === auth.roles[0] && response.data.id === auth.id) ? '' : `${role}${response.data.id}`);
     } catch (err) {
       console.log(err);
     };
