@@ -1,12 +1,10 @@
 import styles from '../styles/Carousel.module.css'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import Image from './Image'
 import { useParams } from 'react-router-dom'
 import { memo, useEffect, useEffectEvent, useState } from 'react'
 
-const Carousel = () => {
-  const axiosPrivate = useAxiosPrivate();
+const Carousel = ({ userData }) => {
   const { auth } = useAuth();
   const { userId } = useParams();
   const [album, setAlbum] = useState(null);
@@ -15,22 +13,7 @@ const Carousel = () => {
     if (!userId) {
       setAlbum(auth.album);
     } else {
-      try {
-        const response = await axiosPrivate.get('/fetch_profile_data',
-          {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            withCredentials: true,
-            params: {
-              role: userId[0] === 'c' ? 'customer' : 'venue',
-              id: userId[0] === 'c' ? userId?.substring(8) : userId?.substring(5),
-              from: 'Carousel'
-            }
-          }
-        );
-        setAlbum(response.data.album);
-      } catch (err) {
-        console.log(err);
-      };
+      setAlbum(userData?.album);
     };
   });
 

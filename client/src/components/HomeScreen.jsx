@@ -70,7 +70,7 @@ const HomeScreen = () => {
         }
 
         {!tablePreview && 
-        <Carousel />
+        <Carousel userData={userData}/>
         }
 
         {!albumUploadPending 

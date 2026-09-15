@@ -1,13 +1,13 @@
 import pool from './pool.js';
 
 export async function checkConnection() {
-  console.log('checkConnection');
+  console.log('DB QUERY - checkConnection');
   const { rows } = await pool.query('SELECT venue FROM venues');
   return rows;
 };
 
 export async function getAllVenueData() {
-  console.log('getAllVenueData');
+  console.log('DB QUERY - getAllVenueData');
   const { rows } = await pool.query('SELECT * FROM venues');
   
   for (let i=0; i<rows.length; i++) {
@@ -20,7 +20,7 @@ export async function getAllVenueData() {
 };
 
 export async function getAllCustomerData() {
-  console.log('getAllCustomerData');
+  console.log('DB QUERY - getAllCustomerData');
   const { rows } = await pool.query('SELECT * FROM customers');
   
   for (let i=0; i<rows.length; i++) {
@@ -33,19 +33,19 @@ export async function getAllCustomerData() {
 };
 
 export async function checkVenuesForMatch(email) {
-    console.log('checkVenuesForMatch');
+    console.log('DB QUERY - checkVenuesForMatch');
   const { rows } = await pool.query(`SELECT * FROM venues WHERE email = '${email}'`);
   return rows[0];
 };
 
 export async function checkCustomersForMatch(email) {
-    // console.log('checkCustomersForMatch');
+    console.log('DB QUERY - checkCustomersForMatch');
   const { rows } = await pool.query(`SELECT * FROM customers WHERE email = '${email}'`);
   return rows[0];
 };
 
 export async function createNewUser(acc_type, name, email, password, stage, rating, tables, dates, credits) {
-    console.log('createNewUser');
+    console.log('DB QUERY - createNewUser');
   if (acc_type === 'venue') {
     await pool.query(
       `INSERT INTO venues (
@@ -63,7 +63,7 @@ export async function createNewUser(acc_type, name, email, password, stage, rati
 };
 
 export async function getUserData(email, acc_type) {
-    console.log('getUserData');
+    console.log('DB QUERY - getUserData');
   if (acc_type === 'venue') {
     const { rows } = await pool.query(`
       SELECT ${acc_type}, id, password, stage, avatar, album, rating, hours, tables, likes, dates, credits
@@ -79,31 +79,31 @@ export async function getUserData(email, acc_type) {
 };
 
 export async function addRefreshToken(acc_type, email, token) {
-    console.log('addRefreshToken');
+    console.log('DB QUERY - addRefreshToken');
   await pool.query(`UPDATE ${acc_type}s SET refToken = '${token}' WHERE email = '${email}'`);
   return 'success';
 };
 
 export async function checkVenueToken(token) {
-    console.log('checkVenueToken'); 
+    console.log('DB QUERY - checkVenueToken'); 
   const { rows } = await pool.query(`SELECT * FROM venues WHERE reftoken = '${token}'`);
   return rows[0];
 };
 
 export async function checkCustomerToken(token) {
-    console.log('checkCustomerToken'); 
+    console.log('DB QUERY - checkCustomerToken'); 
   const { rows } = await pool.query(`SELECT * FROM customers WHERE reftoken = '${token}'`);
   return rows[0];
 };
 
 export async function deleteRefreshToken(acc_type, email) {
-    console.log('deleteRefreshToken');
+    console.log('DB QUERY - deleteRefreshToken');
   await pool.query(`UPDATE ${acc_type}s SET refToken = '' WHERE email = '${email}'`);
   return 'success';
 };
 
 export async function uploadNewAvatar(acc_type, email, link) {
-    console.log('uploadNewAvatar');
+    console.log('DB QUERY - uploadNewAvatar');
   const { rows } = await pool.query(`SELECT * FROM ${acc_type}s WHERE email = '${email}'`);
   await pool.query(`UPDATE ${acc_type}s SET avatar = '${link}' WHERE email = '${email}'`);
   if (rows[0].stage === '0') await pool.query(`UPDATE ${acc_type}s SET stage = '1' WHERE email = '${email}'`);
@@ -112,14 +112,14 @@ export async function uploadNewAvatar(acc_type, email, link) {
 };
 
 export async function uploadNewAlbum(acc_type, email, links, postreg) {
-    console.log('uploadNewAlbum');
+    console.log('DB QUERY - uploadNewAlbum');
   await pool.query(`UPDATE ${acc_type}s SET album = '${links}' WHERE email = '${email}'`);
   if (!postreg) await pool.query(`UPDATE ${acc_type}s SET stage = '2' WHERE email = '${email}'`);
   return 'ALBUM UPLOADED';
 };
 
 export async function infoUpload(acc_type, email, hours, tables, stage, dob, gender, interest, endreg) {
-    console.log('infoUpload');
+    console.log('DB QUERY - infoUpload');
   if (acc_type === 'venue') {
     if (stage === '2') {  // pre-registration basic info
       console.log('STAGE', stage);
@@ -198,7 +198,7 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
 };
 
 export async function tableInfoUpdate(email, id, link) {
-    console.log('tableInfoUpdate');
+    console.log('DB QUERY - tableInfoUpdate');
 
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${email}'`);
   const tables = rows[0].tables[0];
@@ -214,7 +214,7 @@ export async function tableInfoUpdate(email, id, link) {
 };
 
 export async function auctionUpload(email, id, deposit, step, bidders, reg, venue_id) {
-    console.log('auctionUpload');
+    console.log('DB QUERY - auctionUpload');
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${email}'`);
   const tables = rows[0].tables[0];
   const updated = tables.map(item => {if (item.id === id.toString() || item.id === id)
@@ -229,7 +229,7 @@ export async function auctionUpload(email, id, deposit, step, bidders, reg, venu
 };
 
 export async function BalanceUpdate(email, amount, acc_type, deposit) {
-    console.log('BalanceUpdate');
+    console.log('DB QUERY - BalanceUpdate');
   const { rows } = await pool.query(`SELECT credits FROM ${acc_type}s WHERE email = '${email}'`);
   const balance = rows[0].credits;
   const cashout = parseInt(balance) - parseInt(amount);
@@ -243,7 +243,7 @@ export async function BalanceUpdate(email, amount, acc_type, deposit) {
 };
 
 export async function FetchAuctions() {
-    console.log('FetchAuctions');
+    console.log('DB QUERY - FetchAuctions');
   let auctions = [];
   const { rows } = await pool.query('SELECT venue, email, tables FROM venues');
 
@@ -280,7 +280,7 @@ export async function FetchAuctions() {
 };
 
 export async function BiddersUpdate(bidders, venue_email, table) {
-    console.log('BiddersUpdate');
+    console.log('DB QUERY - BiddersUpdate');
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${venue_email}'`);
   const tables = rows[0].tables[0];
   
@@ -301,7 +301,7 @@ export async function BiddersUpdate(bidders, venue_email, table) {
 };
 
 export async function AddTable(email, id, active, venue_id) {
-    console.log('AddTable:', id);
+    console.log('DB QUERY - AddTable:', id);
   const new_table = {
     id: parseInt(id), 
     pic: '', 
@@ -329,7 +329,7 @@ export async function AddTable(email, id, active, venue_id) {
 
 export async function FetchProfileData(role, id, from) {
   
-  console.log('FetchProfileData', role, id, 'from', from);
+  console.log('DB QUERY - FetchProfileData', role, id, 'from', from);
   
   if (role === 'venue') {
     const { rows } = await pool.query(`
@@ -349,7 +349,7 @@ export async function FetchProfileData(role, id, from) {
 };
 
 export async function SwitchLike(email, role, id) {
-    console.log('SwitchLike');
+    console.log('DB QUERY - SwitchLike');
   const { rows } = await pool.query(`SELECT likes FROM ${role}s WHERE id = ${parseInt(id)}`);
   const arr = rows[0].likes;
   console.log('CURRENT LIKES:', arr);
@@ -373,7 +373,7 @@ export async function SwitchLike(email, role, id) {
 };
 
 export async function FetchAvatar(email, role) {
-    console.log('FetchAvatar');
+    console.log('DB QUERY - FetchAvatar');
   if (role === 'venue') {
     const { rows } = await pool.query(`
       SELECT avatar, id FROM venues 
@@ -389,7 +389,7 @@ export async function FetchAvatar(email, role) {
 };
 
 export async function NewDateUpload(venue, host, guest, new_date) {
-    console.log('NewDateUpload');
+    console.log('DB QUERY - NewDateUpload');
 
   const arr = [host, guest, venue];
 
@@ -453,7 +453,7 @@ export async function NewDateUpload(venue, host, guest, new_date) {
 };
 
 export async function ArchiveVenueDate (venue, date, endTime) {
-  console.log('ArchiveVenueDate');
+  console.log('DB QUERY - ArchiveVenueDate');
 
     const { rows } = await pool.query(`SELECT dates FROM venues WHERE email = '${venue}'`);
     
@@ -475,7 +475,7 @@ export async function ArchiveVenueDate (venue, date, endTime) {
 };
 
 export async function ArchiveHostDate (host, date, endTime) {
-  console.log('ArchiveHostDate');
+  console.log('DB QUERY - ArchiveHostDate');
 
     const { rows } = await pool.query(`SELECT dates FROM customers WHERE email = '${host}'`);
     
@@ -497,7 +497,7 @@ export async function ArchiveHostDate (host, date, endTime) {
 };
 
 export async function ArchiveGuestDate (guest, date, endTime) {
-  console.log('ArchiveGuestDate');
+  console.log('DB QUERY - ArchiveGuestDate');
 
     const { rows } = await pool.query(`SELECT dates FROM customers WHERE email = '${guest}'`);
     
@@ -519,7 +519,7 @@ export async function ArchiveGuestDate (guest, date, endTime) {
 };
 
 export async function EditInfo(email, acc_type, new_name, new_email, new_hours) {
-  console.log('EditInfo');
+  console.log('DB QUERY - EditInfo');
   console.log('E-MAIL:', email);
   console.log('NEW NAME:', new_name);
   console.log('NEW EMAIL:', new_email);
@@ -830,7 +830,7 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
 };
 
 export async function DeleteAccount(email, acc_type) {
-  console.log('DeleteAccount');
+  console.log('DB QUERY - DeleteAccount');
 
   // DELETE CUSTOMER FROM AUCTIONS
   
