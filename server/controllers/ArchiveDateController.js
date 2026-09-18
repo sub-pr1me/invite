@@ -1,4 +1,4 @@
-import { ArchiveVenueDate, ArchiveHostDate, ArchiveGuestDate } from '../db/queries.js'
+import { ArchiveVenueDate, ArchiveHostDate, ArchiveGuestDate } from '../models/queries.js'
 
 export default async function handleArchiveDate(req, res) {
 

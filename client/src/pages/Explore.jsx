@@ -2,7 +2,7 @@ import styles from '../styles/Explore.module.css'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import useAuth from '../hooks/useAuth'
 import { useEffect, useEffectEvent, useState, memo } from 'react'
-import UserProfile from './UserProfile'
+import UserProfile from '../components/UserProfile'
 
 const Explore = () => {
   const [venues, setVenues] = useState(null);

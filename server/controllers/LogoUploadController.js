@@ -1,5 +1,5 @@
 import cloudinary from '../utils/cloudinary.js'
-import { checkVenuesForMatch, checkCustomersForMatch, uploadNewAvatar } from '../db/queries.js'
+import { checkVenuesForMatch, checkCustomersForMatch, uploadNewAvatar } from '../models/queries.js'
 
 export default async function handleLogoUpload(req, res) {
 

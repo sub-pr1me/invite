@@ -1,5 +1,5 @@
 import cloudinary from '../utils/cloudinary.js'
-import { DeleteAccount } from '../db/queries.js'
+import { DeleteAccount } from '../models/queries.js'
 
 const handleAccountRemoval = async (req, res) => {
   try {

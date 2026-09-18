@@ -1,4 +1,4 @@
-  import axios from '../api/axios';
+  import axios from '../services/axios';
   
   export async function fetchCustomers() {
 

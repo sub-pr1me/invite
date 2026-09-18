@@ -1,4 +1,4 @@
-import { BalanceUpdate } from '../db/queries.js'
+import { BalanceUpdate } from '../models/queries.js'
 
 const handleBalanceUpdate = async (req, res) => {
   try {

@@ -2,7 +2,7 @@ import styles from '../styles/Clients.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useEffect, useEffectEvent, useState, memo } from 'react'
-import UserProfile from './UserProfile'
+import UserProfile from '../components/UserProfile'
 
 const Clients = () => {
   const [customers, setCustomers] = useState(null);

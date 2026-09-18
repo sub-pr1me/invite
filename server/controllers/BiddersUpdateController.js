@@ -1,4 +1,4 @@
-import { BiddersUpdate } from '../db/queries.js'
+import { BiddersUpdate } from '../models/queries.js'
 
 const handleBiddersUpdate = async (req, res) => {
   try {

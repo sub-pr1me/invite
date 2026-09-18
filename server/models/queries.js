@@ -1,4 +1,4 @@
-import pool from './pool.js';
+import pool from '../config/pool.js';
 
 export async function checkConnection() {
   console.log('DB QUERY - checkConnection');

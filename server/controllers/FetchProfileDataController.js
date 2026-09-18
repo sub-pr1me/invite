@@ -1,4 +1,4 @@
-import { FetchProfileData } from '../db/queries.js'
+import { FetchProfileData } from '../models/queries.js'
 
 const handleFetchProfileData = async (req, res) => {
   try {

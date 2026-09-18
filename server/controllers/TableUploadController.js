@@ -1,5 +1,5 @@
 import cloudinary from '../utils/cloudinary.js'
-import { tableInfoUpdate } from '../db/queries.js'
+import { tableInfoUpdate } from '../models/queries.js'
 
 export default async function handleTableUpload(req, res) {
 

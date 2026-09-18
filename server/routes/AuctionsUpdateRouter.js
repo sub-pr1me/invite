@@ -1,5 +1,5 @@
 import Router from "express"
-import { FetchAuctions } from '../db/queries.js'
+import { FetchAuctions } from '../models/queries.js'
 // import handleAuctionsUpdate from "../controllers/AuctionsUpdateController.js"
 
 export const AuctionsUpdateRouter = Router();

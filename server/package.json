@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "populate": "node db/populatedb.js"
+    "populate": "node models/populatedb.js"
   },
   "keywords": [],
   "author": "sub-pr1me",

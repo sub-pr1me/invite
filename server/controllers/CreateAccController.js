@@ -1,6 +1,6 @@
-import { checkVenuesForMatch } from "../db/queries.js"
-import { checkCustomersForMatch } from "../db/queries.js"
-import { createNewUser } from "../db/queries.js"
+import { checkVenuesForMatch } from "../models/queries.js"
+import { checkCustomersForMatch } from "../models/queries.js"
+import { createNewUser } from "../models/queries.js"
 import bcrypt from "bcryptjs";
 import { validationResult } from 'express-validator'
 

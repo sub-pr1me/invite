@@ -12,6 +12,7 @@ export default defineConfig({
         target: 'http://localhost:3000', // The exact URL and port of your backend API
         changeOrigin: true,             // Modifies the origin header to match the target URL
         secure: false,                  // Keeps it disabled since you are developing over HTTP
+        ws: true,                        // Enables WebSocket proxying
         // Optional: Removes the '/api' prefix before the request hits your backend
         // Use this if your backend route is just '/users' instead of '/api/users'
         rewrite: (path) => path.replace(/^\/api/, ''), 

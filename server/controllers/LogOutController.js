@@ -1,4 +1,4 @@
-import { checkVenueToken, checkCustomerToken, deleteRefreshToken } from "../db/queries.js";
+import { checkVenueToken, checkCustomerToken, deleteRefreshToken } from "../models/queries.js";
 import jwt from 'jsonwebtoken';
 
 export default async function handleLogOut(req, res) {

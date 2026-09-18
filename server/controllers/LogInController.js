@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { checkVenuesForMatch, checkCustomersForMatch, getUserData, addRefreshToken} from "../db/queries.js";
+import { checkVenuesForMatch, checkCustomersForMatch, getUserData, addRefreshToken} from "../models/queries.js";
 import jwt from 'jsonwebtoken';
 import 'dotenv/config.js';
 import { validationResult } from 'express-validator'

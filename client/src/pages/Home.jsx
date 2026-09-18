@@ -1,10 +1,10 @@
 import useAuth from '../hooks/useAuth'
 import styles from '../styles/Home.module.css'
 import { useEffect, useEffectEvent } from 'react'
-import AlbumUpload from './AlbumUpload'
-import InfoUpload from './InfoUpload'
-import SetAucs from './SetAucs'
-import HomeScreen from './HomeScreen'
+import AlbumUpload from '../components/AlbumUpload'
+import InfoUpload from '../components/InfoUpload'
+import SetAucs from '../components/SetAucs'
+import HomeScreen from '../components/HomeScreen'
 
 const Home = ({ setAuctions }) => {
 

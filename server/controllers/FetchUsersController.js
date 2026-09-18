@@ -1,4 +1,4 @@
-import { getAllVenueData, getAllCustomerData } from '../db/queries.js'
+import { getAllVenueData, getAllCustomerData } from '../models/queries.js'
 
 const handleFetchUsers = async (req, res) => {  
   const role = req.query.role;  

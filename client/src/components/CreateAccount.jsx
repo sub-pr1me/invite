@@ -1,6 +1,6 @@
 import styles from '../styles/CreateAccount.module.css'
 import { useState, useEffect, useRef, useEffectEvent } from 'react'
-import axios from '../api/axios'
+import axios from '../services/axios'
 import AccTypeChoice from './AccTypeChoice'
 import { useNavigate } from 'react-router-dom'
 import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icons'

@@ -1,8 +1,8 @@
 import styles from '../styles/Auctions.module.css'
 import useAuth from '../hooks/useAuth'
 import { useState, useEffect, useEffectEvent, memo } from 'react'
-import SetAucs from './SetAucs'
-import AuctionsMonitor from './AuctionsMonitor'
+import SetAucs from '../components/SetAucs'
+import AuctionsMonitor from '../components/AuctionsMonitor'
 
 const Auctions = ({ auctions, setAuctions }) => {
   

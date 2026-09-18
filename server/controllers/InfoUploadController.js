@@ -1,5 +1,5 @@
 import { type } from 'os';
-import { checkVenuesForMatch, checkCustomersForMatch, infoUpload } from '../db/queries.js'
+import { checkVenuesForMatch, checkCustomersForMatch, infoUpload } from '../models/queries.js'
 
 const handleInfoUpload = async (req, res)=> {
   try {

@@ -1,4 +1,4 @@
-import { checkVenueToken, checkCustomerToken } from "../db/queries.js";
+import { checkVenueToken, checkCustomerToken } from "../models/queries.js";
 import jwt from 'jsonwebtoken';
 import 'dotenv/config.js';
 

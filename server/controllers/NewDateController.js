@@ -1,4 +1,4 @@
-import { NewDateUpload } from '../db/queries.js'
+import { NewDateUpload } from '../models/queries.js'
 
 export default async function handleNewDate(req, res) {
 

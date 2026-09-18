@@ -1,4 +1,4 @@
-import { AddTable } from '../db/queries.js'
+import { AddTable } from '../models/queries.js'
 
 const handleTransformTable = async (req, res) => {
   try {

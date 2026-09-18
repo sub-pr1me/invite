@@ -1,7 +1,7 @@
 import styles from '../styles/Log_In.module.css'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect, useRef, useEffectEvent } from 'react'
-import axios from "../api/axios"
+import axios from "../services/axios"
 import useAuth from '../hooks/useAuth'
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

@@ -1,4 +1,4 @@
-import { FetchAvatar } from '../db/queries.js'
+import { FetchAvatar } from '../models/queries.js'
 
 const handleFetchAvatar = async (req, res) => {
   try {

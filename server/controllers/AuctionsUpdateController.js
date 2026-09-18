@@ -1,4 +1,4 @@
-import { FetchAuctions } from '../db/queries.js'
+import { FetchAuctions } from '../models/queries.js'
 
 const handleAuctionsUpdate = async (req, res) => {
   try {

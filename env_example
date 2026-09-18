@@ -1,0 +1,2 @@
+# Database connection string used by Prisma CLI from the root
+DATABASE_URL=

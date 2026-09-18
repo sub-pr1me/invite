@@ -1,4 +1,4 @@
-import { getAllVenueData, getAllCustomerData } from "../db/queries.js"
+import { getAllVenueData, getAllCustomerData } from "../models/queries.js"
 
 export default async function listAllUsers(req, res) {
   const venues = await getAllVenueData();

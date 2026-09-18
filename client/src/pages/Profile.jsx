@@ -1,8 +1,8 @@
 import styles from '../styles/Profile.module.css'
 import useAuth from '../hooks/useAuth'
 import { useEffect, useEffectEvent, useState } from 'react'
-import EditGallery from './EditGallery'
-import EditProfile from './EditProfile'
+import EditGallery from '../components/EditGallery'
+import EditProfile from '../components/EditProfile'
 
 
 const Profile = () => {

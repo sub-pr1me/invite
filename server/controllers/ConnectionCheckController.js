@@ -1,4 +1,4 @@
-import { checkConnection } from "../db/queries.js";
+import { checkConnection } from "../models/queries.js";
 
 const handleCheckConnection = async (_, res) => {
   try {

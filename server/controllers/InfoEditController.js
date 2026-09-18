@@ -1,4 +1,4 @@
-import { EditInfo } from '../db/queries.js'
+import { EditInfo } from '../models/queries.js'
 
 const handleInfoEdit = async (req, res) => {
   try {

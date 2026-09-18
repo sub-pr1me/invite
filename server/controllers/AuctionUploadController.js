@@ -1,4 +1,4 @@
-import { auctionUpload } from '../db/queries.js'
+import { auctionUpload } from '../models/queries.js'
 
 export default async function handleAuctionUpload(req, res) {
 

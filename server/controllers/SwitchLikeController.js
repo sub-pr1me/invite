@@ -1,4 +1,4 @@
-import { SwitchLike } from '../db/queries.js'
+import { SwitchLike } from '../models/queries.js'
 
 const handleSwitchLike = async (req, res) => {
   try {

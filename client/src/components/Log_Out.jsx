@@ -1,5 +1,5 @@
 import styles from '../styles/Log_Out.module.css'
-import axios from '../api/axios'
+import axios from '../services/axios'
 import useAuth from '../hooks/useAuth'
 
 const Log_Out = () => {

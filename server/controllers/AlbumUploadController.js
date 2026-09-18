@@ -1,5 +1,5 @@
 import cloudinary from '../utils/cloudinary.js'
-import { checkVenuesForMatch, checkCustomersForMatch, uploadNewAlbum } from '../db/queries.js'
+import { checkVenuesForMatch, checkCustomersForMatch, uploadNewAlbum } from '../models/queries.js'
 import asyncHandler from "express-async-handler"
 
 const handleAlbumUpload = asyncHandler(async (req, res)=> {
