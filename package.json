@@ -1,6 +1,10 @@
 {
   "devDependencies": {
-    "prisma": "^7.8.0"
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.0",
+    "@types/pg": "^8.23.1",
+    "prisma": "^6.12.0",
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
@@ -9,7 +13,7 @@
     "pg": "^8.21.0"
   },
   "allowScripts": {
-    "prisma@7.9.1": true,
-    "@prisma/engines@7.9.1": true
+    "@prisma/engines@6.19.3": true,
+    "prisma@6.19.3": true
   }
 }
