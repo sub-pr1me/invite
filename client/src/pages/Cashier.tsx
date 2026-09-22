@@ -2,27 +2,29 @@ import styles from '../styles/Cashier.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useEffect, useEffectEvent } from 'react'
+import { AuthType } from '../types'
+
 
 const Cashier = () => {
   const { auth, setAuth, setActive } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
-  const UpdateBalance = async (formData) => {
+  const UpdateBalance = async (formData: FormData): Promise<void> => {
 
-    const amount = formData.get('amount');
+    const amount = formData.get('amount') as number | null;
 
     try {
       const response = await axiosPrivate.post('/balance_update',
         {
-          email: auth.email,
+          email: auth?.email,
           amount: amount,
-          acc_type: auth.roles[0]},
+          acc_type: auth?.roles[0]},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
         }
       );
-      setAuth({...auth, credits: response.data});
+      setAuth({...auth, credits: response.data} as AuthType | null);
     } catch (err) {
       console.log(err);
     };
@@ -39,11 +41,11 @@ const Cashier = () => {
     <title>Cashier</title>
     <div className={`${styles.cashier_container}`}>
       <div className={`${styles.balance}`}>
-        <div>{auth.credits}</div>
+        <div>{auth?.credits}</div>
         <div>Balance</div>
       </div>
       {
-        auth.roles[0] === 'customer' && 
+        auth?.roles[0] === 'customer' && 
         <div className={`${styles.deposit}`}>
           <form action={UpdateBalance}>
             <div>
@@ -53,7 +55,7 @@ const Cashier = () => {
                 id='amount'
                 type="number"
                 min='50'
-                max={9999 - auth.credits}
+                max={9999 - auth?.credits}
                 placeholder={`50-${9999-auth.credits}`}
                 required 
               />
@@ -63,7 +65,7 @@ const Cashier = () => {
         </div>
       }
       {
-        auth.roles[0] === 'venue' && 
+        auth?.roles[0] === 'venue' && 
         <div className={`${styles.cashout}`}>
           <form action={UpdateBalance}>
             <div>
@@ -73,9 +75,9 @@ const Cashier = () => {
                 id='amount'
                 type="number"
                 min='10'
-                max={auth.credits}
-                placeholder={auth.credits > 10 ? `10-${auth.credits}` : ''}
-                disabled={auth.credits < 10 || !auth.credits}
+                max={auth?.credits}
+                placeholder={auth?.credits > 10 ? `10-${auth.credits}` : ''}
+                disabled={auth?.credits < 10 || !auth.credits}
                 required
               />
             </div>

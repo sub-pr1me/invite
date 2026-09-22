@@ -4,7 +4,7 @@ const Missing = () => {
     <>
       <div>ERROR 404</div>
     </>    
-  )
-}
+  );
+};
 
 export default Missing
