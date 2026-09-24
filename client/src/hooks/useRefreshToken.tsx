@@ -1,4 +1,5 @@
 import axios from "../services/axios"
+import { isAxiosError } from "axios";
 import useAuth from "./useAuth"
 
 const useRefreshToken = () => {
@@ -55,11 +56,13 @@ const useRefreshToken = () => {
         });
       return response.data.accessToken;
 
-    } catch (err) {
-      if (!err?.response) {
-        console.log('NO SERVER RESPONSE');
+    } catch (err: unknown) {
+      if (!isAxiosError(err)) {
+        console.log("UNKNOWN ERROR", err);
+      } else if (!err.response) {
+        console.log("NO SERVER RESPONSE");
       } else {
-        console.log('SOMETHING WENT WRONG');
+        console.log("SOMETHING WENT WRONG", err.response.status);
       }
     };
   };

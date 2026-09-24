@@ -1,6 +1,11 @@
 import getImageUrl from "../functions/getImageUrl";
 
-export default function Thumb({ src, alt}) {
+type ThumbProps = {
+  src: string;
+  alt: string;
+};
+
+export default function Thumb({ src, alt }: ThumbProps) {
   
   const cloudName = src?.split('/')[3];
   const publicId = src?.split('/')[7].split('.')[0];

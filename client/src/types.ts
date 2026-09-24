@@ -21,7 +21,7 @@ export type AuthType = null | {
   likes: number,
   rating?: number,
   hours?: number,
-  tables?: number,
+  tables?: TableType[],
   dob?: string,
   gender?: string,
   interest?: string[],
@@ -29,10 +29,23 @@ export type AuthType = null | {
   credits: number
 }
 
-export type CustomizeType = null | {
-  theme: string,
-  fontSize: number
+export type TableType = {
+  id: number,
+  pic: string,
+  active: boolean,
+  modal: boolean,
+  auction: AuctionType
 }
+
+export type AuctionType = {
+  bidders: [number, number, number],
+  deposit: number | null,
+  reg: boolean,
+  step: number | null,
+  venue_id: number
+}
+
+export type CustomizeType = number | null
 
 export type AuthProviderProps = {
   children: React.ReactNode;
