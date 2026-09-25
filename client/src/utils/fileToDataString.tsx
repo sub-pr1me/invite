@@ -1,5 +1,5 @@
 
-export default function fileToDataString(file) {
+export default function fileToDataString(file: File): Promise<string | ArrayBuffer | null> {
   return new Promise((resolve, reject)=> {
     const reader = new FileReader();
     reader.readAsDataURL(file);
