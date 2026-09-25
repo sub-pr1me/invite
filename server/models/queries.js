@@ -307,7 +307,7 @@ export async function AddTable(email, id, active, venue_id) {
     pic: '', 
     active: JSON.parse(active), 
     modal: false, 
-    auction: {deposit: null, step: null, bidders: [0,0,0], reg: true, venue_id: venue_id}
+    auction: {deposit: null, step: null, bidders: [null,null,null], reg: true, venue_id: venue_id}
   };
   const { rows } = await pool.query(`
     SELECT tables
@@ -438,7 +438,7 @@ export async function NewDateUpload(venue, host, guest, new_date) {
       return {...item, auction: {
         deposit: null, 
         step: null, 
-        bidders: [0,0,0], 
+        bidders: [null,null,null], 
         reg: true, 
         venue_id: parseInt(new_date.table)}};
     } else { return item };

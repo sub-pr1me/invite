@@ -1,16 +1,16 @@
 import styles from '../styles/Table.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import { AxiosError } from 'axios';
-import Thumb from './Thumb';
-import { CustomizeType, TableType } from '../types'
+import { AxiosError } from 'axios'
+import Thumb from './Thumb'
+import { TableType } from '../types'
 
 type TableProps = { 
   id: number,
   active: boolean,
   modal: boolean,
   setStatus: React.Dispatch<React.SetStateAction<string>>,
-  customize: CustomizeType,
+  customize: number | null,
   pic: string
 }
 
@@ -36,7 +36,7 @@ const Table = ({ id, active, modal, setStatus, customize, pic }: TableProps) => 
             'active': true, 
             'modal': false, 
             'auction': {
-              deposit: null, step: null, bidders: [0,0,0], reg: auth?.stage !== '4' ? false : true, venue_id: venueId
+              deposit: null, step: null, bidders: [null,null,null], reg: auth?.stage !== '4' ? false : true, venue_id: venueId
             }
           }
         );

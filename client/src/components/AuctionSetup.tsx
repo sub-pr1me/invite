@@ -1,41 +1,57 @@
 import styles from '../styles/AuctionSetup.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import { useRef, useEffect } from 'react';
+import { AxiosError } from 'axios'
+import { useRef, useEffect } from 'react'
 
-const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
+type AuctionSetupProps = {
+  setStatus: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const AuctionSetup = ({ setStatus }: AuctionSetupProps) => {
   
-  const { auth, setAuth } = useAuth();
+  const { auth, setAuth, customize, setCustomize } = useAuth();
   const axiosPrivate = useAxiosPrivate();
-  const depositRef = useRef();
+  const depositRef = useRef<HTMLInputElement>(null);
   
-  async function Upload(formData) {
+  async function Upload(formData: FormData) {
+  
+  const deposit = Number(formData.get('deposit'));
+  const step = Number(formData.get('step'));
+
+  if (!Number.isFinite(deposit) || !Number.isFinite(step)) {return};
+
     try {
       await axiosPrivate.post('/auction_upload',
         {
           id: customize,
-          deposit: formData.get('deposit'),
-          step: formData.get('step'),
-          bidders: JSON.stringify([0,0,0]),
-          reg: auth.stage !== '4' ? false : true,
-          venue_id: auth.id
+          deposit: deposit,
+          step: step,
+          bidders: JSON.stringify([null,null,null]),
+          reg: auth?.stage !== '4' ? false : true,
+          venue_id: auth?.id
         },
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
         }
       );
+      
+      if (!auth) {throw new Error('Missing auth context')};
+      const venueId = Number(auth?.id);
+      if (!Number.isFinite(venueId)) {throw new Error('Invalid venue ID')};
+      
       setAuth({
-        ...auth, tables: auth.tables.map(
+        ...auth, tables: auth?.tables?.map(
           table => {
             if (table.id === customize) {
               return {...table, 
                 auction: {
-                  deposit: formData.get('deposit'),
-                  step: formData.get('step'),
-                  bidders: [0,0,0],
-                  reg: auth.stage !== '4' ? false : true,
-                  venue_id: auth.id
+                  deposit: deposit,
+                  step: step,
+                  bidders: [null,null,null],
+                  reg: auth?.stage !== '4' ? false : true,
+                  venue_id: venueId
                 }
               };
             } else {
@@ -47,17 +63,18 @@ const AuctionSetup = ({ customize, setStatus, setCustomize }) => {
       setStatus('idle');
       setCustomize(null);
 
-    } catch (err) {
-      if (!err?.response) {
-        console.log('NO SERVER RESPONSE');
-      } else {
-        console.log('SOMETHING WENT WRONG');
-      }
-    }
+    } catch (err) {      
+          const axiosError = err as AxiosError;      
+          if (!axiosError?.response) {
+            console.log('NO SERVER RESPONSE');
+          } else {
+            console.log('SOMETHING WENT WRONG', axiosError.response.status);
+          }
+        }
   };
 
   useEffect(()=>{
-    depositRef.current.focus();
+    depositRef.current?.focus();
   },[]);
 
   return (

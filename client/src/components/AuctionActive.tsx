@@ -4,13 +4,28 @@ import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useState, useEffect, useEffectEvent } from 'react'
 import { Link } from 'react-router-dom'
+import { BidderType, HostPreviewType } from '../types'
+import { AxiosError } from 'axios'
+
+type AuctionActiveProps = { 
+  id: number,
+  venue_email: string,
+  venue: string,
+  venue_id: number,
+  deposit: number,
+  step: number,
+  bidders: (BidderType | null)[],
+  pic: string,
+  setTablePreview: React.Dispatch<React.SetStateAction<string | null>>,
+  setHostPreview: React.Dispatch<React.SetStateAction<HostPreviewType>>
+}
 
 const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidders, 
-  pic, setTablePreview, setHostPreview }) => {
+  pic, setTablePreview, setHostPreview }:AuctionActiveProps) => {
     
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
-  const [modal, setModal] = useState(null);
+  const [modal, setModal] = useState<number | null>(null);
   const [fade, setFade] = useState(false);
   const [tableText, setTableText] = useState(`Table ${id}`);
   const [hover, setHover] = useState(false);
@@ -19,35 +34,44 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
 
   const resetStatus = useEffectEvent(()=>{setStatus('idle')});
 
-  const GetMinDeposit = () => {
+  const GetMinDeposit = (bidders: (BidderType | null)[], deposit: number) => {
   
     const arr = [];
 
-    for (let i=0; i<bidders.length; i++) {    
-      if (bidders[i] !== 0) arr.push(bidders[i]);
+    if (Array.isArray(bidders)) {
+      for (let i=0; i<bidders.length; i++) {    
+        if (bidders[i]) arr.push(bidders[i]);
+      };
     };
 
     if (!arr[0]) return deposit;
     return arr[0].bid + step;
   };
 
-  async function AddBid (formData) {
+  async function AddBid (formData: FormData) {
     setStatus('updating');
 
-    const update = [];
+  const update: (BidderType | null)[] = [];
+    
+  for (const bidder of bidders) {
+    if (bidder === null) {
+      update.push(null);
+    } else if (bidder.email !== auth?.email) {
+      update.push(bidder);
+    }
+  }
 
-    for (let i=0; i<bidders.length; i++) {      
-      if (!bidders[i]) {
-        update.push(0);      
-      } else {        
-        if (bidders[i].email !== auth.email) {
-          update.push(bidders[i]);
-        };        
-      };
+    const depositValue = formData.get('deposit');
+    if (typeof depositValue !== 'string' || depositValue.trim() === '') {
+      throw new Error('Invalid deposit');
     };
 
-    const bid = parseInt(formData.get('deposit'));
-    const existingBid = bidders.filter(item => item.name === auth.name)[0]?.bid;
+    const bid = Number.parseInt(depositValue, 10);
+    if (!Number.isFinite(bid)) {
+      throw new Error('Invalid deposit');
+    };
+
+    const existingBid = bidders.filter(item => item?.name === auth?.name)[0]?.bid;
     
     let difference;
     let ejected = null;
@@ -58,12 +82,14 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
       difference = !bidders[0] ? bid : bid - bidders[0].bid;
     }
 
-    if (difference <= auth.credits) {update.unshift({
-          name: auth.name,
-          id: `${auth.roles[0]}${auth.id}`,
-          avatar: auth.avatar,
-          interest: auth.interest,
-          email: auth.email,
+    if (!auth) {throw new Error('Missing auth context')};    
+
+    if (difference <= auth?.credits) {update.unshift({
+          name: auth?.name,
+          id: `${auth?.roles[0]}${auth?.id}`,
+          avatar: auth?.avatar,
+          interest: auth?.interest!,
+          email: auth?.email,
           bid: bid
     });
 
@@ -93,9 +119,9 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
       setFade(true);
       const newBalance = await axiosPrivate.post('/balance_update',
         {
-          email: auth.email,
+          email: auth?.email,
           amount: existingBid ? difference * -1 : bid * -1, 
-          acc_type: auth.roles[0]
+          acc_type: auth?.roles[0]
         },          
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -116,12 +142,13 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
         );
       };
       setAuth({...auth, credits: newBalance.data});
-    } catch (err) {
-      if (!err?.response) {
+    } catch (err) {      
+      const axiosError = err as AxiosError;      
+      if (!axiosError?.response) {
         console.log('NO SERVER RESPONSE');
       } else {
-        console.log('SOMETHING WENT WRONG');
-      };
+        console.log('SOMETHING WENT WRONG', axiosError.response.status);
+      }
     };
   };
 
@@ -136,7 +163,7 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
         onMouseEnter={()=>{setHover(true)}}
         onMouseLeave={()=>{setHover(false)}}>        
         {
-          auth.roles[0] === 'customer' &&
+          auth?.roles[0] === 'customer' &&
           <Link to={`/dashboard/venue${venue_id}`}>
             <div 
               className={`${styles.venue_name} ${hover ? styles.highlight : null}`}
@@ -154,7 +181,7 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
           </div>
           {pic && <img src={pic} alt=''/>}
         </div>
-        <div className={`${styles.details} ${auth.roles[0] === 'customer' ? styles.short : null}`}>          
+        <div className={`${styles.details} ${auth?.roles[0] === 'customer' ? styles.short : null}`}>          
           <div className={`${styles.dep}`}>Dep: <div>{deposit}</div></div>
           <div className={`${styles.step}`}>Step: <div>{step}</div></div>
         </div>
@@ -169,7 +196,7 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
                     name='deposit'
                     id='deposit'
                     min={GetMinDeposit(bidders, deposit)}
-                    placeholder={`Min: ${GetMinDeposit()}`}/>
+                    placeholder={`Min: ${GetMinDeposit(bidders, deposit)}`}/>
                 </div>              
                 <div className={`${styles.btns}`}>
                   <button
@@ -187,7 +214,7 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
             bidders.map((item) => {
             return(
             <Customer 
-              key={item === 0 ? getRandomKey() : JSON.stringify(item)}
+              key={item === null ? getRandomKey() : JSON.stringify(item)}
               content={item}
               modal={modal}
               award={bidders.indexOf(item)}
@@ -199,7 +226,7 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
           }
         </div>
         {
-          auth.roles[0] === 'customer' &&
+          auth?.roles[0] === 'customer' &&
           <div 
             className={`${styles.new_bid}`}
             onClick={()=>{

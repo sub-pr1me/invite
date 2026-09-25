@@ -1,35 +1,49 @@
 import styles from '../styles/TableModal.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import { AxiosError } from 'axios';
 import { useState, useEffect, useEffectEvent } from 'react'
+import { AuctionType, TableType } from '../types'
 
-const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
+type TableModalProps = { 
+  id: number, 
+  modal: boolean, 
+  setStatus: React.Dispatch<React.SetStateAction<string>>, 
+  setAuctions: React.Dispatch<React.SetStateAction<AuctionType[] | null>>
+}
+
+const TableModal = ({ id, modal, setStatus, setAuctions }: TableModalProps) => {
   const [hidden, setHidden] = useState(true);
   const axiosPrivate = useAxiosPrivate();
-  const { auth, setAuth } = useAuth();
+  const { auth, setAuth, setCustomize } = useAuth();
 
-  const showModal = useEffectEvent((modal)=>{
+  const showModal = useEffectEvent((modal: boolean)=>{
     if (modal) setHidden(false);
   });
 
-  const hideModal = useEffectEvent((modal)=>{
+  const hideModal = useEffectEvent((modal: boolean)=>{
     if (!modal) setTimeout(() => { setHidden(true) }, 250);
   });
 
   const removeTable = async () => {
-    if (auth.tables.filter((item) => item.active === true).length > 1) {
-      setStatus(`pending${id}`);
+    setStatus(`pending${id}`);
+    if ((auth?.tables?.filter((item) => item.active === true).length ?? 0) >= 1) {      
       setHidden(true);
-      let update;
+      if (auth?.id === undefined) {throw new Error('Missing venue ID')};      
+      const venueId = Number(auth.id);      
+      if (Number.isNaN(venueId)) {throw new Error('Invalid venue ID')};
+      
+      let update: TableType[] | undefined;
+
       try {
-        if (auth.stage !== '4') {
-          update = auth.tables;
-          update.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': {
-            deposit: null, step: null, bidders: [0,0,0], reg: auth.stage !== '4' ? false : true, venue_id: auth.id
+        if (auth?.stage !== '4') {
+          update = auth?.tables;
+          update?.splice(id-1, 1, {'id': id, 'pic': '', 'active': false, 'modal': false, 'auction': {
+            deposit: null, step: null, bidders: [null,null,null], reg: auth?.stage !== '4' ? false : true, venue_id: venueId
           }});
 
           await axiosPrivate.post('/info_upload',
-            {hours: auth.hours, tables: JSON.stringify(update), stage: auth.stage},
+            {hours: auth?.hours, tables: JSON.stringify(update), stage: auth?.stage},
             {
               headers: {'Content-Type': 'application/x-www-form-urlencoded'},
               withCredentials: true
@@ -46,8 +60,8 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
           setAuth({...auth, tables: update});
 
         } else {
-          update = await axiosPrivate.post('/transform_table',
-            {id: id, active: false, venue_id: auth.id},
+          const updated = await axiosPrivate.post('/transform_table',
+            {id: id, active: false, venue_id: venueId},
             {
               headers: {'Content-Type': 'application/x-www-form-urlencoded'},
               withCredentials: true
@@ -62,16 +76,16 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
           );
           
           setAuctions(auctions.data);
-          setAuth({...auth, tables: update.data});
+          setAuth({...auth, tables: updated?.data});
         };
         setTimeout(() => {setStatus('success')}, 250);
 
-      } catch (err) {
-        console.error(err)
-        if (!err?.response) {
+      } catch (err) {      
+        const axiosError = err as AxiosError;      
+        if (!axiosError?.response) {
           console.log('NO SERVER RESPONSE');
         } else {
-          console.log('SOMETHING WENT WRONG');
+          console.log('SOMETHING WENT WRONG', axiosError.response.status);
         }
       }
     }    
@@ -87,12 +101,12 @@ const TableModal = ({ id, modal, setStatus, CustomizeTable, setAuctions }) => {
         ${styles[`m${id}`]}
         ${!modal ? styles.fade : null}
         ${hidden ? styles.hidden : null}`}>
-        <button onClick={()=>{CustomizeTable(id)}}>
+        <button onClick={()=>{setCustomize(id)}}>
           Photo
           </button>
-        <button disabled={auth.tables[id-1].auction.step} onClick={()=>{
+        <button disabled={Boolean(auth?.tables?.[id-1]?.auction?.step)} onClick={()=>{
           setStatus('auction');
-          CustomizeTable(id);
+          setCustomize(id);
           }}>
           Auction</button>
         <button

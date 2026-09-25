@@ -28,7 +28,7 @@ const InfoUpload = () => {
           'auction': JSON.stringify({
             deposit: null,
             step: null,
-            bidders: [0,0,0],
+            bidders: [null,null,null],
             reg: auth.stage !== '4' ? false : true,
             venue_id: auth.id
           })
@@ -44,7 +44,7 @@ const InfoUpload = () => {
           'auction': JSON.stringify({
             deposit: null,
             step: null,
-            bidders: [0,0,0],
+            bidders: [null,null,null],
             reg: auth.stage !== '4' ? false : true,
             venue_id: auth.id
           })

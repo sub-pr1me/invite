@@ -5,8 +5,8 @@ export interface AuthContextType {
   setActiveEmail: React.Dispatch<React.SetStateAction<string | null>>;
   active: string;
   setActive: React.Dispatch<React.SetStateAction<string>>;
-  customize: CustomizeType;
-  setCustomize: React.Dispatch<React.SetStateAction<CustomizeType>>;
+  customize: number | null;
+  setCustomize: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 export type AuthType = null | {
@@ -18,13 +18,13 @@ export type AuthType = null | {
   stage: string,
   avatar: string,
   album: string,
-  likes: number,
+  likes: string[][],
   rating?: number,
   hours?: number,
   tables?: TableType[],
   dob?: string,
   gender?: string,
-  interest?: string[],
+  interest?: string,
   dates: number,
   credits: number
 }
@@ -38,15 +38,40 @@ export type TableType = {
 }
 
 export type AuctionType = {
-  bidders: [number, number, number],
-  deposit: number | null,
+  bidders: [BidderType | null, BidderType | null, BidderType | null],
+  deposit: FormDataEntryValue |number | null,
   reg: boolean,
   step: number | null,
   venue_id: number
 }
 
-export type CustomizeType = number | null
+export type AuctionExtendedType = {
+  bidders: [BidderType | null, BidderType | null, BidderType | null],
+  deposit: number,
+  id: number,
+  name: string,
+  pic: string,
+  reg: boolean,
+  step: number,
+  venue_email: string,
+  venue_id: number
+}
 
-export type AuthProviderProps = {
-  children: React.ReactNode;
+export type HostPreviewType = null | {
+  avatar: string, 
+  id: string,
+  interest: string,
+  email: string,
+  bid: number,
+  venue: string,
+  auction_id: number
+}
+
+export type BidderType = {
+  avatar: string,
+  bid: number,
+  email: string,
+  id: string,
+  interest: string,
+  name: string
 }

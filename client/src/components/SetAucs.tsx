@@ -7,59 +7,65 @@ import TablePic from './TablePic'
 import AuctionSetup from './AuctionSetup'
 import { useState, useEffect, useEffectEvent } from 'react';
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import { AuctionType, HostPreviewType, AuthType, TableType } from '../types'
+import { AxiosError } from 'axios'
 
-const SetAucs = ({ setAuctions, tablePreview, hostPreview }) => {
-  const axiosPrivate = useAxiosPrivate();
+type SetAucsProps = { 
+  setAuctions: React.Dispatch<React.SetStateAction<AuctionType[] | null>>;
+  tablePreview: string | null;
+  hostPreview: HostPreviewType;
+}
+
+const SetAucs = ({ setAuctions, tablePreview, hostPreview }: SetAucsProps) => {
+  const axiosPrivate = useAxiosPrivate();  
   const { auth, setAuth, customize, setCustomize } = useAuth();
-  const [active, setActive] = useState(auth.tables.filter((item) => item.active === true).length);
-  const [auctions, SetAuctions] = useState(false);
+  const activeTables = auth?.tables?.filter((item) => item.active).length;
+  const [active, setActive] = useState(activeTables ? activeTables : 0);
+  const [auctionPool, setAuctionPool] = useState(false);
   const [noteHidden, setNoteHidden] = useState(true);
   const [fadeNote, setFadeNote] = useState(true);
   const [status, setStatus] = useState('idle');
 
-  const CustomizeTable = (id) => {
-    setCustomize(id);
-  }
-
-  const auctionsCount = useEffectEvent((auth)=>{
-    const count = auth.tables.filter((item) => item.auction.deposit);
-    if (count.length) SetAuctions(true);
-    if (!count.length) SetAuctions(false);
+  const auctionsCount = useEffectEvent((auth: AuthType)=>{
+    const count = auth?.tables?.filter((item) => item.auction.deposit);
+    if (count?.length) setAuctionPool(true);
+    if (!count?.length) setAuctionPool(false);
   });
 
-  const activeCount = useEffectEvent((auth)=>{
-    const count = auth.tables.filter((item) => item.active).length;
-    setActive(count);
+  const activeCount = useEffectEvent((auth: AuthType)=>{
+    setActive(activeTables ? activeTables : 0);
   });
 
-  const resetStatus = useEffectEvent((status)=>{
+  const resetStatus = useEffectEvent((status: string)=>{
     if (status === 'success') setStatus('idle');
   });
 
   const EndVenueRegistration = async () => {
-    const tables = auth.tables.map(item => {
+    const tables = auth?.tables?.map(item => {
       if (typeof item.auction === 'string') {
         return {...item, auction: JSON.parse(item.auction)}
       } else {return item}
     });
     
-    const updated = tables.map(item => {return {...item, auction: {...item.auction, reg: true}}});
+    const updated = tables?.map(item => {return {...item, auction: {...item.auction, reg: true}}});
 
     try {
       await axiosPrivate.post('/info_upload',
-        {hours: auth.hours, tables: JSON.stringify(updated), stage: auth.stage, endreg: true},
+        {hours: auth?.hours, tables: JSON.stringify(updated), stage: auth?.stage, endreg: true},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
         }
       );
+      if (!auth) {throw new Error('Missing auth context')};
       setAuth({...auth, stage: '4'});
 
-    } catch (err) {
-      if (!err?.response) {
+    } catch (err) {      
+      const axiosError = err as AxiosError;      
+      if (!axiosError?.response) {
         console.log('NO SERVER RESPONSE');
       } else {
-        console.log('SOMETHING WENT WRONG');
+        console.log('SOMETHING WENT WRONG', axiosError.response.status);
       }
     }
   };
@@ -72,9 +78,9 @@ const SetAucs = ({ setAuctions, tablePreview, hostPreview }) => {
 
   return (
     <>
-    <div className={`${styles.container} ${auth.stage === '4' ? styles.post_registration : null}`}>
-      <div className={`${styles.info} ${auth.stage === '4' || customize ? styles.hidden : null}`}>
-        {auth.stage !== '4' &&
+    <div className={`${styles.container} ${auth?.stage === '4' ? styles.post_registration : null}`}>
+      <div className={`${styles.info} ${auth?.stage === '4' || customize ? styles.hidden : null}`}>
+        {auth?.stage !== '4' &&
         <div className={`${styles.instructions} ${customize ? styles.hidden : null}`}>
           You have {active} active {`table${active > 1 || active < 1? 's' : ''}`}. <br />
           {`${active > 1 || active < 1 ? 'These tables are' : 'This table is'}`} NOT visible to customers by default. <br /><br />
@@ -99,14 +105,12 @@ const SetAucs = ({ setAuctions, tablePreview, hostPreview }) => {
       }
       { customize && status === 'auction' &&
         <AuctionSetup
-          customize={customize}
-          setStatus={setStatus}  
-          setCustomize={setCustomize}
+          setStatus={setStatus}
         />
       }
       <div className={`${styles.tables}`}>
         {
-          auth.tables.map((item) =>(
+          auth?.tables?.map((item) =>(
             <div 
               key={item.id}
               className={`
@@ -115,7 +119,7 @@ const SetAucs = ({ setAuctions, tablePreview, hostPreview }) => {
               onClick={()=>{
                 if (item.active) {
                   setAuth({...auth,
-                    tables: auth.tables.map(table => {
+                    tables: auth?.tables?.map(table => {
                       if (table.id === item.id) {
                         return {...table, modal: !item.modal};
                       } else {
@@ -130,7 +134,6 @@ const SetAucs = ({ setAuctions, tablePreview, hostPreview }) => {
                     id={item.id}
                     modal={item.modal}
                     setStatus={setStatus}
-                    CustomizeTable={CustomizeTable}
                     setAuctions={setAuctions}
                   />
                 }
@@ -139,7 +142,6 @@ const SetAucs = ({ setAuctions, tablePreview, hostPreview }) => {
                     id={item.id}
                     active={item.active}
                     modal={item.modal}
-                    status={status}
                     setStatus={setStatus}
                     customize={customize}
                     pic={item.pic}
@@ -153,11 +155,11 @@ const SetAucs = ({ setAuctions, tablePreview, hostPreview }) => {
         }
       </div>
       {
-        auth.stage !== '4' &&
+        auth?.stage !== '4' &&
         <div className={`${styles.btn_container}`}
           onMouseEnter={()=>{
               setFadeNote(false);
-              if (!auth.tables.filter((item) => item.auction.deposit).length) setNoteHidden(false);          
+              if (!auth?.tables?.filter((item) => item.auction.deposit).length) setNoteHidden(false);          
             }}
             onMouseLeave={()=>{
               setFadeNote(true);
@@ -170,7 +172,7 @@ const SetAucs = ({ setAuctions, tablePreview, hostPreview }) => {
               You must set at least one auction to continue!
           </div>          
           <button
-            disabled={!auctions}
+            disabled={!auctionPool}
             onClick={()=>{EndVenueRegistration()}}>
             Save
           </button>          
