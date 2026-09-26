@@ -3,12 +3,18 @@ import useAuth from '../hooks/useAuth'
 import { useState, useEffect, useEffectEvent, memo } from 'react'
 import SetAucs from '../components/SetAucs'
 import AuctionsMonitor from '../components/AuctionsMonitor'
+import { AuctionExtendedType, HostPreviewType } from '../types'
 
-const Auctions = ({ auctions, setAuctions }) => {
+type AuctionsProps = { 
+  auctions: AuctionExtendedType[], 
+  setAuctions: React.Dispatch<React.SetStateAction<AuctionExtendedType[] | null>>
+}
+
+const Auctions = ({ auctions, setAuctions }: AuctionsProps) => {
   
   const [section, setSection] = useState('current');
-  const [tablePreview, setTablePreview] = useState(null);
-  const [hostPreview, setHostPreview] = useState(null);
+  const [tablePreview, setTablePreview] = useState<string | null>(null);
+  const [hostPreview, setHostPreview] = useState<HostPreviewType | null>(null);
   const { auth, customize, setActive } = useAuth();
   const onRefresh = useEffectEvent(()=>{setActive('auctions')});
   
@@ -21,7 +27,7 @@ const Auctions = ({ auctions, setAuctions }) => {
     <title>Auctions</title>
     <div className={`
       ${styles.auctions_container}
-      ${auth.roles[0] === 'customer' ? styles.flex_start : null}`}>
+      ${auth?.roles[0] === 'customer' ? styles.flex_start : null}`}>
       { 
         !customize && 
         <AuctionsMonitor
@@ -36,7 +42,7 @@ const Auctions = ({ auctions, setAuctions }) => {
         />
       }
       <div className={`${styles.bottom}`}>
-        {auth.roles[0] === 'venue' && 
+        {auth?.roles[0] === 'venue' && 
         <SetAucs 
           setAuctions={setAuctions}
           tablePreview={tablePreview}

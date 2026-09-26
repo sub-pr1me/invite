@@ -1,6 +1,11 @@
 import getImageUrl from '../functions/getImageUrl';
 
-export default function Image({ src, alt}) {
+type ImagePropsType = { 
+  src: string, 
+  alt: string 
+}
+
+export default function Image({ src, alt }: ImagePropsType) {
 
   const cloudName = src?.split('/')[3];
   const publicId = src?.split('/')[7].split('.')[0];

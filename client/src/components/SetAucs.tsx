@@ -7,11 +7,11 @@ import TablePic from './TablePic'
 import AuctionSetup from './AuctionSetup'
 import { useState, useEffect, useEffectEvent } from 'react';
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import { AuctionType, HostPreviewType, AuthType, TableType } from '../types'
+import { AuctionExtendedType, HostPreviewType, AuthType } from '../types'
 import { AxiosError } from 'axios'
 
 type SetAucsProps = { 
-  setAuctions: React.Dispatch<React.SetStateAction<AuctionType[] | null>>;
+  setAuctions: React.Dispatch<React.SetStateAction<AuctionExtendedType[] | null>>;
   tablePreview: string | null;
   hostPreview: HostPreviewType;
 }

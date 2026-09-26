@@ -25,7 +25,7 @@ export type AuthType = null | {
   dob?: string,
   gender?: string,
   interest?: string,
-  dates: number,
+  dates: DateType[],
   credits: number
 }
 
@@ -40,7 +40,7 @@ export type TableType = {
 export type AuctionType = {
   bidders: [BidderType | null, BidderType | null, BidderType | null],
   deposit: FormDataEntryValue |number | null,
-  reg: boolean,
+  reg: boolean | string,
   step: number | null,
   venue_id: number
 }
@@ -51,7 +51,7 @@ export type AuctionExtendedType = {
   id: number,
   name: string,
   pic: string,
-  reg: boolean,
+  reg: boolean | string,
   step: number,
   venue_email: string,
   venue_id: number
@@ -76,18 +76,19 @@ export type BidderType = {
   name: string
 }
 
-// export type DateType = {
-//   venue: string,
-//   venue_name: string,
-//   venue_id: string,
-//   table: hostPreview.auction_id,
-//   table_pic: auctionToDelete.pic,
-//   host: hostPreview.email,
-//   host_id: hostPreview.id,
-//   host_pic: hostPreview.avatar,
-//   guest: auth.email,
-//   guest_id: `customer${auth.id}`,
-//   guest_pic: auth.avatar,
-//   deposit: hostPreview.bid,
-//   status: 'upcoming'
-// }
+export type DateType = {
+  venue: string,
+  venue_id: string,
+  venue_name: string,
+  table: string,
+  table_pic: string,
+  host: string,
+  host_id: string,
+  host_pic: string,
+  guest: string,
+  guest_id: string,
+  guest_pic: string,
+  deposit: string,
+  status: string,
+  endTime?: string
+}

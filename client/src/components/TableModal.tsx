@@ -3,13 +3,13 @@ import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { AxiosError } from 'axios';
 import { useState, useEffect, useEffectEvent } from 'react'
-import { AuctionType, TableType } from '../types'
+import { AuctionExtendedType, TableType } from '../types'
 
 type TableModalProps = { 
   id: number, 
   modal: boolean, 
   setStatus: React.Dispatch<React.SetStateAction<string>>, 
-  setAuctions: React.Dispatch<React.SetStateAction<AuctionType[] | null>>
+  setAuctions: React.Dispatch<React.SetStateAction<AuctionExtendedType[] | null>>
 }
 
 const TableModal = ({ id, modal, setStatus, setAuctions }: TableModalProps) => {

@@ -2,12 +2,25 @@ import styles from '../styles/AuctionsMonitor.module.css'
 import AuctionActive from './AuctionActive'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import { AxiosError } from 'axios'
 import { useEffect, useEffectEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ArchivedDate from './ArchivedDate'
+import { HostPreviewType, AuctionExtendedType, DateType } from '../types'
+
+type AuctionsMonitorProps = {
+  section: string;
+  setSection: React.Dispatch<React.SetStateAction<string>>;
+  auctions: AuctionExtendedType[];
+  setAuctions: React.Dispatch<React.SetStateAction<AuctionExtendedType[] | null>>;
+  tablePreview: string | null;
+  setTablePreview: React.Dispatch<React.SetStateAction<string | null>>;
+  hostPreview: HostPreviewType;
+  setHostPreview: React.Dispatch<React.SetStateAction<HostPreviewType>>;
+}
 
 const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
-  tablePreview, setTablePreview, hostPreview, setHostPreview}) => {
+  tablePreview, setTablePreview, hostPreview, setHostPreview}: AuctionsMonitorProps) => {
 
   const axiosPrivate = useAxiosPrivate();
   const [status, setStatus] = useState('idle');
@@ -23,12 +36,12 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           withCredentials: true
         }
       );
-      const arr = response.data.filter(item => item.venue_email === auth.email);
+      const arr = response.data.filter((item: AuctionExtendedType) => item.venue_email === auth?.email);
       
-      if (auth.roles[0] === 'venue') for (let i=0; i<arr.length; i++) {
-        for (const table of auth.tables) {
-          if (arr[i].id === table.id && arr[i].bidders[0].toString() !== table.auction.bidders[0].toString()) {
-            setAuth({...auth, tables: auth.tables.map(table => {
+      if (auth?.roles[0] === 'venue' && auth?.tables) for (let i=0; i<arr.length; i++) {
+        for (const table of auth?.tables) {
+          if (arr[i].id === table.id && arr[i].bidders[0].toString() !== table.auction.bidders?.[0]?.toString()) {
+            setAuth({...auth, tables: auth?.tables.map(table => {
               if (table.id) {
                 return {...table, auction: {...table.auction, bidders: arr[i].bidders}};
               } else {return table};
@@ -36,11 +49,12 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           };
         }
       };
-    } catch (err) {
-      if (!err?.response) {
+    } catch (err) {      
+      const axiosError = err as AxiosError;      
+      if (!axiosError?.response) {
         console.log('NO SERVER RESPONSE');
       } else {
-        console.log('SOMETHING WENT WRONG');
+        console.log('SOMETHING WENT WRONG', axiosError.response.status);
       }
     };
   });
@@ -52,12 +66,13 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true,
           params: {
-            role: auth.roles[0],
-            id: auth.id,
+            role: auth?.roles[0],
+            id: auth?.id,
             from: 'AuctionsMonitor'
           }
         }
       );
+      if (!auth) {throw new Error('Missing auth context')};
       setAuth({...auth, likes: response.data.likes});
     } catch (err) {
       console.log(err);
@@ -115,11 +130,12 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
     try {
       connect();
 
-    } catch (err) {
-      if (!err?.response) {
+    } catch (err) {      
+      const axiosError = err as AxiosError;      
+      if (!axiosError?.response) {
         console.log('NO SERVER RESPONSE');
       } else {
-        console.log('SOMETHING WENT WRONG');
+        console.log('SOMETHING WENT WRONG', axiosError.response.status);
       }
     };
   });
@@ -128,26 +144,26 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
 
     setStatus('pending');
     const auctionToDelete = auctions.filter(
-      item => item.venue_email === hostPreview.venue && item.id === hostPreview.auction_id
+      item => item.venue_email === hostPreview?.venue && item.id === hostPreview?.auction_id
     )[0];
 
     const newDate = {
-      venue: hostPreview.venue,
+      venue: hostPreview?.venue,
       venue_name: auctionToDelete.name,
       venue_id: `venue${auctionToDelete.venue_id}`,
-      table: hostPreview.auction_id,
+      table: hostPreview?.auction_id,
       table_pic: auctionToDelete.pic,
-      host: hostPreview.email,
-      host_id: hostPreview.id,
-      host_pic: hostPreview.avatar,
-      guest: auth.email,
-      guest_id: `customer${auth.id}`,
-      guest_pic: auth.avatar,
-      deposit: hostPreview.bid,
+      host: hostPreview?.email,
+      host_id: hostPreview?.id,
+      host_pic: hostPreview?.avatar,
+      guest: auth?.email,
+      guest_id: `customer${auth?.id}`,
+      guest_pic: auth?.avatar,
+      deposit: hostPreview?.bid,
       status: 'upcoming'
     };
 
-    const refunds = auctionToDelete.bidders.filter(item => item && item.email !== hostPreview.email);
+    const refunds = auctionToDelete.bidders.filter((item) => item && item.email !== hostPreview?.email);
     try {
       await axiosPrivate.post('/new_date', // upload new date + remove the auction
           {
@@ -163,8 +179,8 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
 
       const venueDeposit = await axiosPrivate.post('/balance_update', // deposit to the venue
         {
-          email: hostPreview.venue,
-          amount: hostPreview.bid,
+          email: hostPreview?.venue,
+          amount: hostPreview?.bid,
           acc_type: 'venue',
           deposit: true
         },
@@ -174,16 +190,16 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
         }
       );
       if (venueDeposit) {
-        console.log(`${hostPreview.bid} bid was deposited to ${auctionToDelete.name}`);
+        console.log(`${hostPreview?.bid} bid was deposited to ${auctionToDelete.name}`);
       } else { 
-        console.log(`Error depositing ${hostPreview.bid} bid to ${auctionToDelete.name}`);
+        console.log(`Error depositing ${hostPreview?.bid} bid to ${auctionToDelete.name}`);
       };
 
       while (refunds.length) {
         const customersRefunds = await axiosPrivate.post('/balance_update', // refund customers
           {
-            email: refunds[0].email,
-            amount: refunds[0].bid,
+            email: refunds?.[0]?.email,
+            amount: refunds?.[0]?.bid,
             acc_type: 'customer'},
           {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -191,25 +207,24 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           }
         );
         if (customersRefunds) {
-          console.log(`${refunds[0].bid} bid was refunded to ${refunds[0].name}`);
+          console.log(`${refunds?.[0]?.bid} bid was refunded to ${refunds?.[0]?.name}`);
           refunds.shift();
         } else { 
-          console.log(`Error refunding ${refunds[0].bid} bid to ${refunds[0].name}`);
+          console.log(`Error refunding ${refunds?.[0]?.bid} bid to ${refunds?.[0]?.name}`);
           break;
         };
       };
       setStatus('success');
       setHostPreview(null);
-    } catch (err) {
-      if (!err?.response) {
+    } catch (err) {      
+      const axiosError = err as AxiosError;      
+      if (!axiosError?.response) {
         console.log('NO SERVER RESPONSE');
       } else {
-        console.log('SOMETHING WENT WRONG');
-      };
+        console.log('SOMETHING WENT WRONG', axiosError.response.status);
+      }
     };
   };
-
-
 
   const resetStatus = useEffectEvent(()=>{setStatus('idle')}); 
 
@@ -230,27 +245,27 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           </div>
         }
         { tablePreview !== null &&
-          <div className={`${styles.table_preview} ${auth.roles[0] === 'customer' ? styles.alt : null}`}>
+          <div className={`${styles.table_preview} ${auth?.roles[0] === 'customer' ? styles.alt : null}`}>
             <img src={tablePreview} alt='' />
             <button onClick={()=>{setTablePreview(null)}}>Close</button>
           </div>
         }
         { hostPreview !== null &&
-          <div className={`${styles.host_preview} ${auth.roles[0] === 'customer' ? styles.alt : null}`}>
-            <img src={hostPreview.avatar} alt='' />
+          <div className={`${styles.host_preview} ${auth?.roles[0] === 'customer' ? styles.alt : null}`}>
+            <img src={hostPreview?.avatar} alt='' />
             <div className={`${styles.btns}`}>
               <button onClick={()=>{setHostPreview(null)}}>Close<br />Preview</button>
-              <button onClick={()=>{navigate(`/dashboard/${hostPreview.id}`)}}>View<br />Profile</button>
-              {auth.roles[0] !== 'venue'
-               && auth.gender === hostPreview.interest
-               && auth.likes?.some((like) => like[0] === hostPreview.email)
+              <button onClick={()=>{navigate(`/dashboard/${hostPreview?.id}`)}}>View<br />Profile</button>
+              {auth?.roles[0] !== 'venue'
+               && auth?.gender === hostPreview?.interest
+               && auth?.likes?.some((like) => like[0] === hostPreview?.email)
                &&
               <button onClick={()=>{
-                const duplicate = auth.dates?.filter(
-                  item => item.status === 'upcoming' 
-                  && item.host === hostPreview.email || item.guest === hostPreview.email
+                const duplicate = auth?.dates?.filter(
+                  (item: DateType) => item.status === 'upcoming' 
+                  && item.host === hostPreview?.email || item.guest === hostPreview?.email
                 );
-                if (!duplicate.length) { AcceptNewDate() } else {setWarning(true)};
+                if (!duplicate?.length) { AcceptNewDate() } else {setWarning(true)};
               }}>Accept<br />Invitation!</button>
               }
             </div>
@@ -258,7 +273,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
         }
         <div className={`
           ${styles.navigate}
-          ${auth.roles[0] === 'customer' ? styles.navigate2 : null}`}>
+          ${auth?.roles[0] === 'customer' ? styles.navigate2 : null}`}>
           <div 
             className={`${styles.current} ${section !== 'current' ? styles.non_highlighted : null}`} 
             onClick={()=>{setSection('current')}}
@@ -274,10 +289,10 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
         <div className={`
           ${styles.sections} 
           ${section !== 'current' ? styles.curr : styles.hist}
-          ${auth.roles[0] === 'customer' ? styles.sections2 : null}`}>
+          ${auth?.roles[0] === 'customer' ? styles.sections2 : null}`}>
           <div className={`${styles.history_section}`}>
             {
-              auth.dates?.map(item => {
+              auth?.dates?.map(item => {
                 if (item.status === 'archived') {
                   return (
                     <ArchivedDate 
@@ -294,8 +309,8 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
             { auctions &&
               auctions.map((item) => {       
                 if (item.reg !== 'false' && item.reg !== false) {
-                  if (auth.roles[0] === 'venue' && item.name === auth.name
-                      || auth.roles[0] === 'customer') return (
+                  if (auth?.roles[0] === 'venue' && item.name === auth?.name
+                      || auth?.roles[0] === 'customer') return (
                   <AuctionActive
                     key={item.name+item.id}
                     id={item.id}
