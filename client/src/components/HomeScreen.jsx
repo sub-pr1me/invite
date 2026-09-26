@@ -23,6 +23,8 @@ const HomeScreen = () => {
 
   const upcomingDates = auth.dates?.filter(item => item.status === 'upcoming');
 
+
+
   const applyUserData = useEffectEvent(async (userId)=>{
     try {
       const response = await axiosPrivate.get('/fetch_profile_data',

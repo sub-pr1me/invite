@@ -7,8 +7,9 @@ const handleSwitchLike = async (req, res) => {
     const id = req.body.id;
     const name = req.body.name;
     const avatar = req.body.avatar;
+    const liker_id = req.body.liker_id;
 
-    const result = await SwitchLike(email, role, name, avatar, id);
+    const result = await SwitchLike(email, role, name, avatar, id, liker_id);
     res.status(200).send(result);
 
   } catch (err) {

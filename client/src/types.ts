@@ -75,3 +75,19 @@ export type BidderType = {
   interest: string,
   name: string
 }
+
+// export type DateType = {
+//   venue: string,
+//   venue_name: string,
+//   venue_id: string,
+//   table: hostPreview.auction_id,
+//   table_pic: auctionToDelete.pic,
+//   host: hostPreview.email,
+//   host_id: hostPreview.id,
+//   host_pic: hostPreview.avatar,
+//   guest: auth.email,
+//   guest_id: `customer${auth.id}`,
+//   guest_pic: auth.avatar,
+//   deposit: hostPreview.bid,
+//   status: 'upcoming'
+// }

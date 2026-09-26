@@ -348,15 +348,15 @@ export async function FetchProfileData(role, id, from) {
   return rows[0];
 };
 
-export async function SwitchLike(email, role, name, avatar, id) {
+export async function SwitchLike(email, role, name, avatar, id, liker_id) {
     console.log('DB QUERY - SwitchLike');
-    const user = [email, name, avatar];
+    const user = [email, name, avatar, liker_id];
   const { rows } = await pool.query(`SELECT likes FROM ${role}s WHERE id = ${parseInt(id)}`);
   const arr = rows[0].likes;
   console.log('CURRENT LIKES:', arr);
   if (!arr || !arr[0]) {
     const updated = [];
-    await pool.query(`UPDATE ${role}s SET likes = '{{${email},${name},${avatar},${id}}}' WHERE id = '${parseInt(id)}'`);
+    await pool.query(`UPDATE ${role}s SET likes = '{{${email},${name},${avatar},${liker_id}}}' WHERE id = '${parseInt(id)}'`);
     updated.push(user);
     return updated;
   };

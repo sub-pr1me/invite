@@ -37,7 +37,8 @@ const ProfileTopSection = ({ userData, setUserData }) => {
             name: auth.name,
             avatar: auth.avatar,
             role: userId[0] === 'c' ? 'customer' : 'venue', 
-            id: userId[0] === 'c' ? userId?.substring(8) : userId?.substring(5)},
+            id: userId[0] === 'c' ? userId?.substring(8) : userId?.substring(5),
+            liker_id: auth.id},
           {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             withCredentials: true
@@ -49,7 +50,7 @@ const ProfileTopSection = ({ userData, setUserData }) => {
       } catch (err) {
         console.log(err);
       };
-    },[axiosPrivate, userData, setUserData, userId, auth.name, auth.avatar]
+    },[axiosPrivate, userData, setUserData, userId, auth.name, auth.avatar, auth.id]
   );
 
   const host = userData?.dates?.find((item) => item.venue === auth.email && item.host === userData.email);

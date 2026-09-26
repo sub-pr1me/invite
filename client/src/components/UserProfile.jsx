@@ -3,8 +3,16 @@ import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
 
-const UserProfile = ({ likesSection, name, avatar, role, id,setUserData, expanded, setExpanded, passedID, host, guest }) => {
+const UserProfile = ({ likesSection, name, avatar, role, id, setUserData, expanded, setExpanded, passedID, host, guest }) => {
   const { auth } = useAuth();
+
+  console.log('USERPROFILE', {
+    name,
+    avatar,
+    role,
+    id,
+    passedID
+  });
 
   return (
     <>
