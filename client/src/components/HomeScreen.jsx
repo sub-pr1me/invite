@@ -23,8 +23,6 @@ const HomeScreen = () => {
 
   const upcomingDates = auth.dates?.filter(item => item.status === 'upcoming');
 
-
-
   const applyUserData = useEffectEvent(async (userId)=>{
     try {
       const response = await axiosPrivate.get('/fetch_profile_data',
@@ -71,12 +69,13 @@ const HomeScreen = () => {
           </div>
         }
 
-        {!tablePreview && 
+        {!tablePreview && userData !== null &&
         <Carousel userData={userData}/>
         }
 
         {!albumUploadPending 
-        && !tablePreview 
+        && !tablePreview
+        && userData !== null
         && 
          <ProfileTopSection userData={userData} setUserData={setUserData}/>
         }
@@ -86,6 +85,7 @@ const HomeScreen = () => {
         && !userId 
         && !albumUploadPending 
         && !tablePreview
+        && userData !== null
         && !expanded
         &&
           <div className={`${styles.no_photos} ${!auth.likes?.length && !upcomingDates?.length ? styles.shifted : null}`}>
@@ -96,7 +96,8 @@ const HomeScreen = () => {
 
         {auth.dates?.length > 0 
         && !userId 
-        && !albumUploadPending 
+        && !albumUploadPending
+        && userData !== null
         && upcomingDates?.length > 0
         && !expanded 
         &&
@@ -107,7 +108,7 @@ const HomeScreen = () => {
           />
         }
 
-        {!albumUploadPending && 
+        {!albumUploadPending &&
           <ProfileLikesSection 
             userData={userData} 
             setUserData={setUserData}

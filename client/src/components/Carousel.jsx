@@ -18,8 +18,8 @@ const Carousel = ({ userData }) => {
   });
 
   useEffect(()=>{
-    applyAlbum(userId);
-  },[userId]);
+    applyAlbum(userId);    
+  },[userId, userData, album]);
 
   return (
     <>
