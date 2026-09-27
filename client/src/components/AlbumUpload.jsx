@@ -137,8 +137,9 @@ const AlbumUpload = ({ albumUploadPending, setAlbumUploadPending, postreg }) => 
     if (files && status === 'idle') {
       handleAlbumUpload(files);
       resetStatus(status);
-    }    
-  },[files, status]);
+    };
+    if (previewSrc) console.log('SRCCCCCCCCCCCCCCCCCCCCCC -- ',previewSrc);
+  },[files, status, previewSrc]);
 
   return (
     <>

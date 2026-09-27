@@ -1,13 +1,19 @@
 import styles from '../styles/ChooseOpenHours.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import { AxiosError } from 'axios'
 
-const ChooseOpenHours = ({ state, setState }) => {
+type ChooseOpenHoursProps = { 
+  state: boolean | null, 
+  setState: React.Dispatch<React.SetStateAction<boolean | null>>
+}
+
+const ChooseOpenHours = ({ state, setState }: ChooseOpenHoursProps) => {
 
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
-  async function Upload(formData) {
+  async function Upload(formData: FormData) {
     
     const open = formData.get('open');
     const close = formData.get('closed');
@@ -25,14 +31,15 @@ const ChooseOpenHours = ({ state, setState }) => {
       const update = response.data;
       console.log(update.message);
       
-      setAuth({...auth, hours: update.hours});
+      setAuth({...auth!, hours: update.hours});
       setState(null);
 
-    } catch (err) {
-      if (!err?.response) {
+    } catch (err) {      
+      const axiosError = err as AxiosError;      
+      if (!axiosError?.response) {
         console.log('NO SERVER RESPONSE');
       } else {
-        console.log('SOMETHING WENT WRONG');
+        console.log('SOMETHING WENT WRONG', axiosError.response.status);
       }
     }
   };

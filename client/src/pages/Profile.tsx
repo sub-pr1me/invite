@@ -3,19 +3,20 @@ import useAuth from '../hooks/useAuth'
 import { useEffect, useEffectEvent, useState } from 'react'
 import EditGallery from '../components/EditGallery'
 import EditProfile from '../components/EditProfile'
+import { PreviewSrcType } from '../types'
 
 
 const Profile = () => {
-  const [previewSrc, setPreviewSrc] = useState(null);
+  const [previewSrc, setPreviewSrc] = useState<PreviewSrcType[] | null>(null);
   const [showUploadAnimation, SetShowUploadAnimation] = useState(false);
   const [fade, setFade] = useState(false);
   const [hidden, setHidden] = useState(true);
   const { auth, setActive } = useAuth();
 
-  const [editName, setEditName] = useState(false);
-  const [editEmail, setEditEmail] = useState(false);
-  const [editHours, setEditHours] = useState(false);
-  const [editDelete, setEditDelete] = useState(false);
+  const [editName, setEditName] = useState<boolean | null>(false);
+  const [editEmail, setEditEmail] = useState<boolean | null>(false);
+  const [editHours, setEditHours] = useState<boolean | null>(false);
+  const [editDelete, setEditDelete] = useState<boolean | null>(false);
     
   const onRefresh = useEffectEvent(()=>{setActive('profile')});
 
@@ -82,7 +83,7 @@ const Profile = () => {
             variable={'hours'}/>
         </div>
         }
-        {auth.roles[0] === 'venue' &&
+        {auth?.roles[0] === 'venue' &&
           <div className={`${styles.edit_hours}`}>
             <button className={``} onClick={()=>{setEditHours(!editHours)}}>
               Edit Hours
@@ -109,7 +110,6 @@ const Profile = () => {
         SetShowUploadAnimation={SetShowUploadAnimation}
         previewSrc={previewSrc}
         setPreviewSrc={setPreviewSrc}
-        setFade={setFade}
         setHidden={setHidden}
       />
     </div>

@@ -5,17 +5,28 @@ import { useEffect, useEffectEvent, useState } from 'react'
 import fileToDataString from '../utils/fileToDataString'
 import Image from './Image';
 import Thumb from './Thumb';
+import { PreviewSrcType } from '../types'
+import { AxiosError } from 'axios'
 
-const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHidden }) => {
+type EditGalleryProps = { 
+  previewSrc: PreviewSrcType[] | null, 
+  setPreviewSrc: React.Dispatch<React.SetStateAction<PreviewSrcType[] | null>>, 
+  SetShowUploadAnimation: React.Dispatch<React.SetStateAction<boolean>>, 
+  setHidden: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHidden }: EditGalleryProps) => {
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth} = useAuth();
   const [status, setStatus] = useState('idle');
-  const [files, setFiles] = useState(null);
-  const [mainPreview, setMainPreview] = useState(null);
+  const [files, setFiles] = useState<(File | null)[] | null>(null);
+  const [mainPreview, setMainPreview] = useState<PreviewSrcType | null>(null);
   const [empty, setEmpty] = useState(false);
-  const [toRemove, setToRemove] = useState([]);
+  const [toRemove, setToRemove] = useState<string[]>([]);
 
+  
   const InitializePreview = useEffectEvent(()=>{
+    if (!auth) {throw new Error('Missing auth context')};
     setTimeout(() => { SetShowUploadAnimation(false) }, 2500);
     const arr = [];    
     for (let i=0; i<auth.album?.length; i++) {
@@ -27,11 +38,12 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
     setEmpty(false);
   });
 
-  function removePic(item) {
+  function removePic(item: PreviewSrcType | null) {
+    if (!item) return;
     setStatus('change');
     const arr = previewSrc;
 
-    if (arr.length === 1) {
+    if (arr?.length === 1) {
       setToRemove([...toRemove, arr[0].pic]);
       setPreviewSrc(null);
       setMainPreview(null);
@@ -40,57 +52,61 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
     };
 
     const existing = [];
-    for (item of auth.album) {
-      const arr = item.split('/');
-      const arr2 = arr[arr.length - 1].split('.');
+    for (const element of auth?.album!) {
+      const arr = element.split('/');
+      const arr2 = arr[arr?.length - 1].split('.');
       const imgID = arr2[arr2.length -2];
       existing.push(imgID)
     };
 
-    const index = previewSrc?.indexOf(item);
-    const removed = arr.splice(index, 1);
+    if (!previewSrc) return;
 
-    const arrX = removed[0].pic.split('/');
+    const index = previewSrc.indexOf(item);
+    const removed = arr?.splice(index, 1);
+
+    const arrX = removed![0].pic.split('/');
     const arrY = arrX[arrX.length - 1].split('.');
     const removedID = arrY[arrY.length -2];
 
-    if (existing.includes(removedID)) setToRemove([...toRemove, removed[0].pic]);
+    if (existing.includes(removedID)) setToRemove([...toRemove, removed![0].pic]);
 
-    const newArr = [];
-    for (let i=0; i<arr.length; i++) {
-      newArr.push({ pic: arr[i].pic, index: i, file: arr[i].file })
-    };
+    const newArr = previewSrc.map((preview, index) => ({...preview, index}));
     setPreviewSrc(newArr);
     setMainPreview(newArr[0]);
   };
 
   function extractFiles() {
     let arr = [];
-    for (let i=0; i<previewSrc?.length; i++) {
-      if (previewSrc[i].file) arr.push(previewSrc[i].file);
+    const previews = previewSrc ?? [];
+    for (let i=0; i<previews?.length; i++) {
+      if (previewSrc?.[i].file) arr.push(previewSrc[i].file);
     };
     setFiles(arr);
     setStatus('start');
   };
 
-  async function handleFilesChange(e) {
+  async function handleFilesChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (status !== 'change') setStatus('change');
 
-    const arr = Array.from(e.target.files);
+    const arr: File[] = Array.from(e.target.files ?? []);
     
-    while (arr.length > 5 - previewSrc?.length) arr.pop();
+    const prev = previewSrc ?? [];
+    while (arr?.length > 5 - prev?.length) arr.pop();
     
-    const arrData = [];
+    const arrData: PreviewSrcType[] = [];
     const valid = ['image/jpeg', 'image/png'];
     
     try {
-      for (let i=0; i<arr.length; i++) {
+      for (let i=0; i<arr?.length; i++) {
         const str = await fileToDataString(arr[i]);
-        if (valid.includes(arr[i].type)) { arrData.push({ pic: str, index: i, file: arr[i] }) }
+        if (valid.includes(arr[i].type) && typeof str === 'string') { 
+          arrData.push({ pic: str, index: i, file: arr[i] })
+        };
       };
       
-      for (let i=0; i<previewSrc?.length; i++) { 
-        arrData.push({ pic: previewSrc[i].pic, index: arrData.length, file: previewSrc[i].file }) 
+      const previews = previewSrc ?? [];
+      for (let i=0; i<previews?.length; i++) { 
+        arrData.push({ pic: previews[i].pic, index: arrData.length, file: previews[i].file }) 
       };
       
       setPreviewSrc(arrData);
@@ -107,7 +123,7 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
     setPreviewSrc(null);
   });
 
-  const handleAlbumUpload = useEffectEvent(async (files) => {
+  const handleAlbumUpload = useEffectEvent(async (files: File[]) => {
     setStatus('uploading');
     SetShowUploadAnimation(true);
     setHidden(false);
@@ -124,11 +140,11 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
         }
       };
     };
-
+    const previews = previewSrc ?? [];
     const untouched = [];
     
-    for (let i=0; i<previewSrc?.length; i++) {
-      if (previewSrc[i].file === null) untouched.push(previewSrc[i].pic);
+    for (let i=0; i<previews?.length; i++) {
+      if (previews[i].file === null) untouched.push(previews[i].pic);
     };
 
     const formData = new FormData();
@@ -144,17 +160,17 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
           params: {postreg: true, untouched: JSON.stringify(untouched), toRemove: JSON.stringify(toRemove)}
         });      
       setStatus('success');
+      if (!auth) {throw new Error('Missing auth context')};
       setAuth({...auth, album: response.data});
       setToRemove([]);
 
-    } catch (err) {
-      setFiles(null);
-      setStatus('change');
-      if (!err?.response) {
+    } catch (err) {      
+      const axiosError = err as AxiosError;      
+      if (!axiosError?.response) {
         console.log('NO SERVER RESPONSE');
-      } else if (err.response?.status === 422) {
+      } else if (axiosError.response?.status === 422) {
         console.log('INVALID FILE EXTENSION');
-      } else if (err.response?.status === 401) {
+      } else if (axiosError.response?.status === 401) {
         console.log('UNAUTHORIZED');
       } else {
         console.log('SOMETHING WENT WRONG');
@@ -162,11 +178,11 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
     }
   });
 
-  const delayEmpty = useEffectEvent((command, time)=>{setTimeout(() => {setEmpty(command)}, time)});
+  const delayEmpty = useEffectEvent((command: boolean, time: number)=>{setTimeout(() => {setEmpty(command)}, time)});
   
   useEffect(()=>{
     if (!previewSrc && status === 'idle') {InitializePreview()};
-    if (status === 'start') handleAlbumUpload(files);
+    if (status === 'start') handleAlbumUpload((files ?? []).filter((file): file is File => file !== null));
     if (status === 'success') resetStatus();
     if (previewSrc && !previewSrc.length) delayEmpty(true, 0);
     if (previewSrc && previewSrc.length) delayEmpty(false, 0);
@@ -186,9 +202,16 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
           {mainPreview &&
           <div className={`${styles.prev}`} 
             onClick={()=>{
+              const previews = previewSrc ?? [];
               const index = previewSrc?.indexOf(mainPreview);
-              if (index > 0) {setMainPreview(previewSrc[index - 1])
-              } else {setMainPreview(previewSrc[previewSrc?.length - 1])}
+
+              if (index === undefined || previews.length === 0) return;
+
+              if (index > 0) {
+                setMainPreview(previews[index - 1]);
+              } else {
+                setMainPreview(previews[previews?.length - 1]);
+              }
             }}>
             <img src='../../img/right-arrow.png' alt='' />          
           </div>}
@@ -207,9 +230,11 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
           {mainPreview &&
           <div className={`${styles.next}`} 
             onClick={()=>{
+              const previews = previewSrc ?? [];
               const index = previewSrc?.indexOf(mainPreview);
-              if (index < previewSrc?.length - 1) {setMainPreview(previewSrc[index + 1])
-              } else {setMainPreview(previewSrc[0])}
+              if (index === undefined || previews.length === 0) return;
+              if (index < previews?.length - 1) {setMainPreview(previews[index + 1])
+              } else {setMainPreview(previews[0])}
             }}>
             <img src='../../img/right-arrow.png' alt='' />
           </div>}
@@ -256,7 +281,7 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
         </div>
         <div className={`${styles.buttons}`}>
 
-          {previewSrc?.length > 4 &&
+          {previewSrc && previewSrc?.length > 4 &&
             <div className={`${styles.full}`}>
               The maximum gallery size is 5 images.
               <br />

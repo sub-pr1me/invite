@@ -92,3 +92,9 @@ export type DateType = {
   status: string,
   endTime?: string
 }
+
+export type PreviewSrcType = { 
+  pic: string, 
+  index: number, 
+  file: File | null 
+}

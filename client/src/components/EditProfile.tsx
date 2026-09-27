@@ -1,24 +1,33 @@
 import styles from '../styles/EditProfile.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import { AxiosError } from 'axios'
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ChooseOpenHours from './ChooseOpenHours'
 
-const EditProfile = ({ title, state, setState, variable, type }) => {
+type EditProfileProps = { 
+  title: string, 
+  state: boolean | null, 
+  setState: React.Dispatch<React.SetStateAction<boolean | null>>, 
+  variable: string, 
+  type?: string
+}
+
+const EditProfile = ({ title, state, setState, variable, type }: EditProfileProps) => {
 
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
-  const [nameValue, setNameValue] = useState(null);
-  const [emailValue, setEmailValue] = useState(null);
-  const inputRef = useRef();
+  const [nameValue, setNameValue] = useState<string | null>(null);
+  const [emailValue, setEmailValue] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   const EditProfileInfo = async () => {
 
     try {
       const response = await axiosPrivate.post('/info_edit',
-        {old_email: auth.email, new_name: nameValue, new_email: emailValue, acc_type: auth.roles[0]},
+        {old_email: auth?.email, new_name: nameValue, new_email: emailValue, acc_type: auth?.roles[0]},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
@@ -26,15 +35,15 @@ const EditProfile = ({ title, state, setState, variable, type }) => {
       );
 
       const update = response.data;
-
+      if (!auth) {throw new Error('Missing auth context')};
       if (variable === 'name') {
-        if (auth.roles[0] === 'venue') {
+        if (auth?.roles[0] === 'venue') {
           setAuth({...auth, name: update.name, dates: update.dates});
         } else { setAuth({...auth, name: update.name}) }
       };
 
       if (variable === 'email') {
-        if (auth.roles[0] === 'venue') {
+        if (auth?.roles[0] === 'venue') {
           setAuth({...auth, email: update.email, dates: update.dates});
         } else { setAuth({...auth, email: update.email}) }
       };
@@ -45,28 +54,29 @@ const EditProfile = ({ title, state, setState, variable, type }) => {
       setEmailValue(null);
       setState(null);
 
-    } catch (err) {
-      if (!err?.response) {
-        console.log('NO SERVER RESPONSE');
-      } else {
-        console.log('SOMETHING WENT WRONG');
-      }
-    };
+    } catch (err) {      
+        const axiosError = err as AxiosError;      
+        if (!axiosError?.response) {
+          console.log('NO SERVER RESPONSE');
+        } else {
+          console.log('SOMETHING WENT WRONG', axiosError.response.status);
+        }
+      };
   };
 
   const DeleteAccount = async () => {
     console.log('DELETE ACCOUNT');
 
     const links = [];
-    links.push(auth.avatar);
+    links.push(auth?.avatar);
     
-    if (auth.album?.length) {
-      const album = auth.album;
+    if (auth?.album?.length) {
+      const album = auth?.album;
       for (let item of album) links.push(item);
     };
 
-    if (auth.roles[0] === 'venue') {
-      const tables = auth.tables.filter(item => item.pic);
+    if (auth?.roles[0] === 'venue' && auth.tables) {
+      const tables = auth?.tables.filter(item => item.pic);
       for (let i=0; i<tables.length; i++) {
         links.push(tables[i].pic);
       };
@@ -74,15 +84,15 @@ const EditProfile = ({ title, state, setState, variable, type }) => {
 
     const picsToRemove = [];
     for (let str of links) {
-      const arr = str.split('/');
-      const arr2 = arr[arr.length - 1].split('.');
-      const imgID = arr2[arr2.length -2];
+      const arr = str?.split('/');
+      const arr2 = arr?.[arr.length - 1].split('.');
+      const imgID = arr2?.[arr2.length -2];
       picsToRemove.push(imgID)
     };
 
     try {
       const response = await axiosPrivate.post('/delete_account',
-        {email: auth.email, acc_type: auth.roles[0], picsToRemove: picsToRemove},
+        {email: auth?.email, acc_type: auth?.roles[0], picsToRemove: picsToRemove},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
@@ -100,13 +110,14 @@ const EditProfile = ({ title, state, setState, variable, type }) => {
       setState(null);
       navigate('/');
 
-    } catch (err) {
-      if (!err?.response) {
-        console.log('NO SERVER RESPONSE');
-      } else {
-        console.log('SOMETHING WENT WRONG');
-      }
-    };
+    } catch (err) {      
+        const axiosError = err as AxiosError;      
+        if (!axiosError?.response) {
+          console.log('NO SERVER RESPONSE');
+        } else {
+          console.log('SOMETHING WENT WRONG', axiosError.response.status);
+        }
+      };
   };
 
   useEffect(()=>{
