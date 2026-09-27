@@ -6,7 +6,7 @@ const handleAuctionsUpdate = async (req, res) => {
     const result = await FetchAuctions(email);
     res.status(200).send(result);
 
-    if (req.app.locals.broadcastAuctionsUpdated) console.log('TESTTTTTTTTTTTTTTT');
+    // if (req.app.locals.broadcastAuctionsUpdated) console.log('WEBSOCKET TEST');
     
   } catch (err) {
     console.log(err);

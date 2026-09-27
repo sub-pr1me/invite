@@ -11,7 +11,7 @@ import { HostPreviewType, AuctionExtendedType, DateType } from '../types'
 type AuctionsMonitorProps = {
   section: string;
   setSection: React.Dispatch<React.SetStateAction<string>>;
-  auctions: AuctionExtendedType[];
+  auctions: AuctionExtendedType[] | null;
   setAuctions: React.Dispatch<React.SetStateAction<AuctionExtendedType[] | null>>;
   tablePreview: string | null;
   setTablePreview: React.Dispatch<React.SetStateAction<string | null>>;
@@ -143,16 +143,16 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
   const AcceptNewDate = async () => {
 
     setStatus('pending');
-    const auctionToDelete = auctions.filter(
+    const auctionToDelete = auctions?.filter(
       item => item.venue_email === hostPreview?.venue && item.id === hostPreview?.auction_id
     )[0];
 
     const newDate = {
       venue: hostPreview?.venue,
-      venue_name: auctionToDelete.name,
-      venue_id: `venue${auctionToDelete.venue_id}`,
+      venue_name: auctionToDelete?.name,
+      venue_id: `venue${auctionToDelete?.venue_id}`,
       table: hostPreview?.auction_id,
-      table_pic: auctionToDelete.pic,
+      table_pic: auctionToDelete?.pic,
       host: hostPreview?.email,
       host_id: hostPreview?.id,
       host_pic: hostPreview?.avatar,
@@ -163,7 +163,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
       status: 'upcoming'
     };
 
-    const refunds = auctionToDelete.bidders.filter((item) => item && item.email !== hostPreview?.email);
+    const refunds = auctionToDelete?.bidders.filter((item) => item && item.email !== hostPreview?.email);
     try {
       await axiosPrivate.post('/new_date', // upload new date + remove the auction
           {
@@ -190,12 +190,12 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
         }
       );
       if (venueDeposit) {
-        console.log(`${hostPreview?.bid} bid was deposited to ${auctionToDelete.name}`);
+        console.log(`${hostPreview?.bid} bid was deposited to ${auctionToDelete?.name}`);
       } else { 
-        console.log(`Error depositing ${hostPreview?.bid} bid to ${auctionToDelete.name}`);
+        console.log(`Error depositing ${hostPreview?.bid} bid to ${auctionToDelete?.name}`);
       };
 
-      while (refunds.length) {
+      while (refunds?.length) {
         const customersRefunds = await axiosPrivate.post('/balance_update', // refund customers
           {
             email: refunds?.[0]?.email,

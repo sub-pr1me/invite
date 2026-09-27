@@ -3,11 +3,12 @@ import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useEffect, useEffectEvent, useState, memo } from 'react'
 import UserProfile from '../components/UserProfile'
+import { DateType, CustomerType } from '../types'
 
 const Clients = () => {
-  const [customers, setCustomers] = useState(null);
-  const [hosts, setHosts] = useState(null);
-  const [guests, setGuests] = useState(null);
+  const [customers, setCustomers] = useState<CustomerType[] | null>(null);
+  const [hosts, setHosts] = useState<string[] | null>(null);
+  const [guests, setGuests] = useState<string[] | null>(null);
   const axiosPrivate = useAxiosPrivate();
   const { auth, setActive } = useAuth();
 
@@ -23,13 +24,13 @@ const Clients = () => {
     let hostArr = [];
     let guestArr = [];
     for (const item of response.data) {
-      const host = item.dates?.find(obj => obj.venue === auth.email && obj.host === item.email);
+      const host = item.dates?.find((obj: DateType) => obj.venue === auth?.email && obj.host === item.email);
       if (host) hostArr.push(item.email);
-      const guest = item.dates?.find(obj => obj.venue === auth.email && obj.guest === item.email);
+      const guest = item.dates?.find((obj: DateType) => obj.venue === auth?.email && obj.guest === item.email);
       if (guest) guestArr.push(item.email);
     };
-    setHosts(hostArr);
-    setGuests(guestArr);
+    if (hostArr.length) setHosts(hostArr);
+    if (guestArr.length) setGuests(guestArr);
   });
 
   const onRefresh = useEffectEvent(()=>{setActive('clients')});
@@ -49,7 +50,7 @@ const Clients = () => {
       <div className={`${styles.people}`}>
         <div className={`${styles.label}`}>Explore People:</div>
         <div className={`${styles.people_content}`}>
-          {customers?.map(item => {
+          {customers?.map((item: CustomerType) => {
             if (item.avatar) {
               return (
                 <UserProfile

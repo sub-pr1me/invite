@@ -1,6 +1,11 @@
 import styles from '../styles/AccTypeChoice.module.css'
 
-const AccTypeChoice = ({ accType, setAccType }) => {
+type AccTypeChoiceProps = { 
+  accType: string, 
+  setAccType: React.Dispatch<React.SetStateAction<string>> 
+}
+
+const AccTypeChoice = ({ accType, setAccType }: AccTypeChoiceProps) => {
   return (
     <div className={`${styles.content}`}>
       <h3>Choose your account type:</h3>

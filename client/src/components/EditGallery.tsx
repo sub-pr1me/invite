@@ -88,11 +88,9 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
   async function handleFilesChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (status !== 'change') setStatus('change');
 
-    const arr: File[] = Array.from(e.target.files ?? []);
-    
+    const arr: File[] = Array.from(e.target.files ?? []);    
     const prev = previewSrc ?? [];
-    while (arr?.length > 5 - prev?.length) arr.pop();
-    
+    while (arr?.length > 5 - prev?.length) arr.pop();    
     const arrData: PreviewSrcType[] = [];
     const valid = ['image/jpeg', 'image/png'];
     

@@ -1,6 +1,7 @@
 import styles from '../styles/Log_Out.module.css'
 import axios from '../services/axios'
 import useAuth from '../hooks/useAuth'
+import { AxiosError } from 'axios'
 
 const Log_Out = () => {
   const { setAuth, setActive } = useAuth();
@@ -17,14 +18,15 @@ const Log_Out = () => {
       setAuth(null);
       console.log('LOGGED OUT');
     } catch (err) {
-      if (!err?.response) {
+      const axiosError = err as AxiosError; 
+      if (!axiosError?.response) {
         console.log('NO SERVER RESPONSE');
-      } else if (err.response?.status === 401) {
+      } else if (axiosError.response?.status === 401) {
         console.log('UNAUTHORIZED');
       } else {
         console.log('LOGOUT FAILED');
       }
-    }    
+    }
   };
   
   return (

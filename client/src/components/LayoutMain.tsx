@@ -1,7 +1,5 @@
 import styles from '../styles/LayoutMain.module.css'
 import { Outlet } from 'react-router-dom'
-import { Suspense } from 'react'
-import Loading from './Loading'
 
 const LayoutMain = () => {
 

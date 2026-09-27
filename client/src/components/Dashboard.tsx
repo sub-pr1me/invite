@@ -9,10 +9,11 @@ import Cashier from '../pages/Cashier'
 import Explore from '../pages/Explore'
 import HomeScreen from './HomeScreen'
 import useAuth from '../hooks/useAuth'
+import { AuctionExtendedType } from '../types'
 
 const Dashboard = () => {
   const { setActive } = useAuth();
-  const [auctions, setAuctions] = useState(null);
+  const [auctions, setAuctions] = useState<AuctionExtendedType[] | null>(null);
   const { userId } = useParams();
 
   return (
@@ -28,16 +29,18 @@ const Dashboard = () => {
           />
           <Route path='/clients' element={
             <Clients/>} 
-            />
+          />
           <Route path='/profile' element={
             <Profile/>}
-            />
+          />
           <Route path='/auctions' element={
             <Auctions 
               auctions={auctions} 
               setAuctions={setAuctions}/>} 
-            />
-          <Route path='/cashier' element={<Cashier setActive={setActive}/>} />
+          />
+          <Route path='/cashier' element={
+            <Cashier/>} 
+          />
       </Route>
     </Routes>
     </>

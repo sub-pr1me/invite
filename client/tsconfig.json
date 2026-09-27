@@ -11,5 +11,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
 },
-"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/components/Customer.tsx", "src/components/ArchivedDate.tsx", "src/components/EditGallery.tsx", "src/components/UserProfile.jsx"]
+"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/components/Customer.tsx", "src/components/ArchivedDate.tsx", "src/components/EditGallery.tsx", "src/components/UserProfile.tsx", "src/pages/Explore.tsx", "src/components/Log_In.tsx"]
 }

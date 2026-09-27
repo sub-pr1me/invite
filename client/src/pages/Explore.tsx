@@ -3,10 +3,11 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import useAuth from '../hooks/useAuth'
 import { useEffect, useEffectEvent, useState, memo } from 'react'
 import UserProfile from '../components/UserProfile'
+import { VenueType, CustomerType } from '../types'
 
 const Explore = () => {
-  const [venues, setVenues] = useState(null);
-  const [customers, setCustomers] = useState(null);
+  const [venues, setVenues] = useState<VenueType[] | null>(null);
+  const [customers, setCustomers] = useState<CustomerType[] | null>(null);
   const axiosPrivate = useAxiosPrivate();
   const { auth, setActive } = useAuth();
 
@@ -18,11 +19,12 @@ const Explore = () => {
         params: {role: 'venue'}
       }
     );
+    console.log('VENUE TYPEEEEEEEEEEEEEEEEEE', response.data);
     setVenues(response.data);
   });
 
   const FetchCustomers = useEffectEvent(async () => {
-    console.log('FETCHED CUSTOMERS!');
+    // console.log('FETCHED CUSTOMERS!');
     const response = await axiosPrivate.get('/fetch_customers',
       {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -30,8 +32,8 @@ const Explore = () => {
         params: {role: 'customer'}
       }
     );
-    const filtered = response.data.filter(item => item.stage === "4");
-    console.log(filtered);
+    const filtered = response.data.filter((item: CustomerType) => item.stage === "4");
+    // console.log(filtered);
     setCustomers(filtered);
   });
 
@@ -71,8 +73,8 @@ const Explore = () => {
       <div className={`${styles.people}`}>
         <div className={`${styles.label}`}>Explore People:</div>
         <div className={`${styles.people_content}`}>
-          {customers?.filter(item => item.email !== auth.email 
-          && item.gender === auth.interest && item.interest === auth.gender)
+          {customers?.filter(item => item.email !== auth?.email 
+          && item.gender === auth?.interest && item.interest === auth.gender)
             .map(item => {
               if (item.avatar) {
                 return (

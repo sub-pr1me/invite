@@ -12,8 +12,8 @@ import { AxiosError } from 'axios'
 
 type SetAucsProps = { 
   setAuctions: React.Dispatch<React.SetStateAction<AuctionExtendedType[] | null>>;
-  tablePreview: string | null;
-  hostPreview: HostPreviewType;
+  tablePreview?: string | null;
+  hostPreview?: HostPreviewType;
 }
 
 const SetAucs = ({ setAuctions, tablePreview, hostPreview }: SetAucsProps) => {

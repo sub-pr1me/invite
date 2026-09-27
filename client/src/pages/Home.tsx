@@ -5,8 +5,13 @@ import AlbumUpload from '../components/AlbumUpload'
 import InfoUpload from '../components/InfoUpload'
 import SetAucs from '../components/SetAucs'
 import HomeScreen from '../components/HomeScreen'
+import { AuctionExtendedType } from '../types'
 
-const Home = ({ setAuctions }) => {
+type HomeProps = { 
+  setAuctions: React.Dispatch<React.SetStateAction<AuctionExtendedType[] | null>> 
+}
+
+const Home = ({ setAuctions }: HomeProps) => {
 
   const { auth } = useAuth();
   const onRefresh = useEffectEvent(()=>{console.log(auth)});
@@ -20,17 +25,17 @@ const Home = ({ setAuctions }) => {
     <title>Home</title>
     <div  className={`${styles.container}`}>
       {
-        auth.stage === '0' && 
+        auth?.stage === '0' && 
         <div className={`${styles.welcome}`}>Welcome!<br/>{
           auth.roles[0] === 'venue' ?
           `Please start by uploading your venue's logo!` :
           `Please start by uploading your profile photo!`}
         </div>
       }
-      {auth.stage === '1' && <AlbumUpload postreg={false}/>}
-      {auth.stage === '2' && <InfoUpload />}
-      {auth.stage === '3' && auth.tables && <SetAucs setAuctions={setAuctions}/>}
-      {auth.stage === '4' && <HomeScreen />}
+      {auth?.stage === '1' && <AlbumUpload postreg={false}/>}
+      {auth?.stage === '2' && <InfoUpload />}
+      {auth?.stage === '3' && auth.tables && <SetAucs setAuctions={setAuctions}/>}
+      {auth?.stage === '4' && <HomeScreen />}
     </div>
     </>    
   );

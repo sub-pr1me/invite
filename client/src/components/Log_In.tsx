@@ -5,6 +5,7 @@ import axios from "../services/axios"
 import useAuth from '../hooks/useAuth'
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { AxiosError } from 'axios'
 
 const Log_In = () => {  
   
@@ -14,44 +15,48 @@ const Log_In = () => {
   const EMAIL_REGEX = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   const PASSWORD_REGEX = /^.{4,}$/;
 
-  const [email, setEmail] = useState(false);
-  const [validEmail, setValidEmail] = useState(false);  
-  const [pwd, setPwd] = useState(false);
-  const [validPwd, setValidPwd] = useState(false);
-  const emailRef = useRef();
+  const [email, setEmail] = useState<string | null>(null);
+  const [validEmail, setValidEmail] = useState<boolean>(false);  
+  const [pwd, setPwd] = useState<string | null>(null);
+  const [validPwd, setValidPwd] = useState<boolean>(false);
+  const emailRef = useRef<HTMLInputElement>(null);
 
   useEffect(()=>{
-    emailRef.current.focus();
+    emailRef.current?.focus();
   },[]);
 
-  const validateEmail = useEffectEvent((email)=>{
+  const validateEmail = useEffectEvent((email: string)=>{
     const result = EMAIL_REGEX.test(email);
     setValidEmail(result);
   });
 
   useEffect(()=>{
-    validateEmail(email);
+    if (email !== null) validateEmail(email);
   },[email]);
 
-  const validatePwd = useEffectEvent((pwd)=>{
+  const validatePwd = useEffectEvent((pwd: string)=>{
     const result = PASSWORD_REGEX.test(pwd);
     setValidPwd(result);
   });
   
   useEffect(()=>{
-    validatePwd(pwd);
+    if (pwd !== null) validatePwd(pwd);
   },[pwd]);
 
-  async function LogIn(formData) {
+  async function LogIn(formData: FormData) {
 
-    setEmail(false);
-    setPwd(false);
+    setEmail(null);
+    setPwd(null);
 
-    const email = formData.get('email');
-    const password = formData.get('password');
+    const emailValue = formData.get('email');
+    const pwdValue = formData.get('password');
 
-    const v1 = PASSWORD_REGEX.test(pwd);
-    const v2 = EMAIL_REGEX.test(email);
+    const email = typeof emailValue === 'string' ? emailValue : '';
+    const password = typeof pwdValue === 'string' ? pwdValue : '';    
+    
+    const v1 = EMAIL_REGEX.test(email);
+    const v2 = PASSWORD_REGEX.test(password);
+
     if (!v1 || !v2) {
       console.log(`Your hacking skills are worse than my alcoholism.`);
       return;
@@ -95,12 +100,13 @@ const Log_In = () => {
       navigate('/dashboard');
       
     } catch (err) {
-      if (!err?.response) {
+      const axiosError = err as AxiosError;
+      if (!axiosError?.response) {
         console.log('NO SERVER RESPONSE');
-      } else if (err.response?.status === 400) {
-        console.log(err.response.data);
-      } else if (err.response?.status === 401) {
-        console.log('UNAUTHORIZED - ', err.response.data);
+      } else if (axiosError.response?.status === 400) {
+        console.log(axiosError.response.data);
+      } else if (axiosError.response?.status === 401) {
+        console.log('UNAUTHORIZED - ', axiosError.response.data);
       } else {
         console.log('LOGIN FAILED');
       }

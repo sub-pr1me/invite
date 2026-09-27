@@ -5,13 +5,19 @@ import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useParams } from 'react-router-dom'
 import { useCallback } from 'react'
+import { UserDataType } from '../types'
 
-const ProfileTopSection = ({ userData, setUserData }) => {
+type ProfileTopSectionProps = { 
+  userData: UserDataType | null, 
+  setUserData: React.Dispatch<React.SetStateAction<UserDataType | null>>
+} 
+
+const ProfileTopSection = ({ userData, setUserData }: ProfileTopSectionProps) => {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { userId } = useParams();
 
-  const getAge = useCallback((dob) => {
+  const getAge = useCallback((dob: string) => {
     const date = new Date(dob);
     const currentDate = new Date();
     let age = currentDate.getFullYear() - date.getFullYear();
@@ -25,20 +31,20 @@ const ProfileTopSection = ({ userData, setUserData }) => {
 
   let allowLikes = true;
   if (
-    userData?.role === 'customer' && auth.gender !== userData?.interest 
-    || userData?.role === 'customer' && auth.interest !== userData?.gender) allowLikes = false;
+    userData?.role === 'customer' && auth?.gender !== userData?.interest 
+    || userData?.role === 'customer' && auth?.interest !== userData?.gender) allowLikes = false;
 
   const switchLike = useCallback(
-    async (email) => {
+    async (email: string) => {
       try {      
         const response = await axiosPrivate.post('/switch_like',
           {
             email: email,
-            name: auth.name,
-            avatar: auth.avatar,
-            role: userId[0] === 'c' ? 'customer' : 'venue', 
-            id: userId[0] === 'c' ? userId?.substring(8) : userId?.substring(5),
-            liker_id: auth.id},
+            name: auth?.name,
+            avatar: auth?.avatar,
+            role: userId![0] === 'c' ? 'customer' : 'venue', 
+            id: userId![0] === 'c' ? userId?.substring(8) : userId?.substring(5),
+            liker_id: auth?.id},
           {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             withCredentials: true
@@ -50,24 +56,24 @@ const ProfileTopSection = ({ userData, setUserData }) => {
       } catch (err) {
         console.log(err);
       };
-    },[axiosPrivate, userData, setUserData, userId, auth.name, auth.avatar, auth.id]
+    },[axiosPrivate, userData, setUserData, userId, auth?.name, auth?.avatar, auth?.id]
   );
 
-  const host = userData?.dates?.find((item) => item.venue === auth.email && item.host === userData.email);
-  const guest = userData?.dates?.find((item) => item.venue === auth.email && item.guest === userData.email);
+  const host = userData?.dates?.find((item) => item.venue === auth?.email && item.host === userData.email);
+  const guest = userData?.dates?.find((item) => item.venue === auth?.email && item.guest === userData.email);
 
   return (
     <>
       <div className={styles.top_container}>
         <ProfileAvatar 
-          avatar={userData?.avatar}
-          host={ auth.roles[0] === 'venue' && host ? true : false}
-          guest={ auth.roles[0] === 'venue' && guest ? true : false}
+          avatar={userData?.avatar ?? ''}
+          host={ auth?.roles[0] === 'venue' && host ? true : false}
+          guest={ auth?.roles[0] === 'venue' && guest ? true : false}
         />
 
         <div className={styles.name}>
-          {!userId && auth.roles[0] === 'venue' ? auth.name : null}
-          {!userId && auth.roles[0] === 'customer' ? `${auth.name} (${getAge(userData?.dob)})` : null}
+          {!userId && auth?.roles[0] === 'venue' ? auth?.name : null}
+          {!userId && auth?.roles[0] === 'customer' ? `${auth?.name} (${getAge(userData?.dob ?? '')})` : null}
           {userId && userData?.dob ? `${userData?.customer} (${getAge(userData?.dob)})` : null}
           {userId && !userData?.dob ? userData?.venue : null}
         </div>
@@ -76,7 +82,7 @@ const ProfileTopSection = ({ userData, setUserData }) => {
         {userId && auth?.roles[0] !== 'venue' && allowLikes &&
         <ProfileLike 
           icon={userData?.dob ? 'heart' : 'star'} 
-          liked={userData?.likes?.some((like) => like[0] === auth.email)}
+          liked={userData?.likes?.some((like) => like[0] === auth?.email) ?? false}
           switchLike={switchLike}/>
         }
       </div>

@@ -3,22 +3,25 @@ import useAuth from '../hooks/useAuth'
 import Image from './Image'
 import { useParams } from 'react-router-dom'
 import { memo, useEffect, useEffectEvent, useState } from 'react'
+import { UserDataType } from '../types'
 
-const Carousel = ({ userData }) => {
+type CarouselProps = { userData: UserDataType }
+
+const Carousel = ({ userData }: CarouselProps) => {
   const { auth } = useAuth();
   const { userId } = useParams();
-  const [album, setAlbum] = useState(null);
+  const [album, setAlbum] = useState<string[] | null>(null);
 
-  const applyAlbum = useEffectEvent(async (userId)=>{
+  const applyAlbum = useEffectEvent(async (userId: string | null)=>{
     if (!userId) {
-      setAlbum(auth.album);
+      setAlbum(auth?.album ? auth.album : null);
     } else {
       setAlbum(userData?.album);
     };
   });
 
   useEffect(()=>{
-    applyAlbum(userId);    
+    applyAlbum(userId ?? null);    
   },[userId, userData, album]);
 
   return (

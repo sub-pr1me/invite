@@ -68,7 +68,7 @@ const Table = ({ id, active, modal, setStatus, customize, pic }: TableProps) => 
       } else {
         console.log('SOMETHING WENT WRONG', axiosError.response.status);
       }
-    }
+    };
 };
 const table = auth?.tables?.[index];
 const deposit = table?.auction?.deposit;

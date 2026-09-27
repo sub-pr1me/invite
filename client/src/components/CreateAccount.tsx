@@ -5,71 +5,76 @@ import AccTypeChoice from './AccTypeChoice'
 import { useNavigate } from 'react-router-dom'
 import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { AxiosError } from 'axios'
 
 const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{4,23}$/;
 const EMAIL_REGEX = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 const PASSWORD_REGEX = /^.{4,}$/;
 
 const CreateAccount = () => {
-  const [result, setResult] = useState(null);
-  const [accType, setAccType] = useState('customer');
+  const [result, setResult] = useState<string | null>(null);
+  const [accType, setAccType] = useState<string>('customer');
   const navigate = useNavigate();
 
-  const usernameRef = useRef();
+  const usernameRef = useRef<HTMLInputElement>(null);
   
-  const [username, setUsername] = useState(false);
-  const [validUsername, setValidUsername] = useState(false);
-  const [usernameFocus, setUsernameFocus] = useState(false);
-  const [email, setEmail] = useState(false);
-  const [validEmail, setValidEmail] = useState(false);
-  const [pwd, setPwd] = useState(false);
-  const [validPwd, setValidPwd] = useState(false);
-  const [pwdFocus, setPwdFocus] = useState(false);
+  const [username, setUsername] = useState<string | null>(null);
+  const [validUsername, setValidUsername] = useState<boolean>(false);
+  const [usernameFocus, setUsernameFocus] = useState<boolean>(false);
+  const [email, setEmail] = useState<string | null>(null);
+  const [validEmail, setValidEmail] = useState<boolean>(false);
+  const [pwd, setPwd] = useState<string | null>(null);
+  const [validPwd, setValidPwd] = useState<boolean>(false);
+  const [pwdFocus, setPwdFocus] = useState<boolean>(false);
 
   useEffect(()=>{
-    usernameRef.current.focus();
+    usernameRef.current?.focus();
   },[]);
 
-  const validateName = useEffectEvent((username)=>{
+  const validateName = useEffectEvent((username: string)=>{
     const result = NAME_REGEX.test(username);
     setValidUsername(result);
   });
   
   useEffect(()=>{
-    validateName(username);
+    if (username !== null) validateName(username);
   },[username]);
 
-  const validateEmail = useEffectEvent((email)=>{
+  const validateEmail = useEffectEvent((email: string)=>{
     const result = EMAIL_REGEX.test(email);
     setValidEmail(result);
   });
 
   useEffect(()=>{
-    validateEmail(email);
+    if (email !== null) validateEmail(email);
   },[email]);
 
-  const validatePwd = useEffectEvent((pwd)=>{
+  const validatePwd = useEffectEvent((pwd: string)=>{
     const result = PASSWORD_REGEX.test(pwd);
     setValidPwd(result);
   });
 
   useEffect(()=>{
-    validatePwd(pwd);
+    if (pwd !== null) validatePwd(pwd);
   },[pwd]);
 
-  async function AddNewAcc(formData) {
+  async function AddNewAcc(formData: FormData) {
 
-    setUsername(false);
-    setEmail(false);
-    setPwd(false);
+    setUsername(null);
+    setEmail(null);
+    setPwd(null);
 
-    const name = formData.get('name');
-    const email = formData.get('email');
-    const password = formData.get('password');
+    const nameValue = formData.get('name');
+    const pwdValue = formData.get('password');
+    const emailValue = formData.get('email');
     const acc_type = formData.get('acc_type');
+
+    const name = typeof nameValue === 'string' ? nameValue : '';
+    const password = typeof pwdValue === 'string' ? pwdValue : '';
+    const email = typeof emailValue === 'string' ? emailValue : '';
     
     const v1 = NAME_REGEX.test(name);
-    const v2 = PASSWORD_REGEX.test(pwd);
+    const v2 = PASSWORD_REGEX.test(password);
     const v3 = EMAIL_REGEX.test(email);
     
     if (!v1 || !v2 || !v3) {
@@ -87,13 +92,14 @@ const CreateAccount = () => {
       if (response.data === 'success') setResult('success');
 
     } catch (err) {
-      if (!err?.response) {
+      const axiosError = err as AxiosError;
+      if (!axiosError?.response) {
         console.log('NO SERVER RESPONSE');
-      } else if (err.response?.status === 400) {
-        console.log(err.response.data);
-      } else if (err.response?.status === 401) {
+      } else if (axiosError.response?.status === 400) {
+        console.log(axiosError.response.data);
+      } else if (axiosError.response?.status === 401) {
         console.log('Unauthorized access attempt!');
-      } else if (err.response?.status === 409) {
+      } else if (axiosError.response?.status === 409) {
         console.log('Account with this email already exists!');
         setTimeout(() => {navigate('/message',{state:{msg:'dup'}})}, 0);
         setTimeout(() => {navigate('/create_acc')}, 2000);

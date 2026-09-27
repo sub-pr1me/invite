@@ -3,8 +3,18 @@ import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { DateType } from '../types'
 
-const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }) => {
+type DateProps = { 
+  date: DateType, 
+  amount: number, 
+  index: number, 
+  setIndex: React.Dispatch<React.SetStateAction<number>>, 
+  tablePreview: boolean | null, 
+  setTablePreview: React.Dispatch<React.SetStateAction<boolean | null>> 
+}
+
+const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }: DateProps) => {
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
@@ -26,6 +36,7 @@ const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }) 
         }
       );
       
+      if (!auth) {throw new Error('Missing auth context')};
       setAuth({...auth, dates: auth.dates?.map(item => {
         if (JSON.stringify(item) === JSON.stringify(date)) {
           return {...item, status: 'archived', endTime: response.data}
@@ -44,13 +55,13 @@ const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }) 
       <div className={`${styles.date_container} ${tablePreview ? styles.preview_mode : null}`}>
 
       { tablePreview &&
-        <div className={`${styles.table_preview} ${auth.roles[0] === 'customer' ? styles.alt : null}`}>
+        <div className={`${styles.table_preview} ${auth?.roles[0] === 'customer' ? styles.alt : null}`}>
           <img src={date.table_pic} alt='' />
           <button onClick={()=>{setTablePreview(null)}}>Close</button>
         </div>
       }
 
-        {auth. roles[0] === 'venue' &&
+        {auth?.roles[0] === 'venue' &&
           <div className={`${styles.images}`}>
 
             <div 
@@ -91,7 +102,7 @@ const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }) 
           </div>
         }
 
-        {auth. roles[0] === 'customer' && !tablePreview &&
+        {auth?.roles[0] === 'customer' && !tablePreview &&
           <div className={`${styles.images}`}>
             
             <div 

@@ -6,7 +6,7 @@ import AuctionsMonitor from '../components/AuctionsMonitor'
 import { AuctionExtendedType, HostPreviewType } from '../types'
 
 type AuctionsProps = { 
-  auctions: AuctionExtendedType[], 
+  auctions: AuctionExtendedType[] | null, 
   setAuctions: React.Dispatch<React.SetStateAction<AuctionExtendedType[] | null>>
 }
 

@@ -1,84 +1,97 @@
 import styles from '../styles/InfoUpload.module.css'
 import useAuth from '../hooks/useAuth'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import { AxiosError } from 'axios'
+import { TableType } from '../types'
 
 const InfoUpload = () => {
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
 
-  async function Upload(formData) {
+  async function Upload(formData: FormData) {
     
     const open = formData.get('open');
     const close = formData.get('closed');
     const hours = open + '-' + close;
-    const tables = formData.get('tables');
+    const tablesValue = formData.get('tables');
     const dob = formData.get('dob');
     const gender = formData.get('gender');
     const interest = formData.get('interest');
-    const tables_arr = [];
+    const tables_arr: TableType[] = [];
     const maxTables = 20;
 
-    if (auth.roles[0] === 'venue') {
+    const dobValue = typeof dob === 'string' ? dob : JSON.stringify(dob);
+    const genderValue = typeof gender === 'string' ? gender : JSON.stringify(gender);
+    const interestValue = typeof interest === 'string' ? interest : JSON.stringify(interest);
+
+    const tables = typeof tablesValue === 'string' ? Number(tablesValue) : NaN;
+
+  if (!Number.isInteger(tables) || tables < 0) return;
+
+    if (auth?.roles[0] === 'venue') {
       for (let i = 1; i <= tables; i++) { // add active tables
         tables_arr.push({
-          'id': i, 
-          'pic': '', 
-          'active': true, 
-          'modal': false, 
-          'auction': JSON.stringify({
+          id: i, 
+          pic: '', 
+          active: true, 
+          modal: false, 
+          auction: {
             deposit: null,
             step: null,
             bidders: [null,null,null],
-            reg: auth.stage !== '4' ? false : true,
-            venue_id: auth.id
-          })
+            reg: auth?.stage !== '4' ? false : true,
+            venue_id: JSON.parse(auth?.id)
+          }
         });
       };
 
-      for (let i = parseInt(tables)+1; i <= maxTables; i++) { // add inactive tables
-        tables_arr.push({
-          'id': i, 
-          'pic': '', 
-          'active': false, 
-          'modal': false, 
-          'auction': JSON.stringify({
-            deposit: null,
-            step: null,
-            bidders: [null,null,null],
-            reg: auth.stage !== '4' ? false : true,
-            venue_id: auth.id
-          })
-        });
+      for (let i = tables+1; i <= maxTables; i++) { // add inactive tables
+      tables_arr.push({
+        id: i,
+        pic: '',
+        active: true,
+        modal: false,
+        auction: {
+          deposit: null,
+          step: null,
+          bidders: [null, null, null],
+          reg: auth?.stage === '4',
+          venue_id: JSON.parse(auth?.id),
+        },
+      });
       };
     };
 
+    const apiTables = tables_arr.map((table) => ({...table, auction: JSON.stringify(table.auction)}));
+
     try {
       await axiosPrivate.post('/info_upload',
-        {hours: hours, tables: tables_arr, stage: auth.stage, dob: dob, gender: gender, interest: interest},
+        {hours: hours, tables: apiTables, stage: auth?.stage, dob: dob, gender: gender, interest: interest},
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true
         }
       );
 
-      if (auth.stage === '2' && auth.roles[0] === 'venue') setAuth({...auth, stage: '3', tables: tables_arr});
+      if (auth?.stage === '2' && auth?.roles[0] === 'venue') setAuth({...auth, stage: '3', tables: tables_arr});
 
 
-      if (auth.stage === '2' && auth.roles[0] === 'customer') setAuth({...auth, stage: '4', dob: dob, gender: gender, interest: interest});
+      if (auth?.stage === '2' && auth?.roles[0] === 'customer') setAuth({...auth, stage: '4', dob: dobValue, gender: genderValue, interest: interestValue});
 
-    } catch (err) {
-      if (!err?.response) {
+    } catch (err) {      
+      const axiosError = err as AxiosError;      
+      if (!axiosError?.response) {
         console.log('NO SERVER RESPONSE');
       } else {
-        console.log('SOMETHING WENT WRONG');
+        console.log('SOMETHING WENT WRONG', axiosError.response.status);
       }
-    }
+    };
   };
 
   return (
     <>
     {
-      auth.roles[0] === 'venue'
+      auth?.roles[0] === 'venue'
       ?
       <div className={`${styles.venue}`}>
         <div>Now, please specify your venue's working hours <br /> and how many tables it has.</div>

@@ -8,6 +8,7 @@ import ProfileDatesSection from './ProfileDatesSection'
 import ProfileLikesSection from './ProfileLikesSection'
 import Carousel from './Carousel'
 import AlbumUpload from './AlbumUpload'
+import { UserDataType } from '../types'
 
 const HomeScreen = () => {
   const { auth, setActive } = useAuth();
@@ -16,22 +17,22 @@ const HomeScreen = () => {
   // including 2 database queries every time its called. not obvious from caller
   const axiosPrivate = useAxiosPrivate();
   const { userId } = useParams();
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<UserDataType | null>(null);
   const [albumUploadPending, setAlbumUploadPending] = useState(false);
-  const [tablePreview, setTablePreview] = useState(false);
-  const [expanded, setExpanded] = useState(null);
+  const [tablePreview, setTablePreview] = useState<boolean | null>(false);
+  const [expanded, setExpanded] = useState(false);
 
-  const upcomingDates = auth.dates?.filter(item => item.status === 'upcoming');
+  const upcomingDates = auth?.dates?.filter(item => item.status === 'upcoming');
 
-  const applyUserData = useEffectEvent(async (userId)=>{
+  const applyUserData = useEffectEvent(async (userId: string | null)=>{
     try {
       const response = await axiosPrivate.get('/fetch_profile_data',
         {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           withCredentials: true,
           params: {
-            role: userId[0] === 'c' ? 'customer' : 'venue',
-            id: userId[0] === 'c' ? userId?.substring(8) : userId?.substring(5),
+            role: userId?.[0] === 'c' ? 'customer' : 'venue',
+            id: userId?.[0] === 'c' ? userId?.substring(8) : userId?.substring(5),
             from: 'HomeScreen'
           }
         }
@@ -50,12 +51,12 @@ const HomeScreen = () => {
 
   useEffect(()=>{
     if (userId) applyUserData(userId);
-    if (!userId) applyUserData(auth.roles[0]+auth.id);
-  },[userId, auth.roles, auth.id, auth.dates, albumUploadPending, upcomingDates?.length]);
+    if (auth && !userId) applyUserData(auth?.roles[0]+auth?.id);
+  },[userId, auth?.roles, auth?.id, auth?.dates, albumUploadPending, upcomingDates?.length]);
 
   return (
     <>
-      <div className={`${styles.homescreen_container} ${!auth.likes?.length && !userId ? styles.shifted2 : null}`}>
+      <div className={`${styles.homescreen_container} ${!auth?.likes?.length && !userId ? styles.shifted2 : null}`}>
         
         <div className={`${styles.edge_fader}`}></div>
 
@@ -80,21 +81,23 @@ const HomeScreen = () => {
          <ProfileTopSection userData={userData} setUserData={setUserData}/>
         }
         
-        {auth.roles[0] === 'customer' 
-        && !auth.album?.length
+        {auth?.roles[0] === 'customer' 
+        && !auth?.album?.length
         && !userId 
         && !albumUploadPending 
         && !tablePreview
         && userData !== null
         && !expanded
         &&
-          <div className={`${styles.no_photos} ${!auth.likes?.length && !upcomingDates?.length ? styles.shifted : null}`}>
+          <div className={`${styles.no_photos} ${!auth?.likes?.length && !upcomingDates?.length ? styles.shifted : null}`}>
             Upload some photos to your gallery!
             <button onClick={()=>{setAlbumUploadPending(true)}}>Let's do it</button>
           </div>          
         }
 
-        {auth.dates?.length > 0 
+        {auth?.dates?.length !== undefined
+        && upcomingDates?.length !== undefined
+        && auth?.dates?.length > 0 
         && !userId 
         && !albumUploadPending
         && userData !== null

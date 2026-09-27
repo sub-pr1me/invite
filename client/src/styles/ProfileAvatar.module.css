@@ -20,6 +20,8 @@
   aspect-ratio: 1/1;
   border-radius: 50%;
   box-shadow: 0 0 6pt 4pt rgb(225, 150, 255);
+  object-fit: cover;
+  overflow-clip-margin: unset;  
 }
 
 .host_label,

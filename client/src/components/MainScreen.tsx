@@ -16,7 +16,7 @@ const MainScreen = () => {
         <Route path='/login' element={<Log_In />} />
       </Route>
     </Routes>
-    </>    
+    </>
   );
 };
 

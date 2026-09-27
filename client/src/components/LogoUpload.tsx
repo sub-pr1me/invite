@@ -2,21 +2,22 @@ import { useState, useEffect, useEffectEvent } from 'react'
 import useAuth from '../hooks/useAuth'
 import styles from '../styles/LogoUpload.module.css'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import { AxiosError } from 'axios'
 
 const LogoUpload = () => {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState('idle');
   const axiosPrivate = useAxiosPrivate();
   const { auth, setAuth } = useAuth();
 
-  function handleFileChange(e) {
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
       setFile(e.target.files[0]);
       e.target.value = '';
     }
   };
 
-  const handleFileUpload = useEffectEvent(async (file) => {
+  const handleFileUpload = useEffectEvent(async (file: File) => {
 
     const valid = ['image/jpeg', 'image/png'];   
 
@@ -39,28 +40,29 @@ const LogoUpload = () => {
         });
       setStatus('success');
       console.log('AVATAR UPLOADED');      
-      setAuth({...auth, avatar: response.data});
+      if (auth) setAuth({...auth, avatar: response.data});
       
-    } catch(err) {
-      setFile(null);
-      setStatus('idle');
-      if (!err?.response) {
-        console.log('NO SERVER RESPONSE');
-      } else if (err.response?.status === 422) {
-        console.log('INVALID FILE EXTENSION');
-      } else if (err.response?.status === 401) {
-        console.log('UNAUTHORIZED');
-      } else if (err.response?.status === 413) {
-        console.log('FILE IS TOO LARGE');
-      } else {
-        console.log('SOMETHING WENT WRONG');
+    } catch(err: unknown) {      
+        setFile(null);
+        setStatus('idle');
+        const axiosError = err as AxiosError;      
+        if (!axiosError?.response) {
+          console.log('NO SERVER RESPONSE');
+        } else if (axiosError.response?.status === 422) {
+          console.log('INVALID FILE EXTENSION');
+        } else if (axiosError.response?.status === 401) {
+          console.log('UNAUTHORIZED');
+        } else if (axiosError.response?.status === 413) {
+          console.log('FILE IS TOO LARGE');
+        } else {
+          console.log('SOMETHING WENT WRONG', axiosError.response.status);
+        }
       }
-    }
   });
 
-  const resetStatus = useEffectEvent((status)=>{
+  const resetStatus = useEffectEvent((status: string)=>{
     if(status === 'success') {
-      if (auth.stage === '0') setAuth({...auth, stage: '1'});
+      if (auth && auth?.stage === '0') setAuth({...auth, stage: '1'});
       setFile(null);
       setStatus('idle');
     }    
@@ -77,9 +79,9 @@ const LogoUpload = () => {
       <label htmlFor='file' className={`${styles.label}`}>
       <img src='../../img/add.png'
          alt='ADD'
-         className={`${auth.avatar || status === 'uploading' ? styles.hidden : null} ${styles.add}`}
+         className={`${auth?.avatar || status === 'uploading' ? styles.hidden : null} ${styles.add}`}
       />
-      <img src={auth.avatar && status !== 'uploading' ? auth.avatar : '../../img/load.gif'} alt='LOGO' className={`${!auth.avatar || status === 'uploading' ? styles.hidden : null} ${styles.logo}`}/>
+      <img src={auth?.avatar && status !== 'uploading' ? auth?.avatar : '../../img/load.gif'} alt='LOGO' className={`${!auth?.avatar || status === 'uploading' ? styles.hidden : null} ${styles.logo}`}/>
       <img src={'../../img/load.gif'} alt='...' className={`${status !== 'uploading' ? styles.hidden : null} ${styles.loadgif}`}/>
       </label>
     </div>      

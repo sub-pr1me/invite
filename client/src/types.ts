@@ -17,7 +17,7 @@ export type AuthType = null | {
   name: string,
   stage: string,
   avatar: string,
-  album: string,
+  album: string[],
   likes: string[][],
   rating?: number,
   hours?: number,
@@ -97,4 +97,51 @@ export type PreviewSrcType = {
   pic: string, 
   index: number, 
   file: File | null 
+}
+
+export type UserDataType = {
+  album: string[],
+  avatar: string,
+  dates?: DateType[],
+  email: string,
+  hours?: string,
+  likes: [string, string, string, string][] | null,
+  role: string,
+  tables?: TableType[],
+  venue?: string,
+  customer?: string,
+  dob?: string,
+  gender?: string,
+  interest?: string
+}
+
+export type CustomerType = {
+  age: string,
+  album: string[],
+  avatar: string,
+  customer: string,
+  dates?: DateType[],
+  dob: string,
+  email: string,
+  gender: string,
+  id: number,
+  interest: string,
+  likes: [string, string, string, string][] | null,
+  stage: string
+}
+
+export type EmptyTables = Record<string, never>;
+
+export type VenueType = {
+  album: string[],
+  avatar: string,
+  email: string,
+  hours: string,
+  id: number,
+  likes: [string, string, string, string][] | null,
+  rating: null,
+  stage: string,
+  tables: TableType[][] | EmptyTables,
+  venue: string,
+  dates?: DateType[]
 }

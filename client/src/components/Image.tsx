@@ -7,6 +7,11 @@ type ImagePropsType = {
 
 export default function Image({ src, alt }: ImagePropsType) {
 
+  if (typeof src !== 'string') {
+    console.error("Image component expected a string for 'src', but received:", typeof src);
+    return <img/>
+  }
+
   const cloudName = src?.split('/')[3];
   const publicId = src?.split('/')[7].split('.')[0];
   
