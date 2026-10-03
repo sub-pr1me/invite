@@ -24,19 +24,19 @@ export type TableType = {
   pic: string,
   active: boolean,
   modal: boolean,
-  auction: AuctionType
+  auction: AuctionType | AuctionExtendedType
 }
 
 export type AuctionType = {
   bidders: [BidderType | null, BidderType | null, BidderType | null],
-  deposit: FormDataEntryValue |number | null,
+  deposit: FormDataEntryValue | number | null,
   reg: boolean | string,
   step: number | null,
   venue_id: number
 }
 
 export type AuctionExtendedType = {
-  bidders: [BidderType | null, BidderType | null, BidderType | null],
+  bidders: [BidderType | string | null, BidderType | string | null, BidderType | string | null],
   deposit: number,
   id: number,
   name: string,

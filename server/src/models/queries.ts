@@ -1,4 +1,13 @@
-import pool from '../src/config/pool.js';
+import pool from '../config/pool.js';
+import type { 
+  TableType, 
+  AuctionType, 
+  AuctionExtendedType, 
+  HostPreviewType, 
+  BidderType, 
+  DateType 
+} from '../types.js'; 
+
 
 export async function checkConnection() {
   console.log('DB QUERY - checkConnection');
@@ -32,19 +41,29 @@ export async function getAllCustomerData() {
   return rows;
 };
 
-export async function checkVenuesForMatch(email) {
+export async function checkVenuesForMatch(email: string) {
     console.log('DB QUERY - checkVenuesForMatch');
   const { rows } = await pool.query(`SELECT * FROM venues WHERE email = '${email}'`);
   return rows[0];
 };
 
-export async function checkCustomersForMatch(email) {
+export async function checkCustomersForMatch(email: string) {
     console.log('DB QUERY - checkCustomersForMatch');
   const { rows } = await pool.query(`SELECT * FROM customers WHERE email = '${email}'`);
   return rows[0];
 };
 
-export async function createNewUser(acc_type, name, email, password, stage, rating, tables, dates, credits) {
+export async function createNewUser(
+  acc_type: string, 
+  name: string, 
+  email: string, 
+  password: string, 
+  stage: string, 
+  rating: string, 
+  tables: string, 
+  dates: string, 
+  credits: string
+) {
     console.log('DB QUERY - createNewUser');
   if (acc_type === 'venue') {
     await pool.query(
@@ -62,7 +81,7 @@ export async function createNewUser(acc_type, name, email, password, stage, rati
   return 'success';
 };
 
-export async function getUserData(email, acc_type) {
+export async function getUserData(email: string, acc_type: string) {
     console.log('DB QUERY - getUserData');
   if (acc_type === 'venue') {
     const { rows } = await pool.query(`
@@ -78,31 +97,31 @@ export async function getUserData(email, acc_type) {
     return rows[0];
 };
 
-export async function addRefreshToken(acc_type, email, token) {
+export async function addRefreshToken(acc_type: string, email: string, token: string) {
     console.log('DB QUERY - addRefreshToken');
   await pool.query(`UPDATE ${acc_type}s SET refToken = '${token}' WHERE email = '${email}'`);
   return 'success';
 };
 
-export async function checkVenueToken(token) {
+export async function checkVenueToken(token: string) {
     console.log('DB QUERY - checkVenueToken'); 
   const { rows } = await pool.query(`SELECT * FROM venues WHERE reftoken = '${token}'`);
   return rows[0];
 };
 
-export async function checkCustomerToken(token) {
+export async function checkCustomerToken(token: string) {
     console.log('DB QUERY - checkCustomerToken'); 
   const { rows } = await pool.query(`SELECT * FROM customers WHERE reftoken = '${token}'`);
   return rows[0];
 };
 
-export async function deleteRefreshToken(acc_type, email) {
+export async function deleteRefreshToken(acc_type: string, email: string) {
     console.log('DB QUERY - deleteRefreshToken');
   await pool.query(`UPDATE ${acc_type}s SET refToken = '' WHERE email = '${email}'`);
   return 'success';
 };
 
-export async function uploadNewAvatar(acc_type, email, link) {
+export async function uploadNewAvatar(acc_type: string, email: string, link: string) {
     console.log('DB QUERY - uploadNewAvatar');
   const { rows } = await pool.query(`SELECT * FROM ${acc_type}s WHERE email = '${email}'`);
   await pool.query(`UPDATE ${acc_type}s SET avatar = '${link}' WHERE email = '${email}'`);
@@ -111,14 +130,24 @@ export async function uploadNewAvatar(acc_type, email, link) {
   return null;
 };
 
-export async function uploadNewAlbum(acc_type, email, links, postreg) {
+export async function uploadNewAlbum(acc_type: string, email: string, links: string, postreg: string) {
     console.log('DB QUERY - uploadNewAlbum');
   await pool.query(`UPDATE ${acc_type}s SET album = '${links}' WHERE email = '${email}'`);
   if (!postreg) await pool.query(`UPDATE ${acc_type}s SET stage = '2' WHERE email = '${email}'`);
   return 'ALBUM UPLOADED';
 };
 
-export async function infoUpload(acc_type, email, hours, tables, stage, dob, gender, interest, endreg) {
+export async function infoUpload(
+  acc_type: string, 
+  email: string, 
+  hours: string, 
+  tables: string, 
+  stage: string, 
+  dob: string, 
+  gender: string, 
+  interest: string, 
+  endreg: string
+) {
     console.log('DB QUERY - infoUpload');
   if (acc_type === 'venue') {
     if (stage === '2') {  // pre-registration basic info
@@ -197,13 +226,13 @@ export async function infoUpload(acc_type, email, hours, tables, stage, dob, gen
   return 'CUSTOMER REGISTRATION COMPLETE';
 };
 
-export async function tableInfoUpdate(email, id, link) {
+export async function tableInfoUpdate(email: string, id: string, link: string) {
     console.log('DB QUERY - tableInfoUpdate');
 
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${email}'`);
   const tables = rows[0].tables[0];
-  const pic = tables.filter(item => item.id === parseInt(id))[0].pic;
-  const updated = tables.map(item => {if (item.id === parseInt(id))
+  const pic = tables.filter((item: TableType) => item.id === parseInt(id))[0].pic;
+  const updated = tables.map((item: TableType) => {if (item.id === parseInt(id))
     {return {...item, pic: link}} else {return item}});
   const stringified = JSON.stringify(updated);
   await pool.query(`
@@ -213,12 +242,25 @@ export async function tableInfoUpdate(email, id, link) {
   return null;
 };
 
-export async function auctionUpload(email, id, deposit, step, bidders, reg, venue_id) {
+export async function auctionUpload(
+  email: string, 
+  id: string, 
+  deposit: string, 
+  step: string, 
+  bidders: string, 
+  reg: string, 
+  venue_id: string
+) {
     console.log('DB QUERY - auctionUpload');
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${email}'`);
   const tables = rows[0].tables[0];
-  const updated = tables.map(item => {if (item.id === id.toString() || item.id === id)
-    {return {...item, auction: {deposit: deposit, step: step, bidders: bidders, reg: reg, venue_id: venue_id}}} else {return item}}
+  const tableId = Number(id);
+  const updated = tables.map((item: TableType) => {
+    if (item.id === tableId) {
+      return {...item, auction: {deposit: deposit, step: step, bidders: bidders, reg: reg, venue_id: venue_id}}
+    } else {
+      return item
+    }}
   );
   const stringified = JSON.stringify(updated);
 
@@ -228,7 +270,7 @@ export async function auctionUpload(email, id, deposit, step, bidders, reg, venu
   return updated;
 };
 
-export async function BalanceUpdate(email, amount, acc_type, deposit) {
+export async function BalanceUpdate(email: string, amount: string, acc_type: string, deposit: string) {
     console.log('DB QUERY - BalanceUpdate');
   const { rows } = await pool.query(`SELECT credits FROM ${acc_type}s WHERE email = '${email}'`);
   const balance = rows[0].credits;
@@ -244,34 +286,40 @@ export async function BalanceUpdate(email, amount, acc_type, deposit) {
 
 export async function FetchAuctions() {
     console.log('DB QUERY - FetchAuctions');
-  let auctions = [];
+  const auctions: AuctionExtendedType[] = [];
   const { rows } = await pool.query('SELECT venue, email, tables FROM venues');
 
     for (let i=0; i<rows.length; i++) {
     if (rows[i].tables[0]) {
-      const filtered = rows[i].tables[0].filter(item => item.auction.deposit);
+      const filtered = rows[i].tables[0].filter((item: TableType) => item.auction.deposit);
 
-      filtered.map(item => {
-        const arr = [];
+      filtered.map((item: TableType) => {
+        
+        const arr: [BidderType | null, BidderType | null, BidderType | null] = [null,null,null];
         for (let i=0; i<3; i++) {
-          if (typeof item.auction.bidders[i] === 'string') {
-            arr.push(JSON.parse(item.auction.bidders[i]));
+          const bidder = item.auction.bidders[i];                
+          if (typeof bidder === 'string') {
+            arr.push(JSON.parse(bidder))
           } else {
-            arr.push(item.auction.bidders[i]);
+            arr.push(bidder);
           }
         };
-        item.venue_id = item.auction.venue_id;
-        item.venue_email = rows[i].email;
-        item.name = rows[i].venue;
-        item.id = parseInt(item.id);
-        item.step = parseInt(item.auction.step);
-        item.deposit = parseInt(item.auction.deposit);
-        item.bidders = arr;
-        item.reg = item.auction.reg;
-        delete item.modal;
-        delete item.active;
-        delete item.auction;
-        auctions.push(item);
+        const step = item.auction.step;
+        const rawDeposit = item.auction.deposit;
+        
+        const deposit = typeof rawDeposit === 'number' ? rawDeposit : Number(rawDeposit);
+        if (item.auction.step === null) return;
+        auctions.push({
+          venue_id: item.auction.venue_id,
+          venue_email: rows[i].email,
+          name: rows[i].venue,
+          id: item.id,
+          pic: item.pic,
+          step: item.auction.step,
+          deposit,
+          bidders: arr,
+          reg: item.auction.reg
+        });
       });
     };
   };
@@ -279,13 +327,13 @@ export async function FetchAuctions() {
   return auctions;
 };
 
-export async function BiddersUpdate(bidders, venue_email, table) {
+export async function BiddersUpdate(bidders: string, venue_email: string, table: string) {
     console.log('DB QUERY - BiddersUpdate');
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${venue_email}'`);
   const tables = rows[0].tables[0];
   
   // console.log(`BEFORE #${parseInt(table)} BID UPDATE`, tables[parseInt(table)-1].auction)
-  const updated = tables.map(item => {if (item.id === parseInt(table))
+  const updated = tables.map((item: TableType) => {if (item.id === parseInt(table))
     {return {...item, auction: {...item.auction, bidders: JSON.parse(bidders)}}} else {return item}}
   );
   
@@ -300,7 +348,7 @@ export async function BiddersUpdate(bidders, venue_email, table) {
   return 'BIDDERS UPDATED?'
 };
 
-export async function AddTable(email, id, active, venue_id) {
+export async function AddTable(email: string, id: string, active: string, venue_id: string) {
     console.log('DB QUERY - AddTable:', id);
   const new_table = {
     id: parseInt(id), 
@@ -315,7 +363,7 @@ export async function AddTable(email, id, active, venue_id) {
     WHERE email = '${email}'`
   );
   const tables = rows[0].tables[0];
-  const updated = tables.map(item => {if (item.id === parseInt(id)) {
+  const updated = tables.map((item: TableType) => {if (item.id === parseInt(id)) {
     return new_table;
   } else {return item}});
   const stringified = JSON.stringify(updated);
@@ -327,7 +375,7 @@ export async function AddTable(email, id, active, venue_id) {
   return updated;
 };
 
-export async function FetchProfileData(role, id, from) {
+export async function FetchProfileData(role: string, id: string, from: string) {
   
   console.log('DB QUERY - FetchProfileData', role, id, 'from', from);
   
@@ -348,7 +396,14 @@ export async function FetchProfileData(role, id, from) {
   return rows[0];
 };
 
-export async function SwitchLike(email, role, name, avatar, id, liker_id) {
+export async function SwitchLike(
+  email: string, 
+  role: string, 
+  name: string, 
+  avatar: string, 
+  id: string, 
+  liker_id: string
+) {
     console.log('DB QUERY - SwitchLike');
     const user = [email, name, avatar, liker_id];
   const { rows } = await pool.query(`SELECT likes FROM ${role}s WHERE id = ${parseInt(id)}`);
@@ -360,20 +415,20 @@ export async function SwitchLike(email, role, name, avatar, id, liker_id) {
     updated.push(user);
     return updated;
   };
-  if (arr.some((like) => like[0] === email)) {
+  if (arr.some((like: [string, string, string, string]) => like[0] === email)) {
     const updated = [];
     for (const item of arr) if (item[0] !== email) updated.push(item);
     await pool.query(`UPDATE ${role}s SET likes = '{${updated.toString()}}' WHERE id = '${parseInt(id)}'`);
     return updated;
   };
-  if (!arr.some((like) => like[0] === email)) {
+  if (!arr.some((like: [string, string, string, string]) => like[0] === email)) {
     arr.push([email, name, avatar]);
     await pool.query(`UPDATE ${role}s SET likes = '{${arr.toString()}}' WHERE id = '${parseInt(id)}'`);
     return arr;
   };
 };
 
-export async function FetchAvatar(email, role) {
+export async function FetchAvatar(email: string, role: string) {
     console.log('DB QUERY - FetchAvatar');
   if (role === 'venue') {
     const { rows } = await pool.query(`
@@ -389,7 +444,7 @@ export async function FetchAvatar(email, role) {
   return rows[0];
 };
 
-export async function NewDateUpload(venue, host, guest, new_date) {
+export async function NewDateUpload(venue: string, host: string, guest: string, new_date: DateType) {
     console.log('DB QUERY - NewDateUpload');
 
   const arr = [host, guest, venue];
@@ -433,7 +488,7 @@ export async function NewDateUpload(venue, host, guest, new_date) {
 
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${venue}'`);
   const tables = rows[0].tables[0];
-  const updated = tables.map(item => {
+  const updated = tables.map((item: TableType) => {
     if (item.id === parseInt(new_date.table)) {
       return {...item, auction: {
         deposit: null, 
@@ -453,14 +508,14 @@ export async function NewDateUpload(venue, host, guest, new_date) {
   return updated;
 };
 
-export async function ArchiveVenueDate (venue, date, endTime) {
+export async function ArchiveVenueDate (venue: string, date: DateType, endTime: string) {
   console.log('DB QUERY - ArchiveVenueDate');
 
     const { rows } = await pool.query(`SELECT dates FROM venues WHERE email = '${venue}'`);
     
     let dates = rows[0].dates[0];
 
-    const updated = dates.map(item => {
+    const updated = dates.map((item: DateType) => {
       if (item.venue === date.venue && item.host === date.host && item.guest === date.guest) {
         return {...item, status: 'archived', endTime: endTime}      
       } else { return item }
@@ -475,14 +530,14 @@ export async function ArchiveVenueDate (venue, date, endTime) {
   return 'success';
 };
 
-export async function ArchiveHostDate (host, date, endTime) {
+export async function ArchiveHostDate (host: string, date: DateType, endTime: string) {
   console.log('DB QUERY - ArchiveHostDate');
 
     const { rows } = await pool.query(`SELECT dates FROM customers WHERE email = '${host}'`);
     
     let dates = rows[0].dates[0];
 
-    const updated = dates.map(item => {
+    const updated = dates.map((item: DateType) => {
       if (item.venue === date.venue && item.host === date.host && item.guest === date.guest) {
         return {...item, status: 'archived', endTime: endTime}      
       } else { return item }
@@ -497,14 +552,14 @@ export async function ArchiveHostDate (host, date, endTime) {
   return 'success';
 };
 
-export async function ArchiveGuestDate (guest, date, endTime) {
+export async function ArchiveGuestDate (guest: string, date: DateType, endTime: string) {
   console.log('DB QUERY - ArchiveGuestDate');
 
     const { rows } = await pool.query(`SELECT dates FROM customers WHERE email = '${guest}'`);
     
     let dates = rows[0].dates[0];
 
-    const updated = dates.map(item => {
+    const updated = dates.map((item: DateType) => {
       if (item.venue === date.venue && item.host === date.host && item.guest === date.guest) {
         return {...item, status: 'archived', endTime: endTime}      
       } else { return item }
@@ -519,7 +574,13 @@ export async function ArchiveGuestDate (guest, date, endTime) {
   return 'success';
 };
 
-export async function EditInfo(email, acc_type, new_name, new_email, new_hours) {
+export async function EditInfo(
+  email: string, 
+  acc_type: string, 
+  new_name: string, 
+  new_email: string, 
+  new_hours: string
+) {
   console.log('DB QUERY - EditInfo');
   console.log('E-MAIL:', email);
   console.log('NEW NAME:', new_name);
@@ -527,7 +588,11 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
   console.log('NEW HOURS:', new_hours);
   if (new_name) {
     console.log('EDIT NAME');
-    const updates = {};
+    const updates: {
+      dates?: DateType[];
+      message?: string;
+      name?: string;
+    } = {};
     
     // EDIT CUSTOMER NAME IN AUCTIONS
     
@@ -539,12 +604,13 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
         const tables = haveTables[i].tables[0];
         let upd = false;
 
-        const updatedTables = tables.map(item => {
+        const updatedTables = tables.map((item: TableType) => {
 
-          if (item.auction.bidders.some(obj => obj.email == email)) {
+          if (item.auction.bidders.some(
+            obj => obj !== null && typeof obj === 'object' && obj.email == email)) {
             upd = true;
             const updatedBidders = item.auction.bidders.map(elem => {
-              if (elem.email === email) {
+              if (elem !== null && typeof elem === 'object' && elem.email === email) {
                 return {...elem, name: new_name}
               } else { return elem }
             });
@@ -575,7 +641,7 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
 
       if (dates?.length) {
 
-        const updatedDates = dates.map(item => { return {...item, venue_name: new_name} });
+        const updatedDates = dates.map((item: DateType) => { return {...item, venue_name: new_name} });
         const stringified = JSON.stringify(updatedDates);
 
         await pool.query(
@@ -591,7 +657,7 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
         const dates = customersWithDates[i].dates[0];
         let upd = false;
 
-        const updatedDates = dates.map(item => {
+        const updatedDates = dates.map((item: DateType) => {
           if (item.venue == email) {
             upd = true;
             return {...item, venue_name: new_name}          
@@ -618,7 +684,12 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
 
   if (new_email) {
     console.log('EDIT E-MAIL');
-    const updates = {};
+    const updates: {
+      dates?: DateType[];
+      message?: string;
+      name?: string;
+      email?: string;
+    } = {};
 
     // EDIT CUSTOMER E-MAIL IN AUCTIONS
     
@@ -630,12 +701,12 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
         const tables = haveTables[i].tables[0];
         let upd = false;
 
-        const updatedTables = tables.map(item => {
+        const updatedTables = tables.map((item: TableType) => {
 
-          if (item.auction.bidders.some(obj => obj.email == email)) {
+          if (item.auction.bidders.some(obj => obj !== null && typeof obj === 'object' && obj.email == email)) {
             upd = true;
             const updatedBidders = item.auction.bidders.map(elem => {
-              if (elem.email === email) {
+              if (elem !== null && typeof elem === 'object' && elem.email === email) {
                 return {...elem, email: new_email}
               } else { return elem }
             });
@@ -659,17 +730,17 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
 
     if (acc_type === 'customer') {
       const { rows } = await pool.query(`SELECT email, likes FROM venues`);
-      const haveLikes = rows.filter(item => item.length);
+      const haveLikes = rows.filter(item => item.likes?.length);
 
       for (let i=0; i<haveLikes.length; i++) {
-        const likes = haveLikes[i];
+        const likes = haveLikes[i].likes;
         let upd = false;
 
-        const updatedLikes = likes.map(item => {
+        const updatedLikes = likes.map((item: [string, string, string, string]) => {
 
-          if (item == email) {
+          if (item[0] == email) {
             upd = true;
-            return new_email;
+            return [new_email, item[1], item[2], item[3]];
           } else { return item };
         });
 
@@ -684,17 +755,17 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
 
     if (acc_type === 'customer') {
       const { rows } = await pool.query(`SELECT email, likes FROM customers`);
-      const haveLikes = rows.filter(item => item.length);
+      const haveLikes = rows.filter(item => item.likes?.length);
 
       for (let i=0; i<haveLikes.length; i++) {
         const likes = haveLikes[i];
         let upd = false;
 
-        const updatedLikes = likes.map(item => {
+        const updatedLikes = likes.map((item: [string, string, string, string]) => {
 
-          if (item == email) {
+          if (item[0] == email) {
             upd = true;
-            return new_email;
+            return [new_email, item[1], item[2], item[3]];
           } else { return item };
         });
 
@@ -715,7 +786,7 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
 
       if (dates?.length) {
 
-        const updatedDates = dates.map(item => { return {...item, venue: new_email} });
+        const updatedDates = dates.map((item: DateType) => { return {...item, venue: new_email} });
         const stringified = JSON.stringify(updatedDates);
 
         await pool.query(
@@ -732,7 +803,7 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
         const dates = customersWithDates[i].dates[0];
         let upd = false;
 
-        const updatedDates = dates.map(item => {
+        const updatedDates = dates.map((item: DateType) => {
           if (item.venue == email) {
             upd = true;
             return {...item, venue: new_email}          
@@ -757,7 +828,7 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
         const dates = venuesWithDates[i].dates[0];
         let upd = false;
 
-        const updatedDates = dates.map(item => {
+        const updatedDates = dates.map((item: DateType) => {
           if (item.host == email) {
             
             upd = true;
@@ -787,7 +858,7 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
         const dates = customersWithDates[i].dates[0];
         let upd = false;
 
-        const updatedDates = dates.map(item => {
+        const updatedDates = dates.map((item: DateType) => {
           if (item.host == email) {
             
             upd = true;
@@ -821,7 +892,11 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
 
   if (new_hours) {
     console.log('EDIT HOURS');
-    const updates = {};
+    const updates: {
+      message?: string;
+      email?: string;
+      hours?: string;
+    } = {};
 
     await pool.query(`UPDATE venues SET hours = '${new_hours}' WHERE email = '${email}'`);
     updates.message = `venue hours were changed to "${new_hours}"`;
@@ -830,7 +905,7 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
   };
 };
 
-export async function DeleteAccount(email, acc_type) {
+export async function DeleteAccount(email: string, acc_type: string) {
   console.log('DB QUERY - DeleteAccount');
 
   // DELETE CUSTOMER FROM AUCTIONS
@@ -842,18 +917,18 @@ export async function DeleteAccount(email, acc_type) {
       const tables = haveTables[i].tables[0];
       let upd = false;
 
-      const updatedTables = tables.map(item => {
-        if (item.auction.bidders.some(obj => obj.email == email)) {
+      const updatedTables = tables.map((item: TableType) => {
+        if (item.auction.bidders.some(obj => obj !== null && typeof obj === 'object' && obj.email == email)) {
           upd = true;
           const updatedBidders = item.auction.bidders
           .map(elem => {
-            if (elem.email === email) {
+            if (elem !== null && typeof elem === 'object' && elem.email === email) {
               return 0;
             } else { return elem }
           })
           .filter(item => item !== 0);
 
-          while (updatedBidders.length < 3) updatedBidders.push(0);
+          while (updatedBidders.length < 3) updatedBidders.push(null);
           return {...item, auction: {...item.auction, bidders: updatedBidders}}
         } else { return item };
       });
@@ -878,9 +953,9 @@ export async function DeleteAccount(email, acc_type) {
     for (let i=0; i<haveLikes.length; i++) {
       const likes = haveLikes[i].likes;
 
-      if (likes.some((like) => like[0] === email)) {
+      if (likes.some((like: [string, string, string, string]) => like[0] === email)) {
         if (likes.length > 1) {
-          const updatedLikes = likes.filter(item => item[0][0] !== email);
+          const updatedLikes = likes.filter((item: [string, string, string, string]) => item[0][0] !== email);
           await pool.query(
             `UPDATE venues SET likes = '{${updatedLikes.toString()}}' 
             WHERE email = '${haveLikes[i].email}'`
@@ -904,9 +979,9 @@ export async function DeleteAccount(email, acc_type) {
     for (let i=0; i<haveLikes.length; i++) {
       const likes = haveLikes[i].likes;
 
-      if (likes.some((like) => like[0] === email)) {
+      if (likes.some((like: [string, string, string, string]) => like[0] === email)) {
         if (likes.length > 1) {
-          const updatedLikes = likes.filter(item => item[0][0] !== email);
+          const updatedLikes = likes.filter((item: [string, string, string, string]) => item[0][0] !== email);
           await pool.query(
             `UPDATE customers SET likes = '{${updatedLikes.toString()}}' 
             WHERE email = '${haveLikes[i].email}'`
@@ -930,10 +1005,10 @@ export async function DeleteAccount(email, acc_type) {
     const customersWithDates = customerDatesData.rows.filter(item => item.dates[0]);
     for (let i=0; i<customersWithDates.length; i++) {
       const dates = customersWithDates[i].dates[0];
-      if (dates.some(obj => obj.venue == email)) {
+      if (dates.some((obj: DateType) => obj.venue == email)) {
         
         if (dates.length > 1) {
-          const updatedDates = dates.filter(item => item.venue !== email);
+          const updatedDates = dates.filter((item: DateType) => item.venue !== email);
           const stringified = JSON.stringify(updatedDates);
           await pool.query(
             `UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}')
@@ -957,10 +1032,10 @@ export async function DeleteAccount(email, acc_type) {
     const venuesWithDates = venueDatesData.rows.filter(item => item.dates[0]);
     for (let i=0; i<venuesWithDates.length; i++) {
       const dates = venuesWithDates[i].dates[0];
-      if (dates.some(obj => obj.host == email) || dates.some(obj => obj.guest == email)) {
+      if (dates.some((obj: DateType) => obj.host == email) || dates.some((obj: DateType) => obj.guest == email)) {
         
         if (dates.length > 1) {
-          const updatedDates = dates.filter(item => item.host !== email && item.guest !== email);
+          const updatedDates = dates.filter((item: DateType) => item.host !== email && item.guest !== email);
           const stringified = JSON.stringify(updatedDates);
           await pool.query(
             `UPDATE venues SET dates = jsonb_set(dates, '{0}', '${stringified}')
@@ -982,10 +1057,10 @@ export async function DeleteAccount(email, acc_type) {
     const customersWithDates = customerDatesData.rows.filter(item => item.dates[0]);
     for (let i=0; i<customersWithDates.length; i++) {
       const dates = customersWithDates[i].dates[0];
-      if (dates.some(obj => obj.host == email) || dates.some(obj => obj.guest == email)) {
+      if (dates.some((obj: DateType) => obj.host == email) || dates.some((obj: DateType) => obj.guest == email)) {
         
         if (dates.length > 1) {
-          const updatedDates = dates.filter(item => item.host !== email && item.guest !== email);
+          const updatedDates = dates.filter((item: DateType) => item.host !== email && item.guest !== email);
           const stringified = JSON.stringify(updatedDates);
           await pool.query(
             `UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}')
