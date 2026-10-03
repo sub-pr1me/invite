@@ -1,18 +1,25 @@
 import { WebSocket, WebSocketServer } from "ws"
+import type { Server } from 'node:http'
 
-function sendJson(socket, payload) {
+declare module 'ws' {
+  interface WebSocket {
+    isAlive: boolean
+  }
+}
+
+function sendJson(socket: WebSocket, payload: unknown) {
   if(socket.readyState !== WebSocket.OPEN) return;
   socket.send(JSON.stringify(payload));
 };
 
-function broadcast(wss, payload) {
+function broadcast(wss: WebSocketServer, payload: unknown) {
   for (const client of wss.clients) {
     if(client.readyState !== WebSocket.OPEN) continue;
     client.send(JSON.stringify(payload));
   };
 };
 
-export function attachWebSocketServer(server) {
+export function attachWebSocketServer(server: Server) {
   const wss = new WebSocketServer({server, path: '/ws', maxPayload: 1024 * 1024});
 
   wss.on('connection', (socket) => {
@@ -33,7 +40,7 @@ export function attachWebSocketServer(server) {
 
   wss.on('close', () => clearInterval(interval));
 
-  function broadcastAuctionsUpdated(auctions) {
+  function broadcastAuctionsUpdated(auctions: unknown) {
     try {
       broadcast(wss, { type: 'auctions_updated', data: auctions });
     } catch (err) {

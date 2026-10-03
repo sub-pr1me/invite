@@ -29,11 +29,20 @@ import cookieParser from 'cookie-parser'
 import ConnectionCheckRouter from './routes/ConnectionCheckRouter.js'
 import 'dotenv/config.js';
 
+declare global {
+  namespace Express {
+    interface Request {
+      email?: string
+    }
+  }
+};
+
 const app = express();
 
 app.locals.test='TEST';
 
 const server = http.createServer(app);
+server.on('error', (error) => {console.error('Server failed to start:', error)});
 
 const { broadcastAuctionsUpdated } = attachWebSocketServer(server);
 app.locals.broadcastAuctionsUpdated = broadcastAuctionsUpdated;
@@ -93,9 +102,15 @@ app.use('/archive_date', ArchiveDateRouter);
 app.use('/info_edit', InfoEditRouter);
 app.use('/delete_account', DeleteAccountRouter);
 
-server.listen(process.env.PORT, process.env.HOST, (error) => {  
-  if (error) {console.error(error)}
-  const baseUrl = `http://${process.env.HOST}:${process.env.PORT}`;
+const port = Number(process.env.PORT ?? 3000);
+const host = process.env.HOST ?? 'localhost';
+
+if (!Number.isInteger(port) || port < 0 || port > 65535) {
+  throw new Error(`Invalid PORT: ${process.env.PORT}`);
+}
+
+server.listen(port, host, () => {
+  const baseUrl = `http://${host}:${port}`;
   console.log(`Server is running on ${baseUrl}`);
   console.log(`WebSocket Server is running on ${baseUrl.replace('http', 'ws')}/ws`);
 });
