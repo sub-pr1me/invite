@@ -1,8 +1,10 @@
 import { checkVenueToken, checkCustomerToken } from "../models/queries.js";
 import jwt from 'jsonwebtoken';
+import type { Jwt, JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import 'dotenv/config.js';
+import type { Request, Response } from 'express'
 
-export default async function handleRefreshToken(req, res) {
+export default async function handleRefreshToken(req: Request, res: Response) {
 
   console.log('HANDLE REFRESH TOKEN');
 
@@ -76,17 +78,27 @@ export default async function handleRefreshToken(req, res) {
   }
 
   // Evaluate JWT
+  const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+  const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
+    
+  if (!accessTokenSecret || !refreshTokenSecret) {
+    throw new Error('Missing JWT secret environment variables');
+  };
 
   jwt.verify(
     refreshToken,
-    process.env.REFRESH_TOKEN_SECRET,
-    (err, decoded) => {
+    refreshTokenSecret,
+    (err: VerifyErrors | null, decoded?: Jwt | JwtPayload | string) => {
+
+      if (err || !decoded || typeof decoded !== 'object' 
+      || !('email' in decoded) || typeof decoded.email !== 'string') {return res.sendStatus(403)};
+
       if (matchedVenue && (err || matchedVenue.email !==decoded.email)) return res.sendStatus(403);
       if (matchedCustomer && (err || matchedCustomer.email !==decoded.email)) return res.sendStatus(403);
 
       const accessToken = jwt.sign(
         { 'email': decoded.email },
-        process.env.ACCESS_TOKEN_SECRET,
+        accessTokenSecret,
         { expiresIn: '60s' } // RUTODO: Set to 15m in production
       );
       // console.log('NEW TOKEN - ', accessToken);
@@ -97,5 +109,5 @@ export default async function handleRefreshToken(req, res) {
         accessToken, roles, id, email, name, avatar, album, stage, likes, dob, gender, interest, dates, credits
       });
     }
-  );  
+  );
 };

@@ -1,20 +1,23 @@
 import bcrypt from "bcryptjs";
 import { checkVenuesForMatch, checkCustomersForMatch, getUserData, addRefreshToken} from "../models/queries.js";
 import jwt from 'jsonwebtoken';
+import type { Request, Response } from 'express'
 import 'dotenv/config.js';
 import { validationResult } from 'express-validator'
 
-export default async function LogInController(req, res) {
+export default async function LogInController(req: Request, res: Response) {
 
   const validation = validationResult(req);
+  const errors = validation.array();
+  const firstError = errors[0];
 
-  if (validation.errors[0] && validation.errors[0].path === 'email') {
-    return res.status(400).send('Invalid email address! Please try again.')
-  }
+  if (firstError?.type === 'field' && firstError.path === 'email') {
+    return res.status(400).send('Invalid email address! Please try again!');
+  };
 
-  if (validation.errors[0] && validation.errors[0].path === 'password') {
-    return res.status(400).send('Password must be longer than 6 characters!')
-  }
+  if (firstError?.type === 'field' && firstError.path === 'password') {
+    return res.status(400).send('Password must be longer than 6 characters!');
+  };
 
   // Check Account Existence
 
@@ -68,14 +71,22 @@ export default async function LogInController(req, res) {
   if (match) {
 
     // CREATE JWT
+    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+    const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
+      
+    if (!accessTokenSecret || !refreshTokenSecret) {
+      throw new Error('Missing JWT secret environment variables');
+    }
+    
     const accessToken = jwt.sign(
-      { 'email': email },
-      process.env.ACCESS_TOKEN_SECRET,
+      { email },
+      accessTokenSecret,
       { expiresIn: '60s' }
     );
+    
     const refreshToken = jwt.sign(
-      { 'email': email },
-      process.env.REFRESH_TOKEN_SECRET,
+      { email },
+      refreshTokenSecret,
       { expiresIn: '1d' }
     );
 

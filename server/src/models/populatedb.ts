@@ -120,7 +120,7 @@ async function main() {
     user: process.env.USER,
     password: process.env.PASSWORD,
     host: process.env.HOST,
-    port: process.env.DB_PORT,
+    port: process.env.DB_PORT === undefined ? undefined : Number(process.env.DB_PORT),
     database: process.env.DATABASE
   });
   await client.connect();

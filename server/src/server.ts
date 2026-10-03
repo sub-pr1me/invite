@@ -27,15 +27,7 @@ import LogOutRouter from './routes/LogOutRouter.js'
 import verifyJWT from './middleware/verifyJWT.js'
 import cookieParser from 'cookie-parser'
 import ConnectionCheckRouter from './routes/ConnectionCheckRouter.js'
-import 'dotenv/config.js';
-
-declare global {
-  namespace Express {
-    interface Request {
-      email?: string
-    }
-  }
-};
+import 'dotenv/config.js'
 
 const app = express();
 
@@ -76,8 +68,7 @@ app.use('/table_upload', TableUploadRouter);
 app.use('/auction_upload', AuctionUploadRouter);
 app.post('/auctions_update', async (req, res) => {
   try {
-    const email = req.email;
-    const result = await FetchAuctions(email);
+    const result = await FetchAuctions();
     if (req.app.locals.broadcastAuctionsUpdated) {
       req.app.locals.broadcastAuctionsUpdated(result);
     };

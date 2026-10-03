@@ -20,8 +20,7 @@ const upload = multer({
     if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg') {
       cb(null, true);
     } else {
-      req.errorMessage = 'Invalid file extension!'
-      cb(null, false);
+      cb(new Error('Invalid file type. Only PNG and JPEG images are allowed.'));
     }
   }
 });
