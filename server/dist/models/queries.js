@@ -1,0 +1,982 @@
+import pool from '../config/pool.js';
+export async function checkConnection() {
+    console.log('DB QUERY - checkConnection');
+    const { rows } = await pool.query('SELECT venue FROM venues');
+    return rows;
+}
+;
+export async function getAllVenueData() {
+    console.log('DB QUERY - getAllVenueData');
+    const { rows } = await pool.query('SELECT * FROM venues');
+    for (let i = 0; i < rows.length; i++) {
+        delete rows[i].password;
+        delete rows[i].reftoken;
+        delete rows[i].credits;
+    }
+    ;
+    return rows;
+}
+;
+export async function getAllCustomerData() {
+    console.log('DB QUERY - getAllCustomerData');
+    const { rows } = await pool.query('SELECT * FROM customers');
+    for (let i = 0; i < rows.length; i++) {
+        delete rows[i].password;
+        delete rows[i].reftoken;
+        delete rows[i].credits;
+    }
+    ;
+    return rows;
+}
+;
+export async function checkVenuesForMatch(email) {
+    console.log('DB QUERY - checkVenuesForMatch');
+    const { rows } = await pool.query(`SELECT * FROM venues WHERE email = '${email}'`);
+    return rows[0];
+}
+;
+export async function checkCustomersForMatch(email) {
+    console.log('DB QUERY - checkCustomersForMatch');
+    const { rows } = await pool.query(`SELECT * FROM customers WHERE email = '${email}'`);
+    return rows[0];
+}
+;
+export async function createNewUser(acc_type, name, email, password, stage, rating, tables, dates, credits) {
+    console.log('DB QUERY - createNewUser');
+    if (acc_type === 'venue') {
+        await pool.query(`INSERT INTO venues (
+      venue, email, password, stage, rating, tables, dates, credits) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, [name, email, password, stage, rating, tables, dates, credits]);
+        return 'success';
+    }
+    ;
+    await pool.query(`INSERT INTO customers (
+    customer, email, password, stage, dates, credits) 
+    VALUES ($1, $2, $3, $4, $5, $6)`, [name, email, password, stage, dates, credits]);
+    return 'success';
+}
+;
+export async function getUserData(email, acc_type) {
+    console.log('DB QUERY - getUserData');
+    if (acc_type === 'venue') {
+        const { rows } = await pool.query(`
+      SELECT ${acc_type}, id, password, stage, avatar, album, rating, hours, tables, likes, dates, credits
+      FROM ${acc_type}s 
+      WHERE email = '${email}'`);
+        return rows[0];
+    }
+    ;
+    const { rows } = await pool.query(`
+    SELECT ${acc_type}, id, password, stage, avatar, album, dob, gender, interest, likes, dates, credits 
+    FROM ${acc_type}s 
+    WHERE email = '${email}'`);
+    return rows[0];
+}
+;
+export async function addRefreshToken(acc_type, email, token) {
+    console.log('DB QUERY - addRefreshToken');
+    await pool.query(`UPDATE ${acc_type}s SET refToken = '${token}' WHERE email = '${email}'`);
+    return 'success';
+}
+;
+export async function checkVenueToken(token) {
+    console.log('DB QUERY - checkVenueToken');
+    const { rows } = await pool.query(`SELECT * FROM venues WHERE reftoken = '${token}'`);
+    return rows[0];
+}
+;
+export async function checkCustomerToken(token) {
+    console.log('DB QUERY - checkCustomerToken');
+    const { rows } = await pool.query(`SELECT * FROM customers WHERE reftoken = '${token}'`);
+    return rows[0];
+}
+;
+export async function deleteRefreshToken(acc_type, email) {
+    console.log('DB QUERY - deleteRefreshToken');
+    await pool.query(`UPDATE ${acc_type}s SET refToken = '' WHERE email = '${email}'`);
+    return 'success';
+}
+;
+export async function uploadNewAvatar(acc_type, email, link) {
+    console.log('DB QUERY - uploadNewAvatar');
+    const { rows } = await pool.query(`SELECT * FROM ${acc_type}s WHERE email = '${email}'`);
+    await pool.query(`UPDATE ${acc_type}s SET avatar = '${link}' WHERE email = '${email}'`);
+    if (rows[0].stage === '0')
+        await pool.query(`UPDATE ${acc_type}s SET stage = '1' WHERE email = '${email}'`);
+    if (rows[0])
+        return rows[0].avatar;
+    return null;
+}
+;
+export async function uploadNewAlbum(acc_type, email, links, postreg) {
+    console.log('DB QUERY - uploadNewAlbum');
+    await pool.query(`UPDATE ${acc_type}s SET album = '${links}' WHERE email = '${email}'`);
+    if (!postreg)
+        await pool.query(`UPDATE ${acc_type}s SET stage = '2' WHERE email = '${email}'`);
+    return 'ALBUM UPLOADED';
+}
+;
+export async function infoUpload(acc_type, email, hours, tables, stage, dob, gender, interest, endreg) {
+    console.log('DB QUERY - infoUpload');
+    if (acc_type === 'venue') {
+        if (stage === '2') { // pre-registration basic info
+            console.log('STAGE', stage);
+            const stringified = JSON.stringify(tables);
+            await pool.query(`UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${stringified}'),
+         stage = '3' WHERE email = '${email}'`);
+            const { rows } = await pool.query(`
+          SELECT tables
+          FROM venues 
+          WHERE email = '${email}'`);
+            return rows[0];
+        }
+        ;
+        if (stage === '3' && !endreg) { // pre-registration table editing
+            console.log('STAGE', stage, 'endreg -', endreg);
+            // console.log('line 132', tables[0]);
+            // console.log('line 132', tables[1]);
+            // console.log('line 132', tables[2]);
+            const stringified = JSON.stringify(tables);
+            await pool.query(`UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}')
+         WHERE email = '${email}'`);
+            const { rows } = await pool.query(`
+          SELECT tables
+          FROM venues 
+          WHERE email = '${email}'`);
+            return rows[0];
+        }
+        ;
+        if (stage === '3' && endreg) { // end venue registration
+            console.log('INFO UPLOAD STAGE', stage, 'endreg -', endreg);
+            // console.log('line 146', tables[0]);
+            // console.log('line 146', tables[1]);
+            // console.log('line 146', tables[2]);
+            const stringified = JSON.stringify(tables);
+            await pool.query(`UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}')
+         WHERE email = '${email}'`);
+            await pool.query(`UPDATE venues SET stage = '4' WHERE email = '${email}'`);
+            return 'VENUE REGISTRATION COMPLETE';
+        }
+        ;
+        if (stage === '4') { // post-registration table editing
+            console.log('INFO UPLOAD STAGE', stage);
+            // console.log('line 156', tables[0].auction);
+            // console.log('line 156', tables[1].auction);
+            // console.log('line 156', tables[2].auction);
+            const stringified = JSON.stringify(tables);
+            await pool.query(`UPDATE venues SET hours = '${hours}', tables = jsonb_set(tables, '{0}', '${stringified}')
+        WHERE email = '${email}'`);
+            const { rows } = await pool.query(`
+        SELECT tables
+        FROM venues 
+        WHERE email = '${email}'`);
+            return rows[0];
+        }
+        ;
+    }
+    ;
+    const date = new Date(dob);
+    const currentDate = new Date();
+    let age = currentDate.getFullYear() - date.getFullYear();
+    const monthDifference = currentDate.getMonth() - date.getMonth();
+    // Adjust age if the birthday hasn't occurred yet this year
+    if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < date.getDate())) {
+        age--;
+    }
+    ;
+    await pool.query(`UPDATE customers SET dob = '${dob}', age = '${age}', gender = '${gender}',
+       interest = '${interest}', stage = '4' WHERE email = '${email}'`);
+    return 'CUSTOMER REGISTRATION COMPLETE';
+}
+;
+export async function tableInfoUpdate(email, id, link) {
+    console.log('DB QUERY - tableInfoUpdate');
+    const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${email}'`);
+    const tables = rows[0].tables[0];
+    const pic = tables.filter((item) => item.id === parseInt(id))[0].pic;
+    const updated = tables.map((item) => {
+        if (item.id === parseInt(id)) {
+            return { ...item, pic: link };
+        }
+        else {
+            return item;
+        }
+    });
+    const stringified = JSON.stringify(updated);
+    await pool.query(`
+    UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
+    WHERE email = '${email}'`);
+    if (pic)
+        return pic;
+    return null;
+}
+;
+export async function auctionUpload(email, id, deposit, step, bidders, reg, venue_id) {
+    console.log('DB QUERY - auctionUpload');
+    const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${email}'`);
+    const tables = rows[0].tables[0];
+    const tableId = Number(id);
+    const updated = tables.map((item) => {
+        if (item.id === tableId) {
+            return { ...item, auction: { deposit: deposit, step: step, bidders: bidders, reg: reg, venue_id: venue_id } };
+        }
+        else {
+            return item;
+        }
+    });
+    const stringified = JSON.stringify(updated);
+    await pool.query(`
+    UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
+    WHERE email = '${email}'`);
+    return updated;
+}
+;
+export async function BalanceUpdate(email, amount, acc_type, deposit) {
+    console.log('DB QUERY - BalanceUpdate');
+    const { rows } = await pool.query(`SELECT credits FROM ${acc_type}s WHERE email = '${email}'`);
+    const balance = rows[0].credits;
+    const cashout = parseInt(balance) - parseInt(amount);
+    const dep = parseInt(balance) + parseInt(amount);
+    await pool.query(`
+    UPDATE ${acc_type}s SET credits = '${acc_type === 'venue' && !deposit ? cashout : dep}' 
+    WHERE email = '${email}'`);
+    if (acc_type === 'venue' && !deposit)
+        return cashout;
+    return dep;
+}
+;
+export async function FetchAuctions() {
+    console.log('DB QUERY - FetchAuctions');
+    const auctions = [];
+    const { rows } = await pool.query('SELECT venue, email, tables FROM venues');
+    for (let i = 0; i < rows.length; i++) {
+        if (rows[i].tables[0]) {
+            const filtered = rows[i].tables[0].filter((item) => item.auction.deposit);
+            filtered.map((item) => {
+                const arr = [null, null, null];
+                for (let i = 0; i < 3; i++) {
+                    const bidder = item.auction.bidders[i];
+                    if (typeof bidder === 'string') {
+                        arr.push(JSON.parse(bidder));
+                    }
+                    else {
+                        arr.push(bidder);
+                    }
+                }
+                ;
+                const step = item.auction.step;
+                const rawDeposit = item.auction.deposit;
+                const deposit = typeof rawDeposit === 'number' ? rawDeposit : Number(rawDeposit);
+                if (item.auction.step === null)
+                    return;
+                auctions.push({
+                    venue_id: item.auction.venue_id,
+                    venue_email: rows[i].email,
+                    name: rows[i].venue,
+                    id: item.id,
+                    pic: item.pic,
+                    step: item.auction.step,
+                    deposit,
+                    bidders: arr,
+                    reg: item.auction.reg
+                });
+            });
+        }
+        ;
+    }
+    ;
+    return auctions;
+}
+;
+export async function BiddersUpdate(bidders, venue_email, table) {
+    console.log('DB QUERY - BiddersUpdate');
+    const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${venue_email}'`);
+    const tables = rows[0].tables[0];
+    // console.log(`BEFORE #${parseInt(table)} BID UPDATE`, tables[parseInt(table)-1].auction)
+    const updated = tables.map((item) => {
+        if (item.id === parseInt(table)) {
+            return { ...item, auction: { ...item.auction, bidders: JSON.parse(bidders) } };
+        }
+        else {
+            return item;
+        }
+    });
+    // console.log(`AFTER #${parseInt(table)} BID UPDATE`,updated[parseInt(table)-1].auction);
+    const stringified = JSON.stringify(updated);
+    await pool.query(`
+    UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
+    WHERE email = '${venue_email}'`);
+    return 'BIDDERS UPDATED?';
+}
+;
+export async function AddTable(email, id, active, venue_id) {
+    console.log('DB QUERY - AddTable:', id);
+    const new_table = {
+        id: parseInt(id),
+        pic: '',
+        active: JSON.parse(active),
+        modal: false,
+        auction: { deposit: null, step: null, bidders: [null, null, null], reg: true, venue_id: venue_id }
+    };
+    const { rows } = await pool.query(`
+    SELECT tables
+    FROM venues 
+    WHERE email = '${email}'`);
+    const tables = rows[0].tables[0];
+    const updated = tables.map((item) => {
+        if (item.id === parseInt(id)) {
+            return new_table;
+        }
+        else {
+            return item;
+        }
+    });
+    const stringified = JSON.stringify(updated);
+    await pool.query(`
+    UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
+    WHERE email = '${email}'`);
+    return updated;
+}
+;
+export async function FetchProfileData(role, id, from) {
+    console.log('DB QUERY - FetchProfileData', role, id, 'from', from);
+    if (role === 'venue') {
+        const { rows } = await pool.query(`
+      SELECT venue, email, avatar, album, hours, tables, likes, dates, credits
+      FROM venues 
+      WHERE id = ${parseInt(id)}`);
+        return rows[0];
+    }
+    ;
+    const { rows } = await pool.query(`
+    SELECT customer, email, avatar, album, dob, gender, interest, likes, dates, credits 
+    FROM customers 
+    WHERE id = ${parseInt(id)}`);
+    return rows[0];
+}
+;
+export async function SwitchLike(email, role, name, avatar, id, liker_id) {
+    console.log('DB QUERY - SwitchLike');
+    const user = [email, name, avatar, liker_id];
+    const { rows } = await pool.query(`SELECT likes FROM ${role}s WHERE id = ${parseInt(id)}`);
+    const arr = rows[0].likes;
+    console.log('CURRENT LIKES:', arr);
+    if (!arr || !arr[0]) {
+        const updated = [];
+        await pool.query(`UPDATE ${role}s SET likes = '{{${email},${name},${avatar},${liker_id}}}' WHERE id = '${parseInt(id)}'`);
+        updated.push(user);
+        return updated;
+    }
+    ;
+    if (arr.some((like) => like[0] === email)) {
+        const updated = [];
+        for (const item of arr)
+            if (item[0] !== email)
+                updated.push(item);
+        await pool.query(`UPDATE ${role}s SET likes = '{${updated.toString()}}' WHERE id = '${parseInt(id)}'`);
+        return updated;
+    }
+    ;
+    if (!arr.some((like) => like[0] === email)) {
+        arr.push([email, name, avatar]);
+        await pool.query(`UPDATE ${role}s SET likes = '{${arr.toString()}}' WHERE id = '${parseInt(id)}'`);
+        return arr;
+    }
+    ;
+}
+;
+export async function FetchAvatar(email, role) {
+    console.log('DB QUERY - FetchAvatar');
+    if (role === 'venue') {
+        const { rows } = await pool.query(`
+      SELECT avatar, id FROM venues 
+      WHERE email = '${email}'`);
+        return rows[0];
+    }
+    ;
+    const { rows } = await pool.query(`
+    SELECT avatar, id FROM customers 
+    WHERE email = '${email}'`);
+    return rows[0];
+}
+;
+export async function NewDateUpload(venue, host, guest, new_date) {
+    console.log('DB QUERY - NewDateUpload');
+    const arr = [host, guest, venue];
+    while (arr.length) {
+        if (arr.length > 1) {
+            const { rows } = await pool.query(`SELECT dates FROM customers WHERE email = '${arr[0]}'`);
+            let dates = rows[0].dates[0];
+            if (dates) {
+                dates.push(new_date);
+            }
+            else {
+                dates = [new_date];
+            }
+            ;
+            const stringified = JSON.stringify(dates);
+            await pool.query(`
+        UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}') 
+        WHERE email = '${arr[0]}'`);
+            arr.shift();
+        }
+        else {
+            const { rows } = await pool.query(`SELECT dates FROM venues WHERE email = '${arr[0]}'`);
+            let dates = rows[0].dates[0];
+            if (dates) {
+                dates.push(new_date);
+            }
+            else {
+                dates = [new_date];
+            }
+            ;
+            const stringified = JSON.stringify(dates);
+            await pool.query(`
+        UPDATE venues SET dates = jsonb_set(dates, '{0}', '${stringified}') 
+        WHERE email = '${arr[0]}'`);
+            arr.shift();
+        }
+        ;
+    }
+    ;
+    const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${venue}'`);
+    const tables = rows[0].tables[0];
+    const updated = tables.map((item) => {
+        if (item.id === parseInt(new_date.table)) {
+            return { ...item, auction: {
+                    deposit: null,
+                    step: null,
+                    bidders: [null, null, null],
+                    reg: true,
+                    venue_id: parseInt(new_date.table)
+                } };
+        }
+        else {
+            return item;
+        }
+        ;
+    });
+    const stringified = JSON.stringify(updated);
+    await pool.query(`
+    UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
+    WHERE email = '${venue}'`);
+    return updated;
+}
+;
+export async function ArchiveVenueDate(venue, date, endTime) {
+    console.log('DB QUERY - ArchiveVenueDate');
+    const { rows } = await pool.query(`SELECT dates FROM venues WHERE email = '${venue}'`);
+    let dates = rows[0].dates[0];
+    const updated = dates.map((item) => {
+        if (item.venue === date.venue && item.host === date.host && item.guest === date.guest) {
+            return { ...item, status: 'archived', endTime: endTime };
+        }
+        else {
+            return item;
+        }
+    });
+    const stringified = JSON.stringify(updated);
+    await pool.query(`
+      UPDATE venues SET dates = jsonb_set(dates, '{0}', '${stringified}') 
+      WHERE email = '${venue}'`);
+    return 'success';
+}
+;
+export async function ArchiveHostDate(host, date, endTime) {
+    console.log('DB QUERY - ArchiveHostDate');
+    const { rows } = await pool.query(`SELECT dates FROM customers WHERE email = '${host}'`);
+    let dates = rows[0].dates[0];
+    const updated = dates.map((item) => {
+        if (item.venue === date.venue && item.host === date.host && item.guest === date.guest) {
+            return { ...item, status: 'archived', endTime: endTime };
+        }
+        else {
+            return item;
+        }
+    });
+    const stringified = JSON.stringify(updated);
+    await pool.query(`
+      UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}') 
+      WHERE email = '${host}'`);
+    return 'success';
+}
+;
+export async function ArchiveGuestDate(guest, date, endTime) {
+    console.log('DB QUERY - ArchiveGuestDate');
+    const { rows } = await pool.query(`SELECT dates FROM customers WHERE email = '${guest}'`);
+    let dates = rows[0].dates[0];
+    const updated = dates.map((item) => {
+        if (item.venue === date.venue && item.host === date.host && item.guest === date.guest) {
+            return { ...item, status: 'archived', endTime: endTime };
+        }
+        else {
+            return item;
+        }
+    });
+    const stringified = JSON.stringify(updated);
+    await pool.query(`
+      UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}') 
+      WHERE email = '${guest}'`);
+    return 'success';
+}
+;
+export async function EditInfo(email, acc_type, new_name, new_email, new_hours) {
+    console.log('DB QUERY - EditInfo');
+    console.log('E-MAIL:', email);
+    console.log('NEW NAME:', new_name);
+    console.log('NEW EMAIL:', new_email);
+    console.log('NEW HOURS:', new_hours);
+    if (new_name) {
+        console.log('EDIT NAME');
+        const updates = {};
+        // EDIT CUSTOMER NAME IN AUCTIONS
+        if (acc_type === 'customer') {
+            const { rows } = await pool.query(`SELECT email, tables FROM venues`);
+            const haveTables = rows.filter(item => item.tables[0]);
+            for (let i = 0; i < haveTables.length; i++) {
+                const tables = haveTables[i].tables[0];
+                let upd = false;
+                const updatedTables = tables.map((item) => {
+                    if (item.auction.bidders.some(obj => obj !== null && typeof obj === 'object' && obj.email == email)) {
+                        upd = true;
+                        const updatedBidders = item.auction.bidders.map(elem => {
+                            if (elem !== null && typeof elem === 'object' && elem.email === email) {
+                                return { ...elem, name: new_name };
+                            }
+                            else {
+                                return elem;
+                            }
+                        });
+                        return { ...item, auction: { ...item.auction, bidders: updatedBidders } };
+                    }
+                    else {
+                        return item;
+                    }
+                    ;
+                });
+                if (upd) {
+                    const stringified = JSON.stringify(updatedTables);
+                    await pool.query(`UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}')
+            WHERE email = '${haveTables[i].email}'`);
+                }
+                ;
+            }
+            ;
+        }
+        ;
+        // EDIT VENUE NAME IN DATES
+        if (acc_type === 'venue') {
+            const { rows } = await pool.query(`SELECT dates FROM venues WHERE email = '${email}'`);
+            console.log('ROWS ZERO:', rows[0]);
+            const dates = rows[0].dates[0];
+            if (dates?.length) {
+                const updatedDates = dates.map((item) => { return { ...item, venue_name: new_name }; });
+                const stringified = JSON.stringify(updatedDates);
+                await pool.query(`UPDATE venues SET dates = jsonb_set(tables, '{0}', '${stringified}') WHERE email = '${email}'`);
+                updates.dates = updatedDates;
+            }
+            ;
+            const customerDatesData = await pool.query(`SELECT email, dates FROM customers`);
+            const customersWithDates = customerDatesData.rows.filter(item => item.dates[0]);
+            for (let i = 0; i < customersWithDates.length; i++) {
+                const dates = customersWithDates[i].dates[0];
+                let upd = false;
+                const updatedDates = dates.map((item) => {
+                    if (item.venue == email) {
+                        upd = true;
+                        return { ...item, venue_name: new_name };
+                    }
+                    else {
+                        return item;
+                    }
+                    ;
+                });
+                if (upd) {
+                    const stringified = JSON.stringify(updatedDates);
+                    await pool.query(`UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}')
+            WHERE email = '${customersWithDates[i].email}'`);
+                }
+                ;
+            }
+            ;
+        }
+        ;
+        // EDIT VENUE / CUSTOMER NAME IN PROFILE
+        await pool.query(`UPDATE ${acc_type}s SET ${acc_type} = '${new_name}' WHERE email = '${email}'`);
+        updates.message = `${acc_type} name has been changed to "${new_name}"`;
+        updates.name = new_name;
+        return updates;
+    }
+    ;
+    if (new_email) {
+        console.log('EDIT E-MAIL');
+        const updates = {};
+        // EDIT CUSTOMER E-MAIL IN AUCTIONS
+        if (acc_type === 'customer') {
+            const { rows } = await pool.query(`SELECT email, tables FROM venues`);
+            const haveTables = rows.filter(item => item.tables[0]);
+            for (let i = 0; i < haveTables.length; i++) {
+                const tables = haveTables[i].tables[0];
+                let upd = false;
+                const updatedTables = tables.map((item) => {
+                    if (item.auction.bidders.some(obj => obj !== null && typeof obj === 'object' && obj.email == email)) {
+                        upd = true;
+                        const updatedBidders = item.auction.bidders.map(elem => {
+                            if (elem !== null && typeof elem === 'object' && elem.email === email) {
+                                return { ...elem, email: new_email };
+                            }
+                            else {
+                                return elem;
+                            }
+                        });
+                        return { ...item, auction: { ...item.auction, bidders: updatedBidders } };
+                    }
+                    else {
+                        return item;
+                    }
+                    ;
+                });
+                if (upd) {
+                    const stringified = JSON.stringify(updatedTables);
+                    await pool.query(`UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}')
+            WHERE email = '${haveTables[i].email}'`);
+                }
+                ;
+            }
+            ;
+        }
+        ;
+        // EDIT CUSTOMER E-MAIL IN VENUE / CUSTOMER LIKES
+        if (acc_type === 'customer') {
+            const { rows } = await pool.query(`SELECT email, likes FROM venues`);
+            const haveLikes = rows.filter(item => item.likes?.length);
+            for (let i = 0; i < haveLikes.length; i++) {
+                const likes = haveLikes[i].likes;
+                let upd = false;
+                const updatedLikes = likes.map((item) => {
+                    if (item[0] == email) {
+                        upd = true;
+                        return [new_email, item[1], item[2], item[3]];
+                    }
+                    else {
+                        return item;
+                    }
+                    ;
+                });
+                if (upd) {
+                    const stringified = JSON.stringify(updatedLikes);
+                    await pool.query(`UPDATE venues SET likes = '{${stringified}}' 
+            WHERE email ='${haveLikes[i].email}'`);
+                }
+                ;
+            }
+            ;
+        }
+        ;
+        if (acc_type === 'customer') {
+            const { rows } = await pool.query(`SELECT email, likes FROM customers`);
+            const haveLikes = rows.filter(item => item.likes?.length);
+            for (let i = 0; i < haveLikes.length; i++) {
+                const likes = haveLikes[i];
+                let upd = false;
+                const updatedLikes = likes.map((item) => {
+                    if (item[0] == email) {
+                        upd = true;
+                        return [new_email, item[1], item[2], item[3]];
+                    }
+                    else {
+                        return item;
+                    }
+                    ;
+                });
+                if (upd) {
+                    const stringified = JSON.stringify(updatedLikes);
+                    await pool.query(`UPDATE customers SET likes = '{${stringified}}' 
+            WHERE email ='${haveLikes[i].email}'`);
+                }
+                ;
+            }
+            ;
+        }
+        ;
+        // EDIT VENUE / GUEST / HOST E-MAIL IN DATES
+        if (acc_type === 'venue') {
+            const { rows } = await pool.query(`SELECT dates FROM venues WHERE email = '${email}'`);
+            const dates = rows[0].dates[0];
+            if (dates?.length) {
+                const updatedDates = dates.map((item) => { return { ...item, venue: new_email }; });
+                const stringified = JSON.stringify(updatedDates);
+                await pool.query(`UPDATE venues SET dates = jsonb_set(tables, '{0}', '${stringified}') 
+          WHERE email = '${email}'`);
+                updates.dates = updatedDates;
+            }
+            ;
+            const customerDatesData = await pool.query(`SELECT email, dates FROM customers`);
+            const customersWithDates = customerDatesData.rows.filter(item => item.dates[0]);
+            for (let i = 0; i < customersWithDates.length; i++) {
+                const dates = customersWithDates[i].dates[0];
+                let upd = false;
+                const updatedDates = dates.map((item) => {
+                    if (item.venue == email) {
+                        upd = true;
+                        return { ...item, venue: new_email };
+                    }
+                    else {
+                        return item;
+                    }
+                    ;
+                });
+                if (upd) {
+                    const stringified = JSON.stringify(updatedDates);
+                    await pool.query(`UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}')
+            WHERE email = '${customersWithDates[i].email}'`);
+                }
+                ;
+            }
+            ;
+        }
+        ;
+        if (acc_type === 'customer') {
+            const venuesDatesData = await pool.query(`SELECT email, dates FROM venues`);
+            const venuesWithDates = venuesDatesData.rows.filter(item => item.dates[0]);
+            for (let i = 0; i < venuesWithDates.length; i++) {
+                const dates = venuesWithDates[i].dates[0];
+                let upd = false;
+                const updatedDates = dates.map((item) => {
+                    if (item.host == email) {
+                        upd = true;
+                        return { ...item, host: new_email };
+                    }
+                    else if (item.guest == email) {
+                        upd = true;
+                        return { ...item, guest: new_email };
+                    }
+                    else {
+                        return item;
+                    }
+                    ;
+                });
+                if (upd) {
+                    const stringified = JSON.stringify(updatedDates);
+                    await pool.query(`UPDATE venues SET dates = jsonb_set(dates, '{0}', '${stringified}')
+            WHERE email = '${venuesWithDates[i].email}'`);
+                }
+                ;
+            }
+            ;
+            const customersDatesData = await pool.query(`SELECT email, dates FROM customers`);
+            const customersWithDates = customersDatesData.rows.filter(item => item.dates[0]);
+            for (let i = 0; i < customersWithDates.length; i++) {
+                const dates = customersWithDates[i].dates[0];
+                let upd = false;
+                const updatedDates = dates.map((item) => {
+                    if (item.host == email) {
+                        upd = true;
+                        return { ...item, host: new_email };
+                    }
+                    else if (item.guest == email) {
+                        upd = true;
+                        return { ...item, guest: new_email };
+                    }
+                    else {
+                        return item;
+                    }
+                    ;
+                });
+                if (upd) {
+                    const stringified = JSON.stringify(updatedDates);
+                    await pool.query(`UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}')
+            WHERE email = '${customersWithDates[i].email}'`);
+                }
+                ;
+            }
+            ;
+        }
+        ;
+        // EDIT VENUE / CUSTOMER E-MAIL IN PROFILE
+        await pool.query(`UPDATE ${acc_type}s SET email = '${new_email}' WHERE email = '${email}'`);
+        updates.message = `${acc_type} email has been changed to "${new_email}"`;
+        updates.email = new_email;
+        return updates;
+    }
+    ;
+    if (new_hours) {
+        console.log('EDIT HOURS');
+        const updates = {};
+        await pool.query(`UPDATE venues SET hours = '${new_hours}' WHERE email = '${email}'`);
+        updates.message = `venue hours were changed to "${new_hours}"`;
+        updates.hours = new_hours;
+        return updates;
+    }
+    ;
+}
+;
+export async function DeleteAccount(email, acc_type) {
+    console.log('DB QUERY - DeleteAccount');
+    // DELETE CUSTOMER FROM AUCTIONS
+    if (acc_type === 'customer') {
+        const { rows } = await pool.query(`SELECT email, tables FROM venues`);
+        const haveTables = rows.filter(item => item.tables[0]);
+        for (let i = 0; i < haveTables.length; i++) {
+            const tables = haveTables[i].tables[0];
+            let upd = false;
+            const updatedTables = tables.map((item) => {
+                if (item.auction.bidders.some(obj => obj !== null && typeof obj === 'object' && obj.email == email)) {
+                    upd = true;
+                    const updatedBidders = item.auction.bidders
+                        .map(elem => {
+                        if (elem !== null && typeof elem === 'object' && elem.email === email) {
+                            return 0;
+                        }
+                        else {
+                            return elem;
+                        }
+                    })
+                        .filter(item => item !== 0);
+                    while (updatedBidders.length < 3)
+                        updatedBidders.push(null);
+                    return { ...item, auction: { ...item.auction, bidders: updatedBidders } };
+                }
+                else {
+                    return item;
+                }
+                ;
+            });
+            if (upd) {
+                const stringified = JSON.stringify(updatedTables);
+                await pool.query(`UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}')
+          WHERE email = '${haveTables[i].email}'`);
+                console.log(`CUSTOMER REMOVED FROM AUCTION IN ${haveTables[i].email}`);
+            }
+            ;
+        }
+        ;
+    }
+    ;
+    // DELETE CUSTOMER FROM VENUE / CUSTOMER LIKES
+    if (acc_type === 'customer') {
+        const { rows } = await pool.query(`SELECT email, likes FROM venues`);
+        const haveLikes = rows.filter(item => item.likes !== null && item.likes.length);
+        for (let i = 0; i < haveLikes.length; i++) {
+            const likes = haveLikes[i].likes;
+            if (likes.some((like) => like[0] === email)) {
+                if (likes.length > 1) {
+                    const updatedLikes = likes.filter((item) => item[0][0] !== email);
+                    await pool.query(`UPDATE venues SET likes = '{${updatedLikes.toString()}}' 
+            WHERE email = '${haveLikes[i].email}'`);
+                    console.log(`CUSTOMER REMOVED FROM LIKES IN ${haveLikes[i].email}`);
+                }
+                else {
+                    await pool.query(`UPDATE venues SET likes = '{}' 
+            WHERE email = '${haveLikes[i].email}'`);
+                    console.log(`CUSTOMER REMOVED FROM LIKES IN ${haveLikes[i].email}`);
+                }
+                ;
+            }
+            ;
+        }
+        ;
+    }
+    ;
+    if (acc_type === 'customer') {
+        const { rows } = await pool.query(`SELECT email, likes FROM customers`);
+        const haveLikes = rows.filter(item => item.likes !== null && item.likes.length);
+        for (let i = 0; i < haveLikes.length; i++) {
+            const likes = haveLikes[i].likes;
+            if (likes.some((like) => like[0] === email)) {
+                if (likes.length > 1) {
+                    const updatedLikes = likes.filter((item) => item[0][0] !== email);
+                    await pool.query(`UPDATE customers SET likes = '{${updatedLikes.toString()}}' 
+            WHERE email = '${haveLikes[i].email}'`);
+                    console.log(`CUSTOMER REMOVED FROM LIKES IN ${haveLikes[i].email}`);
+                }
+                else {
+                    await pool.query(`UPDATE customers SET likes = '{}' 
+            WHERE email = '${haveLikes[i].email}'`);
+                    console.log(`CUSTOMER REMOVED FROM LIKES IN ${haveLikes[i].email}`);
+                }
+                ;
+            }
+            ;
+        }
+        ;
+    }
+    ;
+    // DELETE VENUE / CUSTOMER FROM DATES
+    if (acc_type === 'venue') {
+        const customerDatesData = await pool.query(`SELECT email, dates FROM customers`);
+        const customersWithDates = customerDatesData.rows.filter(item => item.dates[0]);
+        for (let i = 0; i < customersWithDates.length; i++) {
+            const dates = customersWithDates[i].dates[0];
+            if (dates.some((obj) => obj.venue == email)) {
+                if (dates.length > 1) {
+                    const updatedDates = dates.filter((item) => item.venue !== email);
+                    const stringified = JSON.stringify(updatedDates);
+                    await pool.query(`UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}')
+            WHERE email = '${customersWithDates[i].email}'`);
+                    console.log(`VENUE REMOVED FROM DATES IN ${customersWithDates[i].email}`);
+                }
+                else {
+                    await pool.query(`UPDATE customers SET dates = jsonb_set(dates, '{0}', '[]')
+            WHERE email = '${customersWithDates[i].email}'`);
+                    console.log(`VENUE REMOVED FROM DATES IN ${customersWithDates[i].email}`);
+                }
+                ;
+            }
+            ;
+        }
+        ;
+    }
+    ;
+    if (acc_type === 'customer') {
+        const venueDatesData = await pool.query(`SELECT email, dates FROM venues`);
+        const venuesWithDates = venueDatesData.rows.filter(item => item.dates[0]);
+        for (let i = 0; i < venuesWithDates.length; i++) {
+            const dates = venuesWithDates[i].dates[0];
+            if (dates.some((obj) => obj.host == email) || dates.some((obj) => obj.guest == email)) {
+                if (dates.length > 1) {
+                    const updatedDates = dates.filter((item) => item.host !== email && item.guest !== email);
+                    const stringified = JSON.stringify(updatedDates);
+                    await pool.query(`UPDATE venues SET dates = jsonb_set(dates, '{0}', '${stringified}')
+            WHERE email = '${venuesWithDates[i].email}'`);
+                    console.log(`CUSTOMER REMOVED FROM DATES IN ${venuesWithDates[i].email}`);
+                }
+                else {
+                    await pool.query(`UPDATE venues SET dates = jsonb_set(dates, '{0}', '[]')
+            WHERE email = '${venuesWithDates[i].email}'`);
+                    console.log(`CUSTOMER REMOVED FROM DATES IN ${venuesWithDates[i].email}`);
+                }
+                ;
+            }
+            ;
+        }
+        ;
+        const customerDatesData = await pool.query(`SELECT email, dates FROM customers`);
+        const customersWithDates = customerDatesData.rows.filter(item => item.dates[0]);
+        for (let i = 0; i < customersWithDates.length; i++) {
+            const dates = customersWithDates[i].dates[0];
+            if (dates.some((obj) => obj.host == email) || dates.some((obj) => obj.guest == email)) {
+                if (dates.length > 1) {
+                    const updatedDates = dates.filter((item) => item.host !== email && item.guest !== email);
+                    const stringified = JSON.stringify(updatedDates);
+                    await pool.query(`UPDATE customers SET dates = jsonb_set(dates, '{0}', '${stringified}')
+            WHERE email = '${customersWithDates[i].email}'`);
+                    console.log(`CUSTOMER REMOVED FROM DATES IN ${customersWithDates[i].email}`);
+                }
+                else {
+                    await pool.query(`UPDATE customers SET dates = jsonb_set(dates, '{0}', '[]')
+            WHERE email = '${customersWithDates[i].email}'`);
+                    console.log(`CUSTOMER REMOVED FROM DATES IN ${customersWithDates[i].email}`);
+                }
+                ;
+            }
+            ;
+        }
+        ;
+    }
+    ;
+    // DELETE VENUE / CUSTOMER ACCOUNT FROM DB
+    await pool.query(`DELETE FROM ${acc_type}s WHERE email = '${email}'`);
+    return `ACCOUNT "${email}" HAS BEEN DELETED`;
+}
+;

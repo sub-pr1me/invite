@@ -141,7 +141,7 @@ export async function infoUpload(
   acc_type: string, 
   email: string, 
   hours: string, 
-  tables: string, 
+  tables: TableType[], 
   stage: string, 
   dob: string, 
   gender: string, 
@@ -508,7 +508,7 @@ export async function NewDateUpload(venue: string, host: string, guest: string, 
   return updated;
 };
 
-export async function ArchiveVenueDate (venue: string, date: DateType, endTime: string) {
+export async function ArchiveVenueDate (venue: string, date: DateType, endTime: number) {
   console.log('DB QUERY - ArchiveVenueDate');
 
     const { rows } = await pool.query(`SELECT dates FROM venues WHERE email = '${venue}'`);
@@ -530,7 +530,7 @@ export async function ArchiveVenueDate (venue: string, date: DateType, endTime: 
   return 'success';
 };
 
-export async function ArchiveHostDate (host: string, date: DateType, endTime: string) {
+export async function ArchiveHostDate (host: string, date: DateType, endTime: number) {
   console.log('DB QUERY - ArchiveHostDate');
 
     const { rows } = await pool.query(`SELECT dates FROM customers WHERE email = '${host}'`);
@@ -552,7 +552,7 @@ export async function ArchiveHostDate (host: string, date: DateType, endTime: st
   return 'success';
 };
 
-export async function ArchiveGuestDate (guest: string, date: DateType, endTime: string) {
+export async function ArchiveGuestDate (guest: string, date: DateType, endTime: number) {
   console.log('DB QUERY - ArchiveGuestDate');
 
     const { rows } = await pool.query(`SELECT dates FROM customers WHERE email = '${guest}'`);

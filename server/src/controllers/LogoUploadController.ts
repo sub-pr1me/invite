@@ -2,8 +2,7 @@ import cloudinary from '../utils/cloudinary.js'
 import { 
   checkVenuesForMatch,
   checkCustomersForMatch, 
-  uploadNewAvatar } 
-from '../models/queries.js'
+  uploadNewAvatar } from '../models/queries.js'
 import type { Request, Response } from 'express'
 
 export default async function handleLogoUpload(
@@ -14,7 +13,7 @@ export default async function handleLogoUpload(
     return res.status(422).json({ message: 'No valid image file was uploaded.' });
   };
 
-  if (!req.email) { return res.sendStatus(401) }
+  if (!req.email) return res.sendStatus(401);
 
   const email = req.email;
   const matchedVenues = await checkVenuesForMatch(email);
@@ -30,7 +29,7 @@ export default async function handleLogoUpload(
       return res.status(500).json({ success: false, message: 'UPLOAD ERROR' });
     };
 
-    const renew = await uploadNewAvatar(accType, req.email, result.secure_url);
+    const renew = await uploadNewAvatar(accType!, req.email!, result.secure_url);
     
     if (renew) {
       const arr = renew.split("/");

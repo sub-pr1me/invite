@@ -80,7 +80,7 @@ export type DateType = {
   guest_pic: string,
   deposit: string,
   status: string,
-  endTime?: string
+  endTime?: string,
 }
 
 export type PreviewSrcType = { 
