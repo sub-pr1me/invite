@@ -213,6 +213,8 @@ export async function tableInfoUpdate(email, id, link) {
 ;
 export async function auctionUpload(email, id, deposit, step, bidders, reg, venue_id) {
     console.log('DB QUERY - auctionUpload');
+    console.log(bidders);
+    console.log(typeof bidders);
     const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${email}'`);
     const tables = rows[0].tables[0];
     const tableId = Number(id);
@@ -225,6 +227,7 @@ export async function auctionUpload(email, id, deposit, step, bidders, reg, venu
         }
     });
     const stringified = JSON.stringify(updated);
+    console.log('BIDDERS - ', updated[0].auction.bidders);
     await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
     WHERE email = '${email}'`);
@@ -253,18 +256,13 @@ export async function FetchAuctions() {
         if (rows[i].tables[0]) {
             const filtered = rows[i].tables[0].filter((item) => item.auction.deposit);
             filtered.map((item) => {
-                const arr = [null, null, null];
+                const arr = [];
                 for (let i = 0; i < 3; i++) {
                     const bidder = item.auction.bidders[i];
-                    if (typeof bidder === 'string') {
-                        arr.push(JSON.parse(bidder));
-                    }
-                    else {
-                        arr.push(bidder);
-                    }
+                    arr.push(typeof bidder === 'string' ? JSON.parse(bidder) : bidder);
                 }
                 ;
-                const step = item.auction.step;
+                const bidders = arr;
                 const rawDeposit = item.auction.deposit;
                 const deposit = typeof rawDeposit === 'number' ? rawDeposit : Number(rawDeposit);
                 if (item.auction.step === null)
@@ -277,7 +275,7 @@ export async function FetchAuctions() {
                     pic: item.pic,
                     step: item.auction.step,
                     deposit,
-                    bidders: arr,
+                    bidders: bidders,
                     reg: item.auction.reg
                 });
             });
@@ -355,34 +353,24 @@ export async function FetchProfileData(role, id, from) {
     return rows[0];
 }
 ;
-export async function SwitchLike(email, role, name, avatar, id, liker_id) {
+export async function SwitchLike(email, role, name, avatar, likee_id, liker_id) {
     console.log('DB QUERY - SwitchLike');
+    const table = role === 'venue' ? 'venues' : role === 'customer' ? 'customers' : null;
+    if (!table)
+        throw new Error(`Invalid account role: ${role}`);
+    const likeeId = Number.parseInt(likee_id, 10);
+    if (!Number.isInteger(likeeId))
+        throw new Error(`Invalid account id: ${likee_id}`);
     const user = [email, name, avatar, liker_id];
-    const { rows } = await pool.query(`SELECT likes FROM ${role}s WHERE id = ${parseInt(id)}`);
-    const arr = rows[0].likes;
-    console.log('CURRENT LIKES:', arr);
-    if (!arr || !arr[0]) {
-        const updated = [];
-        await pool.query(`UPDATE ${role}s SET likes = '{{${email},${name},${avatar},${liker_id}}}' WHERE id = '${parseInt(id)}'`);
-        updated.push(user);
-        return updated;
-    }
-    ;
-    if (arr.some((like) => like[0] === email)) {
-        const updated = [];
-        for (const item of arr)
-            if (item[0] !== email)
-                updated.push(item);
-        await pool.query(`UPDATE ${role}s SET likes = '{${updated.toString()}}' WHERE id = '${parseInt(id)}'`);
-        return updated;
-    }
-    ;
-    if (!arr.some((like) => like[0] === email)) {
-        arr.push([email, name, avatar]);
-        await pool.query(`UPDATE ${role}s SET likes = '{${arr.toString()}}' WHERE id = '${parseInt(id)}'`);
-        return arr;
-    }
-    ;
+    const { rows } = await pool.query(`SELECT likes FROM ${table} WHERE id = $1`, [likeeId]);
+    const existingLikes = rows[0]?.likes ?? [];
+    console.log('PREVIOUS LIKES:', existingLikes);
+    const updatedLikes = existingLikes.some(like => like[0] === email)
+        ? existingLikes.filter(like => like[0] !== email)
+        : [...existingLikes, user];
+    await pool.query(`UPDATE ${table} SET likes = $1::jsonb WHERE id = $2`, [JSON.stringify(updatedLikes), likeeId]);
+    console.log('UPDATED LIKES:', updatedLikes);
+    return updatedLikes;
 }
 ;
 export async function FetchAvatar(email, role) {
@@ -664,9 +652,7 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
                     ;
                 });
                 if (upd) {
-                    const stringified = JSON.stringify(updatedLikes);
-                    await pool.query(`UPDATE venues SET likes = '{${stringified}}' 
-            WHERE email ='${haveLikes[i].email}'`);
+                    await pool.query(`UPDATE venues SET likes = $1::jsonb WHERE email = $2`, [JSON.stringify(updatedLikes), haveLikes[i].email]);
                 }
                 ;
             }
@@ -690,9 +676,7 @@ export async function EditInfo(email, acc_type, new_name, new_email, new_hours) 
                     ;
                 });
                 if (upd) {
-                    const stringified = JSON.stringify(updatedLikes);
-                    await pool.query(`UPDATE customers SET likes = '{${stringified}}' 
-            WHERE email ='${haveLikes[i].email}'`);
+                    await pool.query(`UPDATE customers SET likes = $1::jsonb WHERE email = $2`, [JSON.stringify(updatedLikes), haveLikes[i].email]);
                 }
                 ;
             }
@@ -861,14 +845,12 @@ export async function DeleteAccount(email, acc_type) {
             const likes = haveLikes[i].likes;
             if (likes.some((like) => like[0] === email)) {
                 if (likes.length > 1) {
-                    const updatedLikes = likes.filter((item) => item[0][0] !== email);
-                    await pool.query(`UPDATE venues SET likes = '{${updatedLikes.toString()}}' 
-            WHERE email = '${haveLikes[i].email}'`);
+                    const updatedLikes = likes.filter((item) => item[0] !== email);
+                    await pool.query(`UPDATE venues SET likes = $1::jsonb WHERE email = $2`, [JSON.stringify(updatedLikes), haveLikes[i].email]);
                     console.log(`CUSTOMER REMOVED FROM LIKES IN ${haveLikes[i].email}`);
                 }
                 else {
-                    await pool.query(`UPDATE venues SET likes = '{}' 
-            WHERE email = '${haveLikes[i].email}'`);
+                    await pool.query(`UPDATE venues SET likes = '[]'::jsonb WHERE email = $1`, [haveLikes[i].email]);
                     console.log(`CUSTOMER REMOVED FROM LIKES IN ${haveLikes[i].email}`);
                 }
                 ;
@@ -885,14 +867,12 @@ export async function DeleteAccount(email, acc_type) {
             const likes = haveLikes[i].likes;
             if (likes.some((like) => like[0] === email)) {
                 if (likes.length > 1) {
-                    const updatedLikes = likes.filter((item) => item[0][0] !== email);
-                    await pool.query(`UPDATE customers SET likes = '{${updatedLikes.toString()}}' 
-            WHERE email = '${haveLikes[i].email}'`);
+                    const updatedLikes = likes.filter((item) => item[0] !== email);
+                    await pool.query(`UPDATE customers SET likes = $1::jsonb WHERE email = $2`, [JSON.stringify(updatedLikes), haveLikes[i].email]);
                     console.log(`CUSTOMER REMOVED FROM LIKES IN ${haveLikes[i].email}`);
                 }
                 else {
-                    await pool.query(`UPDATE customers SET likes = '{}' 
-            WHERE email = '${haveLikes[i].email}'`);
+                    await pool.query(`UPDATE customers SET likes = '[]'::jsonb WHERE email = $1`, [haveLikes[i].email]);
                     console.log(`CUSTOMER REMOVED FROM LIKES IN ${haveLikes[i].email}`);
                 }
                 ;

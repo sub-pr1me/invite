@@ -2,11 +2,8 @@ import { AddTable } from '../models/queries.js';
 const handleTransformTable = async (req, res) => {
     try {
         const email = req.email;
-        if (!email) {
-            res.sendStatus(401);
-            return;
-        }
-        ;
+        if (!email)
+            return res.sendStatus(401);
         const id = req.body.id;
         const active = req.body.active;
         const venue_id = req.body.venue_id;

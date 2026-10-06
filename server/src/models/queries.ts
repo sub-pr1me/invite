@@ -402,31 +402,46 @@ export async function SwitchLike(
   role: string, 
   name: string, 
   avatar: string, 
-  id: string, 
+  likee_id: string, 
   liker_id: string
 ) {
     console.log('DB QUERY - SwitchLike');
+    function toPostgresArray(arr: unknown): string {
+      if (!Array.isArray(arr)) { return `"${arr}"`}; // If it's a string element, wrap it in double quotes      
+      
+      const contents = arr.map(toPostgresArray).join(','); // Recursively process elements and join them with commas inside curly braces
+      return `{${contents}}`;
+    };
+
     const user = [email, name, avatar, liker_id];
-  const { rows } = await pool.query(`SELECT likes FROM ${role}s WHERE id = ${parseInt(id)}`);
-  const arr = rows[0].likes;
-  console.log('CURRENT LIKES:', arr);
-  if (!arr || !arr[0]) {
-    const updated = [];
-    await pool.query(`UPDATE ${role}s SET likes = '{{${email},${name},${avatar},${liker_id}}}' WHERE id = '${parseInt(id)}'`);
-    updated.push(user);
-    return updated;
-  };
-  if (arr.some((like: [string, string, string, string]) => like[0] === email)) {
-    const updated = [];
-    for (const item of arr) if (item[0] !== email) updated.push(item);
-    await pool.query(`UPDATE ${role}s SET likes = '{${updated.toString()}}' WHERE id = '${parseInt(id)}'`);
-    return updated;
-  };
-  if (!arr.some((like: [string, string, string, string]) => like[0] === email)) {
-    arr.push([email, name, avatar]);
-    await pool.query(`UPDATE ${role}s SET likes = '{${arr.toString()}}' WHERE id = '${parseInt(id)}'`);
-    return arr;
-  };
+    const { rows } = await pool.query(`SELECT likes FROM ${role}s WHERE id = ${parseInt(likee_id)}`);
+    const existingLikes = rows[0].likes;
+    console.log('PREVIOUS LIKES:', existingLikes);
+
+    if (!existingLikes || !existingLikes[0]) { // NO LIKES YET
+      const updated = [];
+      await pool.query(`UPDATE ${role}s SET likes = '{{${email},${name},${avatar},${liker_id}}}' WHERE id = '${parseInt(likee_id)}'`);
+      updated.push(user);
+      console.log('CURRENT LIKES #1:', updated);
+      return updated;
+    };
+
+    if (existingLikes.some((like: [string, string, string, string]) => like[0] === email)) { // LIKE EXISTS, REMOVE IT
+      const updated = [];
+      for (const item of existingLikes) if (item[0] !== email) updated.push(item);
+      const finalSqlValue = `'${toPostgresArray(updated)}'`;
+      await pool.query(`UPDATE ${role}s SET likes = ${finalSqlValue} WHERE id = '${parseInt(likee_id)}'`);
+      console.log('CURRENT LIKES #2:', updated);
+      return updated;
+    };
+
+    if (!existingLikes.some((like: [string, string, string, string]) => like[0] === email)) { // LIKE DOESN'T EXIST, ADD IT
+      existingLikes.unshift([email, name, avatar, liker_id]);
+      const finalSqlValue = `'${toPostgresArray(existingLikes)}'`;
+      await pool.query(`UPDATE ${role}s SET likes = ${finalSqlValue} WHERE id = '${parseInt(likee_id)}'`);
+      console.log('CURRENT LIKES #3:', existingLikes);
+      return existingLikes;
+    };
 };
 
 export async function FetchAvatar(email: string, role: string) {

@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS venues (
   stage VARCHAR ( 255 ),
   avatar VARCHAR ( 255 ),
   album TEXT[],
-  likes TEXT[][],
+  likes JSONB,
   rating NUMERIC (2,1),
   hours VARCHAR ( 255 ),
   tables JSONB,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS customers (
   stage VARCHAR ( 255 ),
   avatar VARCHAR ( 255 ),
   album TEXT[],
-  likes TEXT[][],
+  likes JSONB,
   dob VARCHAR ( 255 ),
   age VARCHAR ( 255 ),
   gender VARCHAR ( 255 ),
@@ -39,6 +39,12 @@ CREATE TABLE IF NOT EXISTS customers (
   credits NUMERIC (4,0),
   reftoken VARCHAR ( 255 )
 );
+
+ALTER TABLE venues
+  ALTER COLUMN likes TYPE JSONB USING to_jsonb(likes);
+
+ALTER TABLE customers
+  ALTER COLUMN likes TYPE JSONB USING to_jsonb(likes);
 
 INSERT INTO venues (venue, email, password, stage, avatar, album, hours, tables, dates, credits)
 VALUES
