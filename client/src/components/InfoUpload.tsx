@@ -9,24 +9,29 @@ const InfoUpload = () => {
   const { auth, setAuth } = useAuth();
 
   async function Upload(formData: FormData) {
+
+    const userIsVenue = auth?.roles[0] === 'venue';
     
-    const open = formData.get('open');
-    const close = formData.get('closed');
-    const hours = open + '-' + close;
-    const tablesValue = formData.get('tables');
+    const open = userIsVenue ? formData.get('open') : null;
+    const close = userIsVenue ? formData.get('closed') : null;
+    const hours = userIsVenue ? open + '-' + close : null;
+    const tablesValue = userIsVenue ? formData.get('tables') : null;
+    const tables_arr: TableType[] = [];
+    const maxTables = 20;
+    const tables = typeof tablesValue === 'string' ? Number(tablesValue) : NaN;
+    
     const dob = formData.get('dob');
     const gender = formData.get('gender');
     const interest = formData.get('interest');
-    const tables_arr: TableType[] = [];
-    const maxTables = 20;
 
     const dobValue = typeof dob === 'string' ? dob : JSON.stringify(dob);
     const genderValue = typeof gender === 'string' ? gender : JSON.stringify(gender);
     const interestValue = typeof interest === 'string' ? interest : JSON.stringify(interest);
 
-    const tables = typeof tablesValue === 'string' ? Number(tablesValue) : NaN;
-
-  if (!Number.isInteger(tables) || tables < 0) return;
+    if (userIsVenue && !Number.isInteger(tables) || tables < 0) {
+      console.log('Invalid number of tables');
+      return;
+    };
 
     if (auth?.roles[0] === 'venue') {
       for (let i = 1; i <= tables; i++) { // add active tables
