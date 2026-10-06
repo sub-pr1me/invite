@@ -6,7 +6,7 @@ import TableLoading from './TableLoading'
 import TablePic from './TablePic'
 import AuctionSetup from './AuctionSetup'
 import { useState, useEffect, useEffectEvent } from 'react';
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { AuctionExtendedType, HostPreviewType, AuthType } from '../types'
 import { AxiosError } from 'axios'
 
@@ -17,7 +17,7 @@ type SetAucsProps = {
 }
 
 const SetAucs = ({ setAuctions, tablePreview, hostPreview }: SetAucsProps) => {
-  const axiosPrivate = useAxiosPrivate();  
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();  
   const { auth, setAuth, customize, setCustomize } = useAuth();
   const activeTables = auth?.tables?.filter((item) => item.active).length;
   const [active, setActive] = useState(activeTables ? activeTables : 0);

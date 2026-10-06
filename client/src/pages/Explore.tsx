@@ -1,5 +1,5 @@
 import styles from '../styles/Explore.module.css'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import useAuth from '../hooks/useAuth'
 import { useEffect, useEffectEvent, useState, memo } from 'react'
 import UserProfile from '../components/UserProfile'
@@ -8,7 +8,7 @@ import { VenueType, CustomerType } from '../types'
 const Explore = () => {
   const [venues, setVenues] = useState<VenueType[] | null>(null);
   const [customers, setCustomers] = useState<CustomerType[] | null>(null);
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const { auth, setActive } = useAuth();
 
   const FetchVenues = useEffectEvent(async () => {

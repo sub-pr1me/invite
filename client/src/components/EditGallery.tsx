@@ -1,6 +1,6 @@
 import styles from '../styles/EditGallery.module.css'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { useEffect, useEffectEvent, useState } from 'react'
 import fileToDataString from '../utils/fileToDataString'
 import Image from './Image';
@@ -16,7 +16,7 @@ type EditGalleryProps = {
 }
 
 const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHidden }: EditGalleryProps) => {
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const { auth, setAuth} = useAuth();
   const [status, setStatus] = useState('idle');
   const [files, setFiles] = useState<(File | null)[] | null>(null);

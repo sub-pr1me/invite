@@ -1,7 +1,7 @@
 import styles from '../styles/AuctionActive.module.css'
 import Customer from './Customer'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { useState, useEffect, useEffectEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { BidderType, HostPreviewType } from '../types'
@@ -24,7 +24,7 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
   pic, setTablePreview, setHostPreview }:AuctionActiveProps) => {
     
   const { auth, setAuth } = useAuth();
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const [modal, setModal] = useState<number | null>(null);
   const [fade, setFade] = useState(false);
   const [tableText, setTableText] = useState(`Table ${id}`);

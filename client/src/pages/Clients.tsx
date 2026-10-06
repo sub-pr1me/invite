@@ -1,6 +1,6 @@
 import styles from '../styles/Clients.module.css'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { useEffect, useEffectEvent, useState, memo } from 'react'
 import UserProfile from '../components/UserProfile'
 import { DateType, CustomerType } from '../types'
@@ -9,7 +9,7 @@ const Clients = () => {
   const [customers, setCustomers] = useState<CustomerType[] | null>(null);
   const [hosts, setHosts] = useState<string[] | null>(null);
   const [guests, setGuests] = useState<string[] | null>(null);
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const { auth, setActive } = useAuth();
 
   const FetchCustomers = useEffectEvent(async () => {

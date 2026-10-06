@@ -1,6 +1,6 @@
 import styles from '../styles/Table.module.css'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { AxiosError } from 'axios'
 import Thumb from './Thumb'
 import { TableType } from '../types'
@@ -16,7 +16,7 @@ type TableProps = {
 
 const Table = ({ id, active, modal, setStatus, customize, pic }: TableProps) => {
 
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const { auth, setAuth } = useAuth();
   const index = id-1;
 

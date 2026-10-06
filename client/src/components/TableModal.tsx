@@ -1,6 +1,6 @@
 import styles from '../styles/TableModal.module.css'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { AxiosError } from 'axios';
 import { useState, useEffect, useEffectEvent } from 'react'
 import { AuctionExtendedType, TableType } from '../types'
@@ -14,7 +14,7 @@ type TableModalProps = {
 
 const TableModal = ({ id, modal, setStatus, setAuctions }: TableModalProps) => {
   const [hidden, setHidden] = useState(true);
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const { auth, setAuth, setCustomize } = useAuth();
 
   const showModal = useEffectEvent((modal: boolean)=>{

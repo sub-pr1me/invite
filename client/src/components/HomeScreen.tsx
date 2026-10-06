@@ -1,5 +1,5 @@
 import styles from '../styles/HomeScreen.module.css'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import useAuth from '../hooks/useAuth'
 import { useParams } from 'react-router-dom'
 import { useState, useEffect, useEffectEvent, memo } from 'react'
@@ -12,10 +12,8 @@ import { UserDataType } from '../types'
 
 const HomeScreen = () => {
   const { auth, setActive } = useAuth();
-  // RUTODO: UseAxiosPrivate is doing way more than getting an axiols client. Either
-  // rename, or bring multiple functions here to top level. lot of hidden complexity here,
-  // including 2 database queries every time its called. not obvious from caller
-  const axiosPrivate = useAxiosPrivate();
+
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const { userId } = useParams();
   const [userData, setUserData] = useState<UserDataType | null>(null);
   const [albumUploadPending, setAlbumUploadPending] = useState(false);

@@ -1,6 +1,6 @@
 import styles from '../styles/Date.module.css'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { DateType } from '../types'
@@ -16,7 +16,7 @@ type DateProps = {
 
 const Date = ({ date, amount, index, setIndex, tablePreview, setTablePreview }: DateProps) => {
   const { auth, setAuth } = useAuth();
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const navigate = useNavigate();
   const [hidden, setHidden] = useState(true);
   const [end, setEnd] = useState(false);

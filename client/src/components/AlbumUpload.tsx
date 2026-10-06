@@ -2,7 +2,7 @@ import styles from '../styles/AlbumUpload.module.css'
 import { useState, useEffect, useEffectEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { AxiosError } from 'axios'
 import fileToDataString from '../utils/fileToDataString'
 import { PreviewSrcType } from '../types'
@@ -14,7 +14,7 @@ type AlbumUploadProps = {
 }
 
 const AlbumUpload = ({ albumUploadPending, setAlbumUploadPending, postreg }: AlbumUploadProps) => {
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const { auth, setAuth } = useAuth();
   const [files, setFiles] = useState<File[] | null>(null);
   const [status, setStatus] = useState('idle');

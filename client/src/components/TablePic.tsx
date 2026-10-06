@@ -1,7 +1,7 @@
 import styles from '../styles/TablePic.module.css'
 import { useState, useEffect, useEffectEvent, ChangeEvent } from 'react'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { AxiosError } from 'axios'
 
 type TablePicProps = { 
@@ -10,7 +10,7 @@ type TablePicProps = {
 }
 
 const TablePic = ({ setCustomize, customize }: TablePicProps) => {
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const { auth, setAuth} = useAuth();
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState('idle');

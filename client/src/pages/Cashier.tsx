@@ -1,13 +1,13 @@
 import styles from '../styles/Cashier.module.css'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { useEffect, useEffectEvent } from 'react'
 import { AuthType } from '../types'
 
 
 const Cashier = () => {
   const { auth, setAuth, setActive } = useAuth();
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
 
   const UpdateBalance = async (formData: FormData): Promise<void> => {
 

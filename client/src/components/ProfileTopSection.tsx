@@ -2,7 +2,7 @@ import styles from '../styles/ProfileTopSection.module.css'
 import ProfileAvatar from './ProfileAvatar'
 import ProfileLike from './ProfileLike'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { useParams } from 'react-router-dom'
 import { useCallback } from 'react'
 import { UserDataType } from '../types'
@@ -14,7 +14,7 @@ type ProfileTopSectionProps = {
 
 const ProfileTopSection = ({ userData, setUserData }: ProfileTopSectionProps) => {
   const { auth } = useAuth();
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const { userId } = useParams();
 
   const getAge = useCallback((dob: string) => {

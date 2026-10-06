@@ -1,6 +1,6 @@
 import styles from '../styles/EditProfile.module.css'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { AxiosError } from 'axios'
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -17,7 +17,7 @@ type EditProfileProps = {
 const EditProfile = ({ title, state, setState, variable, type }: EditProfileProps) => {
 
   const { auth, setAuth } = useAuth();
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const [nameValue, setNameValue] = useState<string | null>(null);
   const [emailValue, setEmailValue] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);

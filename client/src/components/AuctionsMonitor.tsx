@@ -1,7 +1,7 @@
 import styles from '../styles/AuctionsMonitor.module.css'
 import AuctionActive from './AuctionActive'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { AxiosError } from 'axios'
 import { useEffect, useEffectEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -22,7 +22,7 @@ type AuctionsMonitorProps = {
 const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
   tablePreview, setTablePreview, hostPreview, setHostPreview}: AuctionsMonitorProps) => {
 
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const [status, setStatus] = useState('idle');
   const [warning, setWarning] = useState(false);
   const { auth, setAuth } = useAuth();
@@ -36,6 +36,7 @@ const AuctionsMonitor = ({section, setSection, auctions, setAuctions,
           withCredentials: true
         }
       );
+      console.log('RESPONSE', response.data);
       const arr = response.data.filter((item: AuctionExtendedType) => item.venue_email === auth?.email);
       
       if (auth?.roles[0] === 'venue' && auth?.tables) for (let i=0; i<arr.length; i++) {

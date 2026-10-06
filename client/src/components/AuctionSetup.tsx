@@ -1,6 +1,6 @@
 import styles from '../styles/AuctionSetup.module.css'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { AxiosError } from 'axios'
 import { useRef, useEffect } from 'react'
 
@@ -11,15 +11,15 @@ type AuctionSetupProps = {
 const AuctionSetup = ({ setStatus }: AuctionSetupProps) => {
   
   const { auth, setAuth, customize, setCustomize } = useAuth();
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const depositRef = useRef<HTMLInputElement>(null);
   
   async function Upload(formData: FormData) {
   
-  const deposit = Number(formData.get('deposit'));
-  const step = Number(formData.get('step'));
+    const deposit = Number(formData.get('deposit'));
+    const step = Number(formData.get('step'));
 
-  if (!Number.isFinite(deposit) || !Number.isFinite(step)) {return};
+    if (!Number.isFinite(deposit) || !Number.isFinite(step)) {return};
 
     try {
       await axiosPrivate.post('/auction_upload',
@@ -36,11 +36,9 @@ const AuctionSetup = ({ setStatus }: AuctionSetupProps) => {
           withCredentials: true
         }
       );
-      
       if (!auth) {throw new Error('Missing auth context')};
       const venueId = Number(auth?.id);
       if (!Number.isFinite(venueId)) {throw new Error('Invalid venue ID')};
-      
       setAuth({
         ...auth, tables: auth?.tables?.map(
           table => {
@@ -62,15 +60,14 @@ const AuctionSetup = ({ setStatus }: AuctionSetupProps) => {
       });
       setStatus('idle');
       setCustomize(null);
-
     } catch (err) {      
-          const axiosError = err as AxiosError;      
-          if (!axiosError?.response) {
-            console.log('NO SERVER RESPONSE');
-          } else {
-            console.log('SOMETHING WENT WRONG', axiosError.response.status);
-          }
-        }
+      const axiosError = err as AxiosError;      
+      if (!axiosError?.response) {
+        console.log('NO SERVER RESPONSE');
+      } else {
+        console.log('SOMETHING WENT WRONG', axiosError.response.status);
+      }
+    };
   };
 
   useEffect(()=>{

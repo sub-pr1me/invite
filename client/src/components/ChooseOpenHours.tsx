@@ -1,6 +1,6 @@
 import styles from '../styles/ChooseOpenHours.module.css'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { AxiosError } from 'axios'
 
 type ChooseOpenHoursProps = { 
@@ -11,7 +11,7 @@ type ChooseOpenHoursProps = {
 const ChooseOpenHours = ({ state, setState }: ChooseOpenHoursProps) => {
 
   const { auth, setAuth } = useAuth();
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
 
   async function Upload(formData: FormData) {
     

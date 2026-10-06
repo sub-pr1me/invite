@@ -1,11 +1,11 @@
 import styles from '../styles/InfoUpload.module.css'
 import useAuth from '../hooks/useAuth'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { AxiosError } from 'axios'
 import { TableType } from '../types'
 
 const InfoUpload = () => {
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const { auth, setAuth } = useAuth();
 
   async function Upload(formData: FormData) {

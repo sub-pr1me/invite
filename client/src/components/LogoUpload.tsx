@@ -1,13 +1,13 @@
 import { useState, useEffect, useEffectEvent } from 'react'
 import useAuth from '../hooks/useAuth'
 import styles from '../styles/LogoUpload.module.css'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useProtectedApiClientWithTokenRefresh from '../hooks/useProtectedApiClientWithTokenRefresh'
 import { AxiosError } from 'axios'
 
 const LogoUpload = () => {
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState('idle');
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = useProtectedApiClientWithTokenRefresh();
   const { auth, setAuth } = useAuth();
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
