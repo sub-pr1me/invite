@@ -252,6 +252,8 @@ export async function auctionUpload(
   venue_id: string
 ) {
     console.log('DB QUERY - auctionUpload');
+    console.log(bidders);
+    console.log(typeof bidders);
   const { rows } = await pool.query(`SELECT tables FROM venues WHERE email = '${email}'`);
   const tables = rows[0].tables[0];
   const tableId = Number(id);
@@ -263,6 +265,7 @@ export async function auctionUpload(
     }}
   );
   const stringified = JSON.stringify(updated);
+  console.log('BIDDERS - ', updated[0].auction.bidders);
 
   await pool.query(`
     UPDATE venues SET tables = jsonb_set(tables, '{0}', '${stringified}') 
@@ -295,16 +298,14 @@ export async function FetchAuctions() {
 
       filtered.map((item: TableType) => {
         
-        const arr: [BidderType | null, BidderType | null, BidderType | null] = [null,null,null];
+        const arr: (BidderType | null)[] = [];
+
         for (let i=0; i<3; i++) {
           const bidder = item.auction.bidders[i];                
-          if (typeof bidder === 'string') {
-            arr.push(JSON.parse(bidder))
-          } else {
-            arr.push(bidder);
-          }
+          arr.push(typeof bidder === 'string' ? JSON.parse(bidder) : bidder);
         };
-        const step = item.auction.step;
+
+        const bidders = arr as [BidderType | null, BidderType | null, BidderType | null];
         const rawDeposit = item.auction.deposit;
         
         const deposit = typeof rawDeposit === 'number' ? rawDeposit : Number(rawDeposit);
@@ -317,7 +318,7 @@ export async function FetchAuctions() {
           pic: item.pic,
           step: item.auction.step,
           deposit,
-          bidders: arr,
+          bidders: bidders,
           reg: item.auction.reg
         });
       });
