@@ -243,7 +243,9 @@ const EditGallery = ({ previewSrc, setPreviewSrc, SetShowUploadAnimation, setHid
           {
             previewSrc?.map(item => {
               return (
-                <div className={`
+                <div
+                  key={item.index+'index'} 
+                  className={`
                     ${styles.photos_wrapper}
                     ${!mainPreview ? styles.hidden : null}
                     ${previewSrc?.indexOf(item) === mainPreview?.index ? styles.highlighted : null}`
