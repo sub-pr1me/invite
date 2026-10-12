@@ -185,7 +185,8 @@ const InfoUpload = () => {
               <input
                 type='date' 
                 name='dob' 
-                id='dob'/>
+                id='dob'
+                required/>
             </div>
             <div className={`${styles.gender}`}>
               <label htmlFor='gender'>Gender:</label>
