@@ -247,7 +247,7 @@ export async function auctionUpload(
   email: string, 
   id: string, 
   deposit: string, 
-  step: string, 
+  step: number, 
   bidders: string, 
   reg: string, 
   venue_id: string
@@ -260,7 +260,7 @@ export async function auctionUpload(
   const tableId = Number(id);
   const updated = tables.map((item: TableType) => {
     if (item.id === tableId) {
-      return {...item, auction: {deposit: deposit, step: step, bidders: bidders, reg: reg, venue_id: venue_id}}
+      return {...item, auction: { deposit, step, bidders, reg, venue_id }}
     } else {
       return item
     }}
@@ -311,13 +311,19 @@ export async function FetchAuctions() {
         
         const deposit = typeof rawDeposit === 'number' ? rawDeposit : Number(rawDeposit);
         if (item.auction.step === null) return;
+
+        const step = Number(item.auction.step);
+        if (!Number.isFinite(step)) {
+          throw new Error(`Invalid auction step for table ${item.id}`);
+        };
+
         auctions.push({
           venue_id: item.auction.venue_id,
           venue_email: rows[i].email,
           name: rows[i].venue,
           id: item.id,
           pic: item.pic,
-          step: item.auction.step,
+          step,
           deposit,
           bidders: bidders,
           reg: item.auction.reg

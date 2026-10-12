@@ -10,12 +10,22 @@ export default async function handleAuctionUpload(req: UploadRequest, res: Respo
 
   if (req.errorMessage) return res.status(422);
   if (!req.email) return res.sendStatus(401);
+
+  const stepValue = req.body.step;
+  if (typeof stepValue !== 'string' || stepValue.trim() === '') {
+    return res.sendStatus(400);
+  }
+
+  const step = Number(stepValue);
+  if (!Number.isFinite(step)) {
+    return res.sendStatus(400);
+  }
   
   const response = await auctionUpload(
     req.email,
     req.body.id, 
     req.body.deposit, 
-    req.body.step,
+    step,
     JSON.parse(req.body.bidders),
     JSON.parse(req.body.reg),
     req.body.venue_id
