@@ -196,7 +196,8 @@ const AuctionActive = ({ id, venue_email, venue, venue_id, deposit, step, bidder
                     name='deposit'
                     id='deposit'
                     min={GetMinDeposit(bidders, deposit)}
-                    placeholder={`Min: ${GetMinDeposit(bidders, deposit)}`}/>
+                    placeholder={`Min: ${GetMinDeposit(bidders, deposit)}`}
+                    required/>
                 </div>              
                 <div className={`${styles.btns}`}>
                   <button
