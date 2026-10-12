@@ -211,7 +211,7 @@ const extractFiles = () => {
                 <img src='../../img/right-arrow.png' alt='PREV' />
               </div>
               <div className={`${styles.preview_image}`}>
-                <img src={mainPreview?.pic ?? ''} alt='IMG'/>
+                <img src={mainPreview?.pic ?? undefined} alt='IMG'/>
                 <div className={`${styles.trash}`} onClick={() => {if (mainPreview) removePic(mainPreview)}}>
                   <img src='../../img/trash.png' alt='[X]'/>
                 </div>
